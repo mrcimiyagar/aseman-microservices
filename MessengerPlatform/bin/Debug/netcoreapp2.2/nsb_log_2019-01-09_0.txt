@@ -1,0 +1,20 @@
+﻿2019-01-09 00:26:30.652 INFO  DefaultFactory Logging to 'F:\Desktop\AsemanBackendProjects\MessengerPlatform\bin\Debug\netcoreapp2.2\' with level Info
+2019-01-09 00:26:30.965 INFO  NServiceBus.LicenseManager No valid license could be found. Falling back to trial license with start date '2019-01-08'.
+
+2019-01-09 00:26:31.367 FATAL NServiceBus.ReceiveComponent Receiver Main failed to start.
+RabbitMQ.Client.Exceptions.OperationInterruptedException: The AMQP operation was interrupted: AMQP close-reason, initiated by Peer, code=404, text="NOT_FOUND - no queue 'Messenger' in vhost '/'", classId=60, methodId=20, cause=
+   at RabbitMQ.Client.Impl.SimpleBlockingRpcContinuation.GetReply(TimeSpan timeout)
+   at RabbitMQ.Client.Impl.ModelBase.BasicConsume(String queue, Boolean autoAck, String consumerTag, Boolean noLocal, Boolean exclusive, IDictionary`2 arguments, IBasicConsumer consumer)
+   at RabbitMQ.Client.Impl.AutorecoveringModel.BasicConsume(String queue, Boolean autoAck, String consumerTag, Boolean noLocal, Boolean exclusive, IDictionary`2 arguments, IBasicConsumer consumer)
+   at NServiceBus.Transport.RabbitMQ.MessagePump.Start(PushRuntimeSettings limitations) in C:\BuildAgent\work\15dcdbe5f88af6ed\src\NServiceBus.Transport.RabbitMQ\Receiving\MessagePump.cs:line 112
+   at NServiceBus.TransportReceiver.Start() in C:\BuildAgent\work\ed946b9f0e4aae01\src\NServiceBus.Core\Transports\TransportReceiver.cs:line 47
+   at NServiceBus.ReceiveComponent.Start() in C:\BuildAgent\work\ed946b9f0e4aae01\src\NServiceBus.Core\Receiving\ReceiveComponent.cs:line 90
+2019-01-09 00:40:09.192 INFO  DefaultFactory Logging to 'F:\Desktop\AsemanBackendProjects\MessengerPlatform\bin\Debug\netcoreapp2.2\' with level Info
+2019-01-09 00:40:09.505 INFO  NServiceBus.LicenseManager No valid license could be found. Falling back to trial license with start date '2019-01-08'.
+
+2019-01-09 00:47:29.290 INFO  DefaultFactory Logging to 'F:\Desktop\AsemanBackendProjects\MessengerPlatform\bin\Debug\netcoreapp2.2\' with level Info
+2019-01-09 00:47:29.584 INFO  NServiceBus.LicenseManager No valid license could be found. Falling back to trial license with start date '2019-01-08'.
+
+2019-01-09 00:48:03.387 INFO  DefaultFactory Logging to 'F:\Desktop\AsemanBackendProjects\MessengerPlatform\bin\Debug\netcoreapp2.2\' with level Info
+2019-01-09 00:48:03.683 INFO  NServiceBus.LicenseManager No valid license could be found. Falling back to trial license with start date '2019-01-08'.
+

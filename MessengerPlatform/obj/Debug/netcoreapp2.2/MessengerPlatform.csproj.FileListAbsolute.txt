@@ -1,0 +1,14 @@
+F:\Desktop\AsemanBackendProjects\MessengerPlatform\bin\Debug\netcoreapp2.2\MessengerPlatform.deps.json
+F:\Desktop\AsemanBackendProjects\MessengerPlatform\bin\Debug\netcoreapp2.2\MessengerPlatform.runtimeconfig.json
+F:\Desktop\AsemanBackendProjects\MessengerPlatform\bin\Debug\netcoreapp2.2\MessengerPlatform.runtimeconfig.dev.json
+F:\Desktop\AsemanBackendProjects\MessengerPlatform\bin\Debug\netcoreapp2.2\MessengerPlatform.dll
+F:\Desktop\AsemanBackendProjects\MessengerPlatform\bin\Debug\netcoreapp2.2\MessengerPlatform.pdb
+F:\Desktop\AsemanBackendProjects\MessengerPlatform\bin\Debug\netcoreapp2.2\SharedArea.dll
+F:\Desktop\AsemanBackendProjects\MessengerPlatform\bin\Debug\netcoreapp2.2\SharedArea.pdb
+F:\Desktop\AsemanBackendProjects\MessengerPlatform\obj\Debug\netcoreapp2.2\MessengerPlatform.csprojAssemblyReference.cache
+F:\Desktop\AsemanBackendProjects\MessengerPlatform\obj\Debug\netcoreapp2.2\MessengerPlatform.csproj.CoreCompileInputs.cache
+F:\Desktop\AsemanBackendProjects\MessengerPlatform\obj\Debug\netcoreapp2.2\MessengerPlatform.AssemblyInfoInputs.cache
+F:\Desktop\AsemanBackendProjects\MessengerPlatform\obj\Debug\netcoreapp2.2\MessengerPlatform.AssemblyInfo.cs
+F:\Desktop\AsemanBackendProjects\MessengerPlatform\obj\Debug\netcoreapp2.2\MessengerPlatform.csproj.CopyComplete
+F:\Desktop\AsemanBackendProjects\MessengerPlatform\obj\Debug\netcoreapp2.2\MessengerPlatform.dll
+F:\Desktop\AsemanBackendProjects\MessengerPlatform\obj\Debug\netcoreapp2.2\MessengerPlatform.pdb

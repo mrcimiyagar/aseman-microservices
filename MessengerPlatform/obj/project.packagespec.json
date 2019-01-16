@@ -1,0 +1,63 @@
+﻿{
+  "version": "1.0.0",
+  "restore": {
+    "projectUniqueName": "F:\\Desktop\\AsemanBackendProjects\\MessengerPlatform\\MessengerPlatform.csproj",
+    "projectName": "MessengerPlatform",
+    "projectPath": "F:\\Desktop\\AsemanBackendProjects\\MessengerPlatform\\MessengerPlatform.csproj",
+    "outputPath": "F:\\Desktop\\AsemanBackendProjects\\MessengerPlatform\\obj\\",
+    "projectStyle": "PackageReference",
+    "fallbackFolders": [
+      "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+    ],
+    "originalTargetFrameworks": [
+      "netcoreapp2.2"
+    ],
+    "frameworks": {
+      "netcoreapp2.2": {
+        "projectReferences": {
+          "F:\\Desktop\\AsemanBackendProjects\\SharedArea\\SharedArea.csproj": {
+            "projectPath": "F:\\Desktop\\AsemanBackendProjects\\SharedArea\\SharedArea.csproj"
+          }
+        }
+      }
+    },
+    "warningProperties": {
+      "warnAsError": [
+        "NU1605"
+      ]
+    }
+  },
+  "frameworks": {
+    "netcoreapp2.2": {
+      "dependencies": {
+        "MassTransit": {
+          "target": "Package",
+          "version": "[5.2.1, )"
+        },
+        "MassTransit.RabbitMQ": {
+          "target": "Package",
+          "version": "[5.2.1, )"
+        },
+        "Microsoft.EntityFrameworkCore": {
+          "target": "Package",
+          "version": "[2.2.1, )"
+        },
+        "Microsoft.EntityFrameworkCore.SqlServer": {
+          "target": "Package",
+          "version": "[2.2.1, )"
+        },
+        "Microsoft.NETCore.App": {
+          "suppressParent": "All",
+          "target": "Package",
+          "version": "[2.2.0, )",
+          "autoReferenced": true
+        }
+      },
+      "imports": [
+        "net461"
+      ],
+      "assetTargetFallback": true,
+      "warn": true
+    }
+  }
+}

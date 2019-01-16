@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\keyhan\.Rider2018.1\system\resharper-host\local\Transient\ReSharperHost\v12\SolutionCaches\_AsemanBackendProjects.1459735236.00" t="ExcludeRecursive" />
+    <e p="F:\Desktop\AsemanBackendProjects" t="IncludeFlat">
+      <e p="ApiGateway" t="IncludeRecursive">
+        <e p="ApiGateway.csproj" t="IncludeRecursive" />
+        <e p="appsettings.Development.json" t="Include" />
+        <e p="appsettings.json" t="Include" />
+        <e p="Bin" t="ExcludeRecursive" />
+        <e p="Consumers" t="Include">
+          <e p="ApiGatewayInternalConsumer.cs" t="Include" />
+        </e>
+        <e p="Controllers" t="Include">
+          <e p="AuthController.cs" t="Include" />
+          <e p="BotController.cs" t="Include" />
+          <e p="ComplexController.cs" t="Include" />
+          <e p="ContactController.cs" t="Include" />
+          <e p="FileController.cs" t="Include" />
+          <e p="HomeController.cs" t="Include" />
+          <e p="InviteController.cs" t="Include" />
+          <e p="MessageController.cs" t="Include" />
+          <e p="NotificationController.cs" t="Include" />
+          <e p="RoomController.cs" t="Include" />
+          <e p="UserController.cs" t="Include" />
+        </e>
+        <e p="DbContexts" t="Include">
+          <e p="DatabaseContext.cs" t="Include" />
+        </e>
+        <e p="Documentations" t="Include">
+          <e p="Aseman.postman_collection.json" t="Include" />
+        </e>
+        <e p="Hubs" t="Include">
+          <e p="NotificationsHub.cs" t="Include" />
+        </e>
+        <e p="Models" t="Include">
+          <e p="Forms" t="Include">
+            <e p="AudioUploadForm.cs" t="Include" />
+            <e p="PhotoUploadForm.cs" t="Include" />
+            <e p="VideoUploadForm.cs" t="Include" />
+          </e>
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.2" t="Include">
+              <e p="ApiGateway.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="launchSettings.json" t="Include" />
+        </e>
+        <e p="Startup.cs" t="Include" />
+        <e p="Utils" t="Include">
+          <e p="AuthExtracter.cs" t="Include" />
+          <e p="Security.cs" t="Include" />
+        </e>
+      </e>
+      <e p="AsemanBackendProjects.sln" t="IncludeFlat" />
+      <e p="BotPlatform" t="IncludeRecursive">
+        <e p="Bin" t="ExcludeRecursive" />
+        <e p="BotPlatform.csproj" t="IncludeRecursive" />
+        <e p="DbContexts" t="Include">
+          <e p="DatabaseContext.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.2" t="Include">
+              <e p="BotPlatform.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+      </e>
+      <e p="CityPlatform" t="IncludeRecursive">
+        <e p="Bin" t="ExcludeRecursive" />
+        <e p="CityPlatform.csproj" t="IncludeRecursive" />
+        <e p="Consumers" t="Include">
+          <e p="CityConsumer.cs" t="Include" />
+        </e>
+        <e p="DbContexts" t="Include">
+          <e p="DatabaseContext.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.2" t="Include">
+              <e p="CityPlatform.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+      </e>
+      <e p="DesktopPlatform" t="IncludeRecursive">
+        <e p="Bin" t="ExcludeRecursive" />
+        <e p="DbContexts" t="Include">
+          <e p="DatabaseContext.cs" t="Include" />
+        </e>
+        <e p="DesktopPlatform.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.2" t="Include">
+              <e p="DesktopPlatform.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+      </e>
+      <e p="EntryPlatform" t="IncludeRecursive">
+        <e p="Bin" t="ExcludeRecursive" />
+        <e p="Consumers" t="Include">
+          <e p="EntryConsumer.cs" t="Include" />
+        </e>
+        <e p="DbContexts" t="Include">
+          <e p="DatabaseContext.cs" t="Include" />
+        </e>
+        <e p="EntryPlatform.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.2" t="Include">
+              <e p="EntryPlatform.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+        <e p="Utils" t="Include">
+          <e p="AuthExtracter.cs" t="Include" />
+          <e p="Security.cs" t="Include" />
+        </e>
+      </e>
+      <e p="MessengerPlatform" t="IncludeRecursive">
+        <e p="Bin" t="ExcludeRecursive" />
+        <e p="DbContexts" t="Include">
+          <e p="DatabaseContext.cs" t="Include" />
+        </e>
+        <e p="Handlers" t="Include" />
+        <e p="MessengerPlatform.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.2" t="Include">
+              <e p="MessengerPlatform.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+      </e>
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="ProfilePlatform" t="IncludeRecursive">
+        <e p="Bin" t="ExcludeRecursive" />
+        <e p="DbContexts" t="Include">
+          <e p="DatabaseContext.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.2" t="Include">
+              <e p="ProfilePlatform.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="ProfilePlatform.csproj" t="IncludeRecursive" />
+        <e p="Program.cs" t="Include" />
+      </e>
+      <e p="SearchPlatform" t="IncludeRecursive">
+        <e p="Bin" t="ExcludeRecursive" />
+        <e p="DbContexts" t="Include">
+          <e p="DatabaseContext.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.2" t="Include">
+              <e p="SearchPlatform.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+        <e p="SearchPlatform.csproj" t="IncludeRecursive" />
+      </e>
+      <e p="SharedArea" t="IncludeRecursive">
+        <e p="Bin" t="ExcludeRecursive" />
+        <e p="Commands" t="Include">
+          <e p="Auth" t="Include">
+            <e p="LoginRequest.cs" t="Include" />
+            <e p="LoginResponse.cs" t="Include" />
+            <e p="RegisterRequest.cs" t="Include" />
+            <e p="RegisterResponse.cs" t="Include" />
+            <e p="VerifyRequest.cs" t="Include" />
+            <e p="VerifyResponse.cs" t="Include" />
+          </e>
+          <e p="Internal" t="Include">
+            <e p="Notifications" t="Include">
+              <e p="NotifyComplexCreatedRequest.cs" t="Include" />
+              <e p="NotifyComplexCreatedResponse.cs" t="Include" />
+              <e p="NotifyRoomCreatedRequest.cs" t="Include" />
+              <e p="NotifyRoomCreatedResponse.cs" t="Include" />
+              <e p="NotifyUserCreatedRequest.cs" t="Include" />
+              <e p="NotifyUserCreatedResponse.cs" t="Include" />
+            </e>
+          </e>
+          <e p="Notification.cs" t="Include" />
+          <e p="Request.cs" t="Include" />
+          <e p="Response.cs" t="Include" />
+        </e>
+        <e p="Entities" t="Include">
+          <e p="Audio.cs" t="Include" />
+          <e p="AudioMessage.cs" t="Include" />
+          <e p="BaseUser.cs" t="Include" />
+          <e p="Bot.cs" t="Include" />
+          <e p="BotCreation.cs" t="Include" />
+          <e p="BotSecret.cs" t="Include" />
+          <e p="BotStoreBanner.cs" t="Include" />
+          <e p="BotStoreBot.cs" t="Include" />
+          <e p="BotStoreHeader.cs" t="Include" />
+          <e p="BotStoreSection.cs" t="Include" />
+          <e p="BotSubscription.cs" t="Include" />
+          <e p="Complex.cs" t="Include" />
+          <e p="ComplexSecret.cs" t="Include" />
+          <e p="Contact.cs" t="Include" />
+          <e p="File.cs" t="Include" />
+          <e p="FileUsage.cs" t="Include" />
+          <e p="Invite.cs" t="Include" />
+          <e p="Membership.cs" t="Include" />
+          <e p="Message.cs" t="Include" />
+          <e p="Pending.cs" t="Include" />
+          <e p="Photo.cs" t="Include" />
+          <e p="PhotoMessage.cs" t="Include" />
+          <e p="Room.cs" t="Include" />
+          <e p="ServiceMessage.cs" t="Include" />
+          <e p="Session.cs" t="Include" />
+          <e p="TextMessage.cs" t="Include" />
+          <e p="User.cs" t="Include" />
+          <e p="UserSecret.cs" t="Include" />
+          <e p="Video.cs" t="Include" />
+          <e p="VideoMessage.cs" t="Include" />
+          <e p="Workership.cs" t="Include" />
+        </e>
+        <e p="GlobalVariables.cs" t="Include" />
+        <e p="Middles" t="Include">
+          <e p="Packet.cs" t="Include" />
+          <e p="ReqAuth.cs" t="Include" />
+        </e>
+        <e p="Notifications" t="Include">
+          <e p="AudioMessageNotification.cs" t="Include" />
+          <e p="BotAdditionToRoomNotification.cs" t="Include" />
+          <e p="BotRemovationFromRoomNotification.cs" t="Include" />
+          <e p="ComplexDeletionNotification.cs" t="Include" />
+          <e p="ContactCreationNotification.cs" t="Include" />
+          <e p="InviteAcceptanceNotification.cs" t="Include" />
+          <e p="InviteCancellationNotification.cs" t="Include" />
+          <e p="InviteCreationNotification.cs" t="Include" />
+          <e p="InviteIgnoranceNotification.cs" t="Include" />
+          <e p="Notification.cs" t="Include" />
+          <e p="PhotoMessageNotification.cs" t="Include" />
+          <e p="RoomDeletionNotification.cs" t="Include" />
+          <e p="ServiceMessageNotification.cs" t="Include" />
+          <e p="TextMessageNotification.cs" t="Include" />
+          <e p="UserJointComplexNotification.cs" t="Include" />
+          <e p="VideoMessageNotification.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.2" t="Include">
+              <e p="SharedArea.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="SharedArea.csproj" t="IncludeRecursive" />
+      </e>
+    </e>
+  </component>
+</project>
