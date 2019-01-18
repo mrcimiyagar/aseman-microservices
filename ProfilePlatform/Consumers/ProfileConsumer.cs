@@ -12,8 +12,7 @@ using SharedArea.Utils;
 namespace ProfilePlatform.Consumers
 {
     public class ProfileConsumer : IConsumer<UserCreatedNotif>, IConsumer<ComplexCreatedNotif>, IConsumer<RoomCreatedNotif>
-        , IConsumer<MembershipCreatedNotif>, IConsumer<SessionCreatedNotif>, IConsumer<UpdateUserProfileRequest>
-        , IConsumer<GetMeRequest>, IConsumer<GetUserByIdRequest>, IConsumer<SearchUsersRequest>
+        , IConsumer<MembershipCreatedNotif>, IConsumer<SessionCreatedNotif>
     {
         public Task Consume(ConsumeContext<UserCreatedNotif> context)
         {
@@ -103,82 +102,6 @@ namespace ProfilePlatform.Consumers
                 dbContext.SaveChanges();
                 
                 return Task.CompletedTask;
-            }
-        }
-
-        public async Task Consume(ConsumeContext<UpdateUserProfileRequest> context)
-        {
-            using (var dbContext = new DatabaseContext())
-            {
-                var packet = context.Message.Packet;
-                var session = dbContext.Sessions.Find(context.Message.SessionId);
-                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
-                var user = session.BaseUser;
-                user.Title = packet.User.Title;
-                user.Avatar = packet.User.Avatar;
-                dbContext.SaveChanges();
-
-                await context.RespondAsync(new UpdateUserProfileResponse()
-                {
-                    Packet = new Packet()
-                    {
-                        Status = "success"
-                    }
-                });
-            }
-        }
-
-        public async Task Consume(ConsumeContext<GetMeRequest> context)
-        {
-            using (var dbContext = new DatabaseContext())
-            {
-                var session = dbContext.Sessions.Find(context.Message.SessionId);
-                
-                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
-                var user = (User) session.BaseUser;
-                dbContext.Entry(user).Reference(u => u.UserSecret).Load();
-                dbContext.Entry(user.UserSecret).Reference(us => us.Home).Load();
-
-                await context.RespondAsync(new GetMeResponse()
-                {
-                    Packet = new Packet
-                    {
-                        Status = "success",
-                        User = user,
-                        UserSecret = user.UserSecret,
-                        Complex = user.UserSecret.Home
-                    }
-                });
-            }
-        }
-
-        public async Task Consume(ConsumeContext<GetUserByIdRequest> context)
-        {
-            using (var dbContext = new DatabaseContext())
-            {
-                var packet = context.Message.Packet;
-                var user = dbContext.BaseUsers.Find(packet.BaseUser.BaseUserId);
-
-                await context.RespondAsync(new GetUserByIdResponse()
-                {
-                    Packet = new Packet {Status = "success", BaseUser = user}
-                });
-            }
-        }
-
-        public async Task Consume(ConsumeContext<SearchUsersRequest> context)
-        {
-            using (var dbContext = new DatabaseContext())
-            {
-                var packet = context.Message.Packet;
-                var users = (from u in dbContext.Users
-                    where EF.Functions.Like(u.Title, "%" + packet.SearchQuery + "%")
-                    select u).ToList();
-
-                await context.RespondAsync(new SearchUsersResponse()
-                {
-                    Packet = new Packet {Status = "success", Users = users}
-                });
             }
         }
     }

@@ -1,10 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using CityPlatform.DbContexts;
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using SharedArea.Commands.Internal;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
 using SharedArea.Commands.Internal.Responses;
+using SharedArea.Commands.User;
 using SharedArea.Entities;
 using SharedArea.Middles;
 
@@ -12,7 +15,8 @@ namespace CityPlatform.Consumers
 {
     public class CityConsumer : IConsumer<CreateComplexRequest>, IConsumer<CreateRoomRequest>
         , IConsumer<CreateUserRequest>, IConsumer<CreateMembershipRequest>, IConsumer<CreateSessionRequest>
-        , IConsumer<UpdateUserSecretRequest>
+        , IConsumer<UpdateUserSecretRequest>, IConsumer<UpdateUserProfileRequest>, IConsumer<GetMeRequest>
+        , IConsumer<GetUserByIdRequest>, IConsumer<SearchUsersRequest>
     {
         public async Task Consume(ConsumeContext<CreateComplexRequest> context)
         {
@@ -161,6 +165,90 @@ namespace CityPlatform.Consumers
                     {
                         UserSecret = us
                     }
+                });
+            }
+        }
+        
+        public async Task Consume(ConsumeContext<UpdateUserProfileRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = session.BaseUser;
+                user.Title = packet.User.Title;
+                user.Avatar = packet.User.Avatar;
+                dbContext.SaveChanges();
+                
+                SharedArea.Transport.NotifyService<UpdateUserProfileNotif>(
+                    Program.Bus,
+                    new Packet() {BaseUser = user},
+                    SharedArea.GlobalVariables.AllQueuesExcept(new []
+                    {
+                        SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                    }));
+
+                await context.RespondAsync(new UpdateUserProfileResponse()
+                {
+                    Packet = new Packet()
+                    {
+                        Status = "success"
+                    }
+                });
+            }
+        }
+
+        public async Task Consume(ConsumeContext<GetMeRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+                
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
+                dbContext.Entry(user).Reference(u => u.UserSecret).Load();
+                dbContext.Entry(user.UserSecret).Reference(us => us.Home).Load();
+
+                await context.RespondAsync(new GetMeResponse()
+                {
+                    Packet = new Packet
+                    {
+                        Status = "success",
+                        User = user,
+                        UserSecret = user.UserSecret,
+                        Complex = user.UserSecret.Home
+                    }
+                });
+            }
+        }
+
+        public async Task Consume(ConsumeContext<GetUserByIdRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                var user = dbContext.BaseUsers.Find(packet.BaseUser.BaseUserId);
+
+                await context.RespondAsync(new GetUserByIdResponse()
+                {
+                    Packet = new Packet {Status = "success", BaseUser = user}
+                });
+            }
+        }
+
+        public async Task Consume(ConsumeContext<SearchUsersRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                var users = (from u in dbContext.Users
+                    where EF.Functions.Like(u.Title, "%" + packet.SearchQuery + "%")
+                    select u).ToList();
+
+                await context.RespondAsync(new SearchUsersResponse()
+                {
+                    Packet = new Packet {Status = "success", Users = users}
                 });
             }
         }

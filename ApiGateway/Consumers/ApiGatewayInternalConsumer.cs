@@ -12,8 +12,10 @@ namespace ApiGateway.Consumers
 {
     public class ApiGatewayInternalConsumer : IConsumer<UserCreatedNotif>, IConsumer<ComplexCreatedNotif>
         , IConsumer<RoomCreatedNotif>, IConsumer<MembershipCreatedNotif>, IConsumer<SessionCreatedNotif>
-        , IConsumer<CreateUserRequest>, IConsumer<CreateComplexRequest>, IConsumer<CreateRoomRequest>
-        , IConsumer<CreateMembershipRequest>, IConsumer<CreateSessionRequest>, IConsumer<UpdateUserSecretRequest>
+        , IConsumer<UpdateUserProfileNotif>, IConsumer<CreateUserRequest>, IConsumer<CreateComplexRequest>
+        , IConsumer<CreateRoomRequest>, IConsumer<CreateMembershipRequest>, IConsumer<CreateSessionRequest>
+        , IConsumer<UpdateUserSecretRequest>
+        
     {
         public Task Consume(ConsumeContext<UserCreatedNotif> context)
         {
@@ -61,6 +63,16 @@ namespace ApiGateway.Consumers
             {
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send<SessionCreatedNotif>(context.Message);
+            }
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<UpdateUserProfileNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send<UpdateUserProfileNotif>(context.Message);
             }
             return Task.CompletedTask;
         }

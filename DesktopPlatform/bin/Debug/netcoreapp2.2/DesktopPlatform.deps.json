@@ -1312,7 +1312,10 @@
       "SharedArea/1.0.0": {
         "dependencies": {
           "MassTransit": "5.2.1",
-          "MassTransit.RabbitMQ": "5.2.1"
+          "MassTransit.NLog": "5.2.1",
+          "MassTransit.RabbitMQ": "5.2.1",
+          "Microsoft.EntityFrameworkCore": "2.2.1",
+          "Microsoft.EntityFrameworkCore.SqlServer": "2.2.1"
         },
         "runtime": {
           "SharedArea.dll": {}

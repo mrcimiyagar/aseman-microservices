@@ -26,7 +26,7 @@ namespace ApiGateway.Controllers
                 var result = await SharedArea.Transport
                     .DirectService<UpdateUserProfileRequest, UpdateUserProfileResponse>(
                         Program.Bus,
-                        SharedArea.GlobalVariables.PROFILE_QUEUE_NAME,
+                        SharedArea.GlobalVariables.CITY_QUEUE_NAME,
                         session.SessionId,
                         Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                         packet);
@@ -46,7 +46,7 @@ namespace ApiGateway.Controllers
 
                 var result = await SharedArea.Transport.DirectService<GetMeRequest, GetMeResponse>(
                     Program.Bus,
-                    SharedArea.GlobalVariables.PROFILE_QUEUE_NAME,
+                    SharedArea.GlobalVariables.CITY_QUEUE_NAME,
                     session.SessionId,
                     Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()));
 
@@ -60,7 +60,7 @@ namespace ApiGateway.Controllers
         {
             var result = await SharedArea.Transport.DirectService<GetUserByIdRequest, GetUserByIdResponse>(
                 Program.Bus,
-                SharedArea.GlobalVariables.PROFILE_QUEUE_NAME,
+                SharedArea.GlobalVariables.CITY_QUEUE_NAME,
                 Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                 packet);
 
@@ -73,7 +73,7 @@ namespace ApiGateway.Controllers
         {
             var result = await SharedArea.Transport.DirectService<SearchUsersRequest, SearchUsersResponse>(
                 Program.Bus,
-                SharedArea.GlobalVariables.PROFILE_QUEUE_NAME,
+                SharedArea.GlobalVariables.CITY_QUEUE_NAME,
                 Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                 packet);
 

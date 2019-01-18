@@ -140,24 +140,6 @@
         <e p="Program.cs" t="Include" />
       </e>
       <e p="packages" t="ExcludeRecursive" />
-      <e p="ProfilePlatform" t="IncludeRecursive">
-        <e p="Bin" t="ExcludeRecursive" />
-        <e p="Consumers" t="Include">
-          <e p="ProfileConsumer.cs" t="Include" />
-        </e>
-        <e p="DbContexts" t="Include">
-          <e p="DatabaseContext.cs" t="Include" />
-        </e>
-        <e p="obj" t="ExcludeRecursive">
-          <e p="Debug" t="Include">
-            <e p="netcoreapp2.2" t="Include">
-              <e p="ProfilePlatform.AssemblyInfo.cs" t="Include" />
-            </e>
-          </e>
-        </e>
-        <e p="ProfilePlatform.csproj" t="IncludeRecursive" />
-        <e p="Program.cs" t="Include" />
-      </e>
       <e p="SearchPlatform" t="IncludeRecursive">
         <e p="Bin" t="ExcludeRecursive" />
         <e p="Consumers" t="Include">
@@ -195,6 +177,7 @@
               <e p="MembershipCreatedNotif.cs" t="Include" />
               <e p="RoomCreatedNotif.cs" t="Include" />
               <e p="SessionCreatedNotif.cs" t="Include" />
+              <e p="UpdateUserProfileNotif.cs" t="Include" />
               <e p="UserCreatedNotif.cs" t="Include" />
             </e>
             <e p="Requests" t="Include">
@@ -300,6 +283,24 @@
           <e p="AuthExtracter.cs" t="Include" />
           <e p="Security.cs" t="Include" />
         </e>
+      </e>
+      <e p="StorePlatform" t="IncludeRecursive">
+        <e p="Bin" t="ExcludeRecursive" />
+        <e p="Consumers" t="Include">
+          <e p="StoreConsumer.cs" t="Include" />
+        </e>
+        <e p="DbContexts" t="Include">
+          <e p="DatabaseContext.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.2" t="Include">
+              <e p="StorePlatform.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+        <e p="StorePlatform.csproj" t="IncludeRecursive" />
       </e>
     </e>
   </component>

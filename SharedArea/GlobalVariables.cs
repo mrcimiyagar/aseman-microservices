@@ -28,8 +28,8 @@ namespace SharedArea
         public const string MESSENGER_QUEUE_NAME = "MessengerQueue";
         public const string MESSENGER_QUEUE_PATH = RABBITMQ_SERVER_URL + "/" + MESSENGER_QUEUE_NAME;
         
-        public const string PROFILE_QUEUE_NAME = "ProfileQueue";
-        public const string PROFILE_QUEUE_PATH = RABBITMQ_SERVER_URL + "/" + PROFILE_QUEUE_NAME;
+        public const string STORE_QUEUE_NAME = "StoreQueue";
+        public const string STORE_QUEUE_PATH = RABBITMQ_SERVER_URL + "/" + STORE_QUEUE_NAME;
         
         public const string SEARCH_QUEUE_NAME = "SearchQueue";
         public const string SEARCH_QUEUE_PATH = RABBITMQ_SERVER_URL + "/" + SEARCH_QUEUE_NAME;
@@ -41,7 +41,7 @@ namespace SharedArea
             var queues = new string[]
             {
                 BOT_QUEUE_NAME, CITY_QUEUE_NAME, DESKTOP_QUEUE_NAME, ENTRY_QUEUE_NAME, MESSENGER_QUEUE_NAME,
-                PROFILE_QUEUE_NAME, SEARCH_QUEUE_NAME
+                STORE_QUEUE_NAME, SEARCH_QUEUE_NAME
             }.ToList();
             foreach (var queueName in queueNames)
             {

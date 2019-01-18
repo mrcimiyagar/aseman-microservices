@@ -1,0 +1,14 @@
+F:\Desktop\AsemanBackendProjects\StorePlatform\bin\Debug\netcoreapp2.2\StorePlatform.deps.json
+F:\Desktop\AsemanBackendProjects\StorePlatform\bin\Debug\netcoreapp2.2\StorePlatform.runtimeconfig.json
+F:\Desktop\AsemanBackendProjects\StorePlatform\bin\Debug\netcoreapp2.2\StorePlatform.runtimeconfig.dev.json
+F:\Desktop\AsemanBackendProjects\StorePlatform\bin\Debug\netcoreapp2.2\StorePlatform.dll
+F:\Desktop\AsemanBackendProjects\StorePlatform\bin\Debug\netcoreapp2.2\StorePlatform.pdb
+F:\Desktop\AsemanBackendProjects\StorePlatform\bin\Debug\netcoreapp2.2\SharedArea.dll
+F:\Desktop\AsemanBackendProjects\StorePlatform\bin\Debug\netcoreapp2.2\SharedArea.pdb
+F:\Desktop\AsemanBackendProjects\StorePlatform\obj\Debug\netcoreapp2.2\StorePlatform.csprojAssemblyReference.cache
+F:\Desktop\AsemanBackendProjects\StorePlatform\obj\Debug\netcoreapp2.2\StorePlatform.csproj.CoreCompileInputs.cache
+F:\Desktop\AsemanBackendProjects\StorePlatform\obj\Debug\netcoreapp2.2\StorePlatform.AssemblyInfoInputs.cache
+F:\Desktop\AsemanBackendProjects\StorePlatform\obj\Debug\netcoreapp2.2\StorePlatform.AssemblyInfo.cs
+F:\Desktop\AsemanBackendProjects\StorePlatform\obj\Debug\netcoreapp2.2\StorePlatform.csproj.CopyComplete
+F:\Desktop\AsemanBackendProjects\StorePlatform\obj\Debug\netcoreapp2.2\StorePlatform.dll
+F:\Desktop\AsemanBackendProjects\StorePlatform\obj\Debug\netcoreapp2.2\StorePlatform.pdb

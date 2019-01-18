@@ -2,13 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0a2e1072-4301-4231-9853-0444be647b17" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/SharedArea/Commands/User/GetMeRequest.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SharedArea/Commands/User/GetMeResponse.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SharedArea/Commands/User/GetUserByIdRequest.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SharedArea/Commands/User/GetUserByIdResponse.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SharedArea/Commands/User/SearchUsersRequest.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SharedArea/Commands/User/SearchUsersResponse.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SharedArea/Commands/Internal/Notifications/UpdateUserProfileNotif.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StorePlatform/Consumers/StoreConsumer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StorePlatform/DbContexts/DatabaseContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ApiGateway/Consumers/ApiGatewayInternalConsumer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ApiGateway/Consumers/ApiGatewayInternalConsumer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ApiGateway/Controllers/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ApiGateway/Controllers/UserController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AsemanBackendProjects.sln" beforeDir="false" afterPath="$PROJECT_DIR$/AsemanBackendProjects.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CityPlatform/Consumers/CityConsumer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CityPlatform/Consumers/CityConsumer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProfilePlatform/Consumers/ProfileConsumer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ProfilePlatform/Consumers/ProfileConsumer.cs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -73,12 +73,15 @@
     <setting file="file://$PROJECT_DIR$/EntryPlatform/Consumers/EntryConsumer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SharedArea/Entities/Room.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SearchPlatform/Program.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/SharedArea/Commands/Internal/Notifications/UpdateUserProfileNotif.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/StorePlatform/DbContexts/DatabaseContext.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4AD4FC6A-D555-440B-AC25-7544E9D00BA9/5c/2e78109d/Endpoint.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ApiGateway/Controllers/AuthController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/EntryPlatform/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SearchPlatform/Consumers/SearchConsumer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ApiGateway/DbContexts/DatabaseContext.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/ProfilePlatform/Consumers/ProfileConsumer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/StorePlatform/Consumers/StoreConsumer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ProfilePlatform/Consumers/ProfileConsumer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ApiGateway/Consumers/ApiGatewayInternalConsumer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DesktopPlatform/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SharedArea/Commands/Request.cs" root0="FORCE_HIGHLIGHTING" />
@@ -103,6 +106,7 @@
     <setting file="file://$PROJECT_DIR$/SharedArea/Commands/Internal/Requests/UpdateUserSecretRequest.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SharedArea/Commands/Internal/Notifications/SessionCreatedNotif.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SharedArea/Commands/Internal/Responses/CreateSessionResponse.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/StorePlatform/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SharedArea/Commands/Internal/Requests/CreateSessionRequest.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SharedArea/GlobalVariables.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SharedArea/Notifications/BotRemovationFromRoomNotification.cs" root0="FORCE_HIGHLIGHTING" />
@@ -114,10 +118,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/SearchPlatform/Consumers/MessengerConsumer.cs" />
-        <option value="$PROJECT_DIR$/ApiGateway/Hubs/NotificationsHub.cs" />
-        <option value="$PROJECT_DIR$/ApiGateway/Startup.cs" />
-        <option value="$PROJECT_DIR$/BotPlatform/Program.cs" />
         <option value="$PROJECT_DIR$/ApiGateway/Program.cs" />
         <option value="$PROJECT_DIR$/CityPlatform/Program.cs" />
         <option value="$PROJECT_DIR$/DesktopPlatform/Program.cs" />
@@ -136,7 +136,6 @@
         <option value="$PROJECT_DIR$/SearchPlatform/Consumers/SearchConsumer.cs" />
         <option value="$PROJECT_DIR$/SharedArea/Commands/Internal/Requests/UpdateUserSecretRequest.cs" />
         <option value="$PROJECT_DIR$/SharedArea/Commands/Internal/Responses/UpdateUserSecretResponse.cs" />
-        <option value="$PROJECT_DIR$/CityPlatform/Consumers/CityConsumer.cs" />
         <option value="$PROJECT_DIR$/SharedArea/Commands/User/UpdateUserProfile.cs" />
         <option value="$PROJECT_DIR$/SharedArea/Commands/User/UpdateUserProfileResponse.cs" />
         <option value="$PROJECT_DIR$/SharedArea/Commands/User/UpdateUserProfileRequest.cs" />
@@ -158,13 +157,18 @@
         <option value="$PROJECT_DIR$/ApiGateway/Controllers/AuthController.cs" />
         <option value="$PROJECT_DIR$/SharedArea/Commands/User/GetMeRequest.cs" />
         <option value="$PROJECT_DIR$/SharedArea/Commands/User/GetMeResponse.cs" />
-        <option value="$PROJECT_DIR$/ApiGateway/Consumers/ApiGatewayInternalConsumer.cs" />
         <option value="$PROJECT_DIR$/SharedArea/Commands/User/GetUserByIdRequest.cs" />
         <option value="$PROJECT_DIR$/SharedArea/Commands/User/GetUserByIdResponse.cs" />
         <option value="$PROJECT_DIR$/SharedArea/Commands/User/SearchUsersRequest.cs" />
         <option value="$PROJECT_DIR$/SharedArea/Commands/User/SearchUsersResponse.cs" />
         <option value="$PROJECT_DIR$/ProfilePlatform/Consumers/ProfileConsumer.cs" />
         <option value="$PROJECT_DIR$/ApiGateway/Controllers/UserController.cs" />
+        <option value="$PROJECT_DIR$/StorePlatform/DbContexts/DatabaseContext.cs" />
+        <option value="$PROJECT_DIR$/StorePlatform/Consumers/SearchConsumer.cs" />
+        <option value="$PROJECT_DIR$/StorePlatform/Program.cs" />
+        <option value="$PROJECT_DIR$/SharedArea/Commands/Internal/Notifications/UpdateUserProfileNotif.cs" />
+        <option value="$PROJECT_DIR$/CityPlatform/Consumers/CityConsumer.cs" />
+        <option value="$PROJECT_DIR$/ApiGateway/Consumers/ApiGatewayInternalConsumer.cs" />
       </list>
     </option>
   </component>
@@ -194,34 +198,6 @@
             <path>
               <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
               <item name="AsemanBackendProjects (9 projects)" type="977d5f41:SolutionExplorerNodeRider" />
-            </path>
-            <path>
-              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
-              <item name="AsemanBackendProjects (9 projects)" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="ApiGateway" type="977d5f41:SolutionExplorerNodeRider" />
-            </path>
-            <path>
-              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
-              <item name="AsemanBackendProjects (9 projects)" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="ApiGateway" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="Consumers" type="977d5f41:SolutionExplorerNodeRider" />
-            </path>
-            <path>
-              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
-              <item name="AsemanBackendProjects (9 projects)" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="ApiGateway" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="Controllers" type="977d5f41:SolutionExplorerNodeRider" />
-            </path>
-            <path>
-              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
-              <item name="AsemanBackendProjects (9 projects)" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="ApiGateway" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="DbContexts" type="977d5f41:SolutionExplorerNodeRider" />
-            </path>
-            <path>
-              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
-              <item name="AsemanBackendProjects (9 projects)" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="ProfilePlatform" type="977d5f41:SolutionExplorerNodeRider" />
             </path>
           </expand>
           <select />
@@ -450,12 +426,12 @@
       <workItem from="1547047893338" duration="11334000" />
       <workItem from="1547657262800" duration="6383000" />
       <workItem from="1547707959199" duration="28699000" />
-      <workItem from="1547797143947" duration="16000000" />
+      <workItem from="1547797143947" duration="18096000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="70172000" />
+    <option name="totallyTimeSpent" value="72268000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -508,34 +484,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/ApiGateway/Hubs/NotificationsHub.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-199">
-          <caret line="1" column="27" selection-start-line="1" selection-start-column="27" selection-end-line="1" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ApiGateway/Startup.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="24" column="25" lean-forward="true" selection-start-line="24" selection-start-column="25" selection-end-line="24" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SharedArea/Commands/Internal/Requests/CreateMembershipRequest.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="47" selection-start-line="2" selection-start-column="47" selection-end-line="2" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BotPlatform/Program.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="18" selection-start-line="3" selection-start-column="18" selection-end-line="3" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ApiGateway/Program.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-394">
@@ -572,13 +520,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ProfilePlatform/Program.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="18" selection-start-line="1" selection-start-column="18" selection-end-line="1" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SearchPlatform/Program.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" column="18" selection-start-line="1" selection-start-column="18" selection-end-line="1" selection-end-column="18" />
@@ -743,42 +684,6 @@
             <marker date="1547803967759" expanded="true" signature="2253:2721" ph="{...}" />
             <marker date="1547803967759" expanded="true" signature="2805:3276" ph="{...}" />
             <marker date="1547803967759" expanded="true" signature="2873:3266" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CityPlatform/Consumers/CityConsumer.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="154" lean-forward="true" selection-start-line="154" selection-end-line="154" />
-          <folding>
-            <marker date="1547810126977" expanded="false" signature="6:309" ph="..." />
-            <marker date="1547810126977" expanded="true" signature="343:5813" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="592:5811" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="678:1705" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="746:1695" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="1440:1679" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="1504:1661" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="1783:2439" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="1851:2429" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="2229:2413" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="2293:2395" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="2517:3224" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="2585:3214" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="3008:3198" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="3072:3180" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="3308:4201" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="3376:4191" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="3942:4175" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="4006:4157" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="4282:4971" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="4350:4961" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="4757:4945" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="4821:4927" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="5063:5805" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="5131:5795" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="5634:5779" ph="{...}" />
-            <marker date="1547810126977" expanded="true" signature="5698:5761" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1107,36 +1012,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ApiGateway/Consumers/ApiGatewayInternalConsumer.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="15" column="113" selection-start-line="15" selection-start-column="113" selection-end-line="15" selection-end-column="113" />
-          <folding>
-            <marker date="1547808887886" expanded="false" signature="6:279" ph="..." />
-            <marker date="1547808887886" expanded="true" signature="311:5644" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="740:5642" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="816:1163" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="896:1114" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="1237:1587" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="1317:1538" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="1658:2005" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="1738:1956" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="2082:2435" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="2162:2386" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="2517:2867" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="2597:2818" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="2945:3205" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="3286:3555" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="3633:3893" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="3977:4255" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="4344:4613" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="4705:4983" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="5144:5636" ph="{...}" />
-            <marker date="1547808887886" expanded="true" signature="5550:5597" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/SharedArea/Commands/User/GetUserByIdResponse.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
@@ -1181,56 +1056,209 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ApiGateway/Controllers/UserController.cs">
+    <entry file="file://$PROJECT_DIR$/ProfilePlatform/Consumers/ProfileConsumer.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-439">
-          <caret line="20" column="57" lean-forward="true" selection-start-line="20" selection-start-column="57" selection-end-line="20" selection-end-column="57" />
+        <state relative-caret-position="75">
+          <caret line="14" column="75" selection-start-line="14" selection-start-column="75" selection-end-line="14" selection-end-column="75" />
           <folding>
-            <marker date="1547830575467" expanded="true" signature="7:192" ph="..." />
-            <marker date="1547830575467" expanded="true" signature="226:3075" ph="{...}" />
-            <marker date="1547830575467" expanded="true" signature="360:3073" ph="{...}" />
-            <marker date="1547830575467" expanded="true" signature="523:1283" ph="{...}" />
-            <marker date="1547830575467" expanded="true" signature="591:1273" ph="{...}" />
-            <marker date="1547830575467" expanded="true" signature="1396:2041" ph="{...}" />
-            <marker date="1547830575467" expanded="true" signature="1462:2031" ph="{...}" />
-            <marker date="1547830575467" expanded="true" signature="2192:2555" ph="{...}" />
-            <marker date="1547830575467" expanded="true" signature="2704:3067" ph="{...}" />
+            <marker date="1547833294735" expanded="false" signature="6:297" ph="..." />
+            <marker date="1547833294735" expanded="true" signature="334:3461" ph="{...}" />
+            <marker date="1547833294735" expanded="true" signature="536:3459" ph="{...}" />
+            <marker date="1547833294735" expanded="true" signature="612:1102" ph="{...}" />
+            <marker date="1547833294735" expanded="true" signature="680:1092" ph="{...}" />
+            <marker date="1547833294735" expanded="true" signature="1176:1804" ph="{...}" />
+            <marker date="1547833294735" expanded="true" signature="1244:1794" ph="{...}" />
+            <marker date="1547833294735" expanded="true" signature="1875:2285" ph="{...}" />
+            <marker date="1547833294735" expanded="true" signature="1943:2275" ph="{...}" />
+            <marker date="1547833294735" expanded="true" signature="2362:2908" ph="{...}" />
+            <marker date="1547833294735" expanded="true" signature="2430:2898" ph="{...}" />
+            <marker date="1547833294735" expanded="true" signature="2982:3453" ph="{...}" />
+            <marker date="1547833294735" expanded="true" signature="3050:3443" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ProfilePlatform/Consumers/ProfileConsumer.cs">
+    <entry file="file://$PROJECT_DIR$/ApiGateway/Controllers/UserController.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1016">
-          <caret line="172" column="21" selection-start-line="172" selection-start-column="21" selection-end-line="172" selection-end-column="21" />
+        <state relative-caret-position="386">
+          <caret line="75" column="58" selection-start-line="75" selection-start-column="58" selection-end-line="75" selection-end-column="58" />
           <folding>
-            <marker date="1547830610281" expanded="true" signature="6:297" ph="..." />
-            <marker date="1547830610281" expanded="true" signature="334:6469" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="669:6467" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="745:1235" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="813:1225" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="1309:1937" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="1377:1927" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="2008:2418" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="2076:2408" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="2495:3041" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="2563:3031" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="3115:3586" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="3183:3576" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="3671:4415" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="3739:4405" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="4241:4389" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="4305:4371" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="4488:5354" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="4556:5344" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="5035:5328" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="5097:5310" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="5433:5859" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="5501:5849" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="5736:5833" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="5938:6461" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="6006:6451" ph="{...}" />
-            <marker date="1547830610281" expanded="true" signature="6340:6435" ph="{...}" />
+            <marker date="1547833325220" expanded="false" signature="7:192" ph="..." />
+            <marker date="1547833325220" expanded="true" signature="226:3063" ph="{...}" />
+            <marker date="1547833325220" expanded="true" signature="360:3061" ph="{...}" />
+            <marker date="1547833325220" expanded="true" signature="523:1280" ph="{...}" />
+            <marker date="1547833325220" expanded="true" signature="591:1270" ph="{...}" />
+            <marker date="1547833325220" expanded="true" signature="1393:2035" ph="{...}" />
+            <marker date="1547833325220" expanded="true" signature="1459:2025" ph="{...}" />
+            <marker date="1547833325220" expanded="true" signature="2186:2546" ph="{...}" />
+            <marker date="1547833325220" expanded="true" signature="2695:3055" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/StorePlatform/DbContexts/DatabaseContext.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1414">
+          <caret line="1" column="6" selection-start-line="1" selection-start-column="6" selection-end-line="1" selection-end-column="6" />
+          <folding>
+            <marker date="1547833773412" expanded="true" signature="7:96" ph="..." />
+            <marker date="1547833773412" expanded="true" signature="132:5629" ph="{...}" />
+            <marker date="1547833773412" expanded="true" signature="207:5627" ph="{...}" />
+            <marker date="1547833773412" expanded="true" signature="1717:5621" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/StorePlatform/Program.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="29" column="17" selection-start-line="29" selection-start-column="17" selection-end-line="29" selection-end-column="17" />
+          <folding>
+            <marker date="1547833840342" expanded="false" signature="6:153" ph="..." />
+            <marker date="1547833840342" expanded="true" signature="178:1728" ph="{...}" />
+            <marker date="1547833840342" expanded="true" signature="198:1726" ph="{...}" />
+            <marker date="1547833840342" expanded="true" signature="305:1720" ph="{...}" />
+            <marker date="1547833840342" expanded="true" signature="373:453" ph="{...}" />
+            <marker date="1547833840342" expanded="true" signature="535:1682" ph="{...}" />
+            <marker date="1547833840342" expanded="true" signature="648:840" ph="{...}" />
+            <marker date="1547833840342" expanded="true" signature="938:1166" ph="{...}" />
+            <marker date="1547833840342" expanded="true" signature="1225:1453" ph="{...}" />
+            <marker date="1547833840342" expanded="true" signature="1580:1666" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SearchPlatform/Program.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="23" column="17" lean-forward="true" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
+          <folding>
+            <marker date="1547756959651" expanded="true" signature="6:155" ph="..." />
+            <marker date="1547756959651" expanded="true" signature="181:1732" ph="{...}" />
+            <marker date="1547756959651" expanded="true" signature="201:1730" ph="{...}" />
+            <marker date="1547756959651" expanded="true" signature="308:1724" ph="{...}" />
+            <marker date="1547756959651" expanded="true" signature="376:456" ph="{...}" />
+            <marker date="1547756959651" expanded="true" signature="538:1686" ph="{...}" />
+            <marker date="1547756959651" expanded="true" signature="651:843" ph="{...}" />
+            <marker date="1547756959651" expanded="true" signature="941:1169" ph="{...}" />
+            <marker date="1547756959651" expanded="true" signature="1228:1456" ph="{...}" />
+            <marker date="1547756959651" expanded="true" signature="1583:1670" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/StorePlatform/Consumers/StoreConsumer.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-919">
+          <caret line="7" column="22" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
+          <folding>
+            <marker date="1547833814334" expanded="false" signature="6:130" ph="..." />
+            <marker date="1547833814334" expanded="true" signature="165:3290" ph="{...}" />
+            <marker date="1547833814334" expanded="true" signature="365:3288" ph="{...}" />
+            <marker date="1547833814334" expanded="true" signature="441:931" ph="{...}" />
+            <marker date="1547833814334" expanded="true" signature="509:921" ph="{...}" />
+            <marker date="1547833814334" expanded="true" signature="1005:1633" ph="{...}" />
+            <marker date="1547833814334" expanded="true" signature="1073:1623" ph="{...}" />
+            <marker date="1547833814334" expanded="true" signature="1704:2114" ph="{...}" />
+            <marker date="1547833814334" expanded="true" signature="1772:2104" ph="{...}" />
+            <marker date="1547833814334" expanded="true" signature="2191:2737" ph="{...}" />
+            <marker date="1547833814334" expanded="true" signature="2259:2727" ph="{...}" />
+            <marker date="1547833814334" expanded="true" signature="2811:3282" ph="{...}" />
+            <marker date="1547833814334" expanded="true" signature="2879:3272" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SharedArea/Commands/Internal/Notifications/UpdateUserProfileNotif.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="54" selection-start-line="2" selection-start-column="54" selection-end-line="2" selection-end-column="54" />
+          <folding>
+            <marker date="1547833998948" expanded="true" signature="52:132" ph="{...}" />
+            <marker date="1547833998948" expanded="true" signature="109:130" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CityPlatform/Consumers/CityConsumer.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="182" column="16" lean-forward="true" selection-start-line="182" selection-start-column="16" selection-end-line="182" selection-end-column="16" />
+          <folding>
+            <marker date="1547834336658" expanded="false" signature="6:397" ph="..." />
+            <marker date="1547834336658" expanded="true" signature="431:9279" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="813:9277" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="899:1926" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="967:1916" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="1661:1900" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="1725:1882" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="2004:2660" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="2072:2650" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="2450:2634" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="2514:2616" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="2738:3445" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="2806:3435" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="3229:3419" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="3293:3401" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="3529:4422" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="3597:4412" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="4163:4396" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="4227:4378" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="4503:5192" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="4571:5182" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="4978:5166" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="5042:5148" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="5284:6026" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="5352:6016" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="5855:6000" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="5919:5982" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="6119:7225" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="6187:7215" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="6865:6955" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="7051:7199" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="7115:7181" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="7298:8164" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="7366:8154" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="7845:8138" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="7907:8120" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="8243:8669" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="8311:8659" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="8546:8643" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="8748:9271" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="8816:9261" ph="{...}" />
+            <marker date="1547834336658" expanded="true" signature="9150:9245" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ApiGateway/Consumers/ApiGatewayInternalConsumer.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="74" column="55" selection-start-line="74" selection-start-column="55" selection-end-line="74" selection-end-column="55" />
+          <folding>
+            <marker date="1547834580735" expanded="true" signature="6:279" ph="..." />
+            <marker date="1547834580735" expanded="true" signature="311:6135" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="793:6133" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="869:1216" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="949:1167" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="1290:1640" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="1370:1591" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="1711:2058" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="1791:2009" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="2135:2488" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="2215:2439" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="2570:2920" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="2650:2871" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="3005:3358" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="3085:3309" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="3436:3696" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="3777:4046" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="4124:4384" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="4468:4746" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="4835:5104" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="5196:5474" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="5635:6127" ph="{...}" />
+            <marker date="1547834580735" expanded="true" signature="6041:6088" ph="{...}" />
           </folding>
         </state>
       </provider>
