@@ -218,6 +218,12 @@
           <e p="Request.cs" t="Include" />
           <e p="Response.cs" t="Include" />
           <e p="User" t="Include">
+            <e p="GetMeRequest.cs" t="Include" />
+            <e p="GetMeResponse.cs" t="Include" />
+            <e p="GetUserByIdRequest.cs" t="Include" />
+            <e p="GetUserByIdResponse.cs" t="Include" />
+            <e p="SearchUsersRequest.cs" t="Include" />
+            <e p="SearchUsersResponse.cs" t="Include" />
             <e p="UpdateUserProfileRequest.cs" t="Include" />
             <e p="UpdateUserProfileResponse.cs" t="Include" />
           </e>
