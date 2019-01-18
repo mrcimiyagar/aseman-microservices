@@ -1,0 +1,14 @@
+F:\Desktop\AsemanBackendProjects\BotPlatform\bin\Debug\netcoreapp2.2\BotPlatform.deps.json
+F:\Desktop\AsemanBackendProjects\BotPlatform\bin\Debug\netcoreapp2.2\BotPlatform.runtimeconfig.json
+F:\Desktop\AsemanBackendProjects\BotPlatform\bin\Debug\netcoreapp2.2\BotPlatform.runtimeconfig.dev.json
+F:\Desktop\AsemanBackendProjects\BotPlatform\bin\Debug\netcoreapp2.2\BotPlatform.dll
+F:\Desktop\AsemanBackendProjects\BotPlatform\bin\Debug\netcoreapp2.2\BotPlatform.pdb
+F:\Desktop\AsemanBackendProjects\BotPlatform\bin\Debug\netcoreapp2.2\SharedArea.dll
+F:\Desktop\AsemanBackendProjects\BotPlatform\bin\Debug\netcoreapp2.2\SharedArea.pdb
+F:\Desktop\AsemanBackendProjects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.csprojAssemblyReference.cache
+F:\Desktop\AsemanBackendProjects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.csproj.CoreCompileInputs.cache
+F:\Desktop\AsemanBackendProjects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.AssemblyInfoInputs.cache
+F:\Desktop\AsemanBackendProjects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.AssemblyInfo.cs
+F:\Desktop\AsemanBackendProjects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.csproj.CopyComplete
+F:\Desktop\AsemanBackendProjects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.dll
+F:\Desktop\AsemanBackendProjects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.pdb

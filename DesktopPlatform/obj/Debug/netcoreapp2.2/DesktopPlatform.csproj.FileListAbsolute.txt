@@ -1,0 +1,14 @@
+F:\Desktop\AsemanBackendProjects\DesktopPlatform\bin\Debug\netcoreapp2.2\DesktopPlatform.deps.json
+F:\Desktop\AsemanBackendProjects\DesktopPlatform\bin\Debug\netcoreapp2.2\DesktopPlatform.runtimeconfig.json
+F:\Desktop\AsemanBackendProjects\DesktopPlatform\bin\Debug\netcoreapp2.2\DesktopPlatform.runtimeconfig.dev.json
+F:\Desktop\AsemanBackendProjects\DesktopPlatform\bin\Debug\netcoreapp2.2\DesktopPlatform.dll
+F:\Desktop\AsemanBackendProjects\DesktopPlatform\bin\Debug\netcoreapp2.2\DesktopPlatform.pdb
+F:\Desktop\AsemanBackendProjects\DesktopPlatform\bin\Debug\netcoreapp2.2\SharedArea.dll
+F:\Desktop\AsemanBackendProjects\DesktopPlatform\bin\Debug\netcoreapp2.2\SharedArea.pdb
+F:\Desktop\AsemanBackendProjects\DesktopPlatform\obj\Debug\netcoreapp2.2\DesktopPlatform.csprojAssemblyReference.cache
+F:\Desktop\AsemanBackendProjects\DesktopPlatform\obj\Debug\netcoreapp2.2\DesktopPlatform.csproj.CoreCompileInputs.cache
+F:\Desktop\AsemanBackendProjects\DesktopPlatform\obj\Debug\netcoreapp2.2\DesktopPlatform.AssemblyInfoInputs.cache
+F:\Desktop\AsemanBackendProjects\DesktopPlatform\obj\Debug\netcoreapp2.2\DesktopPlatform.AssemblyInfo.cs
+F:\Desktop\AsemanBackendProjects\DesktopPlatform\obj\Debug\netcoreapp2.2\DesktopPlatform.csproj.CopyComplete
+F:\Desktop\AsemanBackendProjects\DesktopPlatform\obj\Debug\netcoreapp2.2\DesktopPlatform.dll
+F:\Desktop\AsemanBackendProjects\DesktopPlatform\obj\Debug\netcoreapp2.2\DesktopPlatform.pdb

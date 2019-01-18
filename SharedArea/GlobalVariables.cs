@@ -1,4 +1,8 @@
-﻿namespace SharedArea
+﻿using System.Data;
+using System.Linq;
+using System.Runtime.Serialization;
+
+namespace SharedArea
 {
     public class GlobalVariables
     {
@@ -31,5 +35,19 @@
         public const string SEARCH_QUEUE_PATH = RABBITMQ_SERVER_URL + "/" + SEARCH_QUEUE_NAME;
         
         public const int RABBITMQ_REQUEST_TIMEOUT = 30;
+
+        public static string[] AllQueuesExcept(string[] queueNames)
+        {
+            var queues = new string[]
+            {
+                BOT_QUEUE_NAME, CITY_QUEUE_NAME, DESKTOP_QUEUE_NAME, ENTRY_QUEUE_NAME, MESSENGER_QUEUE_NAME,
+                PROFILE_QUEUE_NAME, SEARCH_QUEUE_NAME
+            }.ToList();
+            foreach (var queueName in queueNames)
+            {
+                queues.Remove(queueName);
+            }
+            return queues.ToArray();
+        }
     }
 }

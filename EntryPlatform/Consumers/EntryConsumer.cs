@@ -1,21 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using EntryPlatform.DbContexts;
-using EntryPlatform.Utils;
 using MassTransit;
-using SharedArea.Commands;
 using SharedArea.Commands.Auth;
 using SharedArea.Commands.Internal.Notifications;
+using SharedArea.Commands.Internal.Requests;
+using SharedArea.Commands.Internal.Responses;
 using SharedArea.Entities;
 using SharedArea.Middles;
+using SharedArea.Utils;
 
 namespace EntryPlatform.Consumers
 {
     public class EntryConsumer : IConsumer<RegisterRequest>, IConsumer<LoginRequest>, IConsumer<VerifyRequest>
+        , IConsumer<LogoutRequest>, IConsumer<UserCreatedNotif>, IConsumer<ComplexCreatedNotif>, IConsumer<RoomCreatedNotif>
+        , IConsumer<MembershipCreatedNotif>, IConsumer<SessionCreatedNotif>
     {
         private const string EmailAddress = "keyhan.mohammadi1997@gmail.com";
         private const string EmailPassword = "2&b165sf4j)684tkt87El^o9w68i87u6s*4h48#98aq";
@@ -45,7 +47,7 @@ namespace EntryPlatform.Consumers
                     pending.VerifyCode = code;
                 }
                 dbContext.SaveChanges();
-                await context.RespondAsync<RegisterResponse>(
+                await context.RespondAsync(
                     new RegisterResponse()
                     {
                         Packet = new Packet()
@@ -55,44 +57,13 @@ namespace EntryPlatform.Consumers
                     });
             }
         }
-        
-        private static void SendEmail(string to, string subject, string content) 
-        {
-            var client = new SmtpClient("smtp.gmail.com", 587)
-            {
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(EmailAddress, EmailPassword),
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                EnableSsl = true
-            };
-            var mailMessage = new MailMessage
-            {
-                From = new MailAddress(EmailAddress)
-            };
-            mailMessage.To.Add(to);
-            mailMessage.Body = content;
-            mailMessage.Subject = subject;
-            client.Send(mailMessage);
-        }
 
         public async Task Consume(ConsumeContext<LoginRequest> context)
         {
             using (var dbContext = new DatabaseContext())
             {
-                var packet = context.Message.Packet;
-                var session = Security.Authenticate(dbContext, context.Message.Headers[AuthExtracter.AK]);
-                if (session == null)
-                {
-                    await context.RespondAsync<RegisterResponse>(
-                        new RegisterResponse()
-                        {
-                            Packet = new Packet()
-                            {
-                                Status = "error_030"
-                            }
-                        });
-                    return;
-                }
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
                 var user = (User) session.BaseUser;
                 session.Token = Security.MakeKey64();
@@ -100,8 +71,8 @@ namespace EntryPlatform.Consumers
                 dbContext.Entry(user).Reference(u => u.UserSecret).Load();
                 dbContext.Entry(user.UserSecret).Reference(us => us.Home).Load();
                 dbContext.Entry(user.UserSecret?.Home).Collection(h => h.Members).Load();
-                await context.RespondAsync<RegisterResponse>(
-                    new RegisterResponse()
+                await context.RespondAsync(
+                    new LoginResponse()
                     {
                         Packet = new Packet()
                         {
@@ -138,19 +109,10 @@ namespace EntryPlatform.Consumers
                             };
                             user.UserSecret = userAuth;
                             
-                            var address = new Uri(SharedArea.GlobalVariables.CITY_QUEUE_PATH);
-                            var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);            
-                            IRequestClient<NotifyUserCreatedRequest, NotifyUserCreatedResponse> client =
-                                new MessageRequestClient<NotifyUserCreatedRequest, NotifyUserCreatedResponse>
-                                    (Program.Bus, address, requestTimeout);
-                            var result = await client.Request(new NotifyUserCreatedRequest()
-                            {
-                                Packet = new Packet()
-                                {
-                                    User = user,
-                                    UserSecret = userAuth
-                                }
-                            });
+                            var result = await SharedArea.Transport.RequestService<CreateUserRequest, CreateUserResponse>(
+                                Program.Bus,
+                                SharedArea.GlobalVariables.CITY_QUEUE_NAME,
+                                new Packet() {User = user, UserSecret = userAuth});
                             
                             user.BaseUserId = result.Packet.User.BaseUserId;
                             userAuth.UserSecretId = result.Packet.UserSecret.UserSecretId;
@@ -166,6 +128,8 @@ namespace EntryPlatform.Consumers
                                 Admin = user,
                                 Complex = complex
                             };
+                            
+                            
                             complex.ComplexSecret = ca;
                             var room = new Room()
                             {
@@ -173,28 +137,66 @@ namespace EntryPlatform.Consumers
                                 Avatar = 0,
                                 Complex = complex
                             };
+                            
                             userAuth.Home = complex;
                             
-                            address = new Uri(SharedArea.GlobalVariables.CITY_QUEUE_PATH);
-                            requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);            
-                            IRequestClient<NotifyComplexCreatedRequest, NotifyComplexCreatedResponse> client2 =
-                                new MessageRequestClient<NotifyComplexCreatedRequest, NotifyComplexCreatedResponse>
-                                    (Program.Bus, address, requestTimeout);
-                            result = await client.Request(new NotifyComplexCreatedRequest()
-                            {
-                                Packet = new Packet()
-                                {
-                                    Complex = complex,
-                                    ComplexSecret = ca
-                                }
-                            });
+                            var result2 = await SharedArea.Transport.RequestService<CreateComplexRequest, CreateComplexResponse>(
+                                Program.Bus,
+                                SharedArea.GlobalVariables.CITY_QUEUE_NAME,
+                                new Packet() {User = user, Complex = complex, ComplexSecret = ca, Room = room});
+                            
+                            complex.ComplexId = result2.Packet.Complex.ComplexId;
+                            ca.ComplexSecretId = result2.Packet.ComplexSecret.ComplexSecretId;
+                            room.RoomId = result2.Packet.Room.RoomId;
+
+                            await SharedArea.Transport.RequestService<UpdateUserSecretRequest, UpdateUserSecretResponse>(
+                                Program.Bus,
+                                SharedArea.GlobalVariables.CITY_QUEUE_NAME,
+                                new Packet() {UserSecret = userAuth});
                             
                             var mem = new Membership()
                             {
                                 User = user,
                                 Complex = complex
                             };
+                            
+                            var result3 = await SharedArea.Transport.RequestService<CreateMembershipRequest, CreateMembershipResponse>(
+                                Program.Bus,
+                                SharedArea.GlobalVariables.CITY_QUEUE_NAME,
+                                new Packet() {Membership = mem, User = user, Complex = complex});
+                            
+                            mem.MembershipId = result3.Packet.Membership.MembershipId;
+                            
                             dbContext.AddRange(user, userAuth, complex, ca, room, mem);
+
+                            dbContext.SaveChanges();
+                            
+                            SharedArea.Transport.NotifyService<UserCreatedNotif>(
+                                Program.Bus,
+                                new Packet() {User = user, UserSecret = userAuth},
+                                SharedArea.GlobalVariables.AllQueuesExcept(new []
+                                {
+                                    SharedArea.GlobalVariables.ENTRY_QUEUE_NAME,
+                                    SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                                }));
+                            
+                            SharedArea.Transport.NotifyService<ComplexCreatedNotif>(
+                                Program.Bus,
+                                new Packet() {User = user, Complex = complex, ComplexSecret = ca, Room = room},
+                                SharedArea.GlobalVariables.AllQueuesExcept(new []
+                                {
+                                    SharedArea.GlobalVariables.ENTRY_QUEUE_NAME,
+                                    SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                                }));
+                            
+                            SharedArea.Transport.NotifyService<MembershipCreatedNotif>(
+                                Program.Bus,
+                                new Packet() {Membership = mem, User = user, Complex = complex},
+                                SharedArea.GlobalVariables.AllQueuesExcept(new []
+                                {
+                                    SharedArea.GlobalVariables.ENTRY_QUEUE_NAME,
+                                    SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                                }));
                         }
                         else
                         {
@@ -208,28 +210,188 @@ namespace EntryPlatform.Consumers
                             Online = false,
                             BaseUser = user
                         };
+
+                        var result4 = await SharedArea.Transport.RequestService<CreateSessionRequest, CreateSessionResponse>(
+                            Program.Bus,
+                            SharedArea.GlobalVariables.CITY_QUEUE_NAME,
+                            new Packet() {Session = session, BaseUser = user});
+
+                        session.SessionId = result4.Packet.Session.SessionId;
+                        
                         dbContext.AddRange(session);
                         dbContext.Pendings.Remove(pending);
                         dbContext.SaveChanges();
-
+                        
+                        SharedArea.Transport.NotifyService<SessionCreatedNotif>(
+                            Program.Bus,
+                            new Packet() {Session = session, BaseUser = user},
+                            SharedArea.GlobalVariables.AllQueuesExcept(new []
+                            {
+                                SharedArea.GlobalVariables.ENTRY_QUEUE_NAME,
+                                SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                            }));
+                        
                         dbContext.Entry(session).Reference(s => s.BaseUser).Load();
                         dbContext.Entry(user).Reference(u => u.UserSecret).Load();
                         dbContext.Entry(user.UserSecret).Reference(us => us.Home).Load();
                         dbContext.Entry(user.UserSecret.Home).Collection(h => h.Members).Load();
                         dbContext.Entry(user.UserSecret.Home).Reference(h => h.ComplexSecret).Load();
-
-                        return new Packet { Status = "success", Session = session, UserSecret = userAuth };
+                        
+                        await context.RespondAsync(
+                            new VerifyResponse()
+                            {
+                                Packet = new Packet()
+                                {
+                                    Status = "success", Session = session, UserSecret = userAuth
+                                }
+                            });
                     }
                     else
                     {
-                        return new Packet { Status = "error_020" };
+                        await context.RespondAsync(
+                            new VerifyResponse()
+                            {
+                                Packet = new Packet()
+                                {
+                                    Status = "error_020"
+                                }
+                            });
                     }
                 }
                 else
                 {
-                    return new Packet { Status = "error_021" };
+                    await context.RespondAsync(
+                        new VerifyResponse()
+                        {
+                            Packet = new Packet()
+                            {
+                                Status = "error_021"
+                            }
+                        });
                 }
             }
+        }
+        
+        public async Task Consume(ConsumeContext<LogoutRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+
+                session.ConnectionId = "";
+                session.Online = false;
+                dbContext.SaveChanges();
+                await context.RespondAsync(
+                    new LogoutResponse()
+                    {
+                        Packet = new Packet()
+                        {
+                            Status = "success"
+                        }
+                    });
+            }
+        }
+        
+        public Task Consume(ConsumeContext<UserCreatedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var user = context.Message.Packet.User;
+                var userSecret = context.Message.Packet.UserSecret;
+
+                user.UserSecret = userSecret;
+                userSecret.User = user;
+                
+                dbContext.AddRange(user, userSecret);
+                
+                return Task.CompletedTask;
+            }
+        }
+
+        public Task Consume(ConsumeContext<ComplexCreatedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var admin = context.Message.Packet.User;
+                var complex = context.Message.Packet.Complex;
+                var complexSecret = context.Message.Packet.ComplexSecret;
+                
+                complex.ComplexSecret = complexSecret;
+                complexSecret.Complex = complex;
+                complexSecret.Admin = admin;
+
+                dbContext.AddRange(complex, complexSecret);
+                
+                return Task.CompletedTask;
+            }
+        }
+
+        public Task Consume(ConsumeContext<RoomCreatedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var complex = context.Message.Packet.Complex;
+                var room = context.Message.Packet.Room;
+                
+                room.Complex = complex;
+
+                dbContext.AddRange(room);
+
+                return Task.CompletedTask;
+            }
+        }
+
+        public Task Consume(ConsumeContext<MembershipCreatedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var membership = context.Message.Packet.Membership;
+                var user = context.Message.Packet.User;
+                var complex = context.Message.Packet.Complex;
+
+                membership.User = user;
+                membership.Complex = complex;
+                
+                dbContext.AddRange(membership);
+                
+                return Task.CompletedTask;
+            }
+        }
+
+        public Task Consume(ConsumeContext<SessionCreatedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = context.Message.Packet.Session;
+                var user = context.Message.Packet.BaseUser;
+
+                session.BaseUser = dbContext.BaseUsers.Find(user.BaseUserId);
+                
+                dbContext.AddRange(session);
+
+                dbContext.SaveChanges();
+                
+                return Task.CompletedTask;
+            }
+        }
+
+        private static void SendEmail(string to, string subject, string content)
+        {
+            var client = new SmtpClient("smtp.gmail.com", 587)
+            {
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(EmailAddress, EmailPassword),
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                EnableSsl = true
+            };
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress(EmailAddress)
+            };
+            mailMessage.To.Add(to);
+            mailMessage.Body = content;
+            mailMessage.Subject = subject;
+            client.Send(mailMessage);
         }
     }
 }

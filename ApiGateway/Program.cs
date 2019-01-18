@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using ApiGateway.Consumers;
 using MassTransit;
+using MassTransit.NLogIntegration;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using SharedArea.Commands.Auth;
+using Newtonsoft.Json;
 
 namespace ApiGateway
 {
@@ -33,6 +29,20 @@ namespace ApiGateway
                     h.Username("guest");
                     h.Password("guest");
                 });
+                sbc.UseJsonSerializer();
+                sbc.ConfigureJsonSerializer(options =>
+                {
+                    options.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    options.NullValueHandling = NullValueHandling.Ignore;
+                    return options;
+                });
+                sbc.ConfigureJsonDeserializer(options =>
+                {
+                    options.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    options.NullValueHandling = NullValueHandling.Ignore;
+                    return options;
+                });
+                sbc.UseNLog();
                 sbc.ReceiveEndpoint(host, "ApiGateWayInternalQueue", ep =>
                 {
                     ep.Consumer<ApiGatewayInternalConsumer>();
@@ -44,6 +54,9 @@ namespace ApiGateway
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseUrls("http://*:8080")
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
                 .UseStartup<Startup>();
     }
 }

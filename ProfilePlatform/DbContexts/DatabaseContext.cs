@@ -5,12 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ProfilePlatform.DbContexts
 {
-    public class DatabaseContext : DbContext
+    public class DatabaseContext : SharedArea.DbContexts.DatabaseContext
     {
         public DbSet<BaseUser> BaseUsers { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserSecret> UserSecrets { get; set; }
-        public DbSet<Session> Sessions { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<File> Files { get; set; }
         public DbSet<Pending> Pendings { get; set; }
@@ -32,7 +31,7 @@ namespace ProfilePlatform.DbContexts
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder
-                .UseSqlServer(@"Server=localhost\SQLEXPRESS;Database=KaspernetDB;Trusted_Connection=True;");
+                .UseSqlServer(@"Server=localhost\SQLEXPRESS;Database=ProfilePlatformDb;Trusted_Connection=True;");
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -108,6 +107,22 @@ namespace ProfilePlatform.DbContexts
             
             modelBuilder.Entity<Room>()
                 .Property(u => u.RoomId)
+                .ValueGeneratedNever();
+            
+            modelBuilder.Entity<Membership>()
+                .Property(u => u.MembershipId)
+                .ValueGeneratedNever();
+            
+            modelBuilder.Entity<UserSecret>()
+                .Property(u => u.UserSecretId)
+                .ValueGeneratedNever();
+
+            modelBuilder.Entity<ComplexSecret>()
+                .Property(u => u.ComplexSecretId)
+                .ValueGeneratedNever();
+            
+            modelBuilder.Entity<Session>()
+                .Property(u => u.SessionId)
                 .ValueGeneratedNever();
         }
     }

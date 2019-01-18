@@ -1,12 +1,17 @@
-﻿using System.Linq;
-using MessengerPlatform.DbContexts;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using ApiGateway.DbContexts;
+using MassTransit;
 using SharedArea.Entities;
 using SharedArea.Middles;
-using AWP.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SharedArea.Commands.Auth;
+using SharedArea.Commands.User;
+using SharedArea.Utils;
 
-namespace AWP.Controllers
+namespace ApiGateway.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
@@ -15,18 +20,22 @@ namespace AWP.Controllers
     {
         [Route("~/api/user/update_user_profile")]
         [HttpPost]
-        public ActionResult<Packet> UpdateProfile([FromBody] Packet packet)
+        public async Task<ActionResult<Packet>> UpdateProfile([FromBody] Packet packet)
         {
-            using (var context = new DatabaseContext())
+            using (var dbContext = new DatabaseContext())
             {
-                var session = Security.Authenticate(context, Request.Headers[AuthExtracter.AK]);
-                if (session == null) return new Packet { Status = "error_0" };
-                context.Entry(session).Reference(s => s.BaseUser).Load();
-                var user = session.BaseUser;
-                user.Title = packet.User.Title;
-                user.Avatar = packet.User.Avatar;
-                context.SaveChanges();
-                return new Packet { Status = "success" };
+                var session = Security.Authenticate(dbContext, Request.Headers[AuthExtracter.AK]);
+                if (session == null) return new Packet() {Status = "error_0"};
+                
+                var result = await SharedArea.Transport
+                    .DirectService<UpdateUserProfileRequest, UpdateUserProfileResponse>(
+                        Program.Bus,
+                        SharedArea.GlobalVariables.PROFILE_QUEUE_NAME,
+                        session.SessionId,
+                        Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
+                        packet);
+
+                return result.Packet;
             }
         }
 
@@ -42,7 +51,13 @@ namespace AWP.Controllers
                 var user = (User) session.BaseUser;
                 context.Entry(user).Reference(u => u.UserSecret).Load();
                 context.Entry(user.UserSecret).Reference(us => us.Home).Load();
-                return new Packet {Status = "success", User = user, UserSecret = user.UserSecret, Complex = user.UserSecret.Home};
+                return new Packet
+                {
+                    Status = "success",
+                    User = user,
+                    UserSecret = user.UserSecret,
+                    Complex = user.UserSecret.Home
+                };
             }
         }
 

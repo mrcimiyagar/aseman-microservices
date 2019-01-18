@@ -5,7 +5,9 @@ namespace SharedArea.Commands
 {
     public class Request
     {
+        public long SessionId { get; set; }
         public Dictionary<string, string> Headers { get; set; }
         public Packet Packet { get; set; }
+        public string Destination { get; set; }
     }
 }

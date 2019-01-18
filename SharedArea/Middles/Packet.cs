@@ -28,6 +28,7 @@ namespace SharedArea.Middles
         public List<User> Users { get; set; }
         public List<Session> Sessions { get; set; }
         public List<Membership> Memberships { get; set; }
+        public Membership Membership { get; set; }
         public List<File> Files { get; set; }
         public List<Message> Messages { get; set; }
         public File File { get; set; }

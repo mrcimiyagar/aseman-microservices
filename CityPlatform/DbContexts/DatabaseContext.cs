@@ -5,12 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CityPlatform.DbContexts
 {
-    public class DatabaseContext : DbContext
+    public class DatabaseContext : SharedArea.DbContexts.DatabaseContext
     {
         public DbSet<BaseUser> BaseUsers { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserSecret> UserSecrets { get; set; }
-        public DbSet<Session> Sessions { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<File> Files { get; set; }
         public DbSet<Pending> Pendings { get; set; }
@@ -32,7 +31,7 @@ namespace CityPlatform.DbContexts
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder
-                .UseSqlServer(@"Server=localhost\SQLEXPRESS;Database=KaspernetDB;Trusted_Connection=True;");
+                .UseSqlServer(@"Server=localhost\SQLEXPRESS;Database=CityPlatformDb;Trusted_Connection=True;");
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

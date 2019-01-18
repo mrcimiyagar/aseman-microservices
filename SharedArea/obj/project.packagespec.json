@@ -30,9 +30,21 @@
           "target": "Package",
           "version": "[5.2.1, )"
         },
+        "MassTransit.NLog": {
+          "target": "Package",
+          "version": "[5.2.1, )"
+        },
         "MassTransit.RabbitMQ": {
           "target": "Package",
           "version": "[5.2.1, )"
+        },
+        "Microsoft.EntityFrameworkCore": {
+          "target": "Package",
+          "version": "[2.2.1, )"
+        },
+        "Microsoft.EntityFrameworkCore.SqlServer": {
+          "target": "Package",
+          "version": "[2.2.1, )"
         },
         "Microsoft.NETCore.App": {
           "suppressParent": "All",
