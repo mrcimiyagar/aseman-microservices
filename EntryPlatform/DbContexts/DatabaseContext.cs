@@ -7,21 +7,14 @@ namespace EntryPlatform.DbContexts
 {
     public class DatabaseContext : SharedArea.DbContexts.DatabaseContext
     {
-        public DbSet<BaseUser> BaseUsers { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<UserSecret> UserSecrets { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<File> Files { get; set; }
         public DbSet<Pending> Pendings { get; set; }
-        public DbSet<Complex> Complexes { get; set; }
-        public DbSet<ComplexSecret> ComplexSecrets { get; set; }
-        public DbSet<Room> Rooms { get; set; }
-        public DbSet<Membership> Memberships { get; set; }
         public DbSet<Workership> Workerships { get; set; }
         public DbSet<Invite> Invites { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Contact> Contacts { get; set; }
-        public DbSet<Bot> Bots { get; set; }
         public DbSet<BotSecret> BotSecrets { get; set; }
         public DbSet<BotStoreHeader> BotStoreHeader { get; set; }
         public DbSet<BotStoreSection> BotStoreSections { get; set; }

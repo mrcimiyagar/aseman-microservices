@@ -14,6 +14,8 @@
         <e p="Controllers" t="Include">
           <e p="AuthController.cs" t="Include" />
           <e p="ComplexController.cs" t="Include" />
+          <e p="HomeController.cs" t="Include" />
+          <e p="RoomController.cs" t="Include" />
           <e p="UserController.cs" t="Include" />
         </e>
         <e p="DbContexts" t="Include">
@@ -189,6 +191,8 @@
               <e p="ComplexProfileUpdatedNotif.cs" t="Include" />
               <e p="MembershipCreatedNotif.cs" t="Include" />
               <e p="RoomCreatedNotif.cs" t="Include" />
+              <e p="RoomDeletionNotif.cs" t="Include" />
+              <e p="RoomProfileUpdatedNotif.cs" t="Include" />
               <e p="SessionCreatedNotif.cs" t="Include" />
               <e p="UserCreatedNotif.cs" t="Include" />
               <e p="UserProfileUpdatedNotif.cs" t="Include" />
@@ -214,9 +218,20 @@
           <e p="Push.cs" t="Include" />
           <e p="Pushes" t="Include">
             <e p="ComplexDeletionPush.cs" t="Include" />
+            <e p="RoomDeletionPush.cs" t="Include" />
           </e>
           <e p="Request.cs" t="Include" />
           <e p="Response.cs" t="Include" />
+          <e p="Room" t="Include">
+            <e p="DeleteRoomRequest.cs" t="Include" />
+            <e p="DeleteRoomResponse.cs" t="Include" />
+            <e p="GetRoomByIdRequest.cs" t="Include" />
+            <e p="GetRoomByIdResponse.cs" t="Include" />
+            <e p="GetRoomsRequest.cs" t="Include" />
+            <e p="GetRoomsResponse.cs" t="Include" />
+            <e p="UpdateRoomProfileRequest.cs" t="Include" />
+            <e p="UpdateRoomProfileResponse.cs" t="Include" />
+          </e>
           <e p="User" t="Include">
             <e p="GetMeRequest.cs" t="Include" />
             <e p="GetMeResponse.cs" t="Include" />
@@ -227,6 +242,9 @@
             <e p="UpdateUserProfileRequest.cs" t="Include" />
             <e p="UpdateUserProfileResponse.cs" t="Include" />
           </e>
+        </e>
+        <e p="Consumers" t="Include">
+          <e p="NotifConsumer.cs" t="Include" />
         </e>
         <e p="DbContexts" t="Include">
           <e p="DatabaseContext.cs" t="Include" />

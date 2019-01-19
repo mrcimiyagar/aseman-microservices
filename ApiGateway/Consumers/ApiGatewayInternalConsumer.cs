@@ -16,11 +16,12 @@ namespace ApiGateway.Consumers
     public class ApiGatewayInternalConsumer : IConsumer<UserCreatedNotif>, IConsumer<ComplexCreatedNotif>
         , IConsumer<RoomCreatedNotif>, IConsumer<MembershipCreatedNotif>, IConsumer<SessionCreatedNotif>
         , IConsumer<UserProfileUpdatedNotif>, IConsumer<ComplexProfileUpdatedNotif>, IConsumer<ComplexDeletionNotif>
+        , IConsumer<RoomProfileUpdatedNotif>
 
         , IConsumer<PutUserRequest>, IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
         , IConsumer<PutMembershipRequest>, IConsumer<PutSessionRequest>, IConsumer<UpdateUserSecretRequest>
         
-        , IConsumer<ComplexDeletionPush>
+        , IConsumer<ComplexDeletionPush>, IConsumer<RoomDeletionPush>
     {
         private readonly IHubContext<NotificationsHub> _notifsHub;
         
@@ -108,6 +109,16 @@ namespace ApiGateway.Consumers
             }
             return Task.CompletedTask;
         }
+        
+        public Task Consume(ConsumeContext<RoomProfileUpdatedNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send<RoomProfileUpdatedNotif>(context.Message);
+            }
+            return Task.CompletedTask;
+        }
 
         public async Task Consume(ConsumeContext<PutUserRequest> context)
         {
@@ -174,6 +185,36 @@ namespace ApiGateway.Consumers
                     if (session.Online)
                         _notifsHub.Clients.Client(session.ConnectionId)
                             .SendAsync("NotifyComplexDeleted", notif);
+                    else
+                    {
+                        dbContext.Notifications.Add(notif);
+                    }
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<RoomDeletionPush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var session = dbContext.Sessions.Find(sessionId);
+
+                    var notif = new RoomDeletionNotification()
+                    {
+                        ComplexId = context.Message.Notif.ComplexId,
+                        RoomId = context.Message.Notif.RoomId,
+                        Session = session
+                    };
+                    
+                    if (session.Online)
+                        _notifsHub.Clients.Client(session.ConnectionId)
+                            .SendAsync("NotifyRoomDeleted", notif);
                     else
                     {
                         dbContext.Notifications.Add(notif);

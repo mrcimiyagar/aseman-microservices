@@ -1,28 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CityPlatform.DbContexts;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using SharedArea.Commands.Complex;
-using SharedArea.Commands.Internal;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
 using SharedArea.Commands.Internal.Responses;
 using SharedArea.Commands.Pushes;
+using SharedArea.Commands.Room;
 using SharedArea.Commands.User;
+using SharedArea.Consumers;
 using SharedArea.Entities;
 using SharedArea.Middles;
 using SharedArea.Notifications;
 
 namespace CityPlatform.Consumers
 {
-    public class CityConsumer : IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
+    public class CityConsumer : NotifConsumer, IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
         , IConsumer<PutUserRequest>, IConsumer<PutMembershipRequest>, IConsumer<PutSessionRequest>
         , IConsumer<UpdateUserSecretRequest>, IConsumer<UpdateUserProfileRequest>, IConsumer<GetMeRequest>
         , IConsumer<GetUserByIdRequest>, IConsumer<SearchUsersRequest>, IConsumer<UpdateComplexProfileRequest>
         , IConsumer<CreateComplexRequest>, IConsumer<DeleteComplexRequest>, IConsumer<GetComplexesRequest>
-        , IConsumer<GetComplexByIdRequest>, IConsumer<SearchComplexesRequest>
+        , IConsumer<GetComplexByIdRequest>, IConsumer<SearchComplexesRequest>, IConsumer<UpdateRoomProfileRequest>
+        , IConsumer<DeleteRoomRequest>, IConsumer<GetRoomsRequest>, IConsumer<GetRoomByIdRequest>
     {
         public async Task Consume(ConsumeContext<PutComplexRequest> context)
         {
@@ -576,6 +579,209 @@ namespace CityPlatform.Consumers
                 {
                     Packet = new Packet {Status = "success", Complexes = complexes}
                 });
+            }
+        }
+
+        public async Task Consume(ConsumeContext<UpdateRoomProfileRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+
+                var complex = dbContext.Complexes.Find(packet.Room.ComplexId);
+                dbContext.Entry(complex).Reference(c => c.ComplexSecret).Load();
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                if (complex.ComplexSecret.AdminId == session.BaseUser.BaseUserId)
+                {
+                    dbContext.Entry(complex).Collection(c => c.Rooms).Load();
+                    if (complex.Rooms.Any(r => r.RoomId == packet.Room.RoomId))
+                    {
+                        var room = complex.Rooms.Find(r => r.RoomId == packet.Room.RoomId);
+                        room.Title = packet.Room.Title;
+                        room.Avatar = packet.Room.Avatar;
+                        dbContext.SaveChanges();
+                        
+                        SharedArea.Transport.NotifyService<RoomProfileUpdatedNotif>(
+                            Program.Bus,
+                            new Packet() {Room = room},
+                            SharedArea.GlobalVariables.AllQueuesExcept(new []
+                            {
+                                SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                            }));
+
+                        await context.RespondAsync(new UpdateRoomProfileResponse()
+                        {
+                            Packet = new Packet { Status = "success" }
+                        });
+                    }
+                    else
+                    {
+                        await context.RespondAsync(new UpdateRoomProfileResponse()
+                        {
+                            Packet = new Packet { Status = "error_0" }
+                        });
+                    }
+                }
+                else
+                {
+                    await context.RespondAsync(new UpdateRoomProfileResponse()
+                    {
+                        Packet = new Packet { Status = "error_1" }
+                    });
+                }
+            }
+        }
+
+        public async Task Consume(ConsumeContext<DeleteRoomRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+                
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var human = (User) session.BaseUser;
+                dbContext.Entry(human).Collection(u => u.Memberships).Load();
+                if (human.Memberships.Any(m => m.ComplexId == packet.Room.ComplexId)) 
+                {
+                    var complex = dbContext.Complexes.Find(packet.Room.ComplexId);
+                    dbContext.Entry(complex).Collection(c => c.Rooms).Load();
+                    if (complex.Rooms.Any(r => r.RoomId == packet.Room.RoomId))
+                    {
+                        var room = complex.Rooms.Find(r => r.RoomId == packet.Room.RoomId);
+                        complex.Rooms.Remove(room);
+                        dbContext.Rooms.Remove(room);
+                        dbContext.SaveChanges();
+                        
+                        SharedArea.Transport.NotifyService<RoomDeletionNotif>(
+                            Program.Bus,
+                            new Packet() {Room = room},
+                            SharedArea.GlobalVariables.AllQueuesExcept(new []
+                            {
+                                SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                            }));
+                        
+                        dbContext.Entry(complex).Collection(c => c.Members).Load();
+                        var sessionIds = new List<long>();
+                        foreach (var ms in complex.Members)
+                        {
+                            try
+                            {
+                                dbContext.Entry(ms).Reference(mem => mem.User).Load();
+                                dbContext.Entry(ms.User).Collection(u => u.Sessions).Load();
+                                foreach (var userSession in ms.User.Sessions)
+                                {
+                                    sessionIds.Add(userSession.SessionId);
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                // ignored
+                            }
+                        }
+                        
+                        var rdn = new RoomDeletionNotification()
+                        {
+                            ComplexId = complex.ComplexId,
+                            RoomId = room.RoomId,
+                        };
+                        
+                        SharedArea.Transport.Push<RoomDeletionPush>(
+                            Program.Bus,
+                            new RoomDeletionPush()
+                            {
+                                SessionIds = sessionIds,
+                                Notif = rdn
+                            });
+
+                        await context.RespondAsync(new DeleteRoomResponse()
+                        {
+                            Packet = new Packet { Status = "success" }
+                        });
+                    }
+                    else
+                    {
+                        await context.RespondAsync(new DeleteRoomResponse()
+                        {
+                            Packet = new Packet { Status = "error_0" }
+                        });
+                    }
+                }
+                else
+                {
+                    await context.RespondAsync(new DeleteRoomResponse()
+                    {
+                        Packet = new Packet { Status = "error_1" }
+                    });
+                }
+            }
+        }
+
+        public async Task Consume(ConsumeContext<GetRoomsRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
+                dbContext.Entry(user).Collection(u => u.Memberships).Load();
+                var membership = user.Memberships.Find(mem => mem.ComplexId == packet.Complex.ComplexId);
+                if (membership == null)
+                {
+                    await context.RespondAsync(new GetRoomsResponse()
+                    {
+                        Packet = new Packet {Status = "error_0B0"}
+                    });
+                    return;
+                }
+                dbContext.Entry(membership).Reference(mem => mem.Complex).Load();
+                dbContext.Entry(membership.Complex).Collection(c => c.Rooms).Load();
+                await context.RespondAsync(new GetRoomsResponse()
+                {
+                    Packet = new Packet {Status = "success", Rooms = membership.Complex.Rooms}
+                });
+            }
+        }
+
+        public async Task Consume(ConsumeContext<GetRoomByIdRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
+                dbContext.Entry(user).Collection(u => u.Memberships).Load();
+                var membership = user.Memberships.Find(m => m.ComplexId == packet.Complex.ComplexId);
+                if (membership == null)
+                {
+                    await context.RespondAsync(new GetRoomByIdRequest()
+                    {
+                        Packet = new Packet {Status = "error_1"}
+                    });
+                    return;
+                }
+                dbContext.Entry(membership).Reference(m => m.Complex).Load();
+                dbContext.Entry(membership.Complex).Collection(c => c.Rooms).Load();
+                var room = membership.Complex.Rooms.Find(r => r.RoomId == packet.Room.RoomId);
+                if (room == null)
+                {
+                    await context.RespondAsync(new GetRoomByIdRequest()
+                    {
+                        Packet = new Packet {Status = "error_2"}
+                    });
+                }
+                else
+                {
+                    await context.RespondAsync(new GetRoomByIdRequest()
+                    {
+                        Packet = new Packet {Status = "success", Room = room}
+                    });
+                }
             }
         }
     }
