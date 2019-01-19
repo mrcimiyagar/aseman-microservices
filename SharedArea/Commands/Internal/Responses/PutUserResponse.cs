@@ -1,6 +1,6 @@
 ﻿namespace SharedArea.Commands.Internal.Responses
 {
-    public class CreateMembershipResponse : Response
+    public class PutUserResponse : Response
     {
         
     }

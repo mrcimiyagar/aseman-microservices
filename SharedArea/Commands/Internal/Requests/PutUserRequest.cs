@@ -1,6 +1,6 @@
 ﻿namespace SharedArea.Commands.Internal.Requests
 {
-    public class CreateComplexRequest : Request
+    public class PutUserRequest : Request
     {
         
     }

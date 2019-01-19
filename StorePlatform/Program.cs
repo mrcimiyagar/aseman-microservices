@@ -39,7 +39,7 @@ namespace StorePlatform
                     return options;
                 });
                 sbc.UseNLog();
-                sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.SEARCH_QUEUE_NAME, ep =>
+                sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.STORE_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<StoreConsumer>();
                 });

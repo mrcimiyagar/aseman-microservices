@@ -1,6 +1,6 @@
 ﻿namespace SharedArea.Commands.Internal.Responses
 {
-    public class CreateRoomResponse : Response
+    public class PutSessionResponse : Response
     {
         
     }

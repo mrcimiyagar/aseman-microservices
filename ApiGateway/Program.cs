@@ -15,41 +15,7 @@ namespace ApiGateway
         
         public static void Main(string[] args)
         {
-            RunEndpoint();
-            
             CreateWebHostBuilder(args).Build().Run();
-        }
-        
-        static async void RunEndpoint()
-        {
-            Bus = MassTransit.Bus.Factory.CreateUsingRabbitMq(sbc =>
-            {
-                var host = sbc.Host(new Uri("rabbitmq://localhost?prefetch=32"), h =>
-                {
-                    h.Username("guest");
-                    h.Password("guest");
-                });
-                sbc.UseJsonSerializer();
-                sbc.ConfigureJsonSerializer(options =>
-                {
-                    options.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                    options.NullValueHandling = NullValueHandling.Ignore;
-                    return options;
-                });
-                sbc.ConfigureJsonDeserializer(options =>
-                {
-                    options.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                    options.NullValueHandling = NullValueHandling.Ignore;
-                    return options;
-                });
-                sbc.UseNLog();
-                sbc.ReceiveEndpoint(host, "ApiGateWayInternalQueue", ep =>
-                {
-                    ep.Consumer<ApiGatewayInternalConsumer>();
-                });
-            });
-
-            Bus.Start();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

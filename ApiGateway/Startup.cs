@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiGateway.Consumers;
 using ApiGateway.Hubs;
+using MassTransit;
+using MassTransit.NLogIntegration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -43,7 +47,12 @@ namespace ApiGateway
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(
+            IApplicationBuilder app, 
+            IHostingEnvironment env, 
+            ILoggerFactory loggerFactory, 
+            IServiceProvider serviceProvider,
+            IHubContext<NotificationsHub> notifsHub)
         {
             if (env.IsDevelopment())
             {
@@ -61,6 +70,35 @@ namespace ApiGateway
             {
                 route.MapHub<NotificationsHub>("/NotificationsHub");
             });
+            
+            Program.Bus = MassTransit.Bus.Factory.CreateUsingRabbitMq(sbc =>
+            {
+                var host = sbc.Host(new Uri("rabbitmq://localhost?prefetch=32"), h =>
+                {
+                    h.Username("guest");
+                    h.Password("guest");
+                });
+                sbc.UseJsonSerializer();
+                sbc.ConfigureJsonSerializer(options =>
+                {
+                    options.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    options.NullValueHandling = NullValueHandling.Ignore;
+                    return options;
+                });
+                sbc.ConfigureJsonDeserializer(options =>
+                {
+                    options.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    options.NullValueHandling = NullValueHandling.Ignore;
+                    return options;
+                });
+                sbc.UseNLog();
+                sbc.ReceiveEndpoint(host, "ApiGateWayInternalQueue", ep =>
+                {
+                    ep.Consumer<ApiGatewayInternalConsumer>(() => new ApiGatewayInternalConsumer(notifsHub));
+                });
+            });
+
+            Program.Bus.Start();
         }
     }
 }

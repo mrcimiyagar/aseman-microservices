@@ -1,4 +1,4 @@
-﻿namespace SharedArea.Commands.Internal.Responses
+﻿namespace SharedArea.Commands.Complex
 {
     public class CreateComplexResponse : Response
     {

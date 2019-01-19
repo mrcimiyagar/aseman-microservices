@@ -1,22 +1,34 @@
 ﻿using System;
-using System.Net;
 using System.Threading.Tasks;
+using ApiGateway.DbContexts;
+using ApiGateway.Hubs;
 using MassTransit;
-using SharedArea.Commands.Auth;
+using Microsoft.AspNetCore.SignalR;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
 using SharedArea.Commands.Internal.Responses;
+using SharedArea.Commands.Pushes;
 using SharedArea.Middles;
+using SharedArea.Notifications;
 
 namespace ApiGateway.Consumers
 {
     public class ApiGatewayInternalConsumer : IConsumer<UserCreatedNotif>, IConsumer<ComplexCreatedNotif>
         , IConsumer<RoomCreatedNotif>, IConsumer<MembershipCreatedNotif>, IConsumer<SessionCreatedNotif>
-        , IConsumer<UpdateUserProfileNotif>, IConsumer<CreateUserRequest>, IConsumer<CreateComplexRequest>
-        , IConsumer<CreateRoomRequest>, IConsumer<CreateMembershipRequest>, IConsumer<CreateSessionRequest>
-        , IConsumer<UpdateUserSecretRequest>
+        , IConsumer<UserProfileUpdatedNotif>, IConsumer<ComplexProfileUpdatedNotif>, IConsumer<ComplexDeletionNotif>
+
+        , IConsumer<PutUserRequest>, IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
+        , IConsumer<PutMembershipRequest>, IConsumer<PutSessionRequest>, IConsumer<UpdateUserSecretRequest>
         
+        , IConsumer<ComplexDeletionPush>
     {
+        private readonly IHubContext<NotificationsHub> _notifsHub;
+        
+        public ApiGatewayInternalConsumer(IHubContext<NotificationsHub> notifsHub)
+        {
+            _notifsHub = notifsHub;
+        }
+        
         public Task Consume(ConsumeContext<UserCreatedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -67,54 +79,74 @@ namespace ApiGateway.Consumers
             return Task.CompletedTask;
         }
         
-        public Task Consume(ConsumeContext<UpdateUserProfileNotif> context)
+        public Task Consume(ConsumeContext<UserProfileUpdatedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
             {
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send<UpdateUserProfileNotif>(context.Message);
+                    .Result.Send<UserProfileUpdatedNotif>(context.Message);
+            }
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<ComplexProfileUpdatedNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send<ComplexProfileUpdatedNotif>(context.Message);
             }
             return Task.CompletedTask;
         }
 
-        public async Task Consume(ConsumeContext<CreateUserRequest> context)
+        public Task Consume(ConsumeContext<ComplexDeletionNotif> context)
         {
-            var result = await RequestService<CreateUserRequest, CreateUserResponse>(
-                context.Message.Destination,
-                context.Message.Packet);
-            await context.RespondAsync<CreateUserResponse>(result);
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send<ComplexDeletionNotif>(context.Message);
+            }
+            return Task.CompletedTask;
         }
 
-        public async Task Consume(ConsumeContext<CreateComplexRequest> context)
+        public async Task Consume(ConsumeContext<PutUserRequest> context)
         {
-            var result = await RequestService<CreateComplexRequest, CreateComplexResponse>(
+            var result = await RequestService<PutUserRequest, PutUserResponse>(
                 context.Message.Destination,
                 context.Message.Packet);
-            await context.RespondAsync<CreateComplexResponse>(result);
+            await context.RespondAsync<PutUserResponse>(result);
         }
 
-        public async Task Consume(ConsumeContext<CreateRoomRequest> context)
+        public async Task Consume(ConsumeContext<PutComplexRequest> context)
         {
-            var result = await RequestService<CreateRoomRequest, CreateRoomResponse>(
+            var result = await RequestService<PutComplexRequest, PutComplexResponse>(
                 context.Message.Destination,
                 context.Message.Packet);
-            await context.RespondAsync<CreateRoomResponse>(result);
+            await context.RespondAsync<PutComplexResponse>(result);
         }
 
-        public async Task Consume(ConsumeContext<CreateMembershipRequest> context)
+        public async Task Consume(ConsumeContext<PutRoomRequest> context)
         {
-            var result = await RequestService<CreateMembershipRequest, CreateMembershipResponse>(
+            var result = await RequestService<PutRoomRequest, PutRoomResponse>(
                 context.Message.Destination,
                 context.Message.Packet);
-            await context.RespondAsync<CreateMembershipResponse>(result);
+            await context.RespondAsync<PutRoomResponse>(result);
+        }
+
+        public async Task Consume(ConsumeContext<PutMembershipRequest> context)
+        {
+            var result = await RequestService<PutMembershipRequest, PutMembershipResponse>(
+                context.Message.Destination,
+                context.Message.Packet);
+            await context.RespondAsync<PutMembershipResponse>(result);
         }
         
-        public async Task Consume(ConsumeContext<CreateSessionRequest> context)
+        public async Task Consume(ConsumeContext<PutSessionRequest> context)
         {
-            var result = await RequestService<CreateSessionRequest, CreateSessionResponse>(
+            var result = await RequestService<PutSessionRequest, PutSessionResponse>(
                 context.Message.Destination,
                 context.Message.Packet);
-            await context.RespondAsync<CreateSessionResponse>(result);
+            await context.RespondAsync<PutSessionResponse>(result);
         }
         
         public async Task Consume(ConsumeContext<UpdateUserSecretRequest> context)
@@ -123,6 +155,35 @@ namespace ApiGateway.Consumers
                 context.Message.Destination,
                 context.Message.Packet);
             await context.RespondAsync<UpdateUserSecretResponse>(result);
+        }
+        
+        public Task Consume(ConsumeContext<ComplexDeletionPush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var session = dbContext.Sessions.Find(sessionId);
+
+                    var notif = new ComplexDeletionNotification()
+                    {
+                        ComplexId = context.Message.Notif.ComplexId,
+                        Session = session
+                    };
+                    
+                    if (session.Online)
+                        _notifsHub.Clients.Client(session.ConnectionId)
+                            .SendAsync("NotifyComplexDeleted", notif);
+                    else
+                    {
+                        dbContext.Notifications.Add(notif);
+                    }
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
         }
         
         private static async Task<TB> RequestService<TA, TB>(string queueName, Packet packet)

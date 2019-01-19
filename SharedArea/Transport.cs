@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MassTransit;
+using SharedArea.Commands;
 using SharedArea.Middles;
 
 namespace SharedArea
@@ -82,6 +83,12 @@ namespace SharedArea
                 Headers = headers
             });
             return result;
+        }
+        
+        public static void Push<TA>(IBusControl bus, Push push) where TA : class
+        {
+            var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + SharedArea.GlobalVariables.API_GATEWAY_INTERNAL_QUEUE_NAME);
+            bus.GetSendEndpoint(address).Result.Send<TA>(push);
         }
     }
 }

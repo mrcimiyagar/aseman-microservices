@@ -13,6 +13,7 @@
         </e>
         <e p="Controllers" t="Include">
           <e p="AuthController.cs" t="Include" />
+          <e p="ComplexController.cs" t="Include" />
           <e p="UserController.cs" t="Include" />
         </e>
         <e p="DbContexts" t="Include">
@@ -116,10 +117,6 @@
           </e>
         </e>
         <e p="Program.cs" t="Include" />
-        <e p="Utils" t="Include">
-          <e p="AuthExtracter.cs" t="Include" />
-          <e p="Security.cs" t="Include" />
-        </e>
       </e>
       <e p="MessengerPlatform" t="IncludeRecursive">
         <e p="Bin" t="ExcludeRecursive" />
@@ -171,33 +168,53 @@
             <e p="VerifyRequest.cs" t="Include" />
             <e p="VerifyResponse.cs" t="Include" />
           </e>
+          <e p="Complex" t="Include">
+            <e p="CreateComplexRequest.cs" t="Include" />
+            <e p="CreateComplexResponse.cs" t="Include" />
+            <e p="DeleteComplexRequest.cs" t="Include" />
+            <e p="DeleteComplexResponse.cs" t="Include" />
+            <e p="GetComplexByIdRequest.cs" t="Include" />
+            <e p="GetComplexByIdResponse.cs" t="Include" />
+            <e p="GetComplexesRequest.cs" t="Include" />
+            <e p="GetComplexesResponse.cs" t="Include" />
+            <e p="SearchComplexesRequest.cs" t="Include" />
+            <e p="SearchComplexesResponse.cs" t="Include" />
+            <e p="UpdateComplexProfileRequest.cs" t="Include" />
+            <e p="UpdateComplexProfileResponse.cs" t="Include" />
+          </e>
           <e p="Internal" t="Include">
             <e p="Notifications" t="Include">
               <e p="ComplexCreatedNotif.cs" t="Include" />
+              <e p="ComplexDeletionNotif.cs" t="Include" />
+              <e p="ComplexProfileUpdatedNotif.cs" t="Include" />
               <e p="MembershipCreatedNotif.cs" t="Include" />
               <e p="RoomCreatedNotif.cs" t="Include" />
               <e p="SessionCreatedNotif.cs" t="Include" />
-              <e p="UpdateUserProfileNotif.cs" t="Include" />
               <e p="UserCreatedNotif.cs" t="Include" />
+              <e p="UserProfileUpdatedNotif.cs" t="Include" />
             </e>
             <e p="Requests" t="Include">
-              <e p="CreateComplexRequest.cs" t="Include" />
-              <e p="CreateMembershipRequest.cs" t="Include" />
-              <e p="CreateRoomRequest.cs" t="Include" />
-              <e p="CreateSessionRequest.cs" t="Include" />
-              <e p="CreateUserRequest.cs" t="Include" />
+              <e p="PutComplexRequest.cs" t="Include" />
+              <e p="PutMembershipRequest.cs" t="Include" />
+              <e p="PutRoomRequest.cs" t="Include" />
+              <e p="PutSessionRequest.cs" t="Include" />
+              <e p="PutUserRequest.cs" t="Include" />
               <e p="UpdateUserSecretRequest.cs" t="Include" />
             </e>
             <e p="Responses" t="Include">
-              <e p="CreateComplexResponse.cs" t="Include" />
-              <e p="CreateMembershipResponse.cs" t="Include" />
-              <e p="CreateRoomResponse.cs" t="Include" />
-              <e p="CreateSessionResponse.cs" t="Include" />
-              <e p="CreateUserResponse.cs" t="Include" />
+              <e p="PutComplexResponse.cs" t="Include" />
+              <e p="PutMembershipResponse.cs" t="Include" />
+              <e p="PutRoomResponse.cs" t="Include" />
+              <e p="PutSessionResponse.cs" t="Include" />
+              <e p="PutUserResponse.cs" t="Include" />
               <e p="UpdateUserSecretResponse.cs" t="Include" />
             </e>
           </e>
           <e p="Notification.cs" t="Include" />
+          <e p="Push.cs" t="Include" />
+          <e p="Pushes" t="Include">
+            <e p="ComplexDeletionPush.cs" t="Include" />
+          </e>
           <e p="Request.cs" t="Include" />
           <e p="Response.cs" t="Include" />
           <e p="User" t="Include">

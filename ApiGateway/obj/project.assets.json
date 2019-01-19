@@ -13169,6 +13169,7 @@
       "MassTransit.RabbitMQ >= 5.2.1",
       "Microsoft.AspNetCore.App >= 2.2.0",
       "Microsoft.AspNetCore.Razor.Design >= 2.2.0",
+      "Microsoft.AspNetCore.SignalR >= 1.1.0",
       "Microsoft.EntityFrameworkCore >= 2.2.1",
       "Microsoft.EntityFrameworkCore.SqlServer >= 2.2.1",
       "Microsoft.NETCore.App >= 2.2.0",
@@ -13240,6 +13241,10 @@
             "suppressParent": "All",
             "target": "Package",
             "version": "[2.2.0, )"
+          },
+          "Microsoft.AspNetCore.SignalR": {
+            "target": "Package",
+            "version": "[1.1.0, )"
           },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",
