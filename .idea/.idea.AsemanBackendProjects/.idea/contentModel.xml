@@ -14,6 +14,7 @@
         <e p="Controllers" t="Include">
           <e p="AuthController.cs" t="Include" />
           <e p="ComplexController.cs" t="Include" />
+          <e p="ContactController.cs" t="Include" />
           <e p="HomeController.cs" t="Include" />
           <e p="RoomController.cs" t="Include" />
           <e p="UserController.cs" t="Include" />
@@ -184,11 +185,18 @@
             <e p="UpdateComplexProfileRequest.cs" t="Include" />
             <e p="UpdateComplexProfileResponse.cs" t="Include" />
           </e>
+          <e p="Contact" t="Include">
+            <e p="CreateContactRequest.cs" t="Include" />
+            <e p="CreateContactResponse.cs" t="Include" />
+            <e p="GetContactsRequest.cs" t="Include" />
+            <e p="GetContactsResponse.cs" t="Include" />
+          </e>
           <e p="Internal" t="Include">
             <e p="Notifications" t="Include">
               <e p="ComplexCreatedNotif.cs" t="Include" />
               <e p="ComplexDeletionNotif.cs" t="Include" />
               <e p="ComplexProfileUpdatedNotif.cs" t="Include" />
+              <e p="ContactCreatedNotif.cs" t="Include" />
               <e p="MembershipCreatedNotif.cs" t="Include" />
               <e p="RoomCreatedNotif.cs" t="Include" />
               <e p="RoomDeletionNotif.cs" t="Include" />
@@ -218,7 +226,9 @@
           <e p="Push.cs" t="Include" />
           <e p="Pushes" t="Include">
             <e p="ComplexDeletionPush.cs" t="Include" />
+            <e p="ContactCreationPush.cs" t="Include" />
             <e p="RoomDeletionPush.cs" t="Include" />
+            <e p="ServiceMessagePush.cs" t="Include" />
           </e>
           <e p="Request.cs" t="Include" />
           <e p="Response.cs" t="Include" />

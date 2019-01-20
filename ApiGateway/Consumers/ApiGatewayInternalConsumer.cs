@@ -16,12 +16,13 @@ namespace ApiGateway.Consumers
     public class ApiGatewayInternalConsumer : IConsumer<UserCreatedNotif>, IConsumer<ComplexCreatedNotif>
         , IConsumer<RoomCreatedNotif>, IConsumer<MembershipCreatedNotif>, IConsumer<SessionCreatedNotif>
         , IConsumer<UserProfileUpdatedNotif>, IConsumer<ComplexProfileUpdatedNotif>, IConsumer<ComplexDeletionNotif>
-        , IConsumer<RoomProfileUpdatedNotif>
+        , IConsumer<RoomProfileUpdatedNotif>, IConsumer<ContactCreatedNotif>
 
         , IConsumer<PutUserRequest>, IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
         , IConsumer<PutMembershipRequest>, IConsumer<PutSessionRequest>, IConsumer<UpdateUserSecretRequest>
         
-        , IConsumer<ComplexDeletionPush>, IConsumer<RoomDeletionPush>
+        , IConsumer<ComplexDeletionPush>, IConsumer<RoomDeletionPush>, IConsumer<ContactCreationPush>
+        , IConsumer<ServiceMessagePush>
     {
         private readonly IHubContext<NotificationsHub> _notifsHub;
         
@@ -116,6 +117,16 @@ namespace ApiGateway.Consumers
             {
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send<RoomProfileUpdatedNotif>(context.Message);
+            }
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<ContactCreatedNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send<ContactCreatedNotif>(context.Message);
             }
             return Task.CompletedTask;
         }
@@ -219,6 +230,66 @@ namespace ApiGateway.Consumers
                     {
                         dbContext.Notifications.Add(notif);
                     }
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<ContactCreationPush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var s = dbContext.Sessions.Find(sessionId);
+
+                    var ccn = new ContactCreationNotification()
+                    {
+                        Contact = context.Message.Notif.Contact,
+                        Session = s
+                    };                    
+                    if (s.Online)
+                    {
+                        _notifsHub.Clients.Client(s.ConnectionId)
+                            .SendAsync("NotifyContactCreated", ccn);
+                    } 
+                    else
+                    {
+                        dbContext.Notifications.Add(ccn);
+                    }   
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<ServiceMessagePush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var s = dbContext.Sessions.Find(sessionId);
+
+                    var mcn = new ServiceMessageNotification()
+                    {
+                        Message = context.Message.Notif.Message,
+                        Session = s
+                    };                    
+                    if (s.Online)
+                    {
+                        _notifsHub.Clients.Client(s.ConnectionId)
+                            .SendAsync("NotifyServiceMessageReceived", mcn);
+                    } 
+                    else
+                    {
+                        dbContext.Notifications.Add(mcn);
+                    }   
                 }
 
                 dbContext.SaveChanges();

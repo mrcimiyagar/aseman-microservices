@@ -6,6 +6,7 @@ using CityPlatform.DbContexts;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using SharedArea.Commands.Complex;
+using SharedArea.Commands.Contact;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
 using SharedArea.Commands.Internal.Responses;
@@ -21,11 +22,9 @@ namespace CityPlatform.Consumers
 {
     public class CityConsumer : NotifConsumer, IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
         , IConsumer<PutUserRequest>, IConsumer<PutMembershipRequest>, IConsumer<PutSessionRequest>
-        , IConsumer<UpdateUserSecretRequest>, IConsumer<UpdateUserProfileRequest>, IConsumer<GetMeRequest>
-        , IConsumer<GetUserByIdRequest>, IConsumer<SearchUsersRequest>, IConsumer<UpdateComplexProfileRequest>
-        , IConsumer<CreateComplexRequest>, IConsumer<DeleteComplexRequest>, IConsumer<GetComplexesRequest>
-        , IConsumer<GetComplexByIdRequest>, IConsumer<SearchComplexesRequest>, IConsumer<UpdateRoomProfileRequest>
-        , IConsumer<DeleteRoomRequest>, IConsumer<GetRoomsRequest>, IConsumer<GetRoomByIdRequest>
+        , IConsumer<UpdateUserSecretRequest>, IConsumer<UpdateUserProfileRequest>, IConsumer<UpdateComplexProfileRequest>
+        , IConsumer<CreateComplexRequest>, IConsumer<DeleteComplexRequest>, IConsumer<UpdateRoomProfileRequest>
+        , IConsumer<DeleteRoomRequest>, IConsumer<CreateContactRequest>
     {
         public async Task Consume(ConsumeContext<PutComplexRequest> context)
         {
@@ -204,60 +203,6 @@ namespace CityPlatform.Consumers
                     {
                         Status = "success"
                     }
-                });
-            }
-        }
-
-        public async Task Consume(ConsumeContext<GetMeRequest> context)
-        {
-            using (var dbContext = new DatabaseContext())
-            {
-                var session = dbContext.Sessions.Find(context.Message.SessionId);
-                
-                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
-                var user = (User) session.BaseUser;
-                dbContext.Entry(user).Reference(u => u.UserSecret).Load();
-                dbContext.Entry(user.UserSecret).Reference(us => us.Home).Load();
-
-                await context.RespondAsync(new GetMeResponse()
-                {
-                    Packet = new Packet
-                    {
-                        Status = "success",
-                        User = user,
-                        UserSecret = user.UserSecret,
-                        Complex = user.UserSecret.Home
-                    }
-                });
-            }
-        }
-
-        public async Task Consume(ConsumeContext<GetUserByIdRequest> context)
-        {
-            using (var dbContext = new DatabaseContext())
-            {
-                var packet = context.Message.Packet;
-                var user = dbContext.BaseUsers.Find(packet.BaseUser.BaseUserId);
-
-                await context.RespondAsync(new GetUserByIdResponse()
-                {
-                    Packet = new Packet {Status = "success", BaseUser = user}
-                });
-            }
-        }
-
-        public async Task Consume(ConsumeContext<SearchUsersRequest> context)
-        {
-            using (var dbContext = new DatabaseContext())
-            {
-                var packet = context.Message.Packet;
-                var users = (from u in dbContext.Users
-                    where EF.Functions.Like(u.Title, "%" + packet.SearchQuery + "%")
-                    select u).ToList();
-
-                await context.RespondAsync(new SearchUsersResponse()
-                {
-                    Packet = new Packet {Status = "success", Users = users}
                 });
             }
         }
@@ -469,119 +414,6 @@ namespace CityPlatform.Consumers
             }
         }
 
-        public async Task Consume(ConsumeContext<GetComplexesRequest> context)
-        {
-            using (var dbContext = new DatabaseContext())
-            {
-                var session = dbContext.Sessions.Find(context.Message.SessionId);
-                
-                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
-                var user = (User) session.BaseUser;
-                dbContext.Entry(user).Collection(u => u.Memberships).Query().Include(m => m.Complex).Load();
-                var complexes = user.Memberships.Select(m => m.Complex).ToList();
-
-                await context.RespondAsync(new GetComplexesResponse()
-                {
-                    Packet = new Packet {Status = "success", Complexes = complexes}
-                });
-            }
-        }
-
-        public async Task Consume(ConsumeContext<GetComplexByIdRequest> context)
-        {
-            using (var dbContext = new DatabaseContext())
-            {
-                var packet = context.Message.Packet;
-                var session = dbContext.Sessions.Find(context.Message.SessionId);
-
-                var complex = dbContext.Complexes.Find(packet.Complex.ComplexId);
-                if (complex == null)
-                {
-                    await context.RespondAsync(new GetComplexByIdResponse()
-                    {
-                        Packet = new Packet {Status = "error_1"}
-                    });
-                    return;
-                }
-
-                if (complex.Mode == 3)
-                {
-                    await context.RespondAsync(new GetComplexesResponse()
-                    {
-                        Packet = new Packet
-                        {
-                            Status = "success",
-                            Complex = dbContext.Complexes.Find(packet.Complex.ComplexId)
-                        }
-                    });
-                }
-                else if (complex.Mode == 2)
-                {
-                    dbContext.Entry(session).Reference(s => s.BaseUser).Load();
-                    var user = (User) session.BaseUser;
-                    dbContext.Entry(user).Collection(u => u.Memberships).Load();
-                    var membership = user.Memberships.Find(m => m.ComplexId == packet.Complex.ComplexId);
-                    if (membership == null)
-                    {
-                        await context.RespondAsync(new GetComplexByIdResponse()
-                        {
-                            Packet = new Packet {Status = "error_2"}
-                        });
-                    }
-                    else
-                    {
-                        dbContext.Entry(membership).Reference(m => m.Complex).Load();
-                        await context.RespondAsync(new GetComplexByIdResponse()
-                        {
-                            Packet = new Packet {Status = "success", Complex = membership.Complex}
-                        });
-                    }
-                }
-                else
-                {
-                    dbContext.Entry(session).Reference(s => s.BaseUser).Load();
-                    var user = (User) session.BaseUser;
-                    dbContext.Entry(user).Reference(u => u.UserSecret).Load();
-                    if (user.UserSecret.HomeId == packet.Complex.ComplexId)
-                    {
-                        dbContext.Entry(user.UserSecret).Reference(us => us.Home).Load();
-                        await context.RespondAsync(new GetComplexByIdResponse()
-                        {
-                            Packet = new Packet { Status = "success", Complex = user.UserSecret.Home }
-                        });
-                    }
-                    else
-                    {
-                        await context.RespondAsync(new GetComplexByIdResponse()
-                        {
-                            Packet = new Packet {Status = "error_3"}
-                        });
-                    }
-                }
-            }
-        }
-
-        public async Task Consume(ConsumeContext<SearchComplexesRequest> context)
-        {
-            using (var dbContext = new DatabaseContext())
-            {
-                var packet = context.Message.Packet;
-                var session = dbContext.Sessions.Find(context.Message.SessionId);
-                
-                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
-                var user = (User) session.BaseUser;
-                dbContext.Entry(user).Collection(u => u.Memberships).Query().Include(m => m.Complex).Load();
-                var complexes = (from c in (from m in user.Memberships
-                    where EF.Functions.Like(m.Complex.Title, "%" + packet.SearchQuery + "%")
-                    select m) select c.Complex).ToList();
-
-                await context.RespondAsync(new SearchComplexesResponse()
-                {
-                    Packet = new Packet {Status = "success", Complexes = complexes}
-                });
-            }
-        }
-
         public async Task Consume(ConsumeContext<UpdateRoomProfileRequest> context)
         {
             using (var dbContext = new DatabaseContext())
@@ -718,7 +550,7 @@ namespace CityPlatform.Consumers
             }
         }
 
-        public async Task Consume(ConsumeContext<GetRoomsRequest> context)
+        public async Task Consume(ConsumeContext<CreateContactRequest> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -726,60 +558,123 @@ namespace CityPlatform.Consumers
                 var session = dbContext.Sessions.Find(context.Message.SessionId);
 
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
-                var user = (User) session.BaseUser;
-                dbContext.Entry(user).Collection(u => u.Memberships).Load();
-                var membership = user.Memberships.Find(mem => mem.ComplexId == packet.Complex.ComplexId);
-                if (membership == null)
-                {
-                    await context.RespondAsync(new GetRoomsResponse()
-                    {
-                        Packet = new Packet {Status = "error_0B0"}
-                    });
-                    return;
-                }
-                dbContext.Entry(membership).Reference(mem => mem.Complex).Load();
-                dbContext.Entry(membership.Complex).Collection(c => c.Rooms).Load();
-                await context.RespondAsync(new GetRoomsResponse()
-                {
-                    Packet = new Packet {Status = "success", Rooms = membership.Complex.Rooms}
-                });
-            }
-        }
+                var me = (User) session.BaseUser;
+                var peer = dbContext.Users.Find(packet.User.BaseUserId);
 
-        public async Task Consume(ConsumeContext<GetRoomByIdRequest> context)
-        {
-            using (var dbContext = new DatabaseContext())
-            {
-                var packet = context.Message.Packet;
-                var session = dbContext.Sessions.Find(context.Message.SessionId);
+                if (me.Contacts.All(c => c.PeerId != packet.User.BaseUserId))
+                {
+                    var complex = new Complex
+                    {
+                        Title = "",
+                        Avatar = -1
+                    };
+                    var complexSecret = new ComplexSecret
+                    {
+                        Admin = null,
+                        Complex = complex
+                    };
+                    complex.ComplexSecret = complexSecret;
+                    var room = new Room()
+                    {
+                        Title = "Hall",
+                        Avatar = 0,
+                        Complex = complex
+                    };
+                    var m1 = new Membership()
+                    {
+                        User = me,
+                        Complex = complex
+                    };
+                    var m2 = new Membership()
+                    {
+                        User = peer,
+                        Complex = complex
+                    };
+                    var message = new ServiceMessage
+                    {
+                        Text = "Room created.",
+                        Room = room,
+                        Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds),
+                        Author = null
+                    };
+                    var myContact = new Contact
+                    {
+                        Complex = complex,
+                        User = me,
+                        Peer = peer
+                    };
+                    var peerContact = new Contact
+                    {
+                        Complex = complex,
+                        User = peer,
+                        Peer = me
+                    };
+                    dbContext.AddRange(complex, complexSecret, room, m1, m2, message, myContact, peerContact);
+                    dbContext.SaveChanges();
+                    
+                    SharedArea.Transport.NotifyService<ContactCreatedNotif>(
+                        Program.Bus,
+                        new Packet() {Complex = complex, ComplexSecret = complexSecret, Room = room
+                            , Memberships = new [] {m1, m2}.ToList(), ServiceMessage = message
+                            , Contacts = new [] {myContact, peerContact}.ToList(), Users = new [] {me, peer}.ToList()},
+                        SharedArea.GlobalVariables.AllQueuesExcept(new []
+                        {
+                            SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                        }));
+                    
+                    dbContext.Entry(peerContact.Complex).Collection(c => c.Rooms).Load();
+                    
+                    dbContext.Entry(peer).Collection(u => u.Sessions).Load();
+                    var sessionIds = new List<long>();
+                    foreach(var s in peer.Sessions)
+                    {
+                        sessionIds.Add(s.SessionId);
+                    }
+                    var ccn = new ContactCreationNotification
+                    {
+                        Contact = peerContact,
+                    };
+                    var mcn = new ServiceMessageNotification
+                    {
+                        Message = message
+                    };
 
-                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
-                var user = (User) session.BaseUser;
-                dbContext.Entry(user).Collection(u => u.Memberships).Load();
-                var membership = user.Memberships.Find(m => m.ComplexId == packet.Complex.ComplexId);
-                if (membership == null)
-                {
-                    await context.RespondAsync(new GetRoomByIdRequest()
+                    SharedArea.Transport.Push<ContactCreationPush>(
+                        Program.Bus,
+                        new ContactCreationPush()
+                        {
+                            Notif = ccn
+                        });
+                    
+                    SharedArea.Transport.Push<ServiceMessagePush>(
+                        Program.Bus,
+                        new ServiceMessagePush()
+                        {
+                            Notif = mcn
+                        });
+                    
+                    ServiceMessage finalMessage;
+                    Contact finalMyContact;
+                    using (var finalContext = new DatabaseContext())
                     {
-                        Packet = new Packet {Status = "error_1"}
-                    });
-                    return;
-                }
-                dbContext.Entry(membership).Reference(m => m.Complex).Load();
-                dbContext.Entry(membership.Complex).Collection(c => c.Rooms).Load();
-                var room = membership.Complex.Rooms.Find(r => r.RoomId == packet.Room.RoomId);
-                if (room == null)
-                {
-                    await context.RespondAsync(new GetRoomByIdRequest()
+                        finalMessage = (ServiceMessage) finalContext.Messages.Find(message.MessageId);
+                        finalMyContact = finalContext.Contacts.Find(myContact.ContactId);
+                        finalContext.Entry(finalMessage).Reference(m => m.Room).Load();
+                        finalContext.Entry(finalMyContact).Reference(c => c.Complex).Load();
+                        finalContext.Entry(finalMyContact.Complex).Collection(c => c.Rooms).Load();
+                        finalContext.Entry(finalMyContact).Reference(c => c.Peer).Load();
+                    }
+
+                    await context.RespondAsync(new CreateContactResponse()
                     {
-                        Packet = new Packet {Status = "error_2"}
+                        Packet = new Packet {Status = "success", Contact = finalMyContact, ServiceMessage = finalMessage}
                     });
-                }
+                } 
                 else
                 {
-                    await context.RespondAsync(new GetRoomByIdRequest()
+                    await context.RespondAsync(new CreateContactResponse()
                     {
-                        Packet = new Packet {Status = "success", Room = room}
+                        Packet = new Packet {Status = "error_050"}
                     });
                 }
             }

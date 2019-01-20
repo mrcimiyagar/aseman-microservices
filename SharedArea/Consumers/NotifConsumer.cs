@@ -1,16 +1,18 @@
 ﻿
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using MassTransit;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.DbContexts;
+using SharedArea.Entities;
 
 namespace SharedArea.Consumers
 {
     public class NotifConsumer : IConsumer<UserCreatedNotif>, IConsumer<ComplexCreatedNotif>, IConsumer<RoomCreatedNotif>
         , IConsumer<MembershipCreatedNotif>, IConsumer<SessionCreatedNotif>, IConsumer<UserProfileUpdatedNotif>
         , IConsumer<ComplexProfileUpdatedNotif>, IConsumer<ComplexDeletionNotif>, IConsumer<RoomProfileUpdatedNotif>
-        , IConsumer<RoomDeletionNotif>
+        , IConsumer<RoomDeletionNotif>, IConsumer<ContactCreatedNotif>
     {
         public Task Consume(ConsumeContext<UserCreatedNotif> context)
         {
@@ -201,6 +203,41 @@ namespace SharedArea.Consumers
                 complex.Rooms.Remove(localRoom);
                 dbContext.Rooms.Remove(localRoom);
 
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<ContactCreatedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var me = dbContext.BaseUsers.Find(context.Message.Packet.Users[0]) as User;
+                var peer = dbContext.BaseUsers.Find(context.Message.Packet.Users[1]) as User;
+                var complex = context.Message.Packet.Complex;
+                var complexSecret = context.Message.Packet.ComplexSecret;
+                complexSecret.Complex = complex;
+                complex.ComplexSecret = complexSecret;
+                var room = context.Message.Packet.Room;
+                room.Complex = complex;
+                var m1 = context.Message.Packet.Memberships[0];
+                m1.User = me;
+                m1.Complex = complex;
+                var m2 = context.Message.Packet.Memberships[1];
+                m2.User = peer;
+                m2.Complex = complex;
+                var message = context.Message.Packet.ServiceMessage;
+                message.Room = room;
+                var myContact = context.Message.Packet.Contacts[0];
+                myContact.Complex = complex;
+                myContact.User = me;
+                myContact.Peer = peer;
+                var peerContact = context.Message.Packet.Contacts[1];
+                peerContact.Complex = complex;
+                peerContact.User = peer;
+                peerContact.Peer = me;
+                dbContext.AddRange(complex, complexSecret, room, m1, m2, message, myContact, peerContact);
                 dbContext.SaveChanges();
             }
             

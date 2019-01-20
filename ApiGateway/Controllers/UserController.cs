@@ -73,7 +73,7 @@ namespace ApiGateway.Controllers
         {
             var result = await SharedArea.Transport.DirectService<SearchUsersRequest, SearchUsersResponse>(
                 Program.Bus,
-                SharedArea.GlobalVariables.CITY_QUEUE_NAME,
+                SharedArea.GlobalVariables.SEARCH_QUEUE_NAME,
                 Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                 packet);
 
