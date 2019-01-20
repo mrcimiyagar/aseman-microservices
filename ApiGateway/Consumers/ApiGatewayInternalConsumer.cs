@@ -16,13 +16,15 @@ namespace ApiGateway.Consumers
     public class ApiGatewayInternalConsumer : IConsumer<UserCreatedNotif>, IConsumer<ComplexCreatedNotif>
         , IConsumer<RoomCreatedNotif>, IConsumer<MembershipCreatedNotif>, IConsumer<SessionCreatedNotif>
         , IConsumer<UserProfileUpdatedNotif>, IConsumer<ComplexProfileUpdatedNotif>, IConsumer<ComplexDeletionNotif>
-        , IConsumer<RoomProfileUpdatedNotif>, IConsumer<ContactCreatedNotif>
+        , IConsumer<RoomProfileUpdatedNotif>, IConsumer<ContactCreatedNotif>, IConsumer<InviteCreatedNotif>
+        , IConsumer<InviteCancelledNotif>, IConsumer<InviteAcceptedNotif>, IConsumer<InvitedIgnoredNotif>
 
         , IConsumer<PutUserRequest>, IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
         , IConsumer<PutMembershipRequest>, IConsumer<PutSessionRequest>, IConsumer<UpdateUserSecretRequest>
         
         , IConsumer<ComplexDeletionPush>, IConsumer<RoomDeletionPush>, IConsumer<ContactCreationPush>
-        , IConsumer<ServiceMessagePush>
+        , IConsumer<ServiceMessagePush>, IConsumer<InviteCreationPush>, IConsumer<InviteCancellationPush>
+        , IConsumer<UserJointComplexPush>, IConsumer<InviteAcceptancePush>, IConsumer<InviteIgnoredPush>
     {
         private readonly IHubContext<NotificationsHub> _notifsHub;
         
@@ -127,6 +129,46 @@ namespace ApiGateway.Consumers
             {
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send<ContactCreatedNotif>(context.Message);
+            }
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<InviteCreatedNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send<InviteCreatedNotif>(context.Message);
+            }
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<InviteCancelledNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send<InviteCancelledNotif>(context.Message);
+            }
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<InviteAcceptedNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send<InviteAcceptedNotif>(context.Message);
+            }
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<InvitedIgnoredNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send<InvitedIgnoredNotif>(context.Message);
             }
             return Task.CompletedTask;
         }
@@ -298,6 +340,157 @@ namespace ApiGateway.Consumers
             return Task.CompletedTask;
         }
         
+        public Task Consume(ConsumeContext<InviteCreationPush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var s = dbContext.Sessions.Find(sessionId);
+
+                    var icn = new InviteCreationNotification()
+                    {
+                        Invite = context.Message.Notif.Invite,
+                        Session = s
+                    };
+                    if (s.Online)
+                    {
+                        _notifsHub.Clients.Client(s.ConnectionId)
+                            .SendAsync("NotifyInviteCreated", icn);
+                    }
+                    else
+                    {
+                        dbContext.Notifications.Add(icn);
+                    }  
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<InviteCancellationPush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var s = dbContext.Sessions.Find(sessionId);
+
+                    var icn = new InviteCancellationNotification()
+                    {
+                        Invite = context.Message.Notif.Invite,
+                        Session = s
+                    };
+                    if (s.Online)
+                    {
+                        _notifsHub.Clients.Client(s.ConnectionId)
+                            .SendAsync("NotifyInviteCancelled", icn);
+                    }
+                    else
+                    {
+                        dbContext.Notifications.Add(icn);
+                    }  
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<UserJointComplexPush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var s = dbContext.Sessions.Find(sessionId);
+
+                    var icn = new UserJointComplexNotification()
+                    {
+                        ComplexId = context.Message.Notif.ComplexId,
+                        UserId = context.Message.Notif.UserId,
+                        Session = s
+                    };
+                    if (s.Online)
+                    {
+                        _notifsHub.Clients.Client(s.ConnectionId)
+                            .SendAsync("NotifyUserJointComplex", icn);
+                    }
+                    else
+                    {
+                        dbContext.Notifications.Add(icn);
+                    }  
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<InviteAcceptancePush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var s = dbContext.Sessions.Find(sessionId);
+
+                    var icn = new InviteAcceptanceNotification()
+                    {
+                        Invite = context.Message.Notif.Invite,
+                        Session = s
+                    };
+                    if (s.Online)
+                    {
+                        _notifsHub.Clients.Client(s.ConnectionId)
+                            .SendAsync("NotifyInviteAccepted", icn);
+                    }
+                    else
+                    {
+                        dbContext.Notifications.Add(icn);
+                    }  
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<InviteIgnoredPush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var s = dbContext.Sessions.Find(sessionId);
+
+                    var icn = new InviteIgnoranceNotification()
+                    {
+                        Invite = context.Message.Notif.Invite,
+                        Session = s
+                    };
+                    if (s.Online)
+                    {
+                        _notifsHub.Clients.Client(s.ConnectionId)
+                            .SendAsync("NotifyInviteIgnored", icn);
+                    }
+                    else
+                    {
+                        dbContext.Notifications.Add(icn);
+                    }  
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+        
         private static async Task<TB> RequestService<TA, TB>(string queueName, Packet packet)
             where TA : class
             where TB : class
@@ -311,5 +504,7 @@ namespace ApiGateway.Consumers
             });
             return result;
         }
+
+
     }
 }

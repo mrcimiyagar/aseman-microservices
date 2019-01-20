@@ -7,12 +7,9 @@ namespace CityPlatform.DbContexts
 {
     public class DatabaseContext : SharedArea.DbContexts.DatabaseContext
     {
-        public DbSet<UserSecret> UserSecrets { get; set; }
-        public DbSet<Message> Messages { get; set; }
         public DbSet<File> Files { get; set; }
         public DbSet<Pending> Pendings { get; set; }
         public DbSet<Workership> Workerships { get; set; }
-        public DbSet<Invite> Invites { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<BotSecret> BotSecrets { get; set; }

@@ -12,7 +12,8 @@ namespace SharedArea.Consumers
     public class NotifConsumer : IConsumer<UserCreatedNotif>, IConsumer<ComplexCreatedNotif>, IConsumer<RoomCreatedNotif>
         , IConsumer<MembershipCreatedNotif>, IConsumer<SessionCreatedNotif>, IConsumer<UserProfileUpdatedNotif>
         , IConsumer<ComplexProfileUpdatedNotif>, IConsumer<ComplexDeletionNotif>, IConsumer<RoomProfileUpdatedNotif>
-        , IConsumer<RoomDeletionNotif>, IConsumer<ContactCreatedNotif>
+        , IConsumer<RoomDeletionNotif>, IConsumer<ContactCreatedNotif>, IConsumer<InviteCreatedNotif>
+        , IConsumer<InviteCancelledNotif>, IConsumer<InviteAcceptedNotif>, IConsumer<InvitedIgnoredNotif>
     {
         public Task Consume(ConsumeContext<UserCreatedNotif> context)
         {
@@ -213,8 +214,8 @@ namespace SharedArea.Consumers
         {
             using (var dbContext = new DatabaseContext())
             {
-                var me = dbContext.BaseUsers.Find(context.Message.Packet.Users[0]) as User;
-                var peer = dbContext.BaseUsers.Find(context.Message.Packet.Users[1]) as User;
+                var me = (User) dbContext.BaseUsers.Find(context.Message.Packet.Users[0].BaseUserId);
+                var peer = (User) dbContext.BaseUsers.Find(context.Message.Packet.Users[1].BaseUserId);
                 var complex = context.Message.Packet.Complex;
                 var complexSecret = context.Message.Packet.ComplexSecret;
                 complexSecret.Complex = complex;
@@ -238,6 +239,85 @@ namespace SharedArea.Consumers
                 peerContact.User = peer;
                 peerContact.Peer = me;
                 dbContext.AddRange(complex, complexSecret, room, m1, m2, message, myContact, peerContact);
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<InviteCreatedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var invite = context.Message.Packet.Invite;
+                var complex = dbContext.Complexes.Find(context.Message.Packet.Complex.ComplexId);
+                var user = (User) dbContext.BaseUsers.Find(context.Message.Packet.User.BaseUserId);
+                
+                invite.Complex = complex;
+                invite.User = user;
+                
+                dbContext.AddRange(invite);
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<InviteCancelledNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var invite = dbContext.Invites.Find(context.Message.Packet.Invite.InviteId);
+                var user = (User) dbContext.BaseUsers.Find(context.Message.Packet.User.BaseUserId);
+
+                user.Invites.Remove(invite);
+                dbContext.Invites.Remove(invite);
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<InviteAcceptedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var invite = dbContext.Invites.Find(context.Message.Packet.Invite.InviteId);
+                var membership = context.Message.Packet.Membership;
+                var message = context.Message.Packet.ServiceMessage;
+                var human = (User) dbContext.BaseUsers.Find(context.Message.Packet.User.BaseUserId);
+                
+                dbContext.Entry(invite).Reference(i => i.Complex).Load();
+                var complex = invite.Complex;
+                human.Invites.Remove(invite);
+                dbContext.Invites.Remove(invite);
+                membership.Complex = complex;
+                membership.User = human;
+                dbContext.Entry(complex).Collection(c => c.Members).Load();
+                complex.Members.Add(membership);
+                dbContext.Entry(complex).Collection(c => c.Rooms).Load();
+                var hall = complex.Rooms.FirstOrDefault();
+                message.Room = hall;
+                dbContext.Messages.Add(message);
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<InvitedIgnoredNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var invite = dbContext.Invites.Find(context.Message.Packet.Invite.InviteId);
+                var human = (User) dbContext.BaseUsers.Find(context.Message.Packet.User.BaseUserId);
+                
+                dbContext.Entry(invite).Reference(i => i.Complex).Load();
+                human.Invites.Remove(invite);
+                dbContext.Invites.Remove(invite);
+                
                 dbContext.SaveChanges();
             }
             

@@ -16,6 +16,7 @@
           <e p="ComplexController.cs" t="Include" />
           <e p="ContactController.cs" t="Include" />
           <e p="HomeController.cs" t="Include" />
+          <e p="InviteController.cs" t="Include" />
           <e p="RoomController.cs" t="Include" />
           <e p="UserController.cs" t="Include" />
         </e>
@@ -197,6 +198,10 @@
               <e p="ComplexDeletionNotif.cs" t="Include" />
               <e p="ComplexProfileUpdatedNotif.cs" t="Include" />
               <e p="ContactCreatedNotif.cs" t="Include" />
+              <e p="InviteAcceptedNotif.cs" t="Include" />
+              <e p="InviteCancelledNotif.cs" t="Include" />
+              <e p="InviteCreatedNotif.cs" t="Include" />
+              <e p="InvitedIgnoredNotif.cs" t="Include" />
               <e p="MembershipCreatedNotif.cs" t="Include" />
               <e p="RoomCreatedNotif.cs" t="Include" />
               <e p="RoomDeletionNotif.cs" t="Include" />
@@ -222,13 +227,28 @@
               <e p="UpdateUserSecretResponse.cs" t="Include" />
             </e>
           </e>
+          <e p="Invite" t="Include">
+            <e p="AcceptInviteRequest.cs" t="Include" />
+            <e p="AcceptInviteResponse.cs" t="Include" />
+            <e p="CancelInviteRequest.cs" t="Include" />
+            <e p="CancelInviteResponse.cs" t="Include" />
+            <e p="CreateInviteRequest.cs" t="Include" />
+            <e p="CreateInviteResponse.cs" t="Include" />
+            <e p="IgnoreInviteRequest.cs" t="Include" />
+            <e p="IgnoreInviteResponse.cs" t="Include" />
+          </e>
           <e p="Notification.cs" t="Include" />
           <e p="Push.cs" t="Include" />
           <e p="Pushes" t="Include">
             <e p="ComplexDeletionPush.cs" t="Include" />
             <e p="ContactCreationPush.cs" t="Include" />
+            <e p="InviteAcceptancePush.cs" t="Include" />
+            <e p="InviteCancellationPush.cs" t="Include" />
+            <e p="InviteCreationPush.cs" t="Include" />
+            <e p="InviteIgnoredPush.cs" t="Include" />
             <e p="RoomDeletionPush.cs" t="Include" />
             <e p="ServiceMessagePush.cs" t="Include" />
+            <e p="UserJointComplexPush.cs" t="Include" />
           </e>
           <e p="Request.cs" t="Include" />
           <e p="Response.cs" t="Include" />

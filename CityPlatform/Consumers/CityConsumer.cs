@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using CityPlatform.DbContexts;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Remotion.Linq.Clauses;
 using SharedArea.Commands.Complex;
 using SharedArea.Commands.Contact;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
 using SharedArea.Commands.Internal.Responses;
+using SharedArea.Commands.Invite;
 using SharedArea.Commands.Pushes;
 using SharedArea.Commands.Room;
 using SharedArea.Commands.User;
@@ -24,7 +26,8 @@ namespace CityPlatform.Consumers
         , IConsumer<PutUserRequest>, IConsumer<PutMembershipRequest>, IConsumer<PutSessionRequest>
         , IConsumer<UpdateUserSecretRequest>, IConsumer<UpdateUserProfileRequest>, IConsumer<UpdateComplexProfileRequest>
         , IConsumer<CreateComplexRequest>, IConsumer<DeleteComplexRequest>, IConsumer<UpdateRoomProfileRequest>
-        , IConsumer<DeleteRoomRequest>, IConsumer<CreateContactRequest>
+        , IConsumer<DeleteRoomRequest>, IConsumer<CreateContactRequest>, IConsumer<CreateInviteRequest>
+        , IConsumer<CancelInviteRequest>, IConsumer<AcceptInviteRequest>, IConsumer<IgnoreInviteRequest>
     {
         public async Task Consume(ConsumeContext<PutComplexRequest> context)
         {
@@ -675,6 +678,353 @@ namespace CityPlatform.Consumers
                     await context.RespondAsync(new CreateContactResponse()
                     {
                         Packet = new Packet {Status = "error_050"}
+                    });
+                }
+            }
+        }
+
+
+        public async Task Consume(ConsumeContext<CreateInviteRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var human = dbContext.Users.Find(packet.User.BaseUserId);
+                dbContext.Entry(human).Collection(h => h.Memberships).Load();
+                if (human.Memberships.All(m => m.ComplexId != packet.Complex.ComplexId))
+                {
+                    dbContext.Entry(human).Collection(h => h.Invites).Load();
+                    if (human.Invites.All(i => i.ComplexId != packet.Complex.ComplexId))
+                    {
+                        var complex = dbContext.Complexes.Find(packet.Complex.ComplexId);
+                        if (complex != null)
+                        {
+                            dbContext.Entry(complex).Reference(c => c.ComplexSecret).Load();
+                            dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                            if (complex.ComplexSecret.AdminId == session.BaseUser.BaseUserId)
+                            {
+                                var invite = new Invite()
+                                {
+                                    Complex = complex,
+                                    User = human
+                                };
+                                dbContext.AddRange(invite);
+                                dbContext.SaveChanges();
+                                
+                                SharedArea.Transport.NotifyService<InviteCreatedNotif>(
+                                    Program.Bus,
+                                    new Packet() {Invite = invite, Complex = complex, User = human},
+                                    SharedArea.GlobalVariables.AllQueuesExcept(new []
+                                    {
+                                        SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                                    }));
+                                
+                                dbContext.Entry(human).Collection(h => h.Sessions).Load();
+                                var sessionIds = new List<long>();
+                                foreach (var targetSession in human.Sessions)
+                                {
+                                    sessionIds.Add(session.SessionId);
+                                }
+                                var inviteNotification = new InviteCreationNotification()
+                                {
+                                    Invite = invite
+                                };
+                                
+                                SharedArea.Transport.Push<InviteCreationPush>(
+                                    Program.Bus,
+                                    new InviteCreationPush()
+                                    {
+                                        SessionIds = sessionIds,
+                                        Notif = inviteNotification
+                                    });
+
+                                await context.RespondAsync(new CreateInviteResponse()
+                                {
+                                    Packet = new Packet {Status = "success", Invite = invite}
+                                });
+                            }
+                            else
+                            {
+                                await context.RespondAsync(new CreateInviteResponse()
+                                {
+                                    Packet = new Packet {Status = "error_0H0"}
+                                });
+                            }
+                        }
+                        else
+                        {
+                            await context.RespondAsync(new CreateInviteResponse()
+                            {
+                                Packet = new Packet {Status = "error_0H4"}
+                            }); 
+                        }
+                    }
+                    else
+                    {
+                        await context.RespondAsync(new CreateInviteResponse()
+                        {
+                            Packet = new Packet {Status = "error_0H1"}
+                        }); 
+                    }
+                }
+                else
+                {
+                    await context.RespondAsync(new CreateInviteResponse()
+                    {
+                        Packet = new Packet {Status = "error_0H2"}
+                    });
+                }
+            }
+        }
+
+        public async Task Consume(ConsumeContext<CancelInviteRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+
+                var complex = dbContext.Complexes.Find(packet.Complex.ComplexId);
+                if (complex != null)
+                {
+                    dbContext.Entry(complex).Collection(c => c.Invites).Load();
+                    var invite = complex.Invites.Find(i => i.UserId == packet.User.BaseUserId);
+                    if (invite != null)
+                    {
+                        dbContext.Entry(invite).Reference(i => i.User).Load();
+                        var human = invite.User;
+                        dbContext.Entry(human).Collection(h => h.Invites).Load();
+                        human.Invites.Remove(invite);
+                        dbContext.Invites.Remove(invite);
+                        dbContext.SaveChanges();
+                        
+                        SharedArea.Transport.NotifyService<InviteCancelledNotif>(
+                            Program.Bus,
+                            new Packet() {User = human, Invite = invite},
+                            SharedArea.GlobalVariables.AllQueuesExcept(new []
+                            {
+                                SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                            }));
+                        
+                        dbContext.Entry(human).Collection(h => h.Sessions).Load();
+                        var sessionIds = human.Sessions.Select(s => s.SessionId).ToList();
+                        var notification = new InviteCancellationNotification
+                        {
+                            Invite = invite
+                        };
+
+                        SharedArea.Transport.Push<InviteCancellationPush>(
+                            Program.Bus,
+                            new InviteCancellationPush()
+                            {
+                                Notif = notification,
+                                SessionIds = sessionIds
+                            });
+
+                        await context.RespondAsync(new CancelInviteResponse()
+                        {
+                            Packet = new Packet {Status = "success"}
+                        });
+                    }
+                    else
+                    {
+                        await context.RespondAsync(new CancelInviteResponse()
+                        {
+                            Packet = new Packet {Status = "error_0I0"}
+                        });
+                    }
+                } 
+                else
+                {
+                    await context.RespondAsync(new CancelInviteResponse()
+                    {
+                        Packet = new Packet {Status = "error_0I2"}
+                    });
+                }
+            }
+        }
+
+        public async Task Consume(ConsumeContext<AcceptInviteRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var human = (User) session.BaseUser;
+                dbContext.Entry(human).Collection(h => h.Invites).Load();
+                var invite = human.Invites.Find(i => i.ComplexId == packet.Complex.ComplexId);
+                if (invite != null)
+                {
+                    dbContext.Entry(invite).Reference(i => i.Complex).Load();
+                    var complex = invite.Complex;
+                    human.Invites.Remove(invite);
+                    dbContext.Invites.Remove(invite);
+                    var membership = new Membership
+                    {
+                        User = human,
+                        Complex = complex
+                    };
+                    dbContext.Entry(complex).Collection(c => c.Members).Load();
+                    complex.Members.Add(membership);
+                    dbContext.Entry(complex).Collection(c => c.Rooms).Load();
+                    var hall = complex.Rooms.FirstOrDefault();
+                    var message = new ServiceMessage()
+                    {
+                        Room = hall,
+                        Author = null,
+                        Text = human.Title + " entered complex by invite.",
+                        Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds)
+                    };
+                    dbContext.Messages.Add(message);
+                    dbContext.SaveChanges();
+                    
+                    SharedArea.Transport.NotifyService<InviteAcceptedNotif>(
+                        Program.Bus,
+                        new Packet() {Invite = invite, Membership = membership, ServiceMessage = message, User = human},
+                        SharedArea.GlobalVariables.AllQueuesExcept(new []
+                        {
+                            SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                        }));
+                    
+                    User user;
+                    Complex jointComplex;
+                    using (var context2 = new DatabaseContext())
+                    {
+                        user = context2.Users.Find(human.BaseUserId);
+                        jointComplex = context2.Complexes.Find(complex.ComplexId);
+                    }
+
+                    dbContext.Entry(complex)
+                        .Collection(c => c.Members)
+                        .Query().Include(m => m.User)
+                        .ThenInclude(u => u.Sessions).Load();
+                    var sessionIds = (from sess in (from m in complex.Members
+                            from s
+                                in m.User.Sessions
+                            select s)
+                        select sess.SessionId).ToList();
+                    var mcn = new ServiceMessageNotification
+                    {
+                        Message = message
+                    };
+                    var ujn = new UserJointComplexNotification
+                    {
+                        UserId = user.BaseUserId,
+                        ComplexId = jointComplex.ComplexId
+                    };
+                    
+                    SharedArea.Transport.Push<UserJointComplexPush>(
+                        Program.Bus,
+                        new UserJointComplexPush()
+                        {
+                            Notif = ujn,
+                            SessionIds = sessionIds
+                        });
+                    
+                    SharedArea.Transport.Push<ServiceMessagePush>(
+                        Program.Bus,
+                        new ServiceMessagePush()
+                        {
+                            Notif = mcn,
+                            SessionIds = sessionIds
+                        });
+                    
+                    dbContext.SaveChanges();
+                    dbContext.Entry(complex).Reference(c => c.ComplexSecret).Load();
+                    dbContext.Entry(complex.ComplexSecret).Reference(cs => cs.Admin).Load();
+                    var inviter = complex.ComplexSecret.Admin;
+                    dbContext.Entry(inviter).Collection(i => i.Sessions).Load();
+
+                    var inviterSessiondIds = inviter.Sessions.Select(s => s.SessionId).ToList();
+                    var notification = new InviteAcceptanceNotification
+                    {
+                        Invite = invite
+                    };
+                    
+                    SharedArea.Transport.Push<InviteAcceptancePush>(
+                        Program.Bus,
+                        new InviteAcceptancePush()
+                        {
+                            Notif = notification,
+                            SessionIds = sessionIds
+                        });
+
+                    await context.RespondAsync(new AcceptInviteResponse()
+                    {
+                        Packet = new Packet { Status = "success" }
+                    });
+                }
+                else
+                {
+                    await context.RespondAsync(new AcceptInviteResponse()
+                    {
+                        Packet = new Packet { Status = "error_0J0" }
+                    });
+                }
+            }
+        }
+
+        public async Task Consume(ConsumeContext<IgnoreInviteRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var human = (User) session.BaseUser;
+                dbContext.Entry(human).Collection(h => h.Invites).Load();
+                var invite = human.Invites.Find(i => i.ComplexId == packet.Complex.ComplexId);
+                if (invite != null)
+                {
+                    dbContext.Entry(invite).Reference(i => i.Complex).Load();
+                    var complex = invite.Complex;
+                    human.Invites.Remove(invite);
+                    dbContext.Invites.Remove(invite);
+                    dbContext.SaveChanges();
+                    
+                    SharedArea.Transport.NotifyService<InvitedIgnoredNotif>(
+                        Program.Bus,
+                        new Packet() {Invite = invite, User = human},
+                        SharedArea.GlobalVariables.AllQueuesExcept(new []
+                        {
+                            SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                        }));
+                    
+                    dbContext.Entry(complex).Reference(c => c.ComplexSecret).Load();
+                    dbContext.Entry(complex.ComplexSecret).Reference(cs => cs.Admin).Load();
+                    var inviter = complex.ComplexSecret.Admin;
+                    dbContext.Entry(inviter).Collection(i => i.Sessions).Load();
+
+                    var sessionIds = inviter.Sessions.Select(s => s.SessionId).ToList();
+                    var notification = new InviteIgnoranceNotification
+                    {
+                        Invite = invite
+                    };
+                    
+                    SharedArea.Transport.Push<InviteIgnoredPush>(
+                        Program.Bus,
+                        new InviteIgnoredPush()
+                        {
+                            SessionIds = sessionIds,
+                            Notif = notification
+                        });
+
+                    await context.RespondAsync(new IgnoreInviteResponse()
+                    {
+                        Packet = new Packet {Status = "success"}
+                    });
+                }
+                else
+                {
+                    await context.RespondAsync(new IgnoreInviteResponse()
+                    {
+                        Packet = new Packet {Status = "error_0K0"}
                     });
                 }
             }
