@@ -8,7 +8,6 @@ using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
 using SharedArea.Commands.Internal.Responses;
 using SharedArea.Commands.Pushes;
-using SharedArea.Middles;
 using SharedArea.Notifications;
 
 namespace ApiGateway.Consumers
@@ -18,6 +17,7 @@ namespace ApiGateway.Consumers
         , IConsumer<UserProfileUpdatedNotif>, IConsumer<ComplexProfileUpdatedNotif>, IConsumer<ComplexDeletionNotif>
         , IConsumer<RoomProfileUpdatedNotif>, IConsumer<ContactCreatedNotif>, IConsumer<InviteCreatedNotif>
         , IConsumer<InviteCancelledNotif>, IConsumer<InviteAcceptedNotif>, IConsumer<InvitedIgnoredNotif>
+        , IConsumer<BotProfileUpdatedNotif>, IConsumer<BotSubscribedNotif>, IConsumer<BotCreatedNotif>
 
         , IConsumer<PutUserRequest>, IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
         , IConsumer<PutMembershipRequest>, IConsumer<PutSessionRequest>, IConsumer<UpdateUserSecretRequest>
@@ -25,6 +25,8 @@ namespace ApiGateway.Consumers
         , IConsumer<ComplexDeletionPush>, IConsumer<RoomDeletionPush>, IConsumer<ContactCreationPush>
         , IConsumer<ServiceMessagePush>, IConsumer<InviteCreationPush>, IConsumer<InviteCancellationPush>
         , IConsumer<UserJointComplexPush>, IConsumer<InviteAcceptancePush>, IConsumer<InviteIgnoredPush>
+        , IConsumer<BotAdditionToRoomPush>, IConsumer<BotRemovationFromRoomPush>, IConsumer<TextMessagePush>
+        , IConsumer<PhotoMessagePush>, IConsumer<AudioMessagePush>, IConsumer<VideoMessagePush>
     {
         private readonly IHubContext<NotificationsHub> _notifsHub;
         
@@ -38,7 +40,7 @@ namespace ApiGateway.Consumers
             foreach (var destination in context.Message.Destinations)
             {
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send<UserCreatedNotif>(context.Message);
+                    .Result.Send(context.Message);
             }
             return Task.CompletedTask;
         }
@@ -48,7 +50,7 @@ namespace ApiGateway.Consumers
             foreach (var destination in context.Message.Destinations)
             {
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send<ComplexCreatedNotif>(context.Message);
+                    .Result.Send(context.Message);
             }
             return Task.CompletedTask;
         }
@@ -58,7 +60,7 @@ namespace ApiGateway.Consumers
             foreach (var destination in context.Message.Destinations)
             {
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send<RoomCreatedNotif>(context.Message);
+                    .Result.Send(context.Message);
             }
             return Task.CompletedTask;
         }
@@ -68,7 +70,7 @@ namespace ApiGateway.Consumers
             foreach (var destination in context.Message.Destinations)
             {
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send<MembershipCreatedNotif>(context.Message);
+                    .Result.Send(context.Message);
             }
             return Task.CompletedTask;
         }
@@ -78,7 +80,7 @@ namespace ApiGateway.Consumers
             foreach (var destination in context.Message.Destinations)
             {
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send<SessionCreatedNotif>(context.Message);
+                    .Result.Send(context.Message);
             }
             return Task.CompletedTask;
         }
@@ -88,7 +90,7 @@ namespace ApiGateway.Consumers
             foreach (var destination in context.Message.Destinations)
             {
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send<UserProfileUpdatedNotif>(context.Message);
+                    .Result.Send(context.Message);
             }
             return Task.CompletedTask;
         }
@@ -98,7 +100,7 @@ namespace ApiGateway.Consumers
             foreach (var destination in context.Message.Destinations)
             {
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send<ComplexProfileUpdatedNotif>(context.Message);
+                    .Result.Send(context.Message);
             }
             return Task.CompletedTask;
         }
@@ -108,7 +110,7 @@ namespace ApiGateway.Consumers
             foreach (var destination in context.Message.Destinations)
             {
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send<ComplexDeletionNotif>(context.Message);
+                    .Result.Send(context.Message);
             }
             return Task.CompletedTask;
         }
@@ -118,7 +120,7 @@ namespace ApiGateway.Consumers
             foreach (var destination in context.Message.Destinations)
             {
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send<RoomProfileUpdatedNotif>(context.Message);
+                    .Result.Send(context.Message);
             }
             return Task.CompletedTask;
         }
@@ -128,7 +130,7 @@ namespace ApiGateway.Consumers
             foreach (var destination in context.Message.Destinations)
             {
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send<ContactCreatedNotif>(context.Message);
+                    .Result.Send(context.Message);
             }
             return Task.CompletedTask;
         }
@@ -138,7 +140,7 @@ namespace ApiGateway.Consumers
             foreach (var destination in context.Message.Destinations)
             {
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send<InviteCreatedNotif>(context.Message);
+                    .Result.Send(context.Message);
             }
             return Task.CompletedTask;
         }
@@ -148,7 +150,7 @@ namespace ApiGateway.Consumers
             foreach (var destination in context.Message.Destinations)
             {
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send<InviteCancelledNotif>(context.Message);
+                    .Result.Send(context.Message);
             }
             return Task.CompletedTask;
         }
@@ -158,7 +160,7 @@ namespace ApiGateway.Consumers
             foreach (var destination in context.Message.Destinations)
             {
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send<InviteAcceptedNotif>(context.Message);
+                    .Result.Send(context.Message);
             }
             return Task.CompletedTask;
         }
@@ -168,57 +170,93 @@ namespace ApiGateway.Consumers
             foreach (var destination in context.Message.Destinations)
             {
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send<InvitedIgnoredNotif>(context.Message);
+                    .Result.Send(context.Message);
+            }
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<BotProfileUpdatedNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send(context.Message);
+            }
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<BotSubscribedNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send(context.Message);
+            }
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<BotCreatedNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send(context.Message);
             }
             return Task.CompletedTask;
         }
 
         public async Task Consume(ConsumeContext<PutUserRequest> context)
         {
-            var result = await RequestService<PutUserRequest, PutUserResponse>(
+            var result = await SharedArea.Transport.DirectService<PutUserRequest, PutUserResponse>(
+                Program.Bus,
                 context.Message.Destination,
                 context.Message.Packet);
-            await context.RespondAsync<PutUserResponse>(result);
+            await context.RespondAsync(result);
         }
 
         public async Task Consume(ConsumeContext<PutComplexRequest> context)
         {
-            var result = await RequestService<PutComplexRequest, PutComplexResponse>(
+            var result = await SharedArea.Transport.DirectService<PutComplexRequest, PutComplexResponse>(
+                Program.Bus,
                 context.Message.Destination,
                 context.Message.Packet);
-            await context.RespondAsync<PutComplexResponse>(result);
+            await context.RespondAsync(result);
         }
 
         public async Task Consume(ConsumeContext<PutRoomRequest> context)
         {
-            var result = await RequestService<PutRoomRequest, PutRoomResponse>(
+            var result = await SharedArea.Transport.DirectService<PutRoomRequest, PutRoomResponse>(
+                Program.Bus,
                 context.Message.Destination,
                 context.Message.Packet);
-            await context.RespondAsync<PutRoomResponse>(result);
+            await context.RespondAsync(result);
         }
 
         public async Task Consume(ConsumeContext<PutMembershipRequest> context)
         {
-            var result = await RequestService<PutMembershipRequest, PutMembershipResponse>(
+            var result = await SharedArea.Transport.DirectService<PutMembershipRequest, PutMembershipResponse>(
+                Program.Bus,
                 context.Message.Destination,
                 context.Message.Packet);
-            await context.RespondAsync<PutMembershipResponse>(result);
+            await context.RespondAsync(result);
         }
         
         public async Task Consume(ConsumeContext<PutSessionRequest> context)
         {
-            var result = await RequestService<PutSessionRequest, PutSessionResponse>(
+            var result = await SharedArea.Transport.DirectService<PutSessionRequest, PutSessionResponse>(
+                Program.Bus,
                 context.Message.Destination,
                 context.Message.Packet);
-            await context.RespondAsync<PutSessionResponse>(result);
+            await context.RespondAsync(result);
         }
         
         public async Task Consume(ConsumeContext<UpdateUserSecretRequest> context)
         {
-            var result = await RequestService<UpdateUserSecretRequest, UpdateUserSecretResponse>(
+            var result = await SharedArea.Transport.DirectService<UpdateUserSecretRequest, UpdateUserSecretResponse>(
+                Program.Bus,
                 context.Message.Destination,
                 context.Message.Packet);
-            await context.RespondAsync<UpdateUserSecretResponse>(result);
+            await context.RespondAsync(result);
         }
         
         public Task Consume(ConsumeContext<ComplexDeletionPush> context)
@@ -491,20 +529,190 @@ namespace ApiGateway.Consumers
             return Task.CompletedTask;
         }
         
-        private static async Task<TB> RequestService<TA, TB>(string queueName, Packet packet)
-            where TA : class
-            where TB : class
+        public Task Consume(ConsumeContext<BotAdditionToRoomPush> context)
         {
-            var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + queueName);
-            var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
-            IRequestClient<TA, TB> client = new MessageRequestClient<TA, TB>(Program.Bus, address, requestTimeout);
-            var result = await client.Request<TA, TB>(new
+            using (var dbContext = new DatabaseContext())
             {
-                Packet = packet
-            });
-            return result;
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var session = dbContext.Sessions.Find(sessionId);
+
+                    var addition = new BotAdditionToRoomNotification()
+                    {
+                        Room = context.Message.Notif.Room,
+                        Session = session
+                    };
+                    
+                    if (session.Online)
+                    {
+                        _notifsHub.Clients.Client(session.ConnectionId)
+                            .SendAsync("NotifyBotAddedToRoom", addition);
+                    }
+                    else
+                    {
+                        dbContext.Notifications.Add(addition);
+                    }
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<BotRemovationFromRoomPush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var session = dbContext.Sessions.Find(sessionId);
+
+                    var removation = new BotRemovationFromRoomNotification()
+                    {
+                        Room = context.Message.Notif.Room,
+                        Session = session
+                    };
+                    
+                    if (session.Online)
+                    {
+                        _notifsHub.Clients.Client(session.ConnectionId)
+                            .SendAsync("NotifyBotRemovedFromRoom", removation);
+                    }
+                    else
+                    {
+                        dbContext.Notifications.Add(removation);
+                    }
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
         }
 
+        public Task Consume(ConsumeContext<TextMessagePush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var session = dbContext.Sessions.Find(sessionId);
 
+                    var notification = new TextMessageNotification()
+                    {
+                        Message = context.Message.Notif.Message,
+                        Session = session
+                    };
+                    
+                    if (session.Online)
+                    {
+                        _notifsHub.Clients.Client(session.ConnectionId)
+                            .SendAsync("NotifyTextMessageReceived", notification);
+                    }
+                    else
+                    {
+                        dbContext.Notifications.Add(notification);
+                    }
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<PhotoMessagePush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var session = dbContext.Sessions.Find(sessionId);
+
+                    var notification = new PhotoMessageNotification()
+                    {
+                        Message = context.Message.Notif.Message,
+                        Session = session
+                    };
+                    
+                    if (session.Online)
+                    {
+                        _notifsHub.Clients.Client(session.ConnectionId)
+                            .SendAsync("NotifyPhotoMessageReceived", notification);
+                    }
+                    else
+                    {
+                        dbContext.Notifications.Add(notification);
+                    }
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<AudioMessagePush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var session = dbContext.Sessions.Find(sessionId);
+
+                    var notification = new AudioMessageNotification()
+                    {
+                        Message = context.Message.Notif.Message,
+                        Session = session
+                    };
+                    
+                    if (session.Online)
+                    {
+                        _notifsHub.Clients.Client(session.ConnectionId)
+                            .SendAsync("NotifyAudioMessageReceived", notification);
+                    }
+                    else
+                    {
+                        dbContext.Notifications.Add(notification);
+                    }
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<VideoMessagePush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var session = dbContext.Sessions.Find(sessionId);
+
+                    var notification = new VideoMessageNotification()
+                    {
+                        Message = context.Message.Notif.Message,
+                        Session = session
+                    };
+                    
+                    if (session.Online)
+                    {
+                        _notifsHub.Clients.Client(session.ConnectionId)
+                            .SendAsync("NotifyVideoMessageReceived", notification);
+                    }
+                    else
+                    {
+                        dbContext.Notifications.Add(notification);
+                    }
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
     }
 }

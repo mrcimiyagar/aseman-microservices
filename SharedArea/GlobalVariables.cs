@@ -9,6 +9,11 @@ namespace SharedArea
         public const string RABBITMQ_SERVER_URL = "rabbitmq://localhost";
         public const string RABBITMQ_SERVER_PATH = RABBITMQ_SERVER_URL + "?prefetch=32";
         public const string RABBITMQ_USERNAME = "guest", RABBITMQ_PASSWORD = "guest";
+        public const string FILE_TRANSFER_USERNAME = "guest", FILE_TRANSFER_PASSWORD = "guest";
+        public const string SERVER_URL = "http://localhost:8080/";
+        public const string FILE_TRANSFER_GET_UPLOAD_STREAM_URL = "api/file/get_file_upload_stream";
+        public const string FILE_TRANSFER_NOTIFY_GET_UPLOAD_STREAM_FINISHED_URL = "api/file/notify_file_transffered";
+        public const string FILE_TRANSFER_TAKE_DOWNLOAD_STREAM_URL = "api/file/take_file_download_stream";
         
         public const string API_GATEWAY_INTERNAL_QUEUE_NAME = "ApiGateWayInternalQueue";
         public const string API_GATEWAY_INTERNAL_QUEUE_PATH = RABBITMQ_SERVER_URL + "/" + API_GATEWAY_INTERNAL_QUEUE_NAME;
@@ -33,6 +38,9 @@ namespace SharedArea
         
         public const string SEARCH_QUEUE_NAME = "SearchQueue";
         public const string SEARCH_QUEUE_PATH = RABBITMQ_SERVER_URL + "/" + SEARCH_QUEUE_NAME;
+        
+        public const string FILE_QUEUE_NAME = "FileQueue";
+        public const string FILE_QUEUE_PATH = RABBITMQ_SERVER_URL + "/" + FILE_QUEUE_NAME;
         
         public const int RABBITMQ_REQUEST_TIMEOUT = 30;
 

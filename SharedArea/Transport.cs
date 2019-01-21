@@ -85,6 +85,35 @@ namespace SharedArea
             return result;
         }
         
+        public static async Task<TB> DirectService<TA, TB>(IBusControl bus, string queueName, Packet packet)
+            where TA : class
+            where TB : class
+        {
+            var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + queueName);
+            var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
+            IRequestClient<TA, TB> client = new MessageRequestClient<TA, TB>(bus, address, requestTimeout);
+            var result = await client.Request<TA, TB>(new
+            {
+                Packet = packet
+            });
+            return result;
+        }
+        
+        public static async Task<TB> DirectService<TA, TB>(IBusControl bus, string queueName
+            , Dictionary<string, string> headers)
+            where TA : class
+            where TB : class
+        {
+            var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + queueName);
+            var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
+            IRequestClient<TA, TB> client = new MessageRequestClient<TA, TB>(bus, address, requestTimeout);
+            var result = await client.Request<TA, TB>(new
+            {
+                Headers = headers
+            });
+            return result;
+        }
+        
         public static void Push<TA>(IBusControl bus, Push push) where TA : class
         {
             var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + SharedArea.GlobalVariables.API_GATEWAY_INTERNAL_QUEUE_NAME);

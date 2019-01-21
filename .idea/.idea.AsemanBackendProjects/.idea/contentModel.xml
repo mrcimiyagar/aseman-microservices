@@ -13,15 +13,19 @@
         </e>
         <e p="Controllers" t="Include">
           <e p="AuthController.cs" t="Include" />
+          <e p="BotController.cs" t="Include" />
           <e p="ComplexController.cs" t="Include" />
           <e p="ContactController.cs" t="Include" />
+          <e p="FileController.cs" t="Include" />
           <e p="HomeController.cs" t="Include" />
           <e p="InviteController.cs" t="Include" />
+          <e p="MessageController.cs" t="Include" />
           <e p="RoomController.cs" t="Include" />
           <e p="UserController.cs" t="Include" />
         </e>
         <e p="DbContexts" t="Include">
           <e p="DatabaseContext.cs" t="Include" />
+          <e p="StreamRepo.cs" t="Include" />
         </e>
         <e p="Documentations" t="Include">
           <e p="Aseman.postman_collection.json" t="Include" />
@@ -33,8 +37,10 @@
           <e p="Forms" t="Include">
             <e p="AudioUploadForm.cs" t="Include" />
             <e p="PhotoUploadForm.cs" t="Include" />
+            <e p="TakeFileDSF.cs" t="Include" />
             <e p="VideoUploadForm.cs" t="Include" />
           </e>
+          <e p="NotifierStreamContent.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
@@ -122,6 +128,24 @@
         </e>
         <e p="Program.cs" t="Include" />
       </e>
+      <e p="FileService" t="IncludeRecursive">
+        <e p="Bin" t="ExcludeRecursive" />
+        <e p="Consumers" t="Include">
+          <e p="FileConsumer.cs" t="Include" />
+        </e>
+        <e p="DbContexts" t="Include">
+          <e p="DatabaseContext.cs" t="Include" />
+        </e>
+        <e p="FileService.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.2" t="Include">
+              <e p="FileService.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+      </e>
       <e p="MessengerPlatform" t="IncludeRecursive">
         <e p="Bin" t="ExcludeRecursive" />
         <e p="Consumers" t="Include">
@@ -172,6 +196,34 @@
             <e p="VerifyRequest.cs" t="Include" />
             <e p="VerifyResponse.cs" t="Include" />
           </e>
+          <e p="Bot" t="Include">
+            <e p="AddBotToRoomRequest.cs" t="Include" />
+            <e p="AddBotToRoomResponse.cs" t="Include" />
+            <e p="CreateBotRequest.cs" t="Include" />
+            <e p="CreateBotResponse.cs" t="Include" />
+            <e p="GetBotRequest.cs" t="Include" />
+            <e p="GetBotResponse.cs" t="Include" />
+            <e p="GetBotsRequest.cs" t="Include" />
+            <e p="GetBotsResponse.cs" t="Include" />
+            <e p="GetBotStoreContentRequest.cs" t="Include" />
+            <e p="GetBotStoreContentResponse.cs" t="Include" />
+            <e p="GetCreatedBotsRequest.cs" t="Include" />
+            <e p="GetCreatedBotsResponse.cs" t="Include" />
+            <e p="GetSubscribedBotsRequest.cs" t="Include" />
+            <e p="GetSubscribedBotsResponse.cs" t="Include" />
+            <e p="GetWorkershipsRequest.cs" t="Include" />
+            <e p="GetWorkershipsResponse.cs" t="Include" />
+            <e p="RemoveBotFromRoomRequest.cs" t="Include" />
+            <e p="RemoveBotFromRoomResponse.cs" t="Include" />
+            <e p="SearchBotsRequest.cs" t="Include" />
+            <e p="SearchBotsResponse.cs" t="Include" />
+            <e p="SubscribeBotRequest.cs" t="Include" />
+            <e p="SubscribeBotResponse.cs" t="Include" />
+            <e p="UpdateBotProfileRequest.cs" t="Include" />
+            <e p="UpdateBotProfileResponse.cs" t="Include" />
+            <e p="UpdateWorkershipRequest.cs" t="Include" />
+            <e p="UpdateWorkershipResponse.cs" t="Include" />
+          </e>
           <e p="Complex" t="Include">
             <e p="CreateComplexRequest.cs" t="Include" />
             <e p="CreateComplexResponse.cs" t="Include" />
@@ -192,8 +244,21 @@
             <e p="GetContactsRequest.cs" t="Include" />
             <e p="GetContactsResponse.cs" t="Include" />
           </e>
+          <e p="File" t="Include">
+            <e p="DownloadFileRequest.cs" t="Include" />
+            <e p="DownloadFileResponse.cs" t="Include" />
+            <e p="UploadAudioRequest.cs" t="Include" />
+            <e p="UploadAudioResponse.cs" t="Include" />
+            <e p="UploadPhotoRequest.cs" t="Include" />
+            <e p="UploadPhotoResponse.cs" t="Include" />
+            <e p="UploadVideoRequest.cs" t="Include" />
+            <e p="UploadVideoResponse.cs" t="Include" />
+          </e>
           <e p="Internal" t="Include">
             <e p="Notifications" t="Include">
+              <e p="BotCreatedNotif.cs" t="Include" />
+              <e p="BotProfileUpdatedNotif.cs" t="Include" />
+              <e p="BotSubscribedNotif.cs" t="Include" />
               <e p="ComplexCreatedNotif.cs" t="Include" />
               <e p="ComplexDeletionNotif.cs" t="Include" />
               <e p="ComplexProfileUpdatedNotif.cs" t="Include" />
@@ -237,18 +302,36 @@
             <e p="IgnoreInviteRequest.cs" t="Include" />
             <e p="IgnoreInviteResponse.cs" t="Include" />
           </e>
+          <e p="Message" t="Include">
+            <e p="BotCreateFileMessageRequest.cs" t="Include" />
+            <e p="BotCreateFileMessageResponse.cs" t="Include" />
+            <e p="BotCreateTextMessageRequest.cs" t="Include" />
+            <e p="BotCreateTextMessageResponse.cs" t="Include" />
+            <e p="CreateFileMessageRequest.cs" t="Include" />
+            <e p="CreateFileMessageResponse.cs" t="Include" />
+            <e p="CreateTextMessageRequest.cs" t="Include" />
+            <e p="CreateTextMessageResponse.cs" t="Include" />
+            <e p="GetMessagesRequest.cs" t="Include" />
+            <e p="GetMessagesResponse.cs" t="Include" />
+          </e>
           <e p="Notification.cs" t="Include" />
           <e p="Push.cs" t="Include" />
           <e p="Pushes" t="Include">
+            <e p="AudioMessagePush.cs" t="Include" />
+            <e p="BotAdditionToRoomPush.cs" t="Include" />
+            <e p="BotRemovationFromRoomPush.cs" t="Include" />
             <e p="ComplexDeletionPush.cs" t="Include" />
             <e p="ContactCreationPush.cs" t="Include" />
             <e p="InviteAcceptancePush.cs" t="Include" />
             <e p="InviteCancellationPush.cs" t="Include" />
             <e p="InviteCreationPush.cs" t="Include" />
             <e p="InviteIgnoredPush.cs" t="Include" />
+            <e p="PhotoMessagePush.cs" t="Include" />
             <e p="RoomDeletionPush.cs" t="Include" />
             <e p="ServiceMessagePush.cs" t="Include" />
+            <e p="TextMessagePush.cs" t="Include" />
             <e p="UserJointComplexPush.cs" t="Include" />
+            <e p="VideoMessagePush.cs" t="Include" />
           </e>
           <e p="Request.cs" t="Include" />
           <e p="Response.cs" t="Include" />
@@ -311,6 +394,11 @@
           <e p="Video.cs" t="Include" />
           <e p="VideoMessage.cs" t="Include" />
           <e p="Workership.cs" t="Include" />
+        </e>
+        <e p="Forms" t="Include">
+          <e p="AudioUF.cs" t="Include" />
+          <e p="PhotoUF.cs" t="Include" />
+          <e p="VideoUF.cs" t="Include" />
         </e>
         <e p="GlobalVariables.cs" t="Include" />
         <e p="Middles" t="Include">

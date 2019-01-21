@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace SharedArea.Forms
+namespace ApiGateway.Models.Forms
 {
     public class AudioUploadForm
     {

@@ -114,6 +114,22 @@ namespace DesktopPlatform.DbContexts
             modelBuilder.Entity<Session>()
                 .Property(u => u.SessionId)
                 .ValueGeneratedNever();
+            
+            modelBuilder.Entity<Bot>()
+                .Property(u => u.BaseUserId)
+                .ValueGeneratedNever();
+            
+            modelBuilder.Entity<BotSecret>()
+                .Property(u => u.BotSecretId)
+                .ValueGeneratedNever();
+            
+            modelBuilder.Entity<BotCreation>()
+                .Property(u => u.BotCreationId)
+                .ValueGeneratedNever();
+            
+            modelBuilder.Entity<BotSubscription>()
+                .Property(u => u.BotSubscriptionId)
+                .ValueGeneratedNever();
         }
     }
 }

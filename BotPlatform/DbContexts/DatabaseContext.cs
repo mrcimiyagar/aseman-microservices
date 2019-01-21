@@ -115,6 +115,10 @@ namespace BotPlatform.DbContexts
             modelBuilder.Entity<Session>()
                 .Property(u => u.SessionId)
                 .ValueGeneratedNever();
+            
+            modelBuilder.Entity<Workership>()
+                .Property(u => u.WorkershipId)
+                .ValueGeneratedNever();
         }
     }
 }
