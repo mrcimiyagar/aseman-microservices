@@ -54,6 +54,9 @@
           <e p="launchSettings.json" t="Include" />
         </e>
         <e p="Startup.cs" t="Include" />
+        <e p="Utils" t="Include">
+          <e p="Security.cs" t="Include" />
+        </e>
       </e>
       <e p="AsemanBackendProjects.sln" t="IncludeFlat" />
       <e p="BotPlatform" t="IncludeRecursive">
@@ -61,6 +64,7 @@
         <e p="BotPlatform.csproj" t="IncludeRecursive" />
         <e p="Consumers" t="Include">
           <e p="BotConsumer.cs" t="Include" />
+          <e p="NotifConsumer.cs" t="Include" />
         </e>
         <e p="DbContexts" t="Include">
           <e p="DatabaseContext.cs" t="Include" />
@@ -73,12 +77,16 @@
           </e>
         </e>
         <e p="Program.cs" t="Include" />
+        <e p="Utils" t="Include">
+          <e p="Security.cs" t="Include" />
+        </e>
       </e>
       <e p="CityPlatform" t="IncludeRecursive">
         <e p="Bin" t="ExcludeRecursive" />
         <e p="CityPlatform.csproj" t="IncludeRecursive" />
         <e p="Consumers" t="Include">
           <e p="CityConsumer.cs" t="Include" />
+          <e p="NotifConsumer.cs" t="Include" />
         </e>
         <e p="DbContexts" t="Include">
           <e p="DatabaseContext.cs" t="Include" />
@@ -91,11 +99,15 @@
           </e>
         </e>
         <e p="Program.cs" t="Include" />
+        <e p="Utils" t="Include">
+          <e p="Security.cs" t="Include" />
+        </e>
       </e>
       <e p="DesktopPlatform" t="IncludeRecursive">
         <e p="Bin" t="ExcludeRecursive" />
         <e p="Consumers" t="Include">
           <e p="DesktopConsumer.cs" t="Include" />
+          <e p="NotifConsumer.cs" t="Include" />
         </e>
         <e p="DbContexts" t="Include">
           <e p="DatabaseContext.cs" t="Include" />
@@ -114,6 +126,7 @@
         <e p="Bin" t="ExcludeRecursive" />
         <e p="Consumers" t="Include">
           <e p="EntryConsumer.cs" t="Include" />
+          <e p="NotifConsumer.cs" t="Include" />
         </e>
         <e p="DbContexts" t="Include">
           <e p="DatabaseContext.cs" t="Include" />
@@ -127,11 +140,15 @@
           </e>
         </e>
         <e p="Program.cs" t="Include" />
+        <e p="Utils" t="Include">
+          <e p="Security.cs" t="Include" />
+        </e>
       </e>
       <e p="FileService" t="IncludeRecursive">
         <e p="Bin" t="ExcludeRecursive" />
         <e p="Consumers" t="Include">
           <e p="FileConsumer.cs" t="Include" />
+          <e p="NotifConsumer.cs" t="Include" />
         </e>
         <e p="DbContexts" t="Include">
           <e p="DatabaseContext.cs" t="Include" />
@@ -150,6 +167,7 @@
         <e p="Bin" t="ExcludeRecursive" />
         <e p="Consumers" t="Include">
           <e p="MessengerConsumer.cs" t="Include" />
+          <e p="NotifConsumer.cs" t="Include" />
         </e>
         <e p="DbContexts" t="Include">
           <e p="DatabaseContext.cs" t="Include" />
@@ -168,6 +186,7 @@
       <e p="SearchPlatform" t="IncludeRecursive">
         <e p="Bin" t="ExcludeRecursive" />
         <e p="Consumers" t="Include">
+          <e p="NotifConsumer.cs" t="Include" />
           <e p="SearchConsumer.cs" t="Include" />
         </e>
         <e p="DbContexts" t="Include">
@@ -282,6 +301,7 @@
               <e p="RoomDeletionNotif.cs" t="Include" />
               <e p="RoomProfileUpdatedNotif.cs" t="Include" />
               <e p="SessionCreatedNotif.cs" t="Include" />
+              <e p="SessionUpdatedNotif.cs" t="Include" />
               <e p="UserCreatedNotif.cs" t="Include" />
               <e p="UserProfileUpdatedNotif.cs" t="Include" />
               <e p="VideoCreatedNotif.cs" t="Include" />
@@ -290,6 +310,7 @@
               <e p="PutComplexRequest.cs" t="Include" />
               <e p="PutMembershipRequest.cs" t="Include" />
               <e p="PutRoomRequest.cs" t="Include" />
+              <e p="PutServiceMessageRequest.cs" t="Include" />
               <e p="PutSessionRequest.cs" t="Include" />
               <e p="PutUserRequest.cs" t="Include" />
               <e p="UpdateUserSecretRequest.cs" t="Include" />
@@ -298,6 +319,7 @@
               <e p="PutComplexResponse.cs" t="Include" />
               <e p="PutMembershipResponse.cs" t="Include" />
               <e p="PutRoomResponse.cs" t="Include" />
+              <e p="PutServiceMessageResponse.cs" t="Include" />
               <e p="PutSessionResponse.cs" t="Include" />
               <e p="PutUserResponse.cs" t="Include" />
               <e p="UpdateUserSecretResponse.cs" t="Include" />
@@ -347,6 +369,8 @@
           <e p="Request.cs" t="Include" />
           <e p="Response.cs" t="Include" />
           <e p="Room" t="Include">
+            <e p="CreateRoomRequest.cs" t="Include" />
+            <e p="CreateRoomResponse.cs" t="Include" />
             <e p="DeleteRoomRequest.cs" t="Include" />
             <e p="DeleteRoomResponse.cs" t="Include" />
             <e p="GetRoomByIdRequest.cs" t="Include" />
@@ -366,9 +390,6 @@
             <e p="UpdateUserProfileRequest.cs" t="Include" />
             <e p="UpdateUserProfileResponse.cs" t="Include" />
           </e>
-        </e>
-        <e p="Consumers" t="Include">
-          <e p="NotifConsumer.cs" t="Include" />
         </e>
         <e p="DbContexts" t="Include">
           <e p="DatabaseContext.cs" t="Include" />
@@ -445,12 +466,13 @@
         <e p="Transport.cs" t="Include" />
         <e p="Utils" t="Include">
           <e p="AuthExtracter.cs" t="Include" />
-          <e p="Security.cs" t="Include" />
+          <e p="DatabaseConfig.cs" t="Include" />
         </e>
       </e>
       <e p="StorePlatform" t="IncludeRecursive">
         <e p="Bin" t="ExcludeRecursive" />
         <e p="Consumers" t="Include">
+          <e p="NotifConsumer.cs" t="Include" />
           <e p="StoreConsumer.cs" t="Include" />
         </e>
         <e p="DbContexts" t="Include">

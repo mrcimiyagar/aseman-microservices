@@ -3,8 +3,9 @@ using System.Linq;
 using System.Text;
 using SharedArea.DbContexts;
 using SharedArea.Entities;
+using SharedArea.Utils;
 
-namespace SharedArea.Utils
+namespace CityPlatform.Utils
 {
     public class Security
     {

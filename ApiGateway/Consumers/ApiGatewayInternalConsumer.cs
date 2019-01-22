@@ -8,7 +8,6 @@ using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
 using SharedArea.Commands.Internal.Responses;
 using SharedArea.Commands.Pushes;
-using SharedArea.Entities;
 using SharedArea.Notifications;
 
 namespace ApiGateway.Consumers
@@ -20,10 +19,12 @@ namespace ApiGateway.Consumers
         , IConsumer<InviteCancelledNotif>, IConsumer<InviteAcceptedNotif>, IConsumer<InvitedIgnoredNotif>
         , IConsumer<BotProfileUpdatedNotif>, IConsumer<BotSubscribedNotif>, IConsumer<BotCreatedNotif>
         , IConsumer<PhotoCreatedNotif>, IConsumer<AudioCreatedNotif>, IConsumer<VideoCreatedNotif>
+        , IConsumer<SessionUpdatedNotif>, IConsumer<RoomDeletionNotif>
 
         , IConsumer<PutUserRequest>, IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
         , IConsumer<PutMembershipRequest>, IConsumer<PutSessionRequest>, IConsumer<UpdateUserSecretRequest>
-        
+        , IConsumer<PutServiceMessageRequest>
+
         , IConsumer<ComplexDeletionPush>, IConsumer<RoomDeletionPush>, IConsumer<ContactCreationPush>
         , IConsumer<ServiceMessagePush>, IConsumer<InviteCreationPush>, IConsumer<InviteCancellationPush>
         , IConsumer<UserJointComplexPush>, IConsumer<InviteAcceptancePush>, IConsumer<InviteIgnoredPush>
@@ -84,6 +85,19 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = context.Message.Packet.Session;
+
+                session.BaseUserId = null;
+                session.BaseUser = null;
+
+                dbContext.Sessions.Add(session);
+
+                dbContext.SaveChanges();
+            }
+            
             return Task.CompletedTask;
         }
         
@@ -236,6 +250,41 @@ namespace ApiGateway.Consumers
             }
             return Task.CompletedTask;
         }
+        
+        public Task Consume(ConsumeContext<SessionUpdatedNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send(context.Message);
+            }
+
+            var globalSession = context.Message.Packet.Session;
+
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = dbContext.Sessions.Find(globalSession.SessionId);
+
+                session.Online = globalSession.Online;
+                session.ConnectionId = globalSession.ConnectionId;
+                session.Token = globalSession.Token;
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<RoomDeletionNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send(context.Message);
+            }
+            
+            return Task.CompletedTask;
+        }
 
         public async Task Consume(ConsumeContext<PutUserRequest> context)
         {
@@ -285,6 +334,15 @@ namespace ApiGateway.Consumers
         public async Task Consume(ConsumeContext<UpdateUserSecretRequest> context)
         {
             var result = await SharedArea.Transport.DirectService<UpdateUserSecretRequest, UpdateUserSecretResponse>(
+                Program.Bus,
+                context.Message.Destination,
+                context.Message.Packet);
+            await context.RespondAsync(result);
+        }
+        
+        public async Task Consume(ConsumeContext<PutServiceMessageRequest> context)
+        {
+            var result = await SharedArea.Transport.DirectService<PutServiceMessageRequest, PutServiceMessageResponse>(
                 Program.Bus,
                 context.Message.Destination,
                 context.Message.Packet);

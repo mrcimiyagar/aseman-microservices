@@ -4,6 +4,7 @@ using BotPlatform.DbContexts;
 using MassTransit;
 using MassTransit.NLogIntegration;
 using Newtonsoft.Json;
+using SharedArea.Utils;
 
 namespace BotPlatform
 {
@@ -15,7 +16,7 @@ namespace BotPlatform
         {
             using (var dbContext = new DatabaseContext())
             {
-                dbContext.Database.EnsureCreated();
+                DatabaseConfig.ConfigDatabase(dbContext);
             }
             
             Bus = MassTransit.Bus.Factory.CreateUsingRabbitMq(sbc =>
@@ -42,6 +43,7 @@ namespace BotPlatform
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.BOT_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<BotConsumer>();
+                    ep.Consumer<NotifConsumer>();
                 });
             });
 

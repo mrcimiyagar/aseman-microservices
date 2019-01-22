@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CityPlatform.DbContexts;
+using CityPlatform.Utils;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Remotion.Linq.Clauses;
+using SharedArea.Commands.Bot;
 using SharedArea.Commands.Complex;
 using SharedArea.Commands.Contact;
 using SharedArea.Commands.Internal.Notifications;
@@ -15,19 +17,21 @@ using SharedArea.Commands.Invite;
 using SharedArea.Commands.Pushes;
 using SharedArea.Commands.Room;
 using SharedArea.Commands.User;
-using SharedArea.Consumers;
 using SharedArea.Entities;
 using SharedArea.Middles;
 using SharedArea.Notifications;
 
 namespace CityPlatform.Consumers
 {
-    public class CityConsumer : NotifConsumer, IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
+    public class CityConsumer : IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
         , IConsumer<PutUserRequest>, IConsumer<PutMembershipRequest>, IConsumer<PutSessionRequest>
         , IConsumer<UpdateUserSecretRequest>, IConsumer<UpdateUserProfileRequest>, IConsumer<UpdateComplexProfileRequest>
         , IConsumer<CreateComplexRequest>, IConsumer<DeleteComplexRequest>, IConsumer<UpdateRoomProfileRequest>
         , IConsumer<DeleteRoomRequest>, IConsumer<CreateContactRequest>, IConsumer<CreateInviteRequest>
         , IConsumer<CancelInviteRequest>, IConsumer<AcceptInviteRequest>, IConsumer<IgnoreInviteRequest>
+        , IConsumer<GetBotsRequest>, IConsumer<GetCreatedBotsRequest>, IConsumer<GetSubscribedBotsRequest>
+        , IConsumer<SearchBotsRequest>, IConsumer<UpdateBotProfileRequest>, IConsumer<GetBotRequest>
+        , IConsumer<SubscribeBotRequest>, IConsumer<CreateBotRequest>, IConsumer<CreateRoomRequest>
     {
         public async Task Consume(ConsumeContext<PutComplexRequest> context)
         {
@@ -289,15 +293,7 @@ namespace CityPlatform.Consumers
                     
                     SharedArea.Transport.NotifyService<ComplexCreatedNotif>(
                         Program.Bus,
-                        new Packet() {User = user, Complex = complex, ComplexSecret = cs, Room = room},
-                        SharedArea.GlobalVariables.AllQueuesExcept(new []
-                        {
-                            SharedArea.GlobalVariables.CITY_QUEUE_NAME
-                        }));
-                    
-                    SharedArea.Transport.NotifyService<MembershipCreatedNotif>(
-                        Program.Bus,
-                        new Packet() {Membership = mem, User = user, Complex = complex},
+                        new Packet() {User = user, Complex = complex, ComplexSecret = cs},
                         SharedArea.GlobalVariables.AllQueuesExcept(new []
                         {
                             SharedArea.GlobalVariables.CITY_QUEUE_NAME
@@ -557,132 +553,164 @@ namespace CityPlatform.Consumers
         {
             using (var dbContext = new DatabaseContext())
             {
-                var packet = context.Message.Packet;
-                var session = dbContext.Sessions.Find(context.Message.SessionId);
-
-                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
-                var me = (User) session.BaseUser;
-                var peer = dbContext.Users.Find(packet.User.BaseUserId);
-
-                if (me.Contacts.All(c => c.PeerId != packet.User.BaseUserId))
+                try
                 {
-                    var complex = new Complex
-                    {
-                        Title = "",
-                        Avatar = -1
-                    };
-                    var complexSecret = new ComplexSecret
-                    {
-                        Admin = null,
-                        Complex = complex
-                    };
-                    complex.ComplexSecret = complexSecret;
-                    var room = new Room()
-                    {
-                        Title = "Hall",
-                        Avatar = 0,
-                        Complex = complex
-                    };
-                    var m1 = new Membership()
-                    {
-                        User = me,
-                        Complex = complex
-                    };
-                    var m2 = new Membership()
-                    {
-                        User = peer,
-                        Complex = complex
-                    };
-                    var message = new ServiceMessage
-                    {
-                        Text = "Room created.",
-                        Room = room,
-                        Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds),
-                        Author = null
-                    };
-                    var myContact = new Contact
-                    {
-                        Complex = complex,
-                        User = me,
-                        Peer = peer
-                    };
-                    var peerContact = new Contact
-                    {
-                        Complex = complex,
-                        User = peer,
-                        Peer = me
-                    };
-                    dbContext.AddRange(complex, complexSecret, room, m1, m2, message, myContact, peerContact);
-                    dbContext.SaveChanges();
-                    
-                    SharedArea.Transport.NotifyService<ContactCreatedNotif>(
-                        Program.Bus,
-                        new Packet() {Complex = complex, ComplexSecret = complexSecret, Room = room
-                            , Memberships = new [] {m1, m2}.ToList(), ServiceMessage = message
-                            , Contacts = new [] {myContact, peerContact}.ToList(), Users = new [] {me, peer}.ToList()},
-                        SharedArea.GlobalVariables.AllQueuesExcept(new []
-                        {
-                            SharedArea.GlobalVariables.CITY_QUEUE_NAME
-                        }));
-                    
-                    dbContext.Entry(peerContact.Complex).Collection(c => c.Rooms).Load();
-                    
-                    dbContext.Entry(peer).Collection(u => u.Sessions).Load();
-                    var sessionIds = new List<long>();
-                    foreach(var s in peer.Sessions)
-                    {
-                        sessionIds.Add(s.SessionId);
-                    }
-                    var ccn = new ContactCreationNotification
-                    {
-                        Contact = peerContact,
-                    };
-                    var mcn = new ServiceMessageNotification
-                    {
-                        Message = message
-                    };
+                    var packet = context.Message.Packet;
+                    var session = dbContext.Sessions.Find(context.Message.SessionId);
 
-                    SharedArea.Transport.Push<ContactCreationPush>(
-                        Program.Bus,
-                        new ContactCreationPush()
-                        {
-                            Notif = ccn
-                        });
+                    dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                    var me = (User) session.BaseUser;
+                    var peer = (User) dbContext.BaseUsers.Find(packet.User.BaseUserId);
                     
-                    SharedArea.Transport.Push<ServiceMessagePush>(
-                        Program.Bus,
-                        new ServiceMessagePush()
-                        {
-                            Notif = mcn
-                        });
-                    
-                    ServiceMessage finalMessage;
-                    Contact finalMyContact;
-                    using (var finalContext = new DatabaseContext())
-                    {
-                        finalMessage = (ServiceMessage) finalContext.Messages.Find(message.MessageId);
-                        finalMyContact = finalContext.Contacts.Find(myContact.ContactId);
-                        finalContext.Entry(finalMessage).Reference(m => m.Room).Load();
-                        finalContext.Entry(finalMyContact).Reference(c => c.Complex).Load();
-                        finalContext.Entry(finalMyContact.Complex).Collection(c => c.Rooms).Load();
-                        finalContext.Entry(finalMyContact).Reference(c => c.Peer).Load();
-                    }
+                    dbContext.Entry(me).Collection(u => u.Contacts).Load();
 
-                    await context.RespondAsync(new CreateContactResponse()
+                    if (me.Contacts.All(c => c.PeerId != packet.User.BaseUserId))
                     {
-                        Packet = new Packet {Status = "success", Contact = finalMyContact, ServiceMessage = finalMessage}
-                    });
-                } 
-                else
+                        var complex = new Complex
+                        {
+                            Title = "",
+                            Avatar = -1
+                        };
+                        var complexSecret = new ComplexSecret
+                        {
+                            Admin = null,
+                            Complex = complex
+                        };
+                        complex.ComplexSecret = complexSecret;
+                        var room = new Room()
+                        {
+                            Title = "Hall",
+                            Avatar = 0,
+                            Complex = complex
+                        };
+                        var m1 = new Membership()
+                        {
+                            User = me,
+                            Complex = complex
+                        };
+                        var m2 = new Membership()
+                        {
+                            User = peer,
+                            Complex = complex
+                        };
+                        var myContact = new Contact
+                        {
+                            Complex = complex,
+                            User = me,
+                            Peer = peer
+                        };
+                        var peerContact = new Contact
+                        {
+                            Complex = complex,
+                            User = peer,
+                            Peer = me
+                        };
+                        dbContext.AddRange(complex, complexSecret, room, m1, m2, myContact, peerContact);
+                        dbContext.SaveChanges();
+
+                        SharedArea.Transport.NotifyService<ContactCreatedNotif>(
+                            Program.Bus,
+                            new Packet()
+                            {
+                                Complex = complex,
+                                ComplexSecret = complexSecret,
+                                Room = room,
+                                Memberships = new[] {m1, m2}.ToList(),
+                                Contacts = new[] {myContact, peerContact}.ToList(),
+                                Users = new[] {me, peer}.ToList()
+                            },
+                            SharedArea.GlobalVariables.AllQueuesExcept(new[]
+                            {
+                                SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                            }));
+                        
+                        var message = new ServiceMessage
+                        {
+                            Text = "Room created.",
+                            Room = room,
+                            Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds),
+                            Author = null
+                        };
+                        
+                        Console.WriteLine("hello 1");
+
+                        var result1 = await SharedArea.Transport
+                            .RequestService<PutServiceMessageRequest, PutServiceMessageResponse>(
+                                Program.Bus,
+                                SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                                new Packet() {ServiceMessage = message, Room = room});
+
+                        Console.WriteLine("hello 2");
+                        
+                        message.MessageId = result1.Packet.ServiceMessage.MessageId;
+
+                        dbContext.Messages.Add(message);
+                        dbContext.SaveChanges();
+
+                        dbContext.Entry(peerContact.Complex).Collection(c => c.Rooms).Load();
+
+                        dbContext.Entry(peer).Collection(u => u.Sessions).Load();
+                        var sessionIds = peer.Sessions.Select(s => s.SessionId).ToList();
+
+                        var ccn = new ContactCreationNotification
+                        {
+                            Contact = peerContact,
+                        };
+                        var mcn = new ServiceMessageNotification
+                        {
+                            Message = message
+                        };
+
+                        SharedArea.Transport.Push<ContactCreationPush>(
+                            Program.Bus,
+                            new ContactCreationPush()
+                            {
+                                Notif = ccn
+                            });
+
+                        SharedArea.Transport.Push<ServiceMessagePush>(
+                            Program.Bus,
+                            new ServiceMessagePush()
+                            {
+                                Notif = mcn
+                            });
+
+                        ServiceMessage finalMessage;
+                        Contact finalMyContact;
+                        using (var finalContext = new DatabaseContext())
+                        {
+                            finalMessage = (ServiceMessage) finalContext.Messages.Find(message.MessageId);
+                            finalMyContact = finalContext.Contacts.Find(myContact.ContactId);
+                            finalContext.Entry(finalMessage).Reference(m => m.Room).Load();
+                            finalContext.Entry(finalMyContact).Reference(c => c.Complex).Load();
+                            finalContext.Entry(finalMyContact.Complex).Collection(c => c.Rooms).Load();
+                            finalContext.Entry(finalMyContact).Reference(c => c.Peer).Load();
+                        }
+
+                        await context.RespondAsync(new CreateContactResponse()
+                        {
+                            Packet = new Packet
+                            {
+                                Status = "success",
+                                Contact = finalMyContact,
+                                ServiceMessage = finalMessage
+                            }
+                        });
+                    }
+                    else
+                    {
+                        await context.RespondAsync(new CreateContactResponse()
+                        {
+                            Packet = new Packet {Status = "error_050"}
+                        });
+                    }
+                }
+                catch (Exception ex)
                 {
-                    await context.RespondAsync(new CreateContactResponse()
-                    {
-                        Packet = new Packet {Status = "error_050"}
-                    });
+                    Console.WriteLine(ex.ToString());
                 }
             }
         }
-
 
         public async Task Consume(ConsumeContext<CreateInviteRequest> context)
         {
@@ -880,6 +908,15 @@ namespace CityPlatform.Consumers
                         Text = human.Title + " entered complex by invite.",
                         Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds)
                     };
+                    
+                    var result1 = await SharedArea.Transport
+                        .RequestService<PutServiceMessageRequest, PutServiceMessageResponse>(
+                            Program.Bus,
+                            SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                            new Packet() {ServiceMessage = message, Room = hall});
+
+                    message.MessageId = result1.Packet.ServiceMessage.MessageId;
+                    
                     dbContext.Messages.Add(message);
                     dbContext.SaveChanges();
                     
@@ -1025,6 +1062,375 @@ namespace CityPlatform.Consumers
                     await context.RespondAsync(new IgnoreInviteResponse()
                     {
                         Packet = new Packet {Status = "error_0K0"}
+                    });
+                }
+            }
+        }
+        
+        public async Task Consume(ConsumeContext<GetBotsRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var bots = dbContext.Bots.Include(b => b.BotSecret).ToList();
+                var finalBots = new List<Bot>();
+                var bannedAccessIds = new List<long>();
+                foreach (var bot in bots)
+                {
+                    if (bot.BotSecret.CreatorId != session.BaseUserId)
+                    {
+                        bannedAccessIds.Add(bot.BaseUserId);
+                    }
+                    else
+                    {
+                        finalBots.Add(bot);
+                    }
+                }
+                using (var nextContext = new DatabaseContext())
+                {
+                    foreach (var id in bannedAccessIds)
+                    {
+                        var finalBot = nextContext.Bots.Find(id);
+                        finalBots.Add(finalBot);
+                    }
+                }
+
+                await context.RespondAsync(new GetBotsResponse()
+                {
+                    Packet = new Packet {Status = "success", Bots = finalBots}
+                });
+            }
+        }
+
+        public async Task Consume(ConsumeContext<GetCreatedBotsRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
+                var bots = new List<Bot>();
+                dbContext.Entry(user).Collection(u => u.CreatedBots).Load();
+                var creations = user.CreatedBots.ToList();
+                foreach (var botCreation in user.CreatedBots)
+                {
+                    dbContext.Entry(botCreation).Reference(bc => bc.Bot).Load();
+                    dbContext.Entry(botCreation.Bot).Reference(b => b.BotSecret).Load();
+                    bots.Add(botCreation.Bot);
+                }
+
+                await context.RespondAsync(new GetCreatedBotsResponse()
+                {
+                    Packet = new Packet {Status = "success", Bots = bots, BotCreations = creations}
+                });
+            }
+        }
+
+        public async Task Consume(ConsumeContext<GetSubscribedBotsRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+                if (session == null)
+                {
+                    await context.RespondAsync(new GetSubscribedBotsResponse()
+                    {
+                        Packet = new Packet {Status = "error_0"}
+                    });
+                    return;
+                }
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
+                var bots = new List<Bot>();
+                dbContext.Entry(user).Collection(u => u.SubscribedBots).Load();
+                var subscriptions = user.SubscribedBots.ToList();
+                var noAccessBotIds = new List<long>();
+                foreach (var botSubscription in user.SubscribedBots)
+                {
+                    dbContext.Entry(botSubscription).Reference(bc => bc.Bot).Load();
+                    dbContext.Entry(botSubscription.Bot).Reference(b => b.BotSecret).Load();
+                    if (botSubscription.Bot.BotSecret.CreatorId == user.BaseUserId)
+                    {
+                        bots.Add(botSubscription.Bot);
+                    }
+                    else
+                    {
+                        noAccessBotIds.Add(botSubscription.Bot.BaseUserId);
+                    }
+                }
+                using (var nextContext = new DatabaseContext())
+                {
+                    foreach (var id in noAccessBotIds)
+                    {
+                        var bot = nextContext.Bots.Find(id);
+                        bots.Add(bot);
+                    }
+                }
+
+                await context.RespondAsync(new GetSubscribedBotsResponse()
+                {
+                    Packet = new Packet {Status = "success", Bots = bots, BotSubscriptions = subscriptions}
+                });
+            }
+        }
+
+        public async Task Consume(ConsumeContext<SearchBotsRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                
+                var bots = (from b in dbContext.Bots
+                    where EF.Functions.Like(b.Title, "%" + packet.SearchQuery + "%")
+                    select b).ToList();
+
+                await context.RespondAsync(new SearchBotsResponse()
+                {
+                    Packet = new Packet {Status = "success", Bots = bots}
+                });
+            }
+        }
+
+        public async Task Consume(ConsumeContext<UpdateBotProfileRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
+                dbContext.Entry(user).Collection(u => u.CreatedBots).Load();
+                var botCreation = user.CreatedBots.Find(bc => bc.BotId == packet.Bot.BaseUserId);
+                if (botCreation == null)
+                {
+                    await context.RespondAsync(new UpdateBotProfileResponse()
+                    {
+                        Packet = new Packet {Status = "error_0"}
+                    });
+                    return;
+                }
+                dbContext.Entry(botCreation).Reference(bc => bc.Bot).Load();
+                var bot = botCreation.Bot;
+                bot.Title = packet.Bot.Title;
+                bot.Avatar = packet.Bot.Avatar;
+                bot.ViewURL = packet.Bot.ViewURL;
+                dbContext.SaveChanges();
+                
+                SharedArea.Transport.NotifyService<BotProfileUpdatedNotif>(
+                    Program.Bus,
+                    new Packet() {Bot = bot},
+                    new [] {SharedArea.GlobalVariables.DESKTOP_QUEUE_NAME});
+                
+                await context.RespondAsync(new UpdateBotProfileResponse()
+                {
+                    Packet = new Packet {Status = "success"}
+                });
+            }
+        }
+
+        public async Task Consume(ConsumeContext<GetBotRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var robot = (Bot) dbContext.BaseUsers.Find(packet.Bot.BaseUserId);
+                if (robot == null)
+                {
+                    await context.RespondAsync(new GetBotResponse()
+                    {
+                        Packet = new Packet {Status = "error_080"}
+                    });
+                    return;
+                }
+                dbContext.Entry(robot).Reference(r => r.BotSecret).Load();
+                if (robot.BotSecret.CreatorId == session.BaseUserId)
+                {
+                    await context.RespondAsync(new GetBotResponse()
+                    {
+                        Packet = new Packet {Status = "success", Bot = robot}
+                    });
+                    return;                    
+                }
+                using (var nextContext = new DatabaseContext())
+                {
+                    var nextBot = nextContext.Bots.Find(packet.Bot.BaseUserId);
+                    await context.RespondAsync(new GetBotResponse()
+                    {
+                        Packet = new Packet {Status = "success", Bot = nextBot}
+                    });
+                }
+            }
+        }
+
+        public async Task Consume(ConsumeContext<CreateBotRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
+                var bot = new Bot()
+                {
+                    Title = packet.Bot.Title,
+                    Avatar = packet.Bot.Avatar > 0 ? packet.Bot.Avatar : 0,
+                    ViewURL = packet.Bot.ViewURL
+                };
+                var botSecret = new BotSecret()
+                {
+                    Bot = bot,
+                    Creator = user,
+                    Token = Security.MakeKey64()
+                };
+                bot.BotSecret = botSecret;
+                var botSess = new Session()
+                {
+                    Token = botSecret.Token,
+                    BaseUser = bot
+                };
+                var botCreation = new BotCreation()
+                {
+                    Bot = bot,
+                    Creator = user
+                };
+                var subscription = new BotSubscription()
+                {
+                    Bot = bot,
+                    Subscriber = user
+                };
+                dbContext.AddRange(bot, botSecret, botSess, botCreation, subscription);
+                dbContext.SaveChanges();
+                
+                SharedArea.Transport.NotifyService<BotCreatedNotif>(
+                    Program.Bus,
+                    new Packet() {Bot = bot, BotCreation = botCreation, BotSubscription = subscription, User = user},
+                    new []
+                    {
+                        SharedArea.GlobalVariables.DESKTOP_QUEUE_NAME,
+                        SharedArea.GlobalVariables.STORE_QUEUE_NAME,
+                        SharedArea.GlobalVariables.BOT_QUEUE_NAME
+                    });
+
+                await context.RespondAsync(new CreateBotResponse()
+                {
+                    Packet = new Packet
+                    {
+                        Status = "success",
+                        Bot = bot,
+                        BotCreation = botCreation,
+                        BotSubscription = subscription
+                    }
+                });
+            }
+        }
+
+        public async Task Consume(ConsumeContext<SubscribeBotRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+
+                var bot = dbContext.Bots.Find(packet.Bot.BaseUserId);
+                if (bot == null)
+                {
+                    await context.RespondAsync(new SubscribeBotResponse()
+                    {
+                        Packet = new Packet {Status = "error_1"}
+                    });
+                    return;
+                }
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
+                dbContext.Entry(user).Collection(u => u.SubscribedBots).Load();
+                if (user.SubscribedBots.Any(b => b.BotId == packet.Bot.BaseUserId))
+                {
+                    await context.RespondAsync(new SubscribeBotResponse()
+                    {
+                        Packet = new Packet {Status = "error_0"}
+                    });
+                    return;
+                }
+                var subscription = new BotSubscription()
+                {
+                    Bot = bot,
+                    Subscriber = user
+                };
+                dbContext.AddRange(subscription);
+                dbContext.SaveChanges();
+                
+                SharedArea.Transport.NotifyService<BotSubscribedNotif>(
+                    Program.Bus,
+                    new Packet() {BotSubscription = subscription, Bot = bot, User = user},
+                    new []
+                    {
+                        SharedArea.GlobalVariables.DESKTOP_QUEUE_NAME,
+                        SharedArea.GlobalVariables.STORE_QUEUE_NAME,
+                        SharedArea.GlobalVariables.BOT_QUEUE_NAME
+                    });
+                
+                await context.RespondAsync(new SubscribeBotResponse()
+                {
+                    Packet = new Packet {Status = "success", BotSubscription = subscription}
+                });
+            }
+        }
+
+        public async Task Consume(ConsumeContext<CreateRoomRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+
+                var complex = dbContext.Complexes.Find(packet.Complex.ComplexId);
+                if (complex != null)
+                {
+                    if (!string.IsNullOrEmpty(packet.Room.Title))
+                    {
+                        var room = new Room()
+                        {
+                            Title = packet.Room.Title,
+                            Avatar = packet.Room.Avatar,
+                            Complex = complex
+                        };
+                        dbContext.AddRange(room);
+                        dbContext.SaveChanges();
+                        
+                        SharedArea.Transport.NotifyService<RoomCreatedNotif>(
+                            Program.Bus,
+                            new Packet() {Room = room},
+                            SharedArea.GlobalVariables.AllQueuesExcept(new []
+                            {
+                                SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                            }));
+
+                        await context.RespondAsync(new CreateRoomResponse()
+                        {
+                            Packet = new Packet {Status = "success", Room = room}
+                        });
+                    }
+                    else
+                    {
+                        await context.RespondAsync(new CreateRoomResponse()
+                        {
+                            Packet = new Packet {Status = "error_0"}
+                        });
+                    }
+                }
+                else
+                {
+                    await context.RespondAsync(new CreateRoomResponse()
+                    {
+                        Packet = new Packet {Status = "error_1"}
                     });
                 }
             }

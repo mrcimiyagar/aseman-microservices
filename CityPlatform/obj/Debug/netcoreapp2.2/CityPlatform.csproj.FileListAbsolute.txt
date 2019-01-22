@@ -5,10 +5,10 @@ F:\Desktop\AsemanBackendProjects\CityPlatform\bin\Debug\netcoreapp2.2\CityPlatfo
 F:\Desktop\AsemanBackendProjects\CityPlatform\bin\Debug\netcoreapp2.2\CityPlatform.pdb
 F:\Desktop\AsemanBackendProjects\CityPlatform\bin\Debug\netcoreapp2.2\SharedArea.dll
 F:\Desktop\AsemanBackendProjects\CityPlatform\bin\Debug\netcoreapp2.2\SharedArea.pdb
-F:\Desktop\AsemanBackendProjects\CityPlatform\obj\Debug\netcoreapp2.2\CityPlatform.csprojAssemblyReference.cache
 F:\Desktop\AsemanBackendProjects\CityPlatform\obj\Debug\netcoreapp2.2\CityPlatform.csproj.CoreCompileInputs.cache
 F:\Desktop\AsemanBackendProjects\CityPlatform\obj\Debug\netcoreapp2.2\CityPlatform.AssemblyInfoInputs.cache
 F:\Desktop\AsemanBackendProjects\CityPlatform\obj\Debug\netcoreapp2.2\CityPlatform.AssemblyInfo.cs
 F:\Desktop\AsemanBackendProjects\CityPlatform\obj\Debug\netcoreapp2.2\CityPlatform.csproj.CopyComplete
 F:\Desktop\AsemanBackendProjects\CityPlatform\obj\Debug\netcoreapp2.2\CityPlatform.dll
 F:\Desktop\AsemanBackendProjects\CityPlatform\obj\Debug\netcoreapp2.2\CityPlatform.pdb
+F:\Desktop\AsemanBackendProjects\CityPlatform\obj\Debug\netcoreapp2.2\CityPlatform.csprojAssemblyReference.cache

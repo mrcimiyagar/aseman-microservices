@@ -4,19 +4,19 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using EntryPlatform.DbContexts;
+using EntryPlatform.Utils;
 using MassTransit;
 using SharedArea.Commands.Auth;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
 using SharedArea.Commands.Internal.Responses;
-using SharedArea.Consumers;
 using SharedArea.Entities;
 using SharedArea.Middles;
 using SharedArea.Utils;
 
 namespace EntryPlatform.Consumers
 {
-    public class EntryConsumer : NotifConsumer, IConsumer<RegisterRequest>, IConsumer<LoginRequest>, IConsumer<VerifyRequest>
+    public class EntryConsumer : IConsumer<RegisterRequest>, IConsumer<LoginRequest>, IConsumer<VerifyRequest>
         , IConsumer<LogoutRequest>
     {
         private const string EmailAddress = "keyhan.mohammadi1997@gmail.com";
@@ -71,6 +71,15 @@ namespace EntryPlatform.Consumers
                 dbContext.Entry(user).Reference(u => u.UserSecret).Load();
                 dbContext.Entry(user.UserSecret).Reference(us => us.Home).Load();
                 dbContext.Entry(user.UserSecret?.Home).Collection(h => h.Members).Load();
+                
+                SharedArea.Transport.NotifyService<SessionUpdatedNotif>(
+                    Program.Bus,
+                    new Packet() {Session = session},
+                    SharedArea.GlobalVariables.AllQueuesExcept(new []
+                    {
+                        SharedArea.GlobalVariables.ENTRY_QUEUE_NAME
+                    }));
+                
                 await context.RespondAsync(
                     new LoginResponse()
                     {
@@ -129,7 +138,6 @@ namespace EntryPlatform.Consumers
                                 Complex = complex
                             };
                             
-                            
                             complex.ComplexSecret = ca;
                             var room = new Room()
                             {
@@ -182,16 +190,7 @@ namespace EntryPlatform.Consumers
                             
                             SharedArea.Transport.NotifyService<ComplexCreatedNotif>(
                                 Program.Bus,
-                                new Packet() {User = user, Complex = complex, ComplexSecret = ca, Room = room},
-                                SharedArea.GlobalVariables.AllQueuesExcept(new []
-                                {
-                                    SharedArea.GlobalVariables.ENTRY_QUEUE_NAME,
-                                    SharedArea.GlobalVariables.CITY_QUEUE_NAME
-                                }));
-                            
-                            SharedArea.Transport.NotifyService<MembershipCreatedNotif>(
-                                Program.Bus,
-                                new Packet() {Membership = mem, User = user, Complex = complex},
+                                new Packet() {User = user, Complex = complex, ComplexSecret = ca, Room = room, Membership = mem},
                                 SharedArea.GlobalVariables.AllQueuesExcept(new []
                                 {
                                     SharedArea.GlobalVariables.ENTRY_QUEUE_NAME,

@@ -10,10 +10,10 @@ namespace SharedArea
 {
     public static class Transport
     {
-        public static void NotifyService<TA>(IBusControl bus, Packet packet, IEnumerable destinations) where TA : class
+        public static async void NotifyService<TA>(IBusControl bus, Packet packet, IEnumerable destinations) where TA : class
         {
             var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + SharedArea.GlobalVariables.API_GATEWAY_INTERNAL_QUEUE_NAME);
-            bus.GetSendEndpoint(address).Result.Send<TA>(new
+            await bus.GetSendEndpoint(address).Result.Send<TA>(new
             {
                 Packet = packet,
                 Destinations = destinations

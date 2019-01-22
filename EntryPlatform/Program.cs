@@ -4,6 +4,7 @@ using EntryPlatform.DbContexts;
 using MassTransit;
 using MassTransit.NLogIntegration;
 using Newtonsoft.Json;
+using SharedArea.Utils;
 
 namespace EntryPlatform
 {
@@ -15,7 +16,7 @@ namespace EntryPlatform
         {
             using (var dbContext = new DatabaseContext())
             {
-                dbContext.Database.EnsureCreated();
+                DatabaseConfig.ConfigDatabase(dbContext);
             }
             
             Bus = MassTransit.Bus.Factory.CreateUsingRabbitMq(sbc =>
@@ -42,6 +43,7 @@ namespace EntryPlatform
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.ENTRY_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<EntryConsumer>();
+                    ep.Consumer<NotifConsumer>();
                 });
             });
 

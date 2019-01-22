@@ -5,9 +5,10 @@ using MassTransit;
 using MessengerPlatform.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using SharedArea.Commands.Internal.Notifications;
+using SharedArea.Commands.Internal.Requests;
+using SharedArea.Commands.Internal.Responses;
 using SharedArea.Commands.Message;
 using SharedArea.Commands.Pushes;
-using SharedArea.Consumers;
 using SharedArea.Entities;
 using SharedArea.Middles;
 using SharedArea.Notifications;
@@ -15,10 +16,10 @@ using SharedArea.Utils;
 
 namespace MessengerPlatform.Consumers
 {
-    public class MessengerConsumer : NotifConsumer, IConsumer<BotCreatedNotif>, IConsumer<GetMessagesRequest>
+    public class MessengerConsumer : IConsumer<BotCreatedNotif>, IConsumer<GetMessagesRequest>
         , IConsumer<CreateTextMessageRequest>, IConsumer<CreateFileMessageRequest>, IConsumer<BotCreateTextMessageRequest>
         , IConsumer<BotCreateFileMessageRequest>, IConsumer<PhotoCreatedNotif>, IConsumer<AudioCreatedNotif>
-        , IConsumer<VideoCreatedNotif>
+        , IConsumer<VideoCreatedNotif>, IConsumer<ContactCreatedNotif>, IConsumer<PutServiceMessageRequest>
     {
         public Task Consume(ConsumeContext<BotCreatedNotif> context)
         {
@@ -707,6 +708,59 @@ namespace MessengerPlatform.Consumers
             }
             
             return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<ContactCreatedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var me = (User) dbContext.BaseUsers.Find(context.Message.Packet.Users[0].BaseUserId);
+                var peer = (User) dbContext.BaseUsers.Find(context.Message.Packet.Users[1].BaseUserId);
+                var complex = context.Message.Packet.Complex;
+                var complexSecret = context.Message.Packet.ComplexSecret;
+                complexSecret.Complex = complex;
+                complex.ComplexSecret = complexSecret;
+                var room = context.Message.Packet.Room;
+                room.Complex = complex;
+                var m1 = context.Message.Packet.Memberships[0];
+                m1.User = me;
+                m1.Complex = complex;
+                var m2 = context.Message.Packet.Memberships[1];
+                m2.User = peer;
+                m2.Complex = complex;
+                var myContact = context.Message.Packet.Contacts[0];
+                myContact.Complex = complex;
+                myContact.User = me;
+                myContact.Peer = peer;
+                var peerContact = context.Message.Packet.Contacts[1];
+                peerContact.Complex = complex;
+                peerContact.User = peer;
+                peerContact.Peer = me;
+                dbContext.AddRange(complex, complexSecret, room, m1, m2, myContact, peerContact);
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public async Task Consume(ConsumeContext<PutServiceMessageRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var message = context.Message.Packet.ServiceMessage;
+                var room = dbContext.Rooms.Find(context.Message.Packet.Room.RoomId);
+
+                message.Room = room;
+
+                dbContext.Messages.Add(message);
+
+                dbContext.SaveChanges();
+
+                await context.RespondAsync<PutServiceMessageResponse>(new PutServiceMessageResponse()
+                {
+                    Packet = new Packet() {ServiceMessage = message}
+                });
+            }
         }
     }
 }

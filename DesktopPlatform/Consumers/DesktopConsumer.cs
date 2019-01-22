@@ -5,14 +5,13 @@ using MassTransit;
 using SharedArea.Commands.Bot;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Pushes;
-using SharedArea.Consumers;
 using SharedArea.Entities;
 using SharedArea.Middles;
 using SharedArea.Notifications;
 
 namespace DesktopPlatform.Consumers
 {
-    public class DesktopConsumer : NotifConsumer, IConsumer<AddBotToRoomRequest>, IConsumer<UpdateWorkershipRequest>
+    public class DesktopConsumer : IConsumer<AddBotToRoomRequest>, IConsumer<UpdateWorkershipRequest>
         , IConsumer<RemoveBotFromRoomRequest>, IConsumer<GetWorkershipsRequest>, IConsumer<BotProfileUpdatedNotif>
         , IConsumer<BotSubscribedNotif>, IConsumer<BotCreatedNotif>
     {

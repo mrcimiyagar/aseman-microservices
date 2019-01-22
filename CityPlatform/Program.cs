@@ -4,6 +4,7 @@ using CityPlatform.DbContexts;
 using MassTransit;
 using MassTransit.NLogIntegration;
 using Newtonsoft.Json;
+using SharedArea.Utils;
 
 namespace CityPlatform
 {
@@ -15,7 +16,7 @@ namespace CityPlatform
         {
             using (var dbContext = new DatabaseContext())
             {
-                dbContext.Database.EnsureCreated();
+                DatabaseConfig.ConfigDatabase(dbContext);
             }
             
             Bus = MassTransit.Bus.Factory.CreateUsingRabbitMq(sbc =>
@@ -42,6 +43,7 @@ namespace CityPlatform
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.CITY_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<CityConsumer>();
+                    ep.Consumer<NotifConsumer>();
                 });
             });
 

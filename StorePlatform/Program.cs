@@ -2,6 +2,7 @@
 using MassTransit;
 using MassTransit.NLogIntegration;
 using Newtonsoft.Json;
+using SharedArea.Utils;
 using StorePlatform.Consumers;
 using StorePlatform.DbContexts;
 
@@ -15,7 +16,7 @@ namespace StorePlatform
         {
             using (var dbContext = new DatabaseContext())
             {
-                dbContext.Database.EnsureCreated();
+                DatabaseConfig.ConfigDatabase(dbContext);
             }
             
             Bus = MassTransit.Bus.Factory.CreateUsingRabbitMq(sbc =>
@@ -42,6 +43,7 @@ namespace StorePlatform
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.STORE_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<StoreConsumer>();
+                    ep.Consumer<NotifConsumer>();
                 });
             });
 

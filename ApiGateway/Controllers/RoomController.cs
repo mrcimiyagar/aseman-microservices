@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ApiGateway.DbContexts;
 using ApiGateway.Hubs;
+using ApiGateway.Utils;
 using SharedArea.Entities;
 using SharedArea.Middles;
 using SharedArea.Notifications;
@@ -23,6 +24,26 @@ namespace ApiGateway.Controllers
         public RoomController(IHubContext<NotificationsHub> notifsHub)
         {
             _notifsHub = notifsHub;
+        }
+        
+        [Route("~/api/room/create_room")]
+        [HttpPost]
+        public async Task<ActionResult<Packet>> CreateRoom([FromBody] Packet packet)
+        {
+            using (var context = new DatabaseContext())
+            {
+                var session = Security.Authenticate(context, Request.Headers[AuthExtracter.AK]);
+                if (session == null) return new Packet { Status = "error_2" };
+                
+                var result = await SharedArea.Transport.DirectService<CreateRoomRequest, CreateRoomResponse>(
+                    Program.Bus,
+                    SharedArea.GlobalVariables.CITY_QUEUE_NAME,
+                    session.SessionId,
+                    Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
+                    packet);
+
+                return result.Packet;
+            }
         }
         
         [Route("~/api/room/update_room_profile")]
@@ -76,7 +97,7 @@ namespace ApiGateway.Controllers
                 
                 var result = await SharedArea.Transport.DirectService<GetRoomsRequest, GetRoomsResponse>(
                     Program.Bus,
-                    SharedArea.GlobalVariables.CITY_QUEUE_NAME,
+                    SharedArea.GlobalVariables.SEARCH_QUEUE_NAME,
                     session.SessionId,
                     Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                     packet);
@@ -96,7 +117,7 @@ namespace ApiGateway.Controllers
 
                 var result = await SharedArea.Transport.DirectService<GetRoomByIdRequest, GetRoomByIdResponse>(
                     Program.Bus,
-                    SharedArea.GlobalVariables.CITY_QUEUE_NAME,
+                    SharedArea.GlobalVariables.SEARCH_QUEUE_NAME,
                     session.SessionId,
                     Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                     packet);

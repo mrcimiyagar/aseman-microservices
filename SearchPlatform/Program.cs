@@ -4,6 +4,7 @@ using MassTransit.NLogIntegration;
 using Newtonsoft.Json;
 using SearchPlatform.Consumers;
 using SearchPlatform.DbContexts;
+using SharedArea.Utils;
 
 namespace SearchPlatform
 {
@@ -15,7 +16,7 @@ namespace SearchPlatform
         {
             using (var dbContext = new DatabaseContext())
             {
-                dbContext.Database.EnsureCreated();
+                DatabaseConfig.ConfigDatabase(dbContext);
             }
             
             Bus = MassTransit.Bus.Factory.CreateUsingRabbitMq(sbc =>
@@ -42,6 +43,7 @@ namespace SearchPlatform
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.SEARCH_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<SearchConsumer>();
+                    ep.Consumer<NotifConsumer>();
                 });
             });
 

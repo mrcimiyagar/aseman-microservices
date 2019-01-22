@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using ApiGateway.DbContexts;
+using ApiGateway.Utils;
 using SharedArea.Middles;
 using Microsoft.AspNetCore.Mvc;
 using SharedArea.Commands.User;
@@ -46,7 +47,7 @@ namespace ApiGateway.Controllers
 
                 var result = await SharedArea.Transport.DirectService<GetMeRequest, GetMeResponse>(
                     Program.Bus,
-                    SharedArea.GlobalVariables.CITY_QUEUE_NAME,
+                    SharedArea.GlobalVariables.SEARCH_QUEUE_NAME,
                     session.SessionId,
                     Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()));
 
@@ -60,7 +61,7 @@ namespace ApiGateway.Controllers
         {
             var result = await SharedArea.Transport.DirectService<GetUserByIdRequest, GetUserByIdResponse>(
                 Program.Bus,
-                SharedArea.GlobalVariables.CITY_QUEUE_NAME,
+                SharedArea.GlobalVariables.SEARCH_QUEUE_NAME,
                 Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                 packet);
 

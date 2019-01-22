@@ -4,6 +4,7 @@ using DesktopPlatform.DbContexts;
 using MassTransit;
 using MassTransit.NLogIntegration;
 using Newtonsoft.Json;
+using SharedArea.Utils;
 
 namespace DesktopPlatform
 {
@@ -15,7 +16,7 @@ namespace DesktopPlatform
         {
             using (var dbContext = new DatabaseContext())
             {
-                dbContext.Database.EnsureCreated();
+                DatabaseConfig.ConfigDatabase(dbContext);
             }
             
             Bus = MassTransit.Bus.Factory.CreateUsingRabbitMq(sbc =>
@@ -42,6 +43,7 @@ namespace DesktopPlatform
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.DESKTOP_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<DesktopConsumer>();
+                    ep.Consumer<NotifConsumer>();
                 });
             });
 

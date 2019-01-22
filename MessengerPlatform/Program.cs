@@ -5,6 +5,7 @@ using MessengerPlatform.Consumers;
 using MessengerPlatform.DbContexts;
 using Newtonsoft.Json;
 using SharedArea.Commands.Auth;
+using SharedArea.Utils;
 
 namespace MessengerPlatform
 {
@@ -16,7 +17,7 @@ namespace MessengerPlatform
         {
             using (var dbContext = new DatabaseContext())
             {
-                dbContext.Database.EnsureCreated();
+                DatabaseConfig.ConfigDatabase(dbContext);
             }
             
             Bus = MassTransit.Bus.Factory.CreateUsingRabbitMq(sbc =>
@@ -43,6 +44,7 @@ namespace MessengerPlatform
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<MessengerConsumer>();
+                    ep.Consumer<NotifConsumer>();
                 });
             });
 

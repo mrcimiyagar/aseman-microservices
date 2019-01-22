@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using ApiGateway.DbContexts;
+using ApiGateway.Utils;
 using SharedArea.Middles;
 using Microsoft.AspNetCore.Mvc;
 using SharedArea.Commands.Bot;
@@ -25,7 +26,7 @@ namespace ApiGateway.Controllers
 
                 var result = await SharedArea.Transport.DirectService<GetBotsRequest, GetBotsResponse>(
                     Program.Bus,
-                    SharedArea.GlobalVariables.BOT_QUEUE_NAME,
+                    SharedArea.GlobalVariables.CITY_QUEUE_NAME,
                     session.SessionId,
                     Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()));
 
@@ -96,7 +97,7 @@ namespace ApiGateway.Controllers
                 
                 var result = await SharedArea.Transport.DirectService<GetCreatedBotsRequest, GetCreatedBotsResponse>(
                     Program.Bus,
-                    SharedArea.GlobalVariables.BOT_QUEUE_NAME,
+                    SharedArea.GlobalVariables.CITY_QUEUE_NAME,
                     session.SessionId,
                     Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()));
 
@@ -115,7 +116,7 @@ namespace ApiGateway.Controllers
                 
                 var result = await SharedArea.Transport.DirectService<GetSubscribedBotsRequest, GetSubscribedBotsResponse>(
                     Program.Bus,
-                    SharedArea.GlobalVariables.BOT_QUEUE_NAME,
+                    SharedArea.GlobalVariables.CITY_QUEUE_NAME,
                     session.SessionId,
                     Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()));
 
@@ -134,7 +135,7 @@ namespace ApiGateway.Controllers
                 
                 var result = await SharedArea.Transport.DirectService<SubscribeBotRequest, SubscribeBotResponse>(
                     Program.Bus,
-                    SharedArea.GlobalVariables.BOT_QUEUE_NAME,
+                    SharedArea.GlobalVariables.CITY_QUEUE_NAME,
                     session.SessionId,
                     Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                     packet);
@@ -154,7 +155,7 @@ namespace ApiGateway.Controllers
                 
                 var result = await SharedArea.Transport.DirectService<CreateBotRequest, CreateBotResponse>(
                     Program.Bus,
-                    SharedArea.GlobalVariables.BOT_QUEUE_NAME,
+                    SharedArea.GlobalVariables.CITY_QUEUE_NAME,
                     session.SessionId,
                     Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                     packet);
@@ -174,7 +175,7 @@ namespace ApiGateway.Controllers
                 
                 var result = await SharedArea.Transport.DirectService<GetBotRequest, GetBotResponse>(
                     Program.Bus,
-                    SharedArea.GlobalVariables.BOT_QUEUE_NAME,
+                    SharedArea.GlobalVariables.CITY_QUEUE_NAME,
                     session.SessionId,
                     Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                     packet);
@@ -194,7 +195,7 @@ namespace ApiGateway.Controllers
                 
                 var result = await SharedArea.Transport.DirectService<UpdateBotProfileRequest, UpdateBotProfileResponse>(
                     Program.Bus,
-                    SharedArea.GlobalVariables.BOT_QUEUE_NAME,
+                    SharedArea.GlobalVariables.CITY_QUEUE_NAME,
                     session.SessionId,
                     Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                     packet);
@@ -229,7 +230,7 @@ namespace ApiGateway.Controllers
         {
             var result = await SharedArea.Transport.DirectService<SearchBotsRequest, SearchBotsResponse>(
                 Program.Bus,
-                SharedArea.GlobalVariables.BOT_QUEUE_NAME,
+                SharedArea.GlobalVariables.CITY_QUEUE_NAME,
                 packet);
 
             return result.Packet;

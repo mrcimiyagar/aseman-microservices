@@ -1,18 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using SharedArea.Commands.Bot;
 using StorePlatform.DbContexts;
 using SharedArea.Commands.Internal.Notifications;
-using SharedArea.Consumers;
 using SharedArea.Entities;
 using SharedArea.Middles;
 
 namespace StorePlatform.Consumers
 {
-    public class StoreConsumer : NotifConsumer, IConsumer<GetBotStoreContentRequest>, IConsumer<BotCreatedNotif>
+    public class StoreConsumer : IConsumer<GetBotStoreContentRequest>, IConsumer<BotCreatedNotif>
         , IConsumer<BotSubscribedNotif>
     {
         public async Task Consume(ConsumeContext<GetBotStoreContentRequest> context)
@@ -46,6 +47,8 @@ namespace StorePlatform.Consumers
 
         public Task Consume(ConsumeContext<BotCreatedNotif> context)
         {
+            Console.WriteLine(JsonConvert.SerializeObject(context.Message.Packet));
+            
             using (var dbContext = new DatabaseContext())
             {
                 var globalUser = context.Message.Packet.User;
@@ -61,12 +64,12 @@ namespace StorePlatform.Consumers
 
                 subscription.Bot = bot;
                 subscription.Subscriber = localUser;
-                
+
                 dbContext.AddRange(bot, botSecret, session, creation, subscription);
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 

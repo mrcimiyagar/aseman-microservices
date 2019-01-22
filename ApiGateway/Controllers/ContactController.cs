@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ApiGateway.DbContexts;
 using ApiGateway.Hubs;
+using ApiGateway.Utils;
 using SharedArea.Entities;
 using SharedArea.Middles;
 using SharedArea.Notifications;
@@ -27,7 +28,7 @@ namespace ApiGateway.Controllers
         
         [Route("~/api/contact/create_contact")]
         [HttpPost]
-        public async Task<ActionResult<Packet>> GetContacts([FromBody] Packet packet)
+        public async Task<ActionResult<Packet>> CreateContact([FromBody] Packet packet)
         {
             using (var context = new DatabaseContext())
             {

@@ -1,9 +1,10 @@
 ﻿using System;
 using FileService.Consumers;
+using FileService.DbContexts;
 using MassTransit;
 using MassTransit.NLogIntegration;
 using Newtonsoft.Json;
-using SharedArea.DbContexts;
+using SharedArea.Utils;
 
 namespace FileService
 {
@@ -15,7 +16,7 @@ namespace FileService
         {
             using (var dbContext = new DatabaseContext())
             {
-                dbContext.Database.EnsureCreated();
+                DatabaseConfig.ConfigDatabase(dbContext);
             }
             
             Bus = MassTransit.Bus.Factory.CreateUsingRabbitMq(sbc =>
@@ -42,6 +43,7 @@ namespace FileService
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.FILE_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<FileConsumer>();
+                    ep.Consumer<NotifConsumer>();
                 });
             });
 

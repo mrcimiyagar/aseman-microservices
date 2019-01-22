@@ -1,19 +1,19 @@
 ﻿
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using MassTransit;
 using SharedArea.Commands.Internal.Notifications;
-using SharedArea.DbContexts;
 using SharedArea.Entities;
+using StorePlatform.DbContexts;
 
-namespace SharedArea.Consumers
+namespace StorePlatform.Consumers
 {
     public class NotifConsumer : IConsumer<UserCreatedNotif>, IConsumer<ComplexCreatedNotif>, IConsumer<RoomCreatedNotif>
         , IConsumer<MembershipCreatedNotif>, IConsumer<SessionCreatedNotif>, IConsumer<UserProfileUpdatedNotif>
         , IConsumer<ComplexProfileUpdatedNotif>, IConsumer<ComplexDeletionNotif>, IConsumer<RoomProfileUpdatedNotif>
         , IConsumer<RoomDeletionNotif>, IConsumer<ContactCreatedNotif>, IConsumer<InviteCreatedNotif>
         , IConsumer<InviteCancelledNotif>, IConsumer<InviteAcceptedNotif>, IConsumer<InvitedIgnoredNotif>
+        , IConsumer<SessionUpdatedNotif>
     {
         public Task Consume(ConsumeContext<UserCreatedNotif> context)
         {
@@ -37,20 +37,20 @@ namespace SharedArea.Consumers
         {
             using (var dbContext = new DatabaseContext())
             {
-                var admin = context.Message.Packet.User;
+                var admin = (User) dbContext.BaseUsers.Find(context.Message.Packet.User.BaseUserId);
                 var complex = context.Message.Packet.Complex;
                 var complexSecret = context.Message.Packet.ComplexSecret;
-                
+
                 complex.ComplexSecret = complexSecret;
-                complexSecret.Complex = complex;
                 complexSecret.Admin = admin;
+                complexSecret.Complex = complex;
 
                 dbContext.AddRange(complex, complexSecret);
 
                 dbContext.SaveChanges();
-                
-                return Task.CompletedTask;
             }
+            
+            return Task.CompletedTask;
         }
 
         public Task Consume(ConsumeContext<RoomCreatedNotif> context)
@@ -228,8 +228,6 @@ namespace SharedArea.Consumers
                 var m2 = context.Message.Packet.Memberships[1];
                 m2.User = peer;
                 m2.Complex = complex;
-                var message = context.Message.Packet.ServiceMessage;
-                message.Room = room;
                 var myContact = context.Message.Packet.Contacts[0];
                 myContact.Complex = complex;
                 myContact.User = me;
@@ -238,7 +236,7 @@ namespace SharedArea.Consumers
                 peerContact.Complex = complex;
                 peerContact.User = peer;
                 peerContact.Peer = me;
-                dbContext.AddRange(complex, complexSecret, room, m1, m2, message, myContact, peerContact);
+                dbContext.AddRange(complex, complexSecret, room, m1, m2, myContact, peerContact);
                 dbContext.SaveChanges();
             }
             
@@ -318,6 +316,24 @@ namespace SharedArea.Consumers
                 human.Invites.Remove(invite);
                 dbContext.Invites.Remove(invite);
                 
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<SessionUpdatedNotif> context)
+        {
+            var globalSession = context.Message.Packet.Session;
+
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = dbContext.Sessions.Find(globalSession.SessionId);
+
+                session.Online = globalSession.Online;
+                session.ConnectionId = globalSession.ConnectionId;
+                session.Token = globalSession.Token;
+
                 dbContext.SaveChanges();
             }
             

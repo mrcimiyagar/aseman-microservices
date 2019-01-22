@@ -49,7 +49,7 @@ namespace SharedArea
             var queues = new string[]
             {
                 BOT_QUEUE_NAME, CITY_QUEUE_NAME, DESKTOP_QUEUE_NAME, ENTRY_QUEUE_NAME, MESSENGER_QUEUE_NAME,
-                STORE_QUEUE_NAME, SEARCH_QUEUE_NAME
+                STORE_QUEUE_NAME, SEARCH_QUEUE_NAME, FILE_QUEUE_NAME
             }.ToList();
             foreach (var queueName in queueNames)
             {

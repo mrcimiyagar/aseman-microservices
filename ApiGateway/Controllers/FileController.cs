@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using ApiGateway.DbContexts;
 using ApiGateway.Models;
 using ApiGateway.Models.Forms;
+using ApiGateway.Utils;
 using MassTransit;
 using Microsoft.AspNetCore.Http;
 using SharedArea.Entities;
@@ -49,15 +50,24 @@ namespace ApiGateway.Controllers
         [HttpPost]
         public ActionResult NotifyFileTransfered([FromBody] Packet packet)
         {
+            Console.WriteLine("hello 1");
             if (packet.Username == SharedArea.GlobalVariables.FILE_TRANSFER_USERNAME
                 && packet.Password == SharedArea.GlobalVariables.FILE_TRANSFER_PASSWORD)
             {
+                Console.WriteLine("hello 2");
                 var exitLock = StreamRepo.FileStreamLocks[packet.StreamCode];
-
-                lock (exitLock)
+                Console.WriteLine("hello 3");
+                
+                Console.WriteLine("hello 4");
+                Task.Run(() =>
                 {
-                    Monitor.Pulse(exitLock);
-                }
+                    lock (new object())
+                    {
+                        Monitor.Pulse(exitLock);
+                    }
+                }).Wait();
+                
+                Console.WriteLine("hello 5");
 
                 return Ok();
             }
@@ -78,42 +88,45 @@ namespace ApiGateway.Controllers
                 if (session == null) return new Packet {Status = "error_0"};
 
                 var lockObj = new object();
-
                 var guid = Guid.NewGuid().ToString();
+                UploadPhotoResponse result = null;
 
-                lock (lockObj)
+                Task.Run(() =>
                 {
-                    StreamRepo.FileStreamLocks.Add(guid, lockObj);
-                    StreamRepo.FileStreams.Add(guid, form.File);
-
-                    var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
-                                          SharedArea.GlobalVariables.FILE_QUEUE_NAME);
-                    var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
-                    IRequestClient<UploadPhotoRequest, UploadPhotoResponse> client =
-                        new MessageRequestClient<UploadPhotoRequest, UploadPhotoResponse>(
-                            Program.Bus, address, requestTimeout);
-                    var puf = new PhotoUF()
+                    lock (lockObj)
                     {
-                        ComplexId = form.ComplexId,
-                        RoomId = form.RoomId,
-                        Width = form.Width,
-                        Height = form.Height
-                    };
-                    var result = client.Request<UploadPhotoRequest, UploadPhotoResponse>(new
-                    {
-                        Headers = Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
-                        Form = puf,
-                        SessionId = session.SessionId,
-                        StreamCode = guid
-                    }).Result;
+                        StreamRepo.FileStreamLocks.Add(guid, lockObj);
+                        StreamRepo.FileStreams.Add(guid, form.File);
 
-                    Monitor.Wait(lockObj);
+                        var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
+                                              SharedArea.GlobalVariables.FILE_QUEUE_NAME);
+                        var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
+                        IRequestClient<UploadPhotoRequest, UploadPhotoResponse> client =
+                            new MessageRequestClient<UploadPhotoRequest, UploadPhotoResponse>(
+                                Program.Bus, address, requestTimeout);
+                        var puf = new PhotoUF()
+                        {
+                            ComplexId = form.ComplexId,
+                            RoomId = form.RoomId,
+                            Width = form.Width,
+                            Height = form.Height
+                        };
+                        result = client.Request<UploadPhotoRequest, UploadPhotoResponse>(new
+                        {
+                            Headers = Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
+                            Form = puf,
+                            SessionId = session.SessionId,
+                            StreamCode = guid
+                        }).Result;
+                        
+                        Monitor.Wait(lockObj);
+                    }
+                }).Wait();
+                
+                StreamRepo.FileStreamLocks.Remove(guid);
+                StreamRepo.FileStreams.Remove(guid);
 
-                    StreamRepo.FileStreamLocks.Remove(guid);
-                    StreamRepo.FileStreams.Remove(guid);
-
-                    return result.Packet;
-                }
+                return result.Packet;
             }
         }
 

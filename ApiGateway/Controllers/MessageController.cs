@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using ApiGateway.DbContexts;
+using ApiGateway.Utils;
 using SharedArea.Middles;
 using Microsoft.AspNetCore.Mvc;
 using SharedArea.Commands.Message;
@@ -78,7 +79,7 @@ namespace ApiGateway.Controllers
         [HttpPost]
         public async Task<ActionResult<Packet>> BotCreateTextMessage([FromBody] Packet packet)
         {
-            using (var context = new DatabaseContext())
+            /*using (var context = new DatabaseContext())
             {
                 string authHeader = Request.Headers[AuthExtracter.AK];
                 var parts = authHeader.Split(" ");
@@ -96,14 +97,16 @@ namespace ApiGateway.Controllers
                     packet);
 
                 return result.Packet;
-            }
+            }*/
+            
+            return new Packet() {Status = "not implemented"};
         }
         
         [Route("~/api/message/bot_create_file_message")]
         [HttpPost]
         public async Task<ActionResult<Packet>> BotCreateFileMessage([FromBody] Packet packet)
         {
-            using (var context = new DatabaseContext())
+            /*using (var context = new DatabaseContext())
             {
                 string authHeader = Request.Headers[AuthExtracter.AK];
                 var parts = authHeader.Split(" ");
@@ -121,7 +124,9 @@ namespace ApiGateway.Controllers
                     packet);
 
                 return result.Packet;
-            }
+            }*/
+
+            return new Packet() {Status = "not implemented"};
         }
     }
 }

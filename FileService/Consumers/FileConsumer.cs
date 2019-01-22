@@ -9,14 +9,13 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SharedArea.Commands.File;
-using SharedArea.Consumers;
 using SharedArea.Entities;
 using SharedArea.Middles;
 using File = System.IO.File;
 
 namespace FileService.Consumers
 {
-    public class FileConsumer : NotifConsumer, IConsumer<UploadPhotoRequest>, IConsumer<UploadAudioRequest>
+    public class FileConsumer : IConsumer<UploadPhotoRequest>, IConsumer<UploadAudioRequest>
         , IConsumer<UploadVideoRequest>, IConsumer<DownloadFileRequest>, IConsumer<DownloadBotAvatarRequest>
         , IConsumer<DownloadRoomAvatarRequest>, IConsumer<DownloadComplexAvatarRequest>, IConsumer<DownloadUserAvatarRequest>
     {
@@ -26,117 +25,126 @@ namespace FileService.Consumers
         {
             using (var dbContext = new DatabaseContext())
             {
-                var form = context.Message.Form;
-                var session = dbContext.Sessions.Find(context.Message.SessionId);
-                var streamCode = context.Message.StreamCode;
-                
-                Photo photo;
-                FileUsage fileUsage;
-
-                if (form.RoomId > 0)
+                try
                 {
-                    dbContext.Entry(session).Reference(s => s.BaseUser).Load();
-                    var user = (User) session.BaseUser;
-                    dbContext.Entry(user).Collection(u => u.Memberships).Load();
-                    var membership = user.Memberships.Find(m => m.ComplexId == form.ComplexId);
-                    if (membership == null)
+                    var form = context.Message.Form;
+                    var session = dbContext.Sessions.Find(context.Message.SessionId);
+                    var streamCode = context.Message.StreamCode;
+
+                    Photo photo;
+                    FileUsage fileUsage;
+
+                    if (form.RoomId > 0)
                     {
-                        await context.RespondAsync(new UploadPhotoResponse()
+                        dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                        var user = (User) session.BaseUser;
+                        dbContext.Entry(user).Collection(u => u.Memberships).Load();
+                        var membership = user.Memberships.Find(m => m.ComplexId == form.ComplexId);
+                        if (membership == null)
                         {
-                            Packet = new Packet {Status = "error_1"}
-                        });
-                        return;
+                            await context.RespondAsync(new UploadPhotoResponse()
+                            {
+                                Packet = new Packet {Status = "error_1"}
+                            });
+                            return;
+                        }
+
+                        dbContext.Entry(membership).Reference(m => m.Complex).Load();
+                        var complex = membership.Complex;
+                        dbContext.Entry(complex).Collection(c => c.Rooms).Load();
+                        var room = complex.Rooms.Find(r => r.RoomId == form.RoomId);
+                        if (room == null)
+                        {
+                            await context.RespondAsync(new UploadPhotoResponse()
+                            {
+                                Packet = new Packet {Status = "error_2"}
+                            });
+                            return;
+                        }
+
+                        photo = new Photo()
+                        {
+                            Width = form.Width,
+                            Height = form.Height,
+                            IsPublic = false
+                        };
+                        dbContext.Files.Add(photo);
+                        fileUsage = new FileUsage()
+                        {
+                            File = photo,
+                            Room = room
+                        };
+                        dbContext.FileUsages.Add(fileUsage);
                     }
-                    dbContext.Entry(membership).Reference(m => m.Complex).Load();
-                    var complex = membership.Complex;
-                    dbContext.Entry(complex).Collection(c => c.Rooms).Load();
-                    var room = complex.Rooms.Find(r => r.RoomId == form.RoomId);
-                    if (room == null)
+                    else
                     {
-                        await context.RespondAsync(new UploadPhotoResponse()
+                        photo = new Photo()
                         {
-                            Packet = new Packet {Status = "error_2"}
-                        });
-                        return;
+                            Width = form.Width,
+                            Height = form.Height,
+                            IsPublic = true
+                        };
+                        dbContext.Files.Add(photo);
+                        fileUsage = null;
                     }
-                    photo = new Photo()
-                    {
-                        Width = form.Width,
-                        Height = form.Height,
-                        IsPublic = false
-                    };
-                    dbContext.Files.Add(photo);
-                    fileUsage = new FileUsage()
-                    {
-                        File = photo,
-                        Room = room
-                    };
-                    dbContext.FileUsages.Add(fileUsage);
-                }
-                else
-                {
-                    photo = new Photo()
-                    {
-                        Width = form.Width,
-                        Height = form.Height,
-                        IsPublic = true
-                    };
-                    dbContext.Files.Add(photo);
-                    fileUsage = null;
-                }
 
-                dbContext.SaveChanges();
-                
-                var myContent = JsonConvert.SerializeObject(new Packet()
-                {
-                    Username = SharedArea.GlobalVariables.FILE_TRANSFER_USERNAME,
-                    Password = SharedArea.GlobalVariables.FILE_TRANSFER_PASSWORD,
-                    StreamCode = streamCode
-                });
-                var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
-                var byteContent = new ByteArrayContent(buffer);
-                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    dbContext.SaveChanges();
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(SharedArea.GlobalVariables.SERVER_URL);
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers
-                        .MediaTypeWithQualityHeaderValue("application/octet-stream"));
-                    
-                    var response = await client.PostAsync(
-                        SharedArea.GlobalVariables.FILE_TRANSFER_GET_UPLOAD_STREAM_URL,
-                        byteContent);
-                    if (response.IsSuccessStatusCode)
+                    var myContent = JsonConvert.SerializeObject(new Packet()
                     {
-                        var content = response.Content;
-                        var contentStream = await content.ReadAsStreamAsync();
-                        Directory.CreateDirectory(DirPath);
-                        var filePath = DirPath + @"\" + photo.FileId;
-                        System.IO.File.Create(filePath).Close();
-                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        Username = SharedArea.GlobalVariables.FILE_TRANSFER_USERNAME,
+                        Password = SharedArea.GlobalVariables.FILE_TRANSFER_PASSWORD,
+                        StreamCode = streamCode
+                    });
+                    var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+                    var byteContent = new ByteArrayContent(buffer);
+                    byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(SharedArea.GlobalVariables.SERVER_URL);
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers
+                            .MediaTypeWithQualityHeaderValue("application/octet-stream"));
+
+                        var response = await client.PostAsync(
+                            SharedArea.GlobalVariables.FILE_TRANSFER_GET_UPLOAD_STREAM_URL,
+                            byteContent);
+                        if (response.IsSuccessStatusCode)
                         {
-                            contentStream.CopyTo(stream);
+                            var content = response.Content;
+                            var contentStream = await content.ReadAsStreamAsync();
+                            Directory.CreateDirectory(DirPath);
+                            var filePath = DirPath + @"\" + photo.FileId;
+                            System.IO.File.Create(filePath).Close();
+                            using (var stream = new FileStream(filePath, FileMode.Create))
+                            {
+                                contentStream.CopyTo(stream);
+                            }
                         }
                     }
-                }
 
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(SharedArea.GlobalVariables.SERVER_URL);
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers
-                        .MediaTypeWithQualityHeaderValue("application/json"));
-                    
-                    await client.PostAsync(
-                        SharedArea.GlobalVariables.FILE_TRANSFER_NOTIFY_GET_UPLOAD_STREAM_FINISHED_URL,
-                        byteContent);
-                }
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(SharedArea.GlobalVariables.SERVER_URL);
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers
+                            .MediaTypeWithQualityHeaderValue("application/json"));
 
-                await context.RespondAsync(new UploadPhotoResponse()
+                        await client.PostAsync(
+                            SharedArea.GlobalVariables.FILE_TRANSFER_NOTIFY_GET_UPLOAD_STREAM_FINISHED_URL,
+                            byteContent);
+                    }
+
+                    await context.RespondAsync(new UploadPhotoResponse()
+                    {
+                        Packet = new Packet {Status = "success", File = photo, FileUsage = fileUsage}
+                    });
+                }
+                catch (Exception ex)
                 {
-                    Packet = new Packet {Status = "success", File = photo, FileUsage = fileUsage}
-                });
+                    Console.WriteLine(ex.ToString());
+                }
             }
         }
 

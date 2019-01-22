@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApiGateway.Consumers;
+using ApiGateway.DbContexts;
 using ApiGateway.Hubs;
 using MassTransit;
 using MassTransit.NLogIntegration;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using SharedArea.Utils;
 
 namespace ApiGateway
 {
@@ -70,13 +72,18 @@ namespace ApiGateway
             {
                 route.MapHub<NotificationsHub>("/NotificationsHub");
             });
-            
+
+            using (var dbContext = new DatabaseContext())
+            {
+                DatabaseConfig.ConfigDatabase(dbContext);
+            }
+                        
             Program.Bus = MassTransit.Bus.Factory.CreateUsingRabbitMq(sbc =>
             {
-                var host = sbc.Host(new Uri("rabbitmq://localhost?prefetch=32"), h =>
+                var host = sbc.Host(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_PATH), h =>
                 {
-                    h.Username("guest");
-                    h.Password("guest");
+                    h.Username(SharedArea.GlobalVariables.RABBITMQ_USERNAME);
+                    h.Password(SharedArea.GlobalVariables.RABBITMQ_PASSWORD);
                 });
                 sbc.UseJsonSerializer();
                 sbc.ConfigureJsonSerializer(options =>
@@ -92,7 +99,7 @@ namespace ApiGateway
                     return options;
                 });
                 sbc.UseNLog();
-                sbc.ReceiveEndpoint(host, "ApiGateWayInternalQueue", ep =>
+                sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.API_GATEWAY_INTERNAL_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<ApiGatewayInternalConsumer>(() => new ApiGatewayInternalConsumer(notifsHub));
                 });

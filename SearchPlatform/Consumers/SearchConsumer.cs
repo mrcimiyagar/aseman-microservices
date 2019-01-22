@@ -7,13 +7,12 @@ using SharedArea.Commands.Complex;
 using SharedArea.Commands.Contact;
 using SharedArea.Commands.Room;
 using SharedArea.Commands.User;
-using SharedArea.Consumers;
 using SharedArea.Entities;
 using SharedArea.Middles;
 
 namespace SearchPlatform.Consumers
 {
-    public class SearchConsumer : NotifConsumer, IConsumer<SearchUsersRequest>, IConsumer<SearchComplexesRequest>
+    public class SearchConsumer : IConsumer<SearchUsersRequest>, IConsumer<SearchComplexesRequest>
         , IConsumer<GetMeRequest>, IConsumer<GetUserByIdRequest>, IConsumer<GetComplexByIdRequest>
         , IConsumer<GetRoomByIdRequest>, IConsumer<GetRoomsRequest>, IConsumer<GetComplexesRequest>
         , IConsumer<GetContactsRequest>
@@ -68,7 +67,7 @@ namespace SearchPlatform.Consumers
                 var membership = user.Memberships.Find(m => m.ComplexId == packet.Complex.ComplexId);
                 if (membership == null)
                 {
-                    await context.RespondAsync(new GetRoomByIdRequest()
+                    await context.RespondAsync(new GetRoomByIdResponse()
                     {
                         Packet = new Packet {Status = "error_1"}
                     });
@@ -79,14 +78,14 @@ namespace SearchPlatform.Consumers
                 var room = membership.Complex.Rooms.Find(r => r.RoomId == packet.Room.RoomId);
                 if (room == null)
                 {
-                    await context.RespondAsync(new GetRoomByIdRequest()
+                    await context.RespondAsync(new GetRoomByIdResponse()
                     {
                         Packet = new Packet {Status = "error_2"}
                     });
                 }
                 else
                 {
-                    await context.RespondAsync(new GetRoomByIdRequest()
+                    await context.RespondAsync(new GetRoomByIdResponse()
                     {
                         Packet = new Packet {Status = "success", Room = room}
                     });
@@ -113,7 +112,7 @@ namespace SearchPlatform.Consumers
 
                 if (complex.Mode == 3)
                 {
-                    await context.RespondAsync(new GetComplexesResponse()
+                    await context.RespondAsync(new GetComplexByIdResponse()
                     {
                         Packet = new Packet
                         {

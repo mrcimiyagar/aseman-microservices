@@ -5,10 +5,10 @@ F:\Desktop\AsemanBackendProjects\SearchPlatform\bin\Debug\netcoreapp2.2\SearchPl
 F:\Desktop\AsemanBackendProjects\SearchPlatform\bin\Debug\netcoreapp2.2\SearchPlatform.pdb
 F:\Desktop\AsemanBackendProjects\SearchPlatform\bin\Debug\netcoreapp2.2\SharedArea.dll
 F:\Desktop\AsemanBackendProjects\SearchPlatform\bin\Debug\netcoreapp2.2\SharedArea.pdb
-F:\Desktop\AsemanBackendProjects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.csprojAssemblyReference.cache
 F:\Desktop\AsemanBackendProjects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.csproj.CoreCompileInputs.cache
 F:\Desktop\AsemanBackendProjects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.AssemblyInfoInputs.cache
 F:\Desktop\AsemanBackendProjects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.AssemblyInfo.cs
 F:\Desktop\AsemanBackendProjects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.csproj.CopyComplete
 F:\Desktop\AsemanBackendProjects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.dll
 F:\Desktop\AsemanBackendProjects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.pdb
+F:\Desktop\AsemanBackendProjects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.csprojAssemblyReference.cache
