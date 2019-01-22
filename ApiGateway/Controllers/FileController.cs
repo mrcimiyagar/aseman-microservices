@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -45,7 +44,7 @@ namespace ApiGateway.Controllers
                 return NotFound();
             }
         }
-        
+
         [Route("~/api/file/notify_file_transffered")]
         [HttpPost]
         public ActionResult NotifyFileTransfered([FromBody] Packet packet)
@@ -54,8 +53,8 @@ namespace ApiGateway.Controllers
                 && packet.Password == SharedArea.GlobalVariables.FILE_TRANSFER_PASSWORD)
             {
                 var exitLock = StreamRepo.FileStreamLocks[packet.StreamCode];
-            
-                lock(exitLock)
+
+                lock (exitLock)
                 {
                     Monitor.Pulse(exitLock);
                 }
@@ -81,15 +80,16 @@ namespace ApiGateway.Controllers
                 var lockObj = new object();
 
                 var guid = Guid.NewGuid().ToString();
-                                
-                lock(lockObj)
+
+                lock (lockObj)
                 {
                     StreamRepo.FileStreamLocks.Add(guid, lockObj);
                     StreamRepo.FileStreams.Add(guid, form.File);
-                    
-                    var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + SharedArea.GlobalVariables.FILE_QUEUE_NAME);
+
+                    var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
+                                          SharedArea.GlobalVariables.FILE_QUEUE_NAME);
                     var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
-                    IRequestClient<UploadPhotoRequest, UploadPhotoResponse> client = 
+                    IRequestClient<UploadPhotoRequest, UploadPhotoResponse> client =
                         new MessageRequestClient<UploadPhotoRequest, UploadPhotoResponse>(
                             Program.Bus, address, requestTimeout);
                     var puf = new PhotoUF()
@@ -116,7 +116,7 @@ namespace ApiGateway.Controllers
                 }
             }
         }
-        
+
         [Route("~/api/file/upload_audio")]
         [HttpPost]
         public ActionResult<Packet> UploadAudio([FromForm] AudioUploadForm form)
@@ -130,15 +130,16 @@ namespace ApiGateway.Controllers
                 var lockObj = new object();
 
                 var guid = Guid.NewGuid().ToString();
-                                
-                lock(lockObj)
+
+                lock (lockObj)
                 {
                     StreamRepo.FileStreamLocks.Add(guid, lockObj);
                     StreamRepo.FileStreams.Add(guid, form.File);
-                    
-                    var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + SharedArea.GlobalVariables.FILE_QUEUE_NAME);
+
+                    var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
+                                          SharedArea.GlobalVariables.FILE_QUEUE_NAME);
                     var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
-                    IRequestClient<UploadAudioRequest, UploadAudioResponse> client = 
+                    IRequestClient<UploadAudioRequest, UploadAudioResponse> client =
                         new MessageRequestClient<UploadAudioRequest, UploadAudioResponse>(
                             Program.Bus, address, requestTimeout);
                     var auf = new AudioUF()
@@ -165,7 +166,7 @@ namespace ApiGateway.Controllers
                 }
             }
         }
-        
+
         [Route("~/api/file/upload_video")]
         [HttpPost]
         public ActionResult<Packet> UploadVideo([FromForm] VideoUploadForm form)
@@ -179,15 +180,16 @@ namespace ApiGateway.Controllers
                 var lockObj = new object();
 
                 var guid = Guid.NewGuid().ToString();
-                                
-                lock(lockObj)
+
+                lock (lockObj)
                 {
                     StreamRepo.FileStreamLocks.Add(guid, lockObj);
                     StreamRepo.FileStreams.Add(guid, form.File);
-                    
-                    var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + SharedArea.GlobalVariables.FILE_QUEUE_NAME);
+
+                    var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
+                                          SharedArea.GlobalVariables.FILE_QUEUE_NAME);
                     var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
-                    IRequestClient<UploadVideoRequest, UploadVideoResponse> client = 
+                    IRequestClient<UploadVideoRequest, UploadVideoResponse> client =
                         new MessageRequestClient<UploadVideoRequest, UploadVideoResponse>(
                             Program.Bus, address, requestTimeout);
                     var vuf = new VideoUF()
@@ -216,55 +218,242 @@ namespace ApiGateway.Controllers
         }
 
         [Route("~/api/file/download_bot_avatar")]
-        [HttpPost]
-        public HttpResponseMessage DownloadBotAvatar([FromBody] Packet packet)
+        [HttpGet]
+        public HttpResponseMessage DownloadBotAvatar(long botId)
         {
-            using (var context = new DatabaseContext())
+            var lockObj = new object();
+
+            lock (lockObj)
             {
-                var bot = context.Bots.Find(packet.Bot.BaseUserId);
-                return DownloadFile(bot.Avatar);
+                var guid = Guid.NewGuid().ToString();
+                StreamRepo.FileStreamLocks.Add(guid, lockObj);
+                var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
+                                      SharedArea.GlobalVariables.FILE_QUEUE_NAME);
+                var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
+                IRequestClient<DownloadBotAvatarRequest, DownloadBotAvatarResponse> client =
+                    new MessageRequestClient<DownloadBotAvatarRequest, DownloadBotAvatarResponse>(
+                        Program.Bus, address, requestTimeout);
+                var result = client.Request<DownloadBotAvatarRequest, DownloadBotAvatarResponse>(new
+                {
+                    Headers = Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
+                    BotId = botId,
+                    StreamCode = guid
+                }).Result;
+
+                if (result.Packet.Status != "success")
+                {
+                    var resp = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                    var myContent = JsonConvert.SerializeObject(result.Packet);
+                    var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+                    var byteContent = new ByteArrayContent(buffer);
+                    byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    resp.Content = byteContent;
+                    return resp;
+                }
+
+                Monitor.Wait(lockObj);
+
+                StreamRepo.FileStreamLocks.Remove(guid);
+                var stream = StreamRepo.FileStreams[guid];
+                StreamRepo.FileStreams.Remove(guid);
+
+                var response = new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new NotifierStreamContent(stream.OpenReadStream(), ex =>
+                    {
+                        var doneLockObj = StreamRepo.FileTransferDoneLocks[guid];
+                        lock (doneLockObj)
+                        {
+                            Monitor.Pulse(doneLockObj);
+                        }
+
+                        StreamRepo.FileTransferDoneLocks.Remove(guid);
+                    })
+                };
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                return response;
             }
         }
-        
+
         [Route("~/api/file/download_room_avatar")]
         [HttpGet]
         public HttpResponseMessage DownloadRoomAvatar(long complexId, long roomId)
         {
-            using (var context = new DatabaseContext())
+            using (var dbContext = new DatabaseContext())
             {
-                var session = Security.Authenticate(context, Request.Headers[AuthExtracter.AK]);
-                context.Entry(session).Reference(s => s.BaseUser).Load();
-                var user = (User) session.BaseUser;
-                context.Entry(user).Collection(u => u.Memberships).Load();
-                var membership = user.Memberships.Find(mem => mem.ComplexId == complexId);
-                if (membership == null) return NotFound(new Packet {Status = "error_1"});
-                context.Entry(membership).Reference(mem => mem.Complex).Load();
-                var complex = membership.Complex;
-                context.Entry(complex).Collection(c => c.Rooms);
-                var room = complex.Rooms.Find(r => r.RoomId == roomId);
-                return downloa
+                var session = Security.Authenticate(dbContext, Request.Headers[AuthExtracter.AK]);
+                if (session == null) return new HttpResponseMessage(HttpStatusCode.Forbidden);
+
+                var lockObj = new object();
+
+                lock (lockObj)
+                {
+                    var guid = Guid.NewGuid().ToString();
+                    StreamRepo.FileStreamLocks.Add(guid, lockObj);
+                    var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
+                                          SharedArea.GlobalVariables.FILE_QUEUE_NAME);
+                    var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
+                    IRequestClient<DownloadRoomAvatarRequest, DownloadRoomAvatarResponse> client =
+                        new MessageRequestClient<DownloadRoomAvatarRequest, DownloadRoomAvatarResponse>(
+                            Program.Bus, address, requestTimeout);
+                    var result = client.Request<DownloadRoomAvatarRequest, DownloadRoomAvatarResponse>(new
+                    {
+                        Headers = Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
+                        ComplexId = complexId,
+                        RoomId = roomId,
+                        StreamCode = guid,
+                        SessionId = session.SessionId
+                    }).Result;
+
+                    if (result.Packet.Status != "success")
+                    {
+                        var resp = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                        var myContent = JsonConvert.SerializeObject(result.Packet);
+                        var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+                        var byteContent = new ByteArrayContent(buffer);
+                        byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                        resp.Content = byteContent;
+                        return resp;
+                    }
+
+                    Monitor.Wait(lockObj);
+
+                    StreamRepo.FileStreamLocks.Remove(guid);
+                    var stream = StreamRepo.FileStreams[guid];
+                    StreamRepo.FileStreams.Remove(guid);
+
+                    var response = new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        Content = new NotifierStreamContent(stream.OpenReadStream(), ex =>
+                        {
+                            var doneLockObj = StreamRepo.FileTransferDoneLocks[guid];
+                            lock (doneLockObj)
+                            {
+                                Monitor.Pulse(doneLockObj);
+                            }
+
+                            StreamRepo.FileTransferDoneLocks.Remove(guid);
+                        })
+                    };
+                    response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                    return response;
+                }
             }
         }
-        
+
         [Route("~/api/file/download_complex_avatar")]
         [HttpGet]
         public HttpResponseMessage DownloadComplexAvatar(long complexId)
         {
-            using (var context = new DatabaseContext())
+            var lockObj = new object();
+
+            lock (lockObj)
             {
-                var complex = context.Complexes.Find(complexId);
-                return DownloadFile(complex.Avatar);
+                var guid = Guid.NewGuid().ToString();
+                StreamRepo.FileStreamLocks.Add(guid, lockObj);
+                var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
+                                      SharedArea.GlobalVariables.FILE_QUEUE_NAME);
+                var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
+                IRequestClient<DownloadComplexAvatarRequest, DownloadComplexAvatarResponse> client =
+                    new MessageRequestClient<DownloadComplexAvatarRequest, DownloadComplexAvatarResponse>(
+                        Program.Bus, address, requestTimeout);
+                var result = client.Request<DownloadComplexAvatarRequest, DownloadComplexAvatarResponse>(new
+                {
+                    Headers = Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
+                    ComplexId = complexId,
+                    StreamCode = guid
+                }).Result;
+
+                if (result.Packet.Status != "success")
+                {
+                    var resp = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                    var myContent = JsonConvert.SerializeObject(result.Packet);
+                    var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+                    var byteContent = new ByteArrayContent(buffer);
+                    byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    resp.Content = byteContent;
+                    return resp;
+                }
+
+                Monitor.Wait(lockObj);
+
+                StreamRepo.FileStreamLocks.Remove(guid);
+                var stream = StreamRepo.FileStreams[guid];
+                StreamRepo.FileStreams.Remove(guid);
+
+                var response = new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new NotifierStreamContent(stream.OpenReadStream(), ex =>
+                    {
+                        var doneLockObj = StreamRepo.FileTransferDoneLocks[guid];
+                        lock (doneLockObj)
+                        {
+                            Monitor.Pulse(doneLockObj);
+                        }
+
+                        StreamRepo.FileTransferDoneLocks.Remove(guid);
+                    })
+                };
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                return response;
             }
         }
-        
+
         [Route("~/api/file/download_user_avatar")]
         [HttpGet]
         public HttpResponseMessage DownloadUserAvatar(long userId)
         {
-            using (var context = new DatabaseContext())
+            var lockObj = new object();
+
+            lock (lockObj)
             {
-                var user = context.Users.Find(userId);
-                return DownloadFile(user.Avatar);
+                var guid = Guid.NewGuid().ToString();
+                StreamRepo.FileStreamLocks.Add(guid, lockObj);
+                var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
+                                      SharedArea.GlobalVariables.FILE_QUEUE_NAME);
+                var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
+                IRequestClient<DownloadUserAvatarRequest, DownloadUserAvatarResponse> client =
+                    new MessageRequestClient<DownloadUserAvatarRequest, DownloadUserAvatarResponse>(
+                        Program.Bus, address, requestTimeout);
+                var result = client.Request<DownloadUserAvatarRequest, DownloadUserAvatarResponse>(new
+                {
+                    Headers = Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
+                    UserId = userId,
+                    StreamCode = guid
+                }).Result;
+
+                if (result.Packet.Status != "success")
+                {
+                    var resp = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+                    var myContent = JsonConvert.SerializeObject(result.Packet);
+                    var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+                    var byteContent = new ByteArrayContent(buffer);
+                    byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    resp.Content = byteContent;
+                    return resp;
+                }
+
+                Monitor.Wait(lockObj);
+
+                StreamRepo.FileStreamLocks.Remove(guid);
+                var stream = StreamRepo.FileStreams[guid];
+                StreamRepo.FileStreams.Remove(guid);
+
+                var response = new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new NotifierStreamContent(stream.OpenReadStream(), ex =>
+                    {
+                        var doneLockObj = StreamRepo.FileTransferDoneLocks[guid];
+                        lock (doneLockObj)
+                        {
+                            Monitor.Pulse(doneLockObj);
+                        }
+
+                        StreamRepo.FileTransferDoneLocks.Remove(guid);
+                    })
+                };
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                return response;
             }
         }
 
@@ -280,14 +469,14 @@ namespace ApiGateway.Controllers
             lock (doneLockObj)
             {
                 var lockObj = StreamRepo.FileStreamLocks[streamCode];
-            
+
                 lock (lockObj)
                 {
                     StreamRepo.FileStreams.Add(streamCode, file);
-                
+
                     Monitor.Pulse(lockObj);
                 }
-                
+
                 StreamRepo.FileTransferDoneLocks.Add(streamCode, doneLockObj);
 
                 Monitor.Wait(doneLockObj);
@@ -305,18 +494,19 @@ namespace ApiGateway.Controllers
                 var session = Security.Authenticate(context, Request.Headers[AuthExtracter.AK]);
                 if (session == null)
                     return new HttpResponseMessage(HttpStatusCode.NotFound);
-                
+
                 var lockObj = new object();
 
                 var guid = Guid.NewGuid().ToString();
-                                
-                lock(lockObj)
+
+                lock (lockObj)
                 {
                     StreamRepo.FileStreamLocks.Add(guid, lockObj);
-                    
-                    var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + SharedArea.GlobalVariables.FILE_QUEUE_NAME);
+
+                    var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
+                                          SharedArea.GlobalVariables.FILE_QUEUE_NAME);
                     var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
-                    IRequestClient<DownloadFileRequest, DownloadFileResponse> client = 
+                    IRequestClient<DownloadFileRequest, DownloadFileResponse> client =
                         new MessageRequestClient<DownloadFileRequest, DownloadFileResponse>(
                             Program.Bus, address, requestTimeout);
                     var result = client.Request<DownloadFileRequest, DownloadFileResponse>(new
@@ -342,7 +532,7 @@ namespace ApiGateway.Controllers
                     StreamRepo.FileStreamLocks.Remove(guid);
                     var stream = StreamRepo.FileStreams[guid];
                     StreamRepo.FileStreams.Remove(guid);
-                    
+
                     var response = new HttpResponseMessage(HttpStatusCode.OK)
                     {
                         Content = new NotifierStreamContent(stream.OpenReadStream(), ex =>
@@ -356,7 +546,7 @@ namespace ApiGateway.Controllers
                             StreamRepo.FileTransferDoneLocks.Remove(guid);
                         })
                     };
-                    response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");    
+                    response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
                     return response;
                 }
             }

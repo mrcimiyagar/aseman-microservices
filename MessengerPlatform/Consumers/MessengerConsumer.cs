@@ -17,7 +17,8 @@ namespace MessengerPlatform.Consumers
 {
     public class MessengerConsumer : NotifConsumer, IConsumer<BotCreatedNotif>, IConsumer<GetMessagesRequest>
         , IConsumer<CreateTextMessageRequest>, IConsumer<CreateFileMessageRequest>, IConsumer<BotCreateTextMessageRequest>
-        , IConsumer<BotCreateFileMessageRequest>
+        , IConsumer<BotCreateFileMessageRequest>, IConsumer<PhotoCreatedNotif>, IConsumer<AudioCreatedNotif>
+        , IConsumer<VideoCreatedNotif>
     {
         public Task Consume(ConsumeContext<BotCreatedNotif> context)
         {
@@ -664,6 +665,48 @@ namespace MessengerPlatform.Consumers
                         return;
                 }
             }
+        }
+
+        public Task Consume(ConsumeContext<PhotoCreatedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var photo = context.Message.Packet.Photo;
+
+                dbContext.Files.Add(photo);
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<AudioCreatedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var audio = context.Message.Packet.Audio;
+
+                dbContext.Files.Add(audio);
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<VideoCreatedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var video = context.Message.Packet.Video;
+
+                dbContext.Files.Add(video);
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
         }
     }
 }

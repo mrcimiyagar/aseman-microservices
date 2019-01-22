@@ -8,6 +8,7 @@ using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
 using SharedArea.Commands.Internal.Responses;
 using SharedArea.Commands.Pushes;
+using SharedArea.Entities;
 using SharedArea.Notifications;
 
 namespace ApiGateway.Consumers
@@ -18,6 +19,7 @@ namespace ApiGateway.Consumers
         , IConsumer<RoomProfileUpdatedNotif>, IConsumer<ContactCreatedNotif>, IConsumer<InviteCreatedNotif>
         , IConsumer<InviteCancelledNotif>, IConsumer<InviteAcceptedNotif>, IConsumer<InvitedIgnoredNotif>
         , IConsumer<BotProfileUpdatedNotif>, IConsumer<BotSubscribedNotif>, IConsumer<BotCreatedNotif>
+        , IConsumer<PhotoCreatedNotif>, IConsumer<AudioCreatedNotif>, IConsumer<VideoCreatedNotif>
 
         , IConsumer<PutUserRequest>, IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
         , IConsumer<PutMembershipRequest>, IConsumer<PutSessionRequest>, IConsumer<UpdateUserSecretRequest>
@@ -196,6 +198,36 @@ namespace ApiGateway.Consumers
         }
         
         public Task Consume(ConsumeContext<BotCreatedNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send(context.Message);
+            }
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<PhotoCreatedNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send(context.Message);
+            }
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<AudioCreatedNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send(context.Message);
+            }
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<VideoCreatedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
             {

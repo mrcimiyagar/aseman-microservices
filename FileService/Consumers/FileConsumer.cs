@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using FileService.DbContexts;
 using MassTransit;
@@ -15,12 +12,13 @@ using SharedArea.Commands.File;
 using SharedArea.Consumers;
 using SharedArea.Entities;
 using SharedArea.Middles;
-using SharedArea.Utils;
+using File = System.IO.File;
 
 namespace FileService.Consumers
 {
     public class FileConsumer : NotifConsumer, IConsumer<UploadPhotoRequest>, IConsumer<UploadAudioRequest>
-        , IConsumer<UploadVideoRequest>, IConsumer<DownloadFileRequest>
+        , IConsumer<UploadVideoRequest>, IConsumer<DownloadFileRequest>, IConsumer<DownloadBotAvatarRequest>
+        , IConsumer<DownloadRoomAvatarRequest>, IConsumer<DownloadComplexAvatarRequest>, IConsumer<DownloadUserAvatarRequest>
     {
         public const string DirPath = @"C:\\Aseman\Files";
         
@@ -459,6 +457,163 @@ namespace FileService.Consumers
                     {
                         await message.Content.ReadAsStringAsync();
                     }
+                }
+            }
+        }
+
+        public async Task Consume(ConsumeContext<DownloadBotAvatarRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var botId = context.Message.BotId;
+                var streamCode = context.Message.StreamCode;
+                var bot = dbContext.Bots.Find(botId);
+                var file = dbContext.Files.Find(bot.Avatar);
+                if (file == null)
+                {
+                    await context.RespondAsync(new DownloadBotAvatarResponse()
+                    {
+                        Packet = new Packet() {Status = "error_0"}
+                    });
+                    return;
+                }
+
+                if (file.IsPublic)
+                {
+                    UploadFileToApiGateWay(streamCode, File.OpenRead(DirPath + @"\\" + file.FileId));
+                    await context.RespondAsync(new DownloadBotAvatarResponse()
+                    {
+                        Packet = new Packet() {Status = "success"}
+                    });
+                }
+                else
+                {
+                    await context.RespondAsync(new DownloadBotAvatarResponse()
+                    {
+                        Packet = new Packet() {Status = "error_1"}
+                    });
+                }
+            }
+        }
+
+        public async Task Consume(ConsumeContext<DownloadRoomAvatarRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var complexId = context.Message.ComplexId;
+                var roomId = context.Message.RoomId;
+                var streamCode = context.Message.StreamCode;
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
+                dbContext.Entry(user).Collection(u => u.Memberships).Load();
+                var membership = user.Memberships.Find(mem => mem.ComplexId == complexId);
+                if (membership == null)
+                {
+                    await context.RespondAsync(new DownloadRoomAvatarResponse()
+                    {
+                        Packet = new Packet {Status = "error_1"}
+                    });
+                    return;
+                }
+                dbContext.Entry(membership).Reference(mem => mem.Complex).Load();
+                var complex = membership.Complex;
+                dbContext.Entry(complex).Collection(c => c.Rooms);
+                var room = complex.Rooms.Find(r => r.RoomId == roomId);
+                var file = dbContext.Files.Find(room.Avatar);
+                if (file == null)
+                {
+                    await context.RespondAsync(new DownloadRoomAvatarResponse()
+                    {
+                        Packet = new Packet() {Status = "error_0"}
+                    });
+                    return;
+                }
+
+                if (file.IsPublic)
+                {
+                    UploadFileToApiGateWay(streamCode, File.OpenRead(DirPath + @"\\" + file.FileId));
+                    await context.RespondAsync(new DownloadRoomAvatarResponse()
+                    {
+                        Packet = new Packet() {Status = "success"}
+                    });
+                }
+                else
+                {
+                    await context.RespondAsync(new DownloadRoomAvatarResponse()
+                    {
+                        Packet = new Packet() {Status = "error_1"}
+                    });
+                }
+            }
+        }
+
+        public async Task Consume(ConsumeContext<DownloadComplexAvatarRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var complexId = context.Message.ComplexId;
+                var streamCode = context.Message.StreamCode;
+                var complex = dbContext.Complexes.Find(complexId);
+                var file = dbContext.Files.Find(complex.Avatar);
+                if (file == null)
+                {
+                    await context.RespondAsync(new DownloadComplexAvatarResponse()
+                    {
+                        Packet = new Packet() {Status = "error_0"}
+                    });
+                    return;
+                }
+
+                if (file.IsPublic)
+                {
+                    UploadFileToApiGateWay(streamCode, File.OpenRead(DirPath + @"\\" + file.FileId));
+                    await context.RespondAsync(new DownloadComplexAvatarResponse()
+                    {
+                        Packet = new Packet() {Status = "success"}
+                    });
+                }
+                else
+                {
+                    await context.RespondAsync(new DownloadComplexAvatarResponse()
+                    {
+                        Packet = new Packet() {Status = "error_1"}
+                    });
+                }
+            }
+        }
+
+        public async Task Consume(ConsumeContext<DownloadUserAvatarRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var userId = context.Message.UserId;
+                var streamCode = context.Message.StreamCode;
+                var user = (User) dbContext.BaseUsers.Find(userId);
+                var file = dbContext.Files.Find(user.Avatar);
+                if (file == null)
+                {
+                    await context.RespondAsync(new DownloadUserAvatarResponse()
+                    {
+                        Packet = new Packet() {Status = "error_0"}
+                    });
+                    return;
+                }
+
+                if (file.IsPublic)
+                {
+                    UploadFileToApiGateWay(streamCode, File.OpenRead(DirPath + @"\\" + file.FileId));
+                    await context.RespondAsync(new DownloadUserAvatarResponse()
+                    {
+                        Packet = new Packet() {Status = "success"}
+                    });
+                }
+                else
+                {
+                    await context.RespondAsync(new DownloadUserAvatarResponse()
+                    {
+                        Packet = new Packet() {Status = "error_1"}
+                    });
                 }
             }
         }

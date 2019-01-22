@@ -45,6 +45,9 @@ namespace SharedArea.Middles
         public Invite Invite { get; set; }
         public FileUsage FileUsage { get; set; }
         public BaseUser BaseUser { get; set; }
+        public Photo Photo { get; set; }
+        public Audio Audio { get; set; }
+        public Video Video { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string StreamCode { get; set; }

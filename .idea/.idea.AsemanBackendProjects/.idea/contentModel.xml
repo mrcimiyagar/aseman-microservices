@@ -245,8 +245,16 @@
             <e p="GetContactsResponse.cs" t="Include" />
           </e>
           <e p="File" t="Include">
+            <e p="DownloadBotAvatarRequest.cs" t="Include" />
+            <e p="DownloadBotAvatarResponse.cs" t="Include" />
+            <e p="DownloadComplexAvatarRequest.cs" t="Include" />
+            <e p="DownloadComplexAvatarResponse.cs" t="Include" />
             <e p="DownloadFileRequest.cs" t="Include" />
             <e p="DownloadFileResponse.cs" t="Include" />
+            <e p="DownloadRoomAvatarRequest.cs" t="Include" />
+            <e p="DownloadRoomAvatarResponse.cs" t="Include" />
+            <e p="DownloadUserAvatarRequest.cs" t="Include" />
+            <e p="DownloadUserAvatarResponse.cs" t="Include" />
             <e p="UploadAudioRequest.cs" t="Include" />
             <e p="UploadAudioResponse.cs" t="Include" />
             <e p="UploadPhotoRequest.cs" t="Include" />
@@ -256,6 +264,7 @@
           </e>
           <e p="Internal" t="Include">
             <e p="Notifications" t="Include">
+              <e p="AudioCreatedNotif.cs" t="Include" />
               <e p="BotCreatedNotif.cs" t="Include" />
               <e p="BotProfileUpdatedNotif.cs" t="Include" />
               <e p="BotSubscribedNotif.cs" t="Include" />
@@ -268,12 +277,14 @@
               <e p="InviteCreatedNotif.cs" t="Include" />
               <e p="InvitedIgnoredNotif.cs" t="Include" />
               <e p="MembershipCreatedNotif.cs" t="Include" />
+              <e p="PhotoCreatedNotif.cs" t="Include" />
               <e p="RoomCreatedNotif.cs" t="Include" />
               <e p="RoomDeletionNotif.cs" t="Include" />
               <e p="RoomProfileUpdatedNotif.cs" t="Include" />
               <e p="SessionCreatedNotif.cs" t="Include" />
               <e p="UserCreatedNotif.cs" t="Include" />
               <e p="UserProfileUpdatedNotif.cs" t="Include" />
+              <e p="VideoCreatedNotif.cs" t="Include" />
             </e>
             <e p="Requests" t="Include">
               <e p="PutComplexRequest.cs" t="Include" />
