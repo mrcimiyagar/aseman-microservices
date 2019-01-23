@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
+using ApiGateway.DbContexts;
+using ApiGateway.Utils;
 using Microsoft.AspNetCore.SignalR;
 
 namespace ApiGateway.Hubs
@@ -8,7 +11,7 @@ namespace ApiGateway.Hubs
     {
         public string Login(long sessionId, string token)
         {
-            /*using (var context = new DatabaseContext())
+            using (var context = new DatabaseContext())
             {
                 var session = Security.Authenticate(context, sessionId + " " + token);
                 if (session == null) return "error_0";
@@ -16,14 +19,12 @@ namespace ApiGateway.Hubs
                 session.Online = true;
                 context.SaveChanges();
                 return "success";
-            }*/
-
-            return "not implemented";
+            }
         }
 
         public string LoginBot(long botId, string token)
         {
-            /*using (var context = new DatabaseContext())
+            using (var context = new DatabaseContext())
             {
                 var bot = context.Bots.Find(botId);
                 if (bot == null) return "error_0";
@@ -34,9 +35,7 @@ namespace ApiGateway.Hubs
                 session.Online = true;
                 context.SaveChanges();
                 return "success";
-            }*/
-            
-            return "not implemented";
+            }
         }
 
         public string KeepAlive()

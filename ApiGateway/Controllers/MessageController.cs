@@ -64,7 +64,7 @@ namespace ApiGateway.Controllers
                 var session = Security.Authenticate(context, Request.Headers[AuthExtracter.AK]);
                 if (session == null) return new Packet {Status = "error_0"};
                 
-                var result = await SharedArea.Transport.DirectService<CreateTextMessageRequest, CreateTextMessageResponse>(
+                var result = await SharedArea.Transport.DirectService<CreateFileMessageRequest, CreateFileMessageResponse>(
                     Program.Bus,
                     SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
                     session.SessionId,

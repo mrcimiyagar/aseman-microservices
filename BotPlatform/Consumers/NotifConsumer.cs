@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BotPlatform.DbContexts;
@@ -8,7 +9,8 @@ using SharedArea.Entities;
 
 namespace BotPlatform.Consumers
 {
-    public class NotifConsumer : IConsumer<UserCreatedNotif>, IConsumer<ComplexCreatedNotif>, IConsumer<RoomCreatedNotif>
+    public class NotifConsumer : IConsumer<UserCreatedNotif>, IConsumer<ComplexCreatedNotif>,
+        IConsumer<RoomCreatedNotif>
         , IConsumer<MembershipCreatedNotif>, IConsumer<SessionCreatedNotif>, IConsumer<UserProfileUpdatedNotif>
         , IConsumer<ComplexProfileUpdatedNotif>, IConsumer<ComplexDeletionNotif>, IConsumer<RoomProfileUpdatedNotif>
         , IConsumer<RoomDeletionNotif>, IConsumer<ContactCreatedNotif>, IConsumer<InviteCreatedNotif>
@@ -24,11 +26,11 @@ namespace BotPlatform.Consumers
 
                 user.UserSecret = userSecret;
                 userSecret.User = user;
-                
+
                 dbContext.AddRange(user, userSecret);
 
                 dbContext.SaveChanges();
-                
+
                 return Task.CompletedTask;
             }
         }
@@ -49,7 +51,7 @@ namespace BotPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -59,7 +61,7 @@ namespace BotPlatform.Consumers
             {
                 var complex = context.Message.Packet.Complex;
                 var room = context.Message.Packet.Room;
-                
+
                 room.Complex = complex;
 
                 dbContext.AddRange(room);
@@ -80,11 +82,11 @@ namespace BotPlatform.Consumers
 
                 membership.User = user;
                 membership.Complex = complex;
-                
+
                 dbContext.AddRange(membership);
 
                 dbContext.SaveChanges();
-                
+
                 return Task.CompletedTask;
             }
         }
@@ -97,11 +99,11 @@ namespace BotPlatform.Consumers
                 var user = context.Message.Packet.BaseUser;
 
                 session.BaseUser = dbContext.BaseUsers.Find(user.BaseUserId);
-                
+
                 dbContext.AddRange(session);
 
                 dbContext.SaveChanges();
-                
+
                 return Task.CompletedTask;
             }
         }
@@ -169,6 +171,7 @@ namespace BotPlatform.Consumers
                     dbContext.SaveChanges();
                 }
             }
+
             return Task.CompletedTask;
         }
 
@@ -185,7 +188,7 @@ namespace BotPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -196,7 +199,7 @@ namespace BotPlatform.Consumers
                 var globalRoom = context.Message.Packet.Room;
 
                 var localRoom = dbContext.Rooms.Find(globalRoom.RoomId);
-                
+
                 dbContext.Entry(localRoom).Reference(r => r.Complex).Load();
                 var complex = localRoom.Complex;
                 dbContext.Entry(complex).Collection(c => c.Rooms).Load();
@@ -206,7 +209,7 @@ namespace BotPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -216,30 +219,65 @@ namespace BotPlatform.Consumers
             {
                 var me = (User) dbContext.BaseUsers.Find(context.Message.Packet.Users[0].BaseUserId);
                 var peer = (User) dbContext.BaseUsers.Find(context.Message.Packet.Users[1].BaseUserId);
+
                 var complex = context.Message.Packet.Complex;
                 var complexSecret = context.Message.Packet.ComplexSecret;
-                complexSecret.Complex = complex;
-                complex.ComplexSecret = complexSecret;
                 var room = context.Message.Packet.Room;
-                room.Complex = complex;
                 var m1 = context.Message.Packet.Memberships[0];
-                m1.User = me;
-                m1.Complex = complex;
                 var m2 = context.Message.Packet.Memberships[1];
-                m2.User = peer;
-                m2.Complex = complex;
+
+                var lComplex = new Complex()
+                {
+                    ComplexId = complex.ComplexId,
+                    Title = complex.Title,
+                    Avatar = complex.Avatar,
+                    ComplexSecret = new ComplexSecret()
+                    {
+                        ComplexSecretId = complexSecret.ComplexSecretId,
+                        Admin = null
+                    },
+                    Rooms = new List<Room>()
+                    {
+                        new Room()
+                        {
+                            RoomId = room.RoomId,
+                            Title = room.Title,
+                            Avatar = room.Avatar
+                        }
+                    },
+                    Members = new List<Membership>()
+                    {
+                        new Membership()
+                        {
+                            MembershipId = m1.MembershipId,
+                            User = me
+                        },
+                        new Membership()
+                        {
+                            MembershipId = m2.MembershipId,
+                            User = peer
+                        }
+                    }
+                };
+
+                dbContext.AddRange(lComplex);
+                dbContext.SaveChanges();
+
                 var myContact = context.Message.Packet.Contacts[0];
                 myContact.Complex = complex;
                 myContact.User = me;
                 myContact.Peer = peer;
+                dbContext.Contacts.Add(myContact);
+
                 var peerContact = context.Message.Packet.Contacts[1];
                 peerContact.Complex = complex;
                 peerContact.User = peer;
                 peerContact.Peer = me;
-                dbContext.AddRange(complex, complexSecret, room, m1, m2, myContact, peerContact);
+                dbContext.Contacts.Add(peerContact);
+
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -250,18 +288,18 @@ namespace BotPlatform.Consumers
                 var invite = context.Message.Packet.Invite;
                 var complex = dbContext.Complexes.Find(context.Message.Packet.Complex.ComplexId);
                 var user = (User) dbContext.BaseUsers.Find(context.Message.Packet.User.BaseUserId);
-                
+
                 invite.Complex = complex;
                 invite.User = user;
-                
+
                 dbContext.AddRange(invite);
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<InviteCancelledNotif> context)
         {
             using (var dbContext = new DatabaseContext())
@@ -274,7 +312,7 @@ namespace BotPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -286,7 +324,7 @@ namespace BotPlatform.Consumers
                 var membership = context.Message.Packet.Membership;
                 var message = context.Message.Packet.ServiceMessage;
                 var human = (User) dbContext.BaseUsers.Find(context.Message.Packet.User.BaseUserId);
-                
+
                 dbContext.Entry(invite).Reference(i => i.Complex).Load();
                 var complex = invite.Complex;
                 human.Invites.Remove(invite);
@@ -301,7 +339,7 @@ namespace BotPlatform.Consumers
                 dbContext.Messages.Add(message);
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -311,14 +349,14 @@ namespace BotPlatform.Consumers
             {
                 var invite = dbContext.Invites.Find(context.Message.Packet.Invite.InviteId);
                 var human = (User) dbContext.BaseUsers.Find(context.Message.Packet.User.BaseUserId);
-                
+
                 dbContext.Entry(invite).Reference(i => i.Complex).Load();
                 human.Invites.Remove(invite);
                 dbContext.Invites.Remove(invite);
-                
+
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -336,7 +374,7 @@ namespace BotPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
     }

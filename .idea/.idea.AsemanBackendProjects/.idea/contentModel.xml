@@ -40,7 +40,7 @@
             <e p="TakeFileDSF.cs" t="Include" />
             <e p="VideoUploadForm.cs" t="Include" />
           </e>
-          <e p="NotifierStreamContent.cs" t="Include" />
+          <e p="NotifierStreamResult.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
@@ -307,6 +307,8 @@
               <e p="VideoCreatedNotif.cs" t="Include" />
             </e>
             <e p="Requests" t="Include">
+              <e p="ConsolidateContactRequest.cs" t="Include" />
+              <e p="ConsolidateContactResponse.cs" t="Include" />
               <e p="PutComplexRequest.cs" t="Include" />
               <e p="PutMembershipRequest.cs" t="Include" />
               <e p="PutRoomRequest.cs" t="Include" />

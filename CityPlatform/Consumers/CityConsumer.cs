@@ -621,8 +621,22 @@ namespace CityPlatform.Consumers
                             },
                             SharedArea.GlobalVariables.AllQueuesExcept(new[]
                             {
-                                SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                                SharedArea.GlobalVariables.CITY_QUEUE_NAME,
+                                SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME
                             }));
+
+                        await SharedArea.Transport.RequestService<ConsolidateContactRequest, ConsolidateContactResponse>(
+                            Program.Bus,
+                            SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                            new Packet()
+                            {
+                                Complex = complex,
+                                ComplexSecret = complexSecret,
+                                Room = room,
+                                Memberships = new[] {m1, m2}.ToList(),
+                                Contacts = new[] {myContact, peerContact}.ToList(),
+                                Users = new[] {me, peer}.ToList()
+                            });
                         
                         var message = new ServiceMessage
                         {
@@ -631,16 +645,12 @@ namespace CityPlatform.Consumers
                             Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds),
                             Author = null
                         };
-                        
-                        Console.WriteLine("hello 1");
 
                         var result1 = await SharedArea.Transport
                             .RequestService<PutServiceMessageRequest, PutServiceMessageResponse>(
                                 Program.Bus,
                                 SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
-                                new Packet() {ServiceMessage = message, Room = room});
-
-                        Console.WriteLine("hello 2");
+                                new Packet() {ServiceMessage = message});
                         
                         message.MessageId = result1.Packet.ServiceMessage.MessageId;
 
@@ -665,14 +675,16 @@ namespace CityPlatform.Consumers
                             Program.Bus,
                             new ContactCreationPush()
                             {
-                                Notif = ccn
+                                Notif = ccn,
+                                SessionIds = peer.Sessions.Select(s => s.SessionId).ToList()
                             });
 
                         SharedArea.Transport.Push<ServiceMessagePush>(
                             Program.Bus,
                             new ServiceMessagePush()
                             {
-                                Notif = mcn
+                                Notif = mcn,
+                                SessionIds = peer.Sessions.Select(s => s.SessionId).ToList()
                             });
 
                         ServiceMessage finalMessage;

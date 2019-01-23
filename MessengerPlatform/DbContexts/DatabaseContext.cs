@@ -75,6 +75,10 @@ namespace MessengerPlatform.DbContexts
             modelBuilder.Entity<Video>()
                 .Property(b => b.FileId)
                 .ValueGeneratedNever();
+
+            modelBuilder.Entity<FileUsage>()
+                .Property(fu => fu.FileUsageId)
+                .ValueGeneratedNever();
             
             modelBuilder.Entity<Contact>()
                 .Property(b => b.ContactId)

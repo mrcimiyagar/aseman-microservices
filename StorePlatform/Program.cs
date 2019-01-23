@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using MassTransit;
 using MassTransit.NLogIntegration;
 using Newtonsoft.Json;
+using SharedArea.Entities;
 using SharedArea.Utils;
 using StorePlatform.Consumers;
 using StorePlatform.DbContexts;
@@ -17,6 +19,15 @@ namespace StorePlatform
             using (var dbContext = new DatabaseContext())
             {
                 DatabaseConfig.ConfigDatabase(dbContext);
+
+                if (dbContext.BotStoreHeader.LongCount() == 0)
+                {
+                    var header = new BotStoreHeader();
+
+                    dbContext.BotStoreHeader.Add(header);
+
+                    dbContext.SaveChanges();
+                }
             }
             
             Bus = MassTransit.Bus.Factory.CreateUsingRabbitMq(sbc =>

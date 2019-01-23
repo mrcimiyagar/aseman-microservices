@@ -23,7 +23,7 @@ namespace ApiGateway.Consumers
 
         , IConsumer<PutUserRequest>, IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
         , IConsumer<PutMembershipRequest>, IConsumer<PutSessionRequest>, IConsumer<UpdateUserSecretRequest>
-        , IConsumer<PutServiceMessageRequest>
+        , IConsumer<PutServiceMessageRequest>, IConsumer<ConsolidateContactRequest>
 
         , IConsumer<ComplexDeletionPush>, IConsumer<RoomDeletionPush>, IConsumer<ContactCreationPush>
         , IConsumer<ServiceMessagePush>, IConsumer<InviteCreationPush>, IConsumer<InviteCancellationPush>
@@ -343,6 +343,15 @@ namespace ApiGateway.Consumers
         public async Task Consume(ConsumeContext<PutServiceMessageRequest> context)
         {
             var result = await SharedArea.Transport.DirectService<PutServiceMessageRequest, PutServiceMessageResponse>(
+                Program.Bus,
+                context.Message.Destination,
+                context.Message.Packet);
+            await context.RespondAsync(result);
+        }
+        
+        public async Task Consume(ConsumeContext<ConsolidateContactRequest> context)
+        {
+            var result = await SharedArea.Transport.DirectService<ConsolidateContactRequest, ConsolidateContactResponse>(
                 Program.Bus,
                 context.Message.Destination,
                 context.Message.Packet);

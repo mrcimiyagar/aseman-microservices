@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MassTransit;
@@ -13,7 +14,77 @@ namespace MessengerPlatform.Consumers
         , IConsumer<ComplexProfileUpdatedNotif>, IConsumer<ComplexDeletionNotif>, IConsumer<RoomProfileUpdatedNotif>
         , IConsumer<RoomDeletionNotif>, IConsumer<InviteCreatedNotif>, IConsumer<InviteCancelledNotif>
         , IConsumer<InviteAcceptedNotif>, IConsumer<InvitedIgnoredNotif>, IConsumer<SessionUpdatedNotif>
+        , IConsumer<ContactCreatedNotif>
     {
+
+        public Task Consume(ConsumeContext<ContactCreatedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var me = (User) dbContext.BaseUsers.Find(context.Message.Packet.Users[0].BaseUserId);
+                var peer = (User) dbContext.BaseUsers.Find(context.Message.Packet.Users[1].BaseUserId);
+
+                var complex = context.Message.Packet.Complex;
+                var complexSecret = context.Message.Packet.ComplexSecret;
+                var room = context.Message.Packet.Room;
+                var m1 = context.Message.Packet.Memberships[0];
+                var m2 = context.Message.Packet.Memberships[1];
+
+                var lComplex = new Complex()
+                {
+                    ComplexId = complex.ComplexId,
+                    Title = complex.Title,
+                    Avatar = complex.Avatar,
+                    ComplexSecret = new ComplexSecret()
+                    {
+                        ComplexSecretId = complexSecret.ComplexSecretId,
+                        Admin = null
+                    },
+                    Rooms = new List<Room>()
+                    {
+                        new Room()
+                        {
+                            RoomId = room.RoomId,
+                            Title = room.Title,
+                            Avatar = room.Avatar
+                        }
+                    },
+                    Members = new List<Membership>()
+                    {
+                        new Membership()
+                        {
+                            MembershipId = m1.MembershipId,
+                            User = me
+                        },
+                        new Membership()
+                        {
+                            MembershipId = m2.MembershipId,
+                            User = peer
+                        }
+                    }
+                };
+
+                dbContext.AddRange(lComplex);
+                dbContext.SaveChanges();
+
+                var myContact = context.Message.Packet.Contacts[0];
+                myContact.Complex = complex;
+                myContact.User = me;
+                myContact.Peer = peer;
+                dbContext.Contacts.Add(myContact);
+
+                var peerContact = context.Message.Packet.Contacts[1];
+                peerContact.Complex = complex;
+                peerContact.User = peer;
+                peerContact.Peer = me;
+                dbContext.Contacts.Add(peerContact);
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+        
         public Task Consume(ConsumeContext<UserCreatedNotif> context)
         {
             using (var dbContext = new DatabaseContext())
