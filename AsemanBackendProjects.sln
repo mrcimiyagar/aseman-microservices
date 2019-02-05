@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorePlatform", "StorePlatf
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileService", "FileService\FileService.csproj", "{6CC5AAC9-A3CE-4544-ABE3-5C3E51A4D8BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DriverProgram", "DriverProgram\DriverProgram.csproj", "{8773DD38-4935-4411-BF97-696EDF477E37}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,5 +68,9 @@ Global
 		{6CC5AAC9-A3CE-4544-ABE3-5C3E51A4D8BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CC5AAC9-A3CE-4544-ABE3-5C3E51A4D8BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CC5AAC9-A3CE-4544-ABE3-5C3E51A4D8BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8773DD38-4935-4411-BF97-696EDF477E37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8773DD38-4935-4411-BF97-696EDF477E37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8773DD38-4935-4411-BF97-696EDF477E37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8773DD38-4935-4411-BF97-696EDF477E37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

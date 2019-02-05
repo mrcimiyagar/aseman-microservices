@@ -22,14 +22,12 @@ namespace ApiGateway.Hubs
             }
         }
 
-        public string LoginBot(long botId, string token)
+        public string LoginBot(long sessionId, string token)
         {
             using (var context = new DatabaseContext())
             {
-                var bot = context.Bots.Find(botId);
-                if (bot == null) return "error_0";
-                context.Entry(bot).Collection(b => b.Sessions).Load();
-                var session = bot.Sessions.FirstOrDefault();
+                var session = context.Sessions.Find(sessionId);
+                if (session == null) return "error_0";
                 if (session.Token != token) return "error_0";
                 session.ConnectionId = Context.ConnectionId;
                 session.Online = true;

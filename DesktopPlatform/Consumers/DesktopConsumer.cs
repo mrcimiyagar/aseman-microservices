@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using DesktopPlatform.DbContexts;
 using MassTransit;
+using Newtonsoft.Json;
 using SharedArea.Commands.Bot;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Pushes;
@@ -76,6 +78,16 @@ namespace DesktopPlatform.Consumers
                 };
                 dbContext.AddRange(workership);
                 dbContext.SaveChanges();
+                
+                SharedArea.Transport.NotifyService<WorkershipCreatedNotif>(
+                    Program.Bus,
+                    new Packet() {Workership = workership},
+                    new []
+                    {
+                        SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                        SharedArea.GlobalVariables.BOT_QUEUE_NAME
+                    });
+                
                 Room finalRoom;
                 using (var finalContext = new DatabaseContext())
                 {
@@ -155,6 +167,16 @@ namespace DesktopPlatform.Consumers
                 workership.Width = packet.Workership.Width;
                 workership.Height = packet.Workership.Height;
                 dbContext.SaveChanges();
+                
+                SharedArea.Transport.NotifyService<WorkershipUpdatedNotif>(
+                    Program.Bus,
+                    new Packet() {Workership = workership},
+                    new []
+                    {
+                        SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                        SharedArea.GlobalVariables.BOT_QUEUE_NAME
+                    });
+                
                 await context.RespondAsync(new UpdateWorkershipResponse()
                 {
                     Packet = new Packet {Status = "success"}
@@ -206,6 +228,16 @@ namespace DesktopPlatform.Consumers
                 room.Workers.Remove(workership);
                 dbContext.Workerships.Remove(workership);
                 dbContext.SaveChanges();
+                
+                SharedArea.Transport.NotifyService<WorkershipDeletedNotif>(
+                    Program.Bus,
+                    new Packet() {Workership = workership},
+                    new []
+                    {
+                        SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                        SharedArea.GlobalVariables.BOT_QUEUE_NAME
+                    });
+                
                 var bot = dbContext.Bots.Find(workership.BotId);
                 dbContext.Entry(bot).Collection(b => b.Sessions).Load();
                 var botSess = bot.Sessions.FirstOrDefault();
@@ -234,7 +266,6 @@ namespace DesktopPlatform.Consumers
             {
                 var packet = context.Message.Packet;
                 var session = dbContext.Sessions.Find(context.Message.SessionId);
-
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
                 var user = (User) session.BaseUser;
                 dbContext.Entry(user).Collection(u => u.Memberships).Load();
@@ -245,7 +276,7 @@ namespace DesktopPlatform.Consumers
                     {
                         Packet = new Packet {Status = "error_1"}
                     });
-                    return ;
+                    return;
                 }
                 dbContext.Entry(membership).Reference(m => m.Complex).Load();
                 var complex = membership.Complex;
@@ -261,7 +292,6 @@ namespace DesktopPlatform.Consumers
                 }
                 dbContext.Entry(room).Collection(r => r.Workers).Load();
                 var workers = room.Workers.ToList();
-                
                 await context.RespondAsync(new GetWorkershipsResponse()
                 {
                     Packet = new Packet {Status = "success", Workerships = workers}

@@ -9,6 +9,7 @@ namespace MessengerPlatform.DbContexts
     {
         public DbSet<File> Files { get; set; }
         public DbSet<FileUsage> FileUsages { get; set; }
+        public DbSet<Workership> Workerships { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder
@@ -63,6 +64,18 @@ namespace MessengerPlatform.DbContexts
             modelBuilder.Entity<Bot>()
                 .Property(b => b.BaseUserId)
                 .ValueGeneratedNever();
+            
+            modelBuilder.Entity<BotSecret>()
+                .Property(u => u.BotSecretId)
+                .ValueGeneratedNever();
+            
+            modelBuilder.Entity<BotCreation>()
+                .Property(u => u.BotCreationId)
+                .ValueGeneratedNever();
+            
+            modelBuilder.Entity<BotSubscription>()
+                .Property(u => u.BotSubscriptionId)
+                .ValueGeneratedNever();
 
             modelBuilder.Entity<Photo>()
                 .Property(b => b.FileId)
@@ -82,6 +95,10 @@ namespace MessengerPlatform.DbContexts
             
             modelBuilder.Entity<Contact>()
                 .Property(b => b.ContactId)
+                .ValueGeneratedNever();
+
+            modelBuilder.Entity<Workership>()
+                .Property(w => w.WorkershipId)
                 .ValueGeneratedNever();
         }
     }

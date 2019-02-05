@@ -79,54 +79,50 @@ namespace ApiGateway.Controllers
         [HttpPost]
         public async Task<ActionResult<Packet>> BotCreateTextMessage([FromBody] Packet packet)
         {
-            /*using (var context = new DatabaseContext())
+            using (var context = new DatabaseContext())
             {
                 string authHeader = Request.Headers[AuthExtracter.AK];
                 var parts = authHeader.Split(" ");
-                var botId = long.Parse(parts[0]);
+                var sessionId = long.Parse(parts[0]);
                 var token = parts[1];
-                var bot = context.Bots.Find(botId);
-                if (bot == null) return new Packet {Status = "error_1"};
-                context.Entry(bot).Reference(b => b.BotSecret).Load();
-                if (bot.BotSecret.Token != token) return new Packet {Status = "error_2"};
+                var session = context.Sessions.Find(sessionId);
+                if (session == null) return new Packet {Status = "error_1"};
+                if (session.Token != token) return new Packet {Status = "error_2"};
                 
                 var result = await SharedArea.Transport.DirectService<BotCreateTextMessageRequest, BotCreateTextMessageResponse>(
                     Program.Bus,
                     SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                    sessionId,
                     Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                     packet);
 
                 return result.Packet;
-            }*/
-            
-            return new Packet() {Status = "not implemented"};
+            }
         }
         
         [Route("~/api/message/bot_create_file_message")]
         [HttpPost]
         public async Task<ActionResult<Packet>> BotCreateFileMessage([FromBody] Packet packet)
         {
-            /*using (var context = new DatabaseContext())
+            using (var context = new DatabaseContext())
             {
                 string authHeader = Request.Headers[AuthExtracter.AK];
                 var parts = authHeader.Split(" ");
-                var botId = long.Parse(parts[0]);
+                var sessionId = long.Parse(parts[0]);
                 var token = parts[1];
-                var bot = context.Bots.Find(botId);
-                if (bot == null) return new Packet {Status = "error_1"};
-                context.Entry(bot).Reference(b => b.BotSecret).Load();
-                if (bot.BotSecret.Token != token) return new Packet {Status = "error_2"};
+                var session = context.Sessions.Find(sessionId);
+                if (session == null) return new Packet {Status = "error_1"};
+                if (session.Token != token) return new Packet {Status = "error_2"};
                 
                 var result = await SharedArea.Transport.DirectService<BotCreateFileMessageRequest, BotCreateFileMessageResponse>(
                     Program.Bus,
                     SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                    sessionId,
                     Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                     packet);
 
                 return result.Packet;
-            }*/
-
-            return new Packet() {Status = "not implemented"};
+            }
         }
     }
 }

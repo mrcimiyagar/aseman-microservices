@@ -1328,7 +1328,8 @@ namespace CityPlatform.Consumers
                     {
                         SharedArea.GlobalVariables.DESKTOP_QUEUE_NAME,
                         SharedArea.GlobalVariables.STORE_QUEUE_NAME,
-                        SharedArea.GlobalVariables.BOT_QUEUE_NAME
+                        SharedArea.GlobalVariables.BOT_QUEUE_NAME,
+                        SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME
                     });
 
                 await context.RespondAsync(new CreateBotResponse()

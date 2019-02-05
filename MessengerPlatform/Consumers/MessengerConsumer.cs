@@ -22,6 +22,7 @@ namespace MessengerPlatform.Consumers
         , IConsumer<CreateTextMessageRequest>, IConsumer<CreateFileMessageRequest>, IConsumer<BotCreateTextMessageRequest>
         , IConsumer<BotCreateFileMessageRequest>, IConsumer<PhotoCreatedNotif>, IConsumer<AudioCreatedNotif>
         , IConsumer<VideoCreatedNotif>, IConsumer<PutServiceMessageRequest>, IConsumer<ConsolidateContactRequest>
+        , IConsumer<WorkershipCreatedNotif>, IConsumer<WorkershipUpdatedNotif>, IConsumer<WorkershipDeletedNotif>
     {
         public Task Consume(ConsumeContext<BotCreatedNotif> context)
         {
@@ -40,12 +41,12 @@ namespace MessengerPlatform.Consumers
 
                 subscription.Bot = bot;
                 subscription.Subscriber = localUser;
-                
+
                 dbContext.AddRange(bot, botSecret, session, creation, subscription);
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -147,7 +148,8 @@ namespace MessengerPlatform.Consumers
                 }
                 var sessionIds = (from m in complex.Members where m.User.BaseUserId != human.BaseUserId
                     from s in m.User.Sessions select s.SessionId).ToList();
-                sessionIds.AddRange((from w in room.Workers from s in dbContext.Bots.Find(w.BotId).Sessions
+                sessionIds.AddRange((from w in room.Workers from s in dbContext.Bots.Include(b => b.Sessions)
+                        .FirstOrDefault(b => b.BaseUserId == w.BotId).Sessions
                         select s.SessionId).ToList());
                 var mcn = new TextMessageNotification()
                 {
@@ -172,9 +174,7 @@ namespace MessengerPlatform.Consumers
         {
             using (var dbContext = new DatabaseContext())
             {
-                try
-                {
-                    var packet = context.Message.Packet;
+                var packet = context.Message.Packet;
                     var session = dbContext.Sessions.Find(context.Message.SessionId);
 
                     dbContext.Entry(session).Reference(s => s.BaseUser).Load();
@@ -299,7 +299,8 @@ namespace MessengerPlatform.Consumers
                         from s in m.User.Sessions
                         select s.SessionId).ToList();
                     sessionIds.AddRange((from w in room.Workers
-                        from s in dbContext.Bots.Find(w.BotId).Sessions
+                        from s in dbContext.Bots.Include(b => b.Sessions)
+                            .FirstOrDefault(b => b.BaseUserId == w.BotId).Sessions
                         select s.SessionId).ToList());
 
                     switch (nextMessage)
@@ -378,11 +379,6 @@ namespace MessengerPlatform.Consumers
                             });
                             break;
                     }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
             }
         }
 
@@ -391,10 +387,9 @@ namespace MessengerPlatform.Consumers
             using (var dbContext = new DatabaseContext())
             {
                 var packet = context.Message.Packet;
-                var authHeader = context.Message.Headers[AuthExtracter.AK];
-                var parts = authHeader.Split(" ");
-                var botId = long.Parse(parts[0]);
-                var bot = dbContext.Bots.Find(botId);
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var bot = (Bot) session.BaseUser;
                 dbContext.Entry(bot).Reference(b => b.BotSecret).Load();
                 var complex = dbContext.Complexes.Find(packet.Complex.ComplexId);
                 if (complex == null)
@@ -416,7 +411,7 @@ namespace MessengerPlatform.Consumers
                     return;
                 }
                 dbContext.Entry(room).Collection(r => r.Workers).Load();
-                var workership = room.Workers.Find(w => w.BotId == botId);
+                var workership = room.Workers.Find(w => w.BotId == bot.BaseUserId);
                 if (workership == null)
                 {
                     await context.RespondAsync(new BotCreateTextMessageResponse()
@@ -452,7 +447,8 @@ namespace MessengerPlatform.Consumers
                 var sessionIds = (from m in complex.Members from s in m.User.Sessions 
                     select s.SessionId).ToList();
                 sessionIds.AddRange((from w in room.Workers where w.BotId != bot.BaseUserId
-                    from s in dbContext.Bots.Find(w.BotId).Sessions
+                    from s in dbContext.Bots.Include(b => b.Sessions)
+                        .FirstOrDefault(b => b.BaseUserId == w.BotId).Sessions
                     select s.SessionId).ToList());
                 var mcn = new TextMessageNotification()
                 {
@@ -478,10 +474,9 @@ namespace MessengerPlatform.Consumers
             using (var dbContext = new DatabaseContext())
             {
                 var packet = context.Message.Packet;
-                var authHeader = context.Message.Headers[AuthExtracter.AK];
-                var parts = authHeader.Split(" ");
-                var botId = long.Parse(parts[0]);
-                var bot = dbContext.Bots.Find(botId);
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var bot = (Bot) session.BaseUser;
                 dbContext.Entry(bot).Reference(b => b.BotSecret).Load();
                 var complex = dbContext.Complexes.Find(packet.Complex.ComplexId);
                 if (complex == null)
@@ -503,7 +498,7 @@ namespace MessengerPlatform.Consumers
                     return;
                 }
                 dbContext.Entry(room).Collection(r => r.Workers).Load();
-                var workership = room.Workers.Find(w => w.BotId == botId);
+                var workership = room.Workers.Find(w => w.BotId == bot.BaseUserId);
                 if (workership == null)
                 {
                     await context.RespondAsync(new BotCreateFileMessageResponse()
@@ -604,7 +599,8 @@ namespace MessengerPlatform.Consumers
                 var sessionIds = (from m in complex.Members from s in m.User.Sessions 
                     select s.SessionId).ToList();
                 sessionIds.AddRange((from w in room.Workers where w.BotId != bot.BaseUserId
-                    from s in dbContext.Bots.Find(w.BotId).Sessions
+                    from s in dbContext.Bots.Include(b => b.Sessions)
+                        .FirstOrDefault(b => b.BaseUserId == w.BotId).Sessions
                     select s.SessionId).ToList());
                 
                 switch (nextMessage)
@@ -690,27 +686,20 @@ namespace MessengerPlatform.Consumers
         {
             using (var dbContext = new DatabaseContext())
             {
-                try
-                {
-                    var file = context.Message.Packet.Photo;
-                    var fileUsage = context.Message.Packet.FileUsage;
+                var file = context.Message.Packet.Photo;
+                var fileUsage = context.Message.Packet.FileUsage;
 
-                    if (fileUsage != null)
-                    {
-                        file.FileUsages.Clear();
-                        fileUsage.File = file;
-                        fileUsage.Room = dbContext.Rooms.Find(fileUsage.Room.RoomId);
-                        dbContext.AddRange(fileUsage);
-                    }
-                    else
-                        dbContext.AddRange(file);
-
-                    dbContext.SaveChanges();
-                }
-                catch (Exception ex)
+                if (fileUsage != null)
                 {
-                    Console.WriteLine(ex.ToString());
+                    file.FileUsages.Clear();
+                    fileUsage.File = file;
+                    fileUsage.Room = dbContext.Rooms.Find(fileUsage.Room.RoomId);
+                    dbContext.AddRange(fileUsage);
                 }
+                else
+                    dbContext.AddRange(file);
+
+                dbContext.SaveChanges();
             }
 
             return Task.CompletedTask;
@@ -849,6 +838,59 @@ namespace MessengerPlatform.Consumers
             }
 
             await context.RespondAsync(new ConsolidateContactResponse());
+        }
+
+        public Task Consume(ConsumeContext<WorkershipCreatedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var workership = context.Message.Packet.Workership;
+                workership.Room = dbContext.Rooms.Find(workership.Room.RoomId);
+
+                dbContext.Workerships.Add(workership);
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<WorkershipUpdatedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var globalWs = context.Message.Packet.Workership;
+
+                var localWs = dbContext.Workerships.Find(globalWs.WorkershipId);
+
+                localWs.PosX = globalWs.PosX;
+                localWs.PosY = globalWs.PosY;
+                localWs.Width = globalWs.Width;
+                localWs.Height = globalWs.Height;
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<WorkershipDeletedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var globalWs = context.Message.Packet.Workership;
+
+                var localWs = dbContext.Workerships.Find(globalWs.WorkershipId);
+                dbContext.Entry(localWs).Reference(ws => ws.Room).Load();
+                var room = localWs.Room;
+
+                room.Workers.Remove(localWs);
+                dbContext.Workerships.Remove(localWs);
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
         }
     }
 }

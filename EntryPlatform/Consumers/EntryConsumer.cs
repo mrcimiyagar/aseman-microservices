@@ -66,19 +66,9 @@ namespace EntryPlatform.Consumers
 
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
                 var user = (User) session.BaseUser;
-                session.Token = Security.MakeKey64();
-                dbContext.SaveChanges();
                 dbContext.Entry(user).Reference(u => u.UserSecret).Load();
                 dbContext.Entry(user.UserSecret).Reference(us => us.Home).Load();
                 dbContext.Entry(user.UserSecret?.Home).Collection(h => h.Members).Load();
-                
-                SharedArea.Transport.NotifyService<SessionUpdatedNotif>(
-                    Program.Bus,
-                    new Packet() {Session = session},
-                    SharedArea.GlobalVariables.AllQueuesExcept(new []
-                    {
-                        SharedArea.GlobalVariables.ENTRY_QUEUE_NAME
-                    }));
                 
                 await context.RespondAsync(
                     new LoginResponse()

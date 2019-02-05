@@ -11,3 +11,4 @@ F:\Desktop\AsemanBackendProjects\EntryPlatform\obj\Debug\netcoreapp2.2\EntryPlat
 F:\Desktop\AsemanBackendProjects\EntryPlatform\obj\Debug\netcoreapp2.2\EntryPlatform.csproj.CopyComplete
 F:\Desktop\AsemanBackendProjects\EntryPlatform\obj\Debug\netcoreapp2.2\EntryPlatform.dll
 F:\Desktop\AsemanBackendProjects\EntryPlatform\obj\Debug\netcoreapp2.2\EntryPlatform.pdb
+F:\Desktop\AsemanBackendProjects\EntryPlatform\obj\Debug\netcoreapp2.2\EntryPlatform.csprojAssemblyReference.cache

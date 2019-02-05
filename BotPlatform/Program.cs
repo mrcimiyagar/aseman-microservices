@@ -48,6 +48,8 @@ namespace BotPlatform
             });
 
             Bus.Start();
+            
+            Console.WriteLine("Program Loaded.");
         }
     }
 }

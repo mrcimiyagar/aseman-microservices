@@ -11,6 +11,7 @@ namespace BotPlatform.DbContexts
         public DbSet<BotSecret> BotSecrets { get; set; }
         public DbSet<BotCreation> BotCreations { get; set; }
         public DbSet<BotSubscription> BotSubscriptions { get; set; }
+        public DbSet<Workership> Workerships { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder

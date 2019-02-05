@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ApiGateway.DbContexts;
 using ApiGateway.Hubs;
@@ -19,17 +20,20 @@ namespace ApiGateway.Consumers
         , IConsumer<InviteCancelledNotif>, IConsumer<InviteAcceptedNotif>, IConsumer<InvitedIgnoredNotif>
         , IConsumer<BotProfileUpdatedNotif>, IConsumer<BotSubscribedNotif>, IConsumer<BotCreatedNotif>
         , IConsumer<PhotoCreatedNotif>, IConsumer<AudioCreatedNotif>, IConsumer<VideoCreatedNotif>
-        , IConsumer<SessionUpdatedNotif>, IConsumer<RoomDeletionNotif>
+        , IConsumer<SessionUpdatedNotif>, IConsumer<RoomDeletionNotif>, IConsumer<WorkershipCreatedNotif>
+        , IConsumer<WorkershipUpdatedNotif>, IConsumer<WorkershipDeletedNotif>
 
         , IConsumer<PutUserRequest>, IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
         , IConsumer<PutMembershipRequest>, IConsumer<PutSessionRequest>, IConsumer<UpdateUserSecretRequest>
-        , IConsumer<PutServiceMessageRequest>, IConsumer<ConsolidateContactRequest>
+        , IConsumer<PutServiceMessageRequest>, IConsumer<ConsolidateContactRequest>, IConsumer<ConsolidateSessionRequest>
 
         , IConsumer<ComplexDeletionPush>, IConsumer<RoomDeletionPush>, IConsumer<ContactCreationPush>
         , IConsumer<ServiceMessagePush>, IConsumer<InviteCreationPush>, IConsumer<InviteCancellationPush>
         , IConsumer<UserJointComplexPush>, IConsumer<InviteAcceptancePush>, IConsumer<InviteIgnoredPush>
         , IConsumer<BotAdditionToRoomPush>, IConsumer<BotRemovationFromRoomPush>, IConsumer<TextMessagePush>
         , IConsumer<PhotoMessagePush>, IConsumer<AudioMessagePush>, IConsumer<VideoMessagePush>
+        , IConsumer<UserRequestedBotViewPush>, IConsumer<BotSentBotViewPush>, IConsumer<BotUpdatedBotViewPush>
+        , IConsumer<BotAnimatedBotViewPush>, IConsumer<BotRanCommandsOnBotViewPush>
     {
         private readonly IHubContext<NotificationsHub> _notifsHub;
         
@@ -218,6 +222,19 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = context.Message.Packet.Bot.Sessions.FirstOrDefault();
+
+                session.BaseUserId = null;
+                session.BaseUser = null;
+
+                dbContext.Sessions.Add(session);
+
+                dbContext.SaveChanges();
+            }
+
             return Task.CompletedTask;
         }
         
@@ -258,24 +275,44 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
-
-            var globalSession = context.Message.Packet.Session;
-
-            using (var dbContext = new DatabaseContext())
-            {
-                var session = dbContext.Sessions.Find(globalSession.SessionId);
-
-                session.Online = globalSession.Online;
-                session.ConnectionId = globalSession.ConnectionId;
-                session.Token = globalSession.Token;
-
-                dbContext.SaveChanges();
-            }
             
             return Task.CompletedTask;
         }
         
         public Task Consume(ConsumeContext<RoomDeletionNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send(context.Message);
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<WorkershipCreatedNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send(context.Message);
+            }
+            
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<WorkershipUpdatedNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send(context.Message);
+            }
+            
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<WorkershipDeletedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
             {
@@ -356,6 +393,24 @@ namespace ApiGateway.Consumers
                 context.Message.Destination,
                 context.Message.Packet);
             await context.RespondAsync(result);
+        }
+
+        public async Task Consume(ConsumeContext<ConsolidateSessionRequest> context)
+        {
+            var globalSession = context.Message.Packet.Session;
+
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = dbContext.Sessions.Find(globalSession.SessionId);
+
+                session.Online = globalSession.Online;
+                session.ConnectionId = globalSession.ConnectionId;
+                session.Token = globalSession.Token;
+
+                dbContext.SaveChanges();
+            }
+
+            await context.RespondAsync(new ConsolidateSessionResponse());
         }
         
         public Task Consume(ConsumeContext<ComplexDeletionPush> context)
@@ -801,6 +856,176 @@ namespace ApiGateway.Consumers
                     {
                         _notifsHub.Clients.Client(session.ConnectionId)
                             .SendAsync("NotifyVideoMessageReceived", notification);
+                    }
+                    else
+                    {
+                        dbContext.Notifications.Add(notification);
+                    }
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<UserRequestedBotViewPush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var session = dbContext.Sessions.Find(sessionId);
+
+                    var notification = new UserRequestedBotViewNotification()
+                    {
+                        ComplexId = context.Message.Notif.ComplexId,
+                        RoomId = context.Message.Notif.RoomId,
+                        BotId = context.Message.Notif.BotId,
+                        UserSessionId = context.Message.Notif.UserSessionId,
+                        Session = session
+                    };
+                    
+                    if (session.Online)
+                    {
+                        _notifsHub.Clients.Client(session.ConnectionId)
+                            .SendAsync("NotifyUserRequestedBotView", notification);
+                    }
+                    else
+                    {
+                        dbContext.Notifications.Add(notification);
+                    }
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<BotSentBotViewPush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var session = dbContext.Sessions.Find(sessionId);
+
+                    var notification = new BotSentBotViewNotification()
+                    {
+                        ComplexId = context.Message.Notif.ComplexId,
+                        RoomId = context.Message.Notif.RoomId,
+                        BotId = context.Message.Notif.BotId,
+                        ViewData = context.Message.Notif.ViewData,
+                        Session = session
+                    };
+                    
+                    if (session.Online)
+                    {
+                        _notifsHub.Clients.Client(session.ConnectionId)
+                            .SendAsync("NotifyBotSentBotView", notification);
+                    }
+                    else
+                    {
+                        dbContext.Notifications.Add(notification);
+                    }
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<BotUpdatedBotViewPush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var session = dbContext.Sessions.Find(sessionId);
+
+                    var notification = new BotUpdatedBotViewNotification()
+                    {
+                        ComplexId = context.Message.Notif.ComplexId,
+                        RoomId = context.Message.Notif.RoomId,
+                        BotId = context.Message.Notif.BotId,
+                        UpdateData = context.Message.Notif.UpdateData,
+                        Session = session
+                    };
+                    
+                    if (session.Online)
+                    {
+                        _notifsHub.Clients.Client(session.ConnectionId)
+                            .SendAsync("NotifyBotUpdatedBotView", notification);
+                    }
+                    else
+                    {
+                        dbContext.Notifications.Add(notification);
+                    }
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<BotAnimatedBotViewPush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var session = dbContext.Sessions.Find(sessionId);
+
+                    var notification = new BotAnimatedBotViewNotification()
+                    {
+                        ComplexId = context.Message.Notif.ComplexId,
+                        RoomId = context.Message.Notif.RoomId,
+                        BotId = context.Message.Notif.BotId,
+                        AnimData = context.Message.Notif.AnimData,
+                        Session = session
+                    };
+                    
+                    if (session.Online)
+                    {
+                        _notifsHub.Clients.Client(session.ConnectionId)
+                            .SendAsync("NotifyBotAnimatedBotView", notification);
+                    }
+                    else
+                    {
+                        dbContext.Notifications.Add(notification);
+                    }
+                }
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+        
+        public Task Consume(ConsumeContext<BotRanCommandsOnBotViewPush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var session = dbContext.Sessions.Find(sessionId);
+
+                    var notification = new BotRanCommandsOnBotViewNotification()
+                    {
+                        ComplexId = context.Message.Notif.ComplexId,
+                        RoomId = context.Message.Notif.RoomId,
+                        BotId = context.Message.Notif.BotId,
+                        CommandsData = context.Message.Notif.CommandsData,
+                        Session = session
+                    };
+                    
+                    if (session.Online)
+                    {
+                        _notifsHub.Clients.Client(session.ConnectionId)
+                            .SendAsync("NotifyBotRanCommandsOnBotView", notification);
                     }
                     else
                     {

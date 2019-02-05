@@ -51,5 +51,6 @@ namespace SharedArea.Middles
         public string Username { get; set; }
         public string Password { get; set; }
         public string StreamCode { get; set; }
+        public string ViewData { get; set; }
     }
 }
