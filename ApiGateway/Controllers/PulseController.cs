@@ -33,8 +33,8 @@ namespace ApiGateway.Controllers
             }
         }
 
-        [Route("~/api/pulse/send_bot_view")]
-        public async Task<ActionResult<Packet>> SendBotView(Packet packet)
+        [Route("~/api/pulse/bot_send_bot_view")]
+        public async Task<ActionResult<Packet>> BotSendBotView(Packet packet)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -52,8 +52,8 @@ namespace ApiGateway.Controllers
             }
         }
 
-        [Route("~/api/pulse/update_bot_view")]
-        public async Task<ActionResult<Packet>> UpdateBotView(Packet packet)
+        [Route("~/api/pulse/bot_update_bot_view")]
+        public async Task<ActionResult<Packet>> BotUpdateBotView(Packet packet)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -71,8 +71,8 @@ namespace ApiGateway.Controllers
             }
         }
 
-        [Route("~/api/pulse/animate_bot_view")]
-        public async Task<ActionResult<Packet>> AnimateBotView(Packet packet)
+        [Route("~/api/pulse/bot_animate_bot_view")]
+        public async Task<ActionResult<Packet>> BotAnimateBotView(Packet packet)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -90,8 +90,8 @@ namespace ApiGateway.Controllers
             }
         }
         
-        [Route("~/api/pulse/run_commands_on_bot_view")]
-        public async Task<ActionResult<Packet>> RunCommandsOnBotView(Packet packet)
+        [Route("~/api/pulse/bot_run_commands_on_bot_view")]
+        public async Task<ActionResult<Packet>> BotRunCommandsOnBotView(Packet packet)
         {
             using (var dbContext = new DatabaseContext())
             {

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -215,21 +217,38 @@ namespace SearchPlatform.Consumers
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
                 var user = (User) session.BaseUser;
                 dbContext.Entry(user).Collection(u => u.Memberships).Load();
-                var membership = user.Memberships.Find(mem => mem.ComplexId == packet.Complex.ComplexId);
-                if (membership == null)
+                if (packet.Complex.ComplexId > 0)
                 {
+                    var membership = user.Memberships.Find(mem => mem.ComplexId == packet.Complex.ComplexId);
+                    if (membership == null)
+                    {
+                        await context.RespondAsync(new GetRoomsResponse()
+                        {
+                            Packet = new Packet {Status = "error_0B0"}
+                        });
+                        return;
+                    }
+
+                    dbContext.Entry(membership).Reference(mem => mem.Complex).Load();
+                    dbContext.Entry(membership.Complex).Collection(c => c.Rooms).Load();
                     await context.RespondAsync(new GetRoomsResponse()
                     {
-                        Packet = new Packet {Status = "error_0B0"}
+                        Packet = new Packet {Status = "success", Rooms = membership.Complex.Rooms}
                     });
-                    return;
                 }
-                dbContext.Entry(membership).Reference(mem => mem.Complex).Load();
-                dbContext.Entry(membership.Complex).Collection(c => c.Rooms).Load();
-                await context.RespondAsync(new GetRoomsResponse()
+                else
                 {
-                    Packet = new Packet {Status = "success", Rooms = membership.Complex.Rooms}
-                });
+                    var rooms = new List<Room>();
+                    foreach (var membership in user.Memberships)
+                    {
+                        dbContext.Entry(membership).Reference(m => m.Complex).Query().Include(c => c.Rooms).Load();
+                        rooms.AddRange(membership.Complex.Rooms);
+                    }
+                    await context.RespondAsync(new GetRoomsResponse()
+                    {
+                        Packet = new Packet {Status = "success", Rooms = rooms}
+                    });
+                }
             }
         }
         
