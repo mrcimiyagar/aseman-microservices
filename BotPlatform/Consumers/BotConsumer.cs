@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using BotPlatform.DbContexts;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using NLog.Fluent;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Pulse;
 using SharedArea.Commands.Pushes;
@@ -18,7 +17,7 @@ namespace BotPlatform.Consumers
     public class BotConsumer : IConsumer<BotSubscribedNotif>, IConsumer<BotCreatedNotif>, IConsumer<WorkershipCreatedNotif>
         , IConsumer<WorkershipUpdatedNotif>, IConsumer<WorkershipDeletedNotif>, IConsumer<RequestBotViewRequest>
         , IConsumer<SendBotViewRequest>, IConsumer<UpdateBotViewRequest>, IConsumer<AnimateBotViewRequest>
-        , IConsumer<RunCommandsOnBotViewRequest>
+        , IConsumer<RunCommandsOnBotViewRequest>, IConsumer<BotProfileUpdatedNotif>
     {
         public async Task Consume(ConsumeContext<RequestBotViewRequest> context)
         {
@@ -566,6 +565,25 @@ namespace BotPlatform.Consumers
 
                 room.Workers.Remove(localWs);
                 dbContext.Workerships.Remove(localWs);
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<BotProfileUpdatedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var globalBot = context.Message.Packet.Bot;
+
+                var localBot = dbContext.Bots.Find(globalBot.BaseUserId);
+
+                localBot.Title = globalBot.Title;
+                localBot.Avatar = globalBot.Avatar;
+                localBot.Description = globalBot.Description;
+                localBot.ViewURL = globalBot.ViewURL;
 
                 dbContext.SaveChanges();
             }

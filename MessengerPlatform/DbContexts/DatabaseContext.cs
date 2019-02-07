@@ -10,6 +10,9 @@ namespace MessengerPlatform.DbContexts
         public DbSet<File> Files { get; set; }
         public DbSet<FileUsage> FileUsages { get; set; }
         public DbSet<Workership> Workerships { get; set; }
+        public DbSet<BotSecret> BotSecrets { get; set; }
+        public DbSet<BotCreation> BotCreations { get; set; }
+        public DbSet<BotSubscription> BotSubscriptions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder

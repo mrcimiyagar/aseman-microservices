@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using SharedArea.Entities;
+using SharedArea.Notifications;
 
 namespace SharedArea.Middles
 {
@@ -48,6 +49,7 @@ namespace SharedArea.Middles
         public Photo Photo { get; set; }
         public Audio Audio { get; set; }
         public Video Video { get; set; }
+        public Notification Notif { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string StreamCode { get; set; }

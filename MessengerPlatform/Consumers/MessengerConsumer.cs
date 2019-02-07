@@ -23,6 +23,7 @@ namespace MessengerPlatform.Consumers
         , IConsumer<BotCreateFileMessageRequest>, IConsumer<PhotoCreatedNotif>, IConsumer<AudioCreatedNotif>
         , IConsumer<VideoCreatedNotif>, IConsumer<PutServiceMessageRequest>, IConsumer<ConsolidateContactRequest>
         , IConsumer<WorkershipCreatedNotif>, IConsumer<WorkershipUpdatedNotif>, IConsumer<WorkershipDeletedNotif>
+        , IConsumer<BotProfileUpdatedNotif>
     {
         public Task Consume(ConsumeContext<BotCreatedNotif> context)
         {
@@ -47,6 +48,25 @@ namespace MessengerPlatform.Consumers
                 dbContext.SaveChanges();
             }
 
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<BotProfileUpdatedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var globalBot = context.Message.Packet.Bot;
+
+                var localBot = dbContext.Bots.Find(globalBot.BaseUserId);
+
+                localBot.Title = globalBot.Title;
+                localBot.Avatar = globalBot.Avatar;
+                localBot.Description = globalBot.Description;
+                localBot.ViewURL = globalBot.ViewURL;
+
+                dbContext.SaveChanges();
+            }
+            
             return Task.CompletedTask;
         }
 

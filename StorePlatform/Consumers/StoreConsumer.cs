@@ -13,8 +13,8 @@ using SharedArea.Middles;
 
 namespace StorePlatform.Consumers
 {
-    public class StoreConsumer : IConsumer<GetBotStoreContentRequest>, IConsumer<BotCreatedNotif>
-        , IConsumer<BotSubscribedNotif>
+    public class StoreConsumer : IConsumer<GetBotStoreContentRequest>, IConsumer<BotSubscribedNotif>
+        , IConsumer<BotCreatedNotif>, IConsumer<BotProfileUpdatedNotif>
     {
         public async Task Consume(ConsumeContext<GetBotStoreContentRequest> context)
         {
@@ -45,10 +45,30 @@ namespace StorePlatform.Consumers
             }
         }
 
+        public Task Consume(ConsumeContext<BotSubscribedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var subscription = context.Message.Packet.BotSubscription;
+                var globalBot = context.Message.Packet.Bot;
+                var globalUser = context.Message.Packet.User;
+
+                var localUser = dbContext.Users.Find(globalUser.BaseUserId);
+                var localBot = dbContext.Bots.Find(globalBot.BaseUserId);
+
+                subscription.Bot = localBot;
+                subscription.Subscriber = localUser;
+
+                dbContext.BotSubscriptions.Add(subscription);
+
+                dbContext.SaveChanges();
+            }
+            
+            return Task.CompletedTask;
+        }
+
         public Task Consume(ConsumeContext<BotCreatedNotif> context)
         {
-            Console.WriteLine(JsonConvert.SerializeObject(context.Message.Packet));
-            
             using (var dbContext = new DatabaseContext())
             {
                 var globalUser = context.Message.Packet.User;
@@ -73,21 +93,18 @@ namespace StorePlatform.Consumers
             return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<BotSubscribedNotif> context)
+        public Task Consume(ConsumeContext<BotProfileUpdatedNotif> context)
         {
             using (var dbContext = new DatabaseContext())
             {
-                var subscription = context.Message.Packet.BotSubscription;
                 var globalBot = context.Message.Packet.Bot;
-                var globalUser = context.Message.Packet.User;
 
-                var localUser = dbContext.Users.Find(globalUser.BaseUserId);
                 var localBot = dbContext.Bots.Find(globalBot.BaseUserId);
 
-                subscription.Bot = localBot;
-                subscription.Subscriber = localUser;
-
-                dbContext.BotSubscriptions.Add(subscription);
+                localBot.Title = globalBot.Title;
+                localBot.Avatar = globalBot.Avatar;
+                localBot.Description = globalBot.Description;
+                localBot.ViewURL = globalBot.ViewURL;
 
                 dbContext.SaveChanges();
             }

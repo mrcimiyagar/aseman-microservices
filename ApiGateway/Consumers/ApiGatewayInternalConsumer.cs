@@ -2,9 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using ApiGateway.DbContexts;
-using ApiGateway.Hubs;
 using MassTransit;
-using Microsoft.AspNetCore.SignalR;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
 using SharedArea.Commands.Internal.Responses;
@@ -34,14 +32,7 @@ namespace ApiGateway.Consumers
         , IConsumer<PhotoMessagePush>, IConsumer<AudioMessagePush>, IConsumer<VideoMessagePush>
         , IConsumer<UserRequestedBotViewPush>, IConsumer<BotSentBotViewPush>, IConsumer<BotUpdatedBotViewPush>
         , IConsumer<BotAnimatedBotViewPush>, IConsumer<BotRanCommandsOnBotViewPush>
-    {
-        private readonly IHubContext<NotificationsHub> _notifsHub;
-        
-        public ApiGatewayInternalConsumer(IHubContext<NotificationsHub> notifsHub)
-        {
-            _notifsHub = notifsHub;
-        }
-        
+    {   
         public Task Consume(ConsumeContext<UserCreatedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -227,10 +218,13 @@ namespace ApiGateway.Consumers
             {
                 var session = context.Message.Packet.Bot.Sessions.FirstOrDefault();
 
-                session.BaseUserId = null;
-                session.BaseUser = null;
+                if (session != null)
+                {
+                    session.BaseUserId = null;
+                    session.BaseUser = null;
 
-                dbContext.Sessions.Add(session);
+                    dbContext.Sessions.Add(session);
+                }
 
                 dbContext.SaveChanges();
             }
@@ -421,22 +415,21 @@ namespace ApiGateway.Consumers
                 {
                     var session = dbContext.Sessions.Find(sessionId);
 
-                    var notif = new ComplexDeletionNotification()
+                    var notification = new ComplexDeletionNotification()
                     {
                         ComplexId = context.Message.Notif.ComplexId,
                         Session = session
                     };
                     
-                    if (session.Online)
-                        _notifsHub.Clients.Client(session.ConnectionId)
-                            .SendAsync("NotifyComplexDeleted", notif);
-                    else
-                    {
-                        dbContext.Notifications.Add(notif);
-                    }
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -450,23 +443,22 @@ namespace ApiGateway.Consumers
                 {
                     var session = dbContext.Sessions.Find(sessionId);
 
-                    var notif = new RoomDeletionNotification()
+                    var notification = new RoomDeletionNotification()
                     {
                         ComplexId = context.Message.Notif.ComplexId,
                         RoomId = context.Message.Notif.RoomId,
                         Session = session
                     };
                     
-                    if (session.Online)
-                        _notifsHub.Clients.Client(session.ConnectionId)
-                            .SendAsync("NotifyRoomDeleted", notif);
-                    else
-                    {
-                        dbContext.Notifications.Add(notif);
-                    }
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -480,23 +472,21 @@ namespace ApiGateway.Consumers
                 {
                     var s = dbContext.Sessions.Find(sessionId);
 
-                    var ccn = new ContactCreationNotification()
+                    var notification = new ContactCreationNotification()
                     {
                         Contact = context.Message.Notif.Contact,
                         Session = s
-                    };                    
-                    if (s.Online)
-                    {
-                        _notifsHub.Clients.Client(s.ConnectionId)
-                            .SendAsync("NotifyContactCreated", ccn);
-                    } 
-                    else
-                    {
-                        dbContext.Notifications.Add(ccn);
-                    }   
+                    };
+                    
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -510,23 +500,21 @@ namespace ApiGateway.Consumers
                 {
                     var s = dbContext.Sessions.Find(sessionId);
 
-                    var mcn = new ServiceMessageNotification()
+                    var notification = new ServiceMessageNotification()
                     {
                         Message = context.Message.Notif.Message,
                         Session = s
-                    };                    
-                    if (s.Online)
-                    {
-                        _notifsHub.Clients.Client(s.ConnectionId)
-                            .SendAsync("NotifyServiceMessageReceived", mcn);
-                    } 
-                    else
-                    {
-                        dbContext.Notifications.Add(mcn);
-                    }   
+                    };
+                    
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -540,23 +528,21 @@ namespace ApiGateway.Consumers
                 {
                     var s = dbContext.Sessions.Find(sessionId);
 
-                    var icn = new InviteCreationNotification()
+                    var notification = new InviteCreationNotification()
                     {
                         Invite = context.Message.Notif.Invite,
                         Session = s
                     };
-                    if (s.Online)
-                    {
-                        _notifsHub.Clients.Client(s.ConnectionId)
-                            .SendAsync("NotifyInviteCreated", icn);
-                    }
-                    else
-                    {
-                        dbContext.Notifications.Add(icn);
-                    }  
+                    
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -570,23 +556,21 @@ namespace ApiGateway.Consumers
                 {
                     var s = dbContext.Sessions.Find(sessionId);
 
-                    var icn = new InviteCancellationNotification()
+                    var notification = new InviteCancellationNotification()
                     {
                         Invite = context.Message.Notif.Invite,
                         Session = s
                     };
-                    if (s.Online)
-                    {
-                        _notifsHub.Clients.Client(s.ConnectionId)
-                            .SendAsync("NotifyInviteCancelled", icn);
-                    }
-                    else
-                    {
-                        dbContext.Notifications.Add(icn);
-                    }  
+                    
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -600,24 +584,22 @@ namespace ApiGateway.Consumers
                 {
                     var s = dbContext.Sessions.Find(sessionId);
 
-                    var icn = new UserJointComplexNotification()
+                    var notification = new UserJointComplexNotification()
                     {
                         ComplexId = context.Message.Notif.ComplexId,
                         UserId = context.Message.Notif.UserId,
                         Session = s
                     };
-                    if (s.Online)
-                    {
-                        _notifsHub.Clients.Client(s.ConnectionId)
-                            .SendAsync("NotifyUserJointComplex", icn);
-                    }
-                    else
-                    {
-                        dbContext.Notifications.Add(icn);
-                    }  
+                    
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -631,23 +613,21 @@ namespace ApiGateway.Consumers
                 {
                     var s = dbContext.Sessions.Find(sessionId);
 
-                    var icn = new InviteAcceptanceNotification()
+                    var notification = new InviteAcceptanceNotification()
                     {
                         Invite = context.Message.Notif.Invite,
                         Session = s
                     };
-                    if (s.Online)
-                    {
-                        _notifsHub.Clients.Client(s.ConnectionId)
-                            .SendAsync("NotifyInviteAccepted", icn);
-                    }
-                    else
-                    {
-                        dbContext.Notifications.Add(icn);
-                    }  
+                    
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -661,23 +641,21 @@ namespace ApiGateway.Consumers
                 {
                     var s = dbContext.Sessions.Find(sessionId);
 
-                    var icn = new InviteIgnoranceNotification()
+                    var notification = new InviteIgnoranceNotification()
                     {
                         Invite = context.Message.Notif.Invite,
                         Session = s
                     };
-                    if (s.Online)
-                    {
-                        _notifsHub.Clients.Client(s.ConnectionId)
-                            .SendAsync("NotifyInviteIgnored", icn);
-                    }
-                    else
-                    {
-                        dbContext.Notifications.Add(icn);
-                    }  
+                    
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -691,24 +669,21 @@ namespace ApiGateway.Consumers
                 {
                     var session = dbContext.Sessions.Find(sessionId);
 
-                    var addition = new BotAdditionToRoomNotification()
+                    var notification = new BotAdditionToRoomNotification()
                     {
                         Room = context.Message.Notif.Room,
                         Session = session
                     };
                     
-                    if (session.Online)
-                    {
-                        _notifsHub.Clients.Client(session.ConnectionId)
-                            .SendAsync("NotifyBotAddedToRoom", addition);
-                    }
-                    else
-                    {
-                        dbContext.Notifications.Add(addition);
-                    }
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -722,24 +697,21 @@ namespace ApiGateway.Consumers
                 {
                     var session = dbContext.Sessions.Find(sessionId);
 
-                    var removation = new BotRemovationFromRoomNotification()
+                    var notification = new BotRemovationFromRoomNotification()
                     {
                         Room = context.Message.Notif.Room,
                         Session = session
                     };
                     
-                    if (session.Online)
-                    {
-                        _notifsHub.Clients.Client(session.ConnectionId)
-                            .SendAsync("NotifyBotRemovedFromRoom", removation);
-                    }
-                    else
-                    {
-                        dbContext.Notifications.Add(removation);
-                    }
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -759,18 +731,15 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    if (session.Online)
-                    {
-                        _notifsHub.Clients.Client(session.ConnectionId)
-                            .SendAsync("NotifyTextMessageReceived", notification);
-                    }
-                    else
-                    {
-                        dbContext.Notifications.Add(notification);
-                    }
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -790,18 +759,15 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    if (session.Online)
-                    {
-                        _notifsHub.Clients.Client(session.ConnectionId)
-                            .SendAsync("NotifyPhotoMessageReceived", notification);
-                    }
-                    else
-                    {
-                        dbContext.Notifications.Add(notification);
-                    }
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -821,18 +787,15 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    if (session.Online)
-                    {
-                        _notifsHub.Clients.Client(session.ConnectionId)
-                            .SendAsync("NotifyAudioMessageReceived", notification);
-                    }
-                    else
-                    {
-                        dbContext.Notifications.Add(notification);
-                    }
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -852,18 +815,15 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    if (session.Online)
-                    {
-                        _notifsHub.Clients.Client(session.ConnectionId)
-                            .SendAsync("NotifyVideoMessageReceived", notification);
-                    }
-                    else
-                    {
-                        dbContext.Notifications.Add(notification);
-                    }
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -886,18 +846,15 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    if (session.Online)
-                    {
-                        _notifsHub.Clients.Client(session.ConnectionId)
-                            .SendAsync("NotifyUserRequestedBotView", notification);
-                    }
-                    else
-                    {
-                        dbContext.Notifications.Add(notification);
-                    }
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -920,18 +877,15 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    if (session.Online)
-                    {
-                        _notifsHub.Clients.Client(session.ConnectionId)
-                            .SendAsync("NotifyBotSentBotView", notification);
-                    }
-                    else
-                    {
-                        dbContext.Notifications.Add(notification);
-                    }
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -954,18 +908,15 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    if (session.Online)
-                    {
-                        _notifsHub.Clients.Client(session.ConnectionId)
-                            .SendAsync("NotifyBotUpdatedBotView", notification);
-                    }
-                    else
-                    {
-                        dbContext.Notifications.Add(notification);
-                    }
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -988,18 +939,15 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    if (session.Online)
-                    {
-                        _notifsHub.Clients.Client(session.ConnectionId)
-                            .SendAsync("NotifyBotAnimatedBotView", notification);
-                    }
-                    else
-                    {
-                        dbContext.Notifications.Add(notification);
-                    }
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;
@@ -1022,18 +970,15 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    if (session.Online)
-                    {
-                        _notifsHub.Clients.Client(session.ConnectionId)
-                            .SendAsync("NotifyBotRanCommandsOnBotView", notification);
-                    }
-                    else
-                    {
-                        dbContext.Notifications.Add(notification);
-                    }
+                    dbContext.Notifications.Add(notification);
                 }
 
                 dbContext.SaveChanges();
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
             }
             
             return Task.CompletedTask;

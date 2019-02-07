@@ -20,6 +20,7 @@
           <e p="HomeController.cs" t="Include" />
           <e p="InviteController.cs" t="Include" />
           <e p="MessageController.cs" t="Include" />
+          <e p="NotifController.cs" t="Include" />
           <e p="PulseController.cs" t="Include" />
           <e p="RoomController.cs" t="Include" />
           <e p="UserController.cs" t="Include" />
@@ -56,6 +57,7 @@
         </e>
         <e p="Startup.cs" t="Include" />
         <e p="Utils" t="Include">
+          <e p="Pusher.cs" t="Include" />
           <e p="Security.cs" t="Include" />
         </e>
       </e>

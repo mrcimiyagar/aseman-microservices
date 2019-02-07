@@ -7,6 +7,10 @@ namespace SearchPlatform.DbContexts
 {
     public class DatabaseContext : SharedArea.DbContexts.DatabaseContext
     {
+        public DbSet<BotSecret> BotSecrets { get; set; }
+        public DbSet<BotCreation> BotCreations { get; set; }
+        public DbSet<BotSubscription> BotSubscriptions { get; set; }
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder
                 .UseSqlServer(@"Server=localhost\SQLEXPRESS;Database=SearchPlatformDb;Trusted_Connection=True;");
@@ -45,6 +49,18 @@ namespace SearchPlatform.DbContexts
 
             modelBuilder.Entity<Bot>()
                 .Property(b => b.BaseUserId)
+                .ValueGeneratedNever();
+            
+            modelBuilder.Entity<BotSecret>()
+                .Property(u => u.BotSecretId)
+                .ValueGeneratedNever();
+            
+            modelBuilder.Entity<BotCreation>()
+                .Property(u => u.BotCreationId)
+                .ValueGeneratedNever();
+            
+            modelBuilder.Entity<BotSubscription>()
+                .Property(u => u.BotSubscriptionId)
                 .ValueGeneratedNever();
             
             modelBuilder.Entity<Contact>()

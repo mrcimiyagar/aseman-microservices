@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ApiGateway.Consumers;
 using ApiGateway.DbContexts;
 using ApiGateway.Hubs;
+using ApiGateway.Utils;
 using MassTransit;
 using MassTransit.NLogIntegration;
 using Microsoft.AspNetCore.Builder;
@@ -17,12 +18,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using SharedArea.Commands;
 using SharedArea.Utils;
 
 namespace ApiGateway
 {
     public class Startup
     {
+        public static Pusher Pusher { get; set; }
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -77,6 +81,8 @@ namespace ApiGateway
             {
                 DatabaseConfig.ConfigDatabase(dbContext);
             }
+            
+            Pusher = new Pusher(notifsHub);
                         
             Program.Bus = MassTransit.Bus.Factory.CreateUsingRabbitMq(sbc =>
             {
@@ -101,7 +107,7 @@ namespace ApiGateway
                 sbc.UseNLog();
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.API_GATEWAY_INTERNAL_QUEUE_NAME, ep =>
                 {
-                    ep.Consumer<ApiGatewayInternalConsumer>(() => new ApiGatewayInternalConsumer(notifsHub));
+                    ep.Consumer<ApiGatewayInternalConsumer>();
                 });
             });
 

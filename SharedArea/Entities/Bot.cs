@@ -5,6 +5,8 @@ namespace SharedArea.Entities
 {
     public class Bot : BaseUser
     {
+        [JsonProperty("description")]
+        public string Description { get; set; }
         [JsonProperty("viewURL")]
         public string ViewURL { get; set; }
         [JsonProperty("botSecret")]

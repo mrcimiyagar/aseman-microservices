@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using ApiGateway.DbContexts;
 using ApiGateway.Utils;
 using Microsoft.AspNetCore.SignalR;
@@ -40,6 +41,22 @@ namespace ApiGateway.Hubs
         {
             return "keep-alive : " + Convert.ToInt64((DateTime.Now - DateTime.MinValue)
                            .TotalMilliseconds).ToString(CultureInfo.InvariantCulture);
+        }
+
+        public override Task OnDisconnectedAsync(Exception exception)
+        {
+            Console.WriteLine(Context.ConnectionId + " client disconnected .");
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = dbContext.Sessions.FirstOrDefault(s => s.ConnectionId == Context.ConnectionId);
+                if (session != null)
+                {
+                    session.ConnectionId = "";
+                    session.Online = false;
+                    dbContext.SaveChanges();
+                }
+            }
+            return base.OnDisconnectedAsync(exception);
         }
     }
 }

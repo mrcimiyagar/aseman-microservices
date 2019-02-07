@@ -14,8 +14,8 @@ using SharedArea.Notifications;
 namespace DesktopPlatform.Consumers
 {
     public class DesktopConsumer : IConsumer<AddBotToRoomRequest>, IConsumer<UpdateWorkershipRequest>
-        , IConsumer<RemoveBotFromRoomRequest>, IConsumer<GetWorkershipsRequest>, IConsumer<BotProfileUpdatedNotif>
-        , IConsumer<BotSubscribedNotif>, IConsumer<BotCreatedNotif>
+        , IConsumer<RemoveBotFromRoomRequest>, IConsumer<GetWorkershipsRequest>, IConsumer<BotSubscribedNotif>
+        , IConsumer<BotCreatedNotif>, IConsumer<BotProfileUpdatedNotif>
     {
         public async Task Consume(ConsumeContext<AddBotToRoomRequest> context)
         {
@@ -299,24 +299,6 @@ namespace DesktopPlatform.Consumers
             }
         }
 
-        public Task Consume(ConsumeContext<BotProfileUpdatedNotif> context)
-        {
-            using (var dbContext = new DatabaseContext())
-            {
-                var globalBot = context.Message.Packet.Bot;
-
-                var localBot = dbContext.Bots.Find(globalBot.BaseUserId);
-
-                localBot.Title = globalBot.Title;
-                localBot.Avatar = globalBot.Avatar;
-                localBot.ViewURL = globalBot.ViewURL;
-
-                dbContext.SaveChanges();
-            }
-            
-            return Task.CompletedTask;
-        }
-
         public Task Consume(ConsumeContext<BotSubscribedNotif> context)
         {
             using (var dbContext = new DatabaseContext())
@@ -356,8 +338,27 @@ namespace DesktopPlatform.Consumers
 
                 subscription.Bot = bot;
                 subscription.Subscriber = localUser;
-                
+
                 dbContext.AddRange(bot, botSecret, session, creation, subscription);
+
+                dbContext.SaveChanges();
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<BotProfileUpdatedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var globalBot = context.Message.Packet.Bot;
+
+                var localBot = dbContext.Bots.Find(globalBot.BaseUserId);
+
+                localBot.Title = globalBot.Title;
+                localBot.Avatar = globalBot.Avatar;
+                localBot.Description = globalBot.Description;
+                localBot.ViewURL = globalBot.ViewURL;
 
                 dbContext.SaveChanges();
             }

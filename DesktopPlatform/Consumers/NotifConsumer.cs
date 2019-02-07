@@ -1,11 +1,9 @@
 ﻿
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DesktopPlatform.DbContexts;
 using MassTransit;
-using Newtonsoft.Json;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Entities;
 
