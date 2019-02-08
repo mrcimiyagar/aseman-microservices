@@ -1,10 +1,10 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "F:\\Desktop\\AsemanBackendProjects\\DesktopPlatform\\DesktopPlatform.csproj",
+    "projectUniqueName": "F:\\Desktop\\asemanbackendprojects\\DesktopPlatform\\DesktopPlatform.csproj",
     "projectName": "DesktopPlatform",
-    "projectPath": "F:\\Desktop\\AsemanBackendProjects\\DesktopPlatform\\DesktopPlatform.csproj",
-    "outputPath": "F:\\Desktop\\AsemanBackendProjects\\DesktopPlatform\\obj\\",
+    "projectPath": "F:\\Desktop\\asemanbackendprojects\\DesktopPlatform\\DesktopPlatform.csproj",
+    "outputPath": "F:\\Desktop\\asemanbackendprojects\\DesktopPlatform\\obj\\",
     "projectStyle": "PackageReference",
     "fallbackFolders": [
       "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -15,8 +15,8 @@
     "frameworks": {
       "netcoreapp2.2": {
         "projectReferences": {
-          "F:\\Desktop\\AsemanBackendProjects\\SharedArea\\SharedArea.csproj": {
-            "projectPath": "F:\\Desktop\\AsemanBackendProjects\\SharedArea\\SharedArea.csproj"
+          "F:\\Desktop\\asemanbackendprojects\\SharedArea\\SharedArea.csproj": {
+            "projectPath": "F:\\Desktop\\asemanbackendprojects\\SharedArea\\SharedArea.csproj"
           }
         }
       }

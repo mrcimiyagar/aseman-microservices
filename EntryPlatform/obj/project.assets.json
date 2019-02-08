@@ -6820,11 +6820,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\Desktop\\AsemanBackendProjects\\EntryPlatform\\EntryPlatform.csproj",
+      "projectUniqueName": "F:\\Desktop\\asemanbackendprojects\\EntryPlatform\\EntryPlatform.csproj",
       "projectName": "EntryPlatform",
-      "projectPath": "F:\\Desktop\\AsemanBackendProjects\\EntryPlatform\\EntryPlatform.csproj",
+      "projectPath": "F:\\Desktop\\asemanbackendprojects\\EntryPlatform\\EntryPlatform.csproj",
       "packagesPath": "C:\\Users\\keyhan\\.nuget\\packages\\",
-      "outputPath": "F:\\Desktop\\AsemanBackendProjects\\EntryPlatform\\obj\\",
+      "outputPath": "F:\\Desktop\\asemanbackendprojects\\EntryPlatform\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -6841,8 +6841,8 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "F:\\Desktop\\AsemanBackendProjects\\SharedArea\\SharedArea.csproj": {
-              "projectPath": "F:\\Desktop\\AsemanBackendProjects\\SharedArea\\SharedArea.csproj"
+            "F:\\Desktop\\asemanbackendprojects\\SharedArea\\SharedArea.csproj": {
+              "projectPath": "F:\\Desktop\\asemanbackendprojects\\SharedArea\\SharedArea.csproj"
             }
           }
         }

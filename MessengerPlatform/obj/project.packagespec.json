@@ -1,10 +1,10 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "F:\\Desktop\\AsemanBackendProjects\\MessengerPlatform\\MessengerPlatform.csproj",
+    "projectUniqueName": "F:\\Desktop\\asemanbackendprojects\\MessengerPlatform\\MessengerPlatform.csproj",
     "projectName": "MessengerPlatform",
-    "projectPath": "F:\\Desktop\\AsemanBackendProjects\\MessengerPlatform\\MessengerPlatform.csproj",
-    "outputPath": "F:\\Desktop\\AsemanBackendProjects\\MessengerPlatform\\obj\\",
+    "projectPath": "F:\\Desktop\\asemanbackendprojects\\MessengerPlatform\\MessengerPlatform.csproj",
+    "outputPath": "F:\\Desktop\\asemanbackendprojects\\MessengerPlatform\\obj\\",
     "projectStyle": "PackageReference",
     "fallbackFolders": [
       "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -15,8 +15,8 @@
     "frameworks": {
       "netcoreapp2.2": {
         "projectReferences": {
-          "F:\\Desktop\\AsemanBackendProjects\\SharedArea\\SharedArea.csproj": {
-            "projectPath": "F:\\Desktop\\AsemanBackendProjects\\SharedArea\\SharedArea.csproj"
+          "F:\\Desktop\\asemanbackendprojects\\SharedArea\\SharedArea.csproj": {
+            "projectPath": "F:\\Desktop\\asemanbackendprojects\\SharedArea\\SharedArea.csproj"
           }
         }
       }

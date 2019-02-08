@@ -6820,11 +6820,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\Desktop\\AsemanBackendProjects\\StorePlatform\\StorePlatform.csproj",
+      "projectUniqueName": "F:\\Desktop\\asemanbackendprojects\\StorePlatform\\StorePlatform.csproj",
       "projectName": "StorePlatform",
-      "projectPath": "F:\\Desktop\\AsemanBackendProjects\\StorePlatform\\StorePlatform.csproj",
+      "projectPath": "F:\\Desktop\\asemanbackendprojects\\StorePlatform\\StorePlatform.csproj",
       "packagesPath": "C:\\Users\\keyhan\\.nuget\\packages\\",
-      "outputPath": "F:\\Desktop\\AsemanBackendProjects\\StorePlatform\\obj\\",
+      "outputPath": "F:\\Desktop\\asemanbackendprojects\\StorePlatform\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -6841,8 +6841,8 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "F:\\Desktop\\AsemanBackendProjects\\SharedArea\\SharedArea.csproj": {
-              "projectPath": "F:\\Desktop\\AsemanBackendProjects\\SharedArea\\SharedArea.csproj"
+            "F:\\Desktop\\asemanbackendprojects\\SharedArea\\SharedArea.csproj": {
+              "projectPath": "F:\\Desktop\\asemanbackendprojects\\SharedArea\\SharedArea.csproj"
             }
           }
         }

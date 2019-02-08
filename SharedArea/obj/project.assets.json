@@ -6797,11 +6797,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\Desktop\\AsemanBackendProjects\\SharedArea\\SharedArea.csproj",
+      "projectUniqueName": "F:\\Desktop\\asemanbackendprojects\\SharedArea\\SharedArea.csproj",
       "projectName": "SharedArea",
-      "projectPath": "F:\\Desktop\\AsemanBackendProjects\\SharedArea\\SharedArea.csproj",
+      "projectPath": "F:\\Desktop\\asemanbackendprojects\\SharedArea\\SharedArea.csproj",
       "packagesPath": "C:\\Users\\keyhan\\.nuget\\packages\\",
-      "outputPath": "F:\\Desktop\\AsemanBackendProjects\\SharedArea\\obj\\",
+      "outputPath": "F:\\Desktop\\asemanbackendprojects\\SharedArea\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

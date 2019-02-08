@@ -13183,11 +13183,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\Desktop\\AsemanBackendProjects\\ApiGateway\\ApiGateway.csproj",
+      "projectUniqueName": "F:\\Desktop\\asemanbackendprojects\\ApiGateway\\ApiGateway.csproj",
       "projectName": "ApiGateway",
-      "projectPath": "F:\\Desktop\\AsemanBackendProjects\\ApiGateway\\ApiGateway.csproj",
+      "projectPath": "F:\\Desktop\\asemanbackendprojects\\ApiGateway\\ApiGateway.csproj",
       "packagesPath": "C:\\Users\\keyhan\\.nuget\\packages\\",
-      "outputPath": "F:\\Desktop\\AsemanBackendProjects\\ApiGateway\\obj\\",
+      "outputPath": "F:\\Desktop\\asemanbackendprojects\\ApiGateway\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -13204,8 +13204,8 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "F:\\Desktop\\AsemanBackendProjects\\SharedArea\\SharedArea.csproj": {
-              "projectPath": "F:\\Desktop\\AsemanBackendProjects\\SharedArea\\SharedArea.csproj"
+            "F:\\Desktop\\asemanbackendprojects\\SharedArea\\SharedArea.csproj": {
+              "projectPath": "F:\\Desktop\\asemanbackendprojects\\SharedArea\\SharedArea.csproj"
             }
           }
         }

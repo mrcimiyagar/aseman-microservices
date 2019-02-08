@@ -89,7 +89,7 @@ namespace EntryPlatform.Consumers
                 var pending = dbContext.Pendings.FirstOrDefault(p => p.Email == packet.Email);
                 if (pending != null)
                 {
-                    if (packet.VerifyCode == "123")
+                    if (packet.VerifyCode == pending.VerifyCode)
                     {
                         User user;
                         var token = Security.MakeKey64();
