@@ -42,7 +42,7 @@ namespace SharedArea
         public const string FILE_QUEUE_NAME = "FileQueue";
         public const string FILE_QUEUE_PATH = RABBITMQ_SERVER_URL + "/" + FILE_QUEUE_NAME;
         
-        public const int RABBITMQ_REQUEST_TIMEOUT = 30;
+        public const int RABBITMQ_REQUEST_TIMEOUT = 60;
 
         public static string[] AllQueuesExcept(string[] queueNames)
         {

@@ -11,3 +11,4 @@ F:\Desktop\asemanbackendprojects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPl
 F:\Desktop\asemanbackendprojects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.csproj.CopyComplete
 F:\Desktop\asemanbackendprojects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.dll
 F:\Desktop\asemanbackendprojects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.pdb
+F:\Desktop\asemanbackendprojects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.csprojAssemblyReference.cache

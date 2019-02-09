@@ -35,6 +35,9 @@
         <e p="Hubs" t="Include">
           <e p="NotificationsHub.cs" t="Include" />
         </e>
+        <e p="Middleware" t="Include">
+          <e p="LoggerMiddleware.cs" t="Include" />
+        </e>
         <e p="Models" t="Include">
           <e p="Forms" t="Include">
             <e p="AudioUploadForm.cs" t="Include" />
@@ -224,8 +227,8 @@
                 <e p="main.477ccc83.css.map" t="Include" />
               </e>
               <e p="js" t="Include">
-                <e p="main.7249d0ed.js" t="Include" />
-                <e p="main.7249d0ed.js.map" t="Include" />
+                <e p="main.c0a53f2e.js" t="Include" />
+                <e p="main.c0a53f2e.js.map" t="Include" />
               </e>
             </e>
           </e>
@@ -255,6 +258,9 @@
         </e>
         <e p="Controllers" t="Include">
           <e p="ServiceController.cs" t="Include" />
+        </e>
+        <e p="DbContexts" t="Include">
+          <e p="DatabaseContext.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">

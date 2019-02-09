@@ -11,3 +11,4 @@ F:\Desktop\asemanbackendprojects\StorePlatform\obj\Debug\netcoreapp2.2\StorePlat
 F:\Desktop\asemanbackendprojects\StorePlatform\obj\Debug\netcoreapp2.2\StorePlatform.csproj.CopyComplete
 F:\Desktop\asemanbackendprojects\StorePlatform\obj\Debug\netcoreapp2.2\StorePlatform.dll
 F:\Desktop\asemanbackendprojects\StorePlatform\obj\Debug\netcoreapp2.2\StorePlatform.pdb
+F:\Desktop\asemanbackendprojects\StorePlatform\obj\Debug\netcoreapp2.2\StorePlatform.csprojAssemblyReference.cache

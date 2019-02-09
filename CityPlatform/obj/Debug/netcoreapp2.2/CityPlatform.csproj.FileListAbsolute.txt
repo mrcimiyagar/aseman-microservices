@@ -11,3 +11,4 @@ F:\Desktop\asemanbackendprojects\CityPlatform\obj\Debug\netcoreapp2.2\CityPlatfo
 F:\Desktop\asemanbackendprojects\CityPlatform\obj\Debug\netcoreapp2.2\CityPlatform.csproj.CopyComplete
 F:\Desktop\asemanbackendprojects\CityPlatform\obj\Debug\netcoreapp2.2\CityPlatform.dll
 F:\Desktop\asemanbackendprojects\CityPlatform\obj\Debug\netcoreapp2.2\CityPlatform.pdb
+F:\Desktop\asemanbackendprojects\CityPlatform\obj\Debug\netcoreapp2.2\CityPlatform.csprojAssemblyReference.cache

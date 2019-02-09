@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ApiGateway.Consumers;
 using ApiGateway.DbContexts;
 using ApiGateway.Hubs;
+using ApiGateway.Middleware;
 using ApiGateway.Utils;
 using MassTransit;
 using MassTransit.NLogIntegration;
@@ -69,6 +70,8 @@ namespace ApiGateway
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            
+            app.UseMiddleware<LoggerMiddleware>();
 
             app.UseHttpsRedirection();
             app.UseMvc();

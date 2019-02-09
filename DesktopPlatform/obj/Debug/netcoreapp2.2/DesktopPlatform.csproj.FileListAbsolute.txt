@@ -11,3 +11,4 @@ F:\Desktop\asemanbackendprojects\DesktopPlatform\obj\Debug\netcoreapp2.2\Desktop
 F:\Desktop\asemanbackendprojects\DesktopPlatform\obj\Debug\netcoreapp2.2\DesktopPlatform.csproj.CopyComplete
 F:\Desktop\asemanbackendprojects\DesktopPlatform\obj\Debug\netcoreapp2.2\DesktopPlatform.dll
 F:\Desktop\asemanbackendprojects\DesktopPlatform\obj\Debug\netcoreapp2.2\DesktopPlatform.pdb
+F:\Desktop\asemanbackendprojects\DesktopPlatform\obj\Debug\netcoreapp2.2\DesktopPlatform.csprojAssemblyReference.cache

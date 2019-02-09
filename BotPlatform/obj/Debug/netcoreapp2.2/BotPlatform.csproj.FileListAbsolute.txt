@@ -11,3 +11,4 @@ F:\Desktop\asemanbackendprojects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform
 F:\Desktop\asemanbackendprojects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.csproj.CopyComplete
 F:\Desktop\asemanbackendprojects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.dll
 F:\Desktop\asemanbackendprojects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.pdb
+F:\Desktop\asemanbackendprojects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.csprojAssemblyReference.cache

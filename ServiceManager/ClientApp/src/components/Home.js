@@ -17,7 +17,6 @@ export class Home extends Component {
     }
     
     startService(serviceId) {
-        console.log('hello');
         fetch('api/Service/RunService?token=' + this.state.accessToken + '&serviceId=' + serviceId)
             .then(response => response.json())
             .then(data => {
@@ -34,7 +33,6 @@ export class Home extends Component {
     }
     
     stopService(serviceId) {
-        console.log('hello');
         fetch('api/Service/StopService?token=' + this.state.accessToken + '&serviceId=' + serviceId)
             .then(response => response.json())
             .then(data => {
@@ -49,6 +47,18 @@ export class Home extends Component {
                 }
             });
     }
+    
+    clearDatabase(serviceId) {
+        if (window.confirm('Do you really want to delete database ?')) {
+            fetch('api/Service/DeleteDatabase?token=' + this.state.accessToken + '&serviceId=' + serviceId)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert('Service database cleared successfully.');
+                    }
+                });
+        }
+    }
 
     renderServicesTable (serviceDataList) {
         return (
@@ -60,6 +70,7 @@ export class Home extends Component {
                     <th>Status</th>
                     <th>LifeCyle Control</th>
                     <th>Version Control</th>
+                    <th>Database</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -81,12 +92,17 @@ export class Home extends Component {
                                   action={'api/Service/UpdateService'} 
                                   method={'post'}>
                                 <fieldset disabled={serviceData.state === 'Running'}>
-                                    <input id='File' name={'File'} type='file'/>
+                                    <input id='Files' name={'Files'} type='file' multiple/>
                                     <input id='Token' name={'Token'} type='hidden' value={this.state.accessToken}/>
                                     <input id='ServiceId' name={'ServiceId'} type='hidden' value={serviceData.id}/>
                                     <input id='SubmitButton' name={'Submit'} type='submit' title={'Update'}/>
                                 </fieldset>
                             </form>
+                        </td>
+                        <td>
+                            <button onClick={() => this.clearDatabase(serviceData.id)}>
+                                Clear Data
+                            </button>
                         </td>
                     </tr>
                 )}

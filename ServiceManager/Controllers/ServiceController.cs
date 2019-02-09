@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite.Internal.ApacheModRewrite;
+using ServiceManager.DbContexts;
 
 namespace ServiceManager.Controllers
 {
@@ -25,6 +26,19 @@ namespace ServiceManager.Controllers
             "MessengerService",
             "SearchService",
             "StoreService"
+        };
+        
+        private readonly string[] _dbTitles = new string[]
+        {
+            "ApiGatewayDb",
+            "BotPlatformDb",
+            "CityPlatformDb",
+            "DesktopPlatformDb",
+            "EntryPlatformDb",
+            "FileService",
+            "MessengerPlatformDb",
+            "SearchPlatformDb",
+            "StorePlatformDb"
         };
 
         private string ServicesRoot = @"C:\Users\Administrator\Desktop\Aseman Backend Services\";
@@ -142,27 +156,46 @@ namespace ServiceManager.Controllers
         {
             lock (_objectLock)
             {
-                var file = form.File;
                 var token = form.Token;
                 if (PassKey == token)
                 {
-                    var serviceDirName = _serviceTitles[form.ServiceId];
-                    if (file.Length <= 0) return "{ \"status\" : \"failure\" }";
-                    var path = Path.Combine(Path.Combine(ServicesFiles, serviceDirName)
-                        , file.FileName);
-                    System.IO.File.Delete(path);
-                    using (var fs = new FileStream(path, FileMode.Create))
-                        file.CopyToAsync(fs).Wait();
+                    foreach (var file in form.Files)
+                    {
+                        var serviceDirName = _serviceTitles[form.ServiceId];
+                        if (file.Length <= 0) return "{ \"status\" : \"failure\" }";
+                        var path = Path.Combine(Path.Combine(ServicesFiles, serviceDirName)
+                            , file.FileName);
+                        System.IO.File.Delete(path);
+                        using (var fs = new FileStream(path, FileMode.Create))
+                            file.CopyToAsync(fs).Wait();
+                    }
                     var redirectUrl = Request.GetDisplayUrl();
                     redirectUrl = redirectUrl.Substring(0, redirectUrl.IndexOf(
                         "/api/Service/UpdateService", StringComparison.Ordinal));
                     redirectUrl = redirectUrl.EndsWith("/")
                         ? redirectUrl.Substring(0, redirectUrl.Length - 1)
-                        : redirectUrl;
+                        : redirectUrl;                        
                     Response.Redirect(redirectUrl + "/" + token);
                     return "{ \"status\" : \"success\" }";
                 }
                 
+                return "{ \"status\" : \"failure\" }";
+            }
+        }
+
+        [HttpGet("[action]")]
+        public string DeleteDatabase(string token, int serviceId)
+        {
+            if (token == PassKey)
+            {
+                using (var dbContext = new DatabaseContext(_dbTitles[serviceId]))
+                {
+                    dbContext.Database.EnsureDeleted();
+                    return "{ \"status\" : \"success\" }";
+                }
+            }
+            else
+            {
                 return "{ \"status\" : \"failure\" }";
             }
         }
@@ -176,7 +209,7 @@ namespace ServiceManager.Controllers
 
         public class UploadForm
         {
-            public IFormFile File { get; set; }
+            public List<IFormFile> Files { get; set; }
             public int ServiceId { get; set; }
             public string Token { get; set; }
         }
