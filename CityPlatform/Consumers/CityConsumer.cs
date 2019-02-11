@@ -25,8 +25,8 @@ namespace CityPlatform.Consumers
 {
     public class CityConsumer : IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
         , IConsumer<PutUserRequest>, IConsumer<PutMembershipRequest>, IConsumer<PutSessionRequest>
-        , IConsumer<UpdateUserSecretRequest>, IConsumer<UpdateUserProfileRequest>,
-        IConsumer<UpdateComplexProfileRequest>
+        , IConsumer<UpdateUserSecretRequest>, IConsumer<UpdateUserProfileRequest>
+        , IConsumer<UpdateComplexProfileRequest>, IConsumer<MakeAccountRequest>
         , IConsumer<CreateComplexRequest>, IConsumer<DeleteComplexRequest>, IConsumer<UpdateRoomProfileRequest>
         , IConsumer<DeleteRoomRequest>, IConsumer<CreateContactRequest>, IConsumer<CreateInviteRequest>
         , IConsumer<CancelInviteRequest>, IConsumer<AcceptInviteRequest>, IConsumer<IgnoreInviteRequest>
@@ -225,7 +225,15 @@ namespace CityPlatform.Consumers
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
                 var complex = dbContext.Complexes.Include(c => c.ComplexSecret)
                     .SingleOrDefault(c => c.ComplexId == packet.Complex.ComplexId);
-                if (complex?.ComplexSecret.AdminId == session.BaseUser.BaseUserId)
+                if (complex == null)
+                {
+                    await context.RespondAsync(new UpdateComplexProfileResponse()
+                    {
+                        Packet = new Packet {Status = "error_2"}
+                    });
+                    return;
+                }
+                if (complex?.Title.ToLower() != "home" && complex?.ComplexSecret.AdminId == session.BaseUser.BaseUserId)
                 {
                     complex.Title = packet.Complex.Title;
                     complex.Avatar = packet.Complex.Avatar;
@@ -304,7 +312,7 @@ namespace CityPlatform.Consumers
 
                     await context.RespondAsync(new CreateComplexResponse()
                     {
-                        Packet = new Packet {Status = "success", Complex = complex}
+                        Packet = new Packet {Status = "success", Complex = complex, ComplexSecret = cs}
                     });
                 }
                 else
@@ -479,7 +487,7 @@ namespace CityPlatform.Consumers
                 {
                     var complex = dbContext.Complexes.Find(packet.Room.ComplexId);
                     dbContext.Entry(complex).Collection(c => c.Rooms).Load();
-                    if (complex.Rooms.Any(r => r.RoomId == packet.Room.RoomId))
+                    if (complex.Rooms.Count() > 1 && complex.Rooms.Any(r => r.RoomId == packet.Room.RoomId))
                     {
                         var room = complex.Rooms.Find(r => r.RoomId == packet.Room.RoomId);
                         complex.Rooms.Remove(room);
@@ -1470,6 +1478,53 @@ namespace CityPlatform.Consumers
                     {
                         Packet = new Packet {Status = "error_1"}
                     });
+                }
+            }
+        }
+
+        public async Task Consume(ConsumeContext<MakeAccountRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                try
+                {
+                    var user = context.Message.Packet.User;
+                    var userAuth = context.Message.Packet.UserSecret;
+                    var complex = context.Message.Packet.Complex;
+                    var ca = context.Message.Packet.ComplexSecret;
+                    var room = context.Message.Packet.Room;
+                    var mem = new Membership();
+
+                    user.UserSecret = userAuth;
+                    userAuth.User = user;
+                    userAuth.Home = complex;
+                    complex.ComplexSecret = ca;
+                    ca.Complex = complex;
+                    ca.Admin = user;
+                    room.Complex = complex;
+                    mem.User = user;
+                    mem.Complex = complex;
+
+                    dbContext.AddRange(user, userAuth, complex, ca, room, mem);
+
+                    dbContext.SaveChanges();
+
+                    await context.RespondAsync(new MakeAccountResponse()
+                    {
+                        Packet = new Packet()
+                        {
+                            User = user,
+                            UserSecret = userAuth,
+                            Complex = complex,
+                            ComplexSecret = ca,
+                            Room = room,
+                            Membership = mem
+                        }
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
                 }
             }
         }

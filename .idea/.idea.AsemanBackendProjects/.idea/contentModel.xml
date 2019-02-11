@@ -393,6 +393,7 @@
               <e p="ConsolidateContactResponse.cs" t="Include" />
               <e p="ConsolidateSessionRequest.cs" t="Include" />
               <e p="ConsolidateSessionResponse.cs" t="Include" />
+              <e p="MakeAccountRequest.cs" t="Include" />
               <e p="PutComplexRequest.cs" t="Include" />
               <e p="PutMembershipRequest.cs" t="Include" />
               <e p="PutRoomRequest.cs" t="Include" />
@@ -402,6 +403,7 @@
               <e p="UpdateUserSecretRequest.cs" t="Include" />
             </e>
             <e p="Responses" t="Include">
+              <e p="MakeAccountResponse.cs" t="Include" />
               <e p="PutComplexResponse.cs" t="Include" />
               <e p="PutMembershipResponse.cs" t="Include" />
               <e p="PutRoomResponse.cs" t="Include" />

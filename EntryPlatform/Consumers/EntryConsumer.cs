@@ -98,7 +98,7 @@ namespace EntryPlatform.Consumers
                         {
                             user = new User()
                             {
-                                Title = "",
+                                Title = "New User",
                                 Avatar = -1
                             };                            
                             userAuth = new UserSecret()
@@ -107,15 +107,7 @@ namespace EntryPlatform.Consumers
                                 Email = packet.Email
                             };
                             user.UserSecret = userAuth;
-                            
-                            var result = await SharedArea.Transport.RequestService<PutUserRequest, PutUserResponse>(
-                                Program.Bus,
-                                SharedArea.GlobalVariables.CITY_QUEUE_NAME,
-                                new Packet() {User = user, UserSecret = userAuth});
-                            
-                            user.BaseUserId = result.Packet.User.BaseUserId;
-                            userAuth.UserSecretId = result.Packet.UserSecret.UserSecretId;
-                            
+                                                        
                             var complex = new Complex()
                             {
                                 Title = "Home",
@@ -138,32 +130,23 @@ namespace EntryPlatform.Consumers
                             
                             userAuth.Home = complex;
                             
-                            var result2 = await SharedArea.Transport.RequestService<PutComplexRequest, PutComplexResponse>(
-                                Program.Bus,
-                                SharedArea.GlobalVariables.CITY_QUEUE_NAME,
-                                new Packet() {User = user, Complex = complex, ComplexSecret = ca, Room = room});
-                            
-                            complex.ComplexId = result2.Packet.Complex.ComplexId;
-                            ca.ComplexSecretId = result2.Packet.ComplexSecret.ComplexSecretId;
-                            room.RoomId = result2.Packet.Room.RoomId;
-
-                            await SharedArea.Transport.RequestService<UpdateUserSecretRequest, UpdateUserSecretResponse>(
-                                Program.Bus,
-                                SharedArea.GlobalVariables.CITY_QUEUE_NAME,
-                                new Packet() {UserSecret = userAuth});
-                            
                             var mem = new Membership()
                             {
                                 User = user,
                                 Complex = complex
                             };
                             
-                            var result3 = await SharedArea.Transport.RequestService<PutMembershipRequest, PutMembershipResponse>(
+                            var result = await SharedArea.Transport.RequestService<MakeAccountRequest, MakeAccountResponse>(
                                 Program.Bus,
                                 SharedArea.GlobalVariables.CITY_QUEUE_NAME,
-                                new Packet() {Membership = mem, User = user, Complex = complex});
-                            
-                            mem.MembershipId = result3.Packet.Membership.MembershipId;
+                                new Packet() {User = user, UserSecret = userAuth, Complex = complex, ComplexSecret = ca, Room = room});
+
+                            user.BaseUserId = result.Packet.User.BaseUserId;
+                            userAuth.UserSecretId = result.Packet.UserSecret.UserSecretId;
+                            complex.ComplexId = result.Packet.Complex.ComplexId;
+                            ca.ComplexSecretId = result.Packet.ComplexSecret.ComplexSecretId;
+                            room.RoomId = result.Packet.Room.RoomId;
+                            mem.MembershipId = result.Packet.Membership.MembershipId;
                             
                             dbContext.AddRange(user, userAuth, complex, ca, room, mem);
 
@@ -225,13 +208,15 @@ namespace EntryPlatform.Consumers
                         dbContext.Entry(user.UserSecret).Reference(us => us.Home).Load();
                         dbContext.Entry(user.UserSecret.Home).Collection(h => h.Members).Load();
                         dbContext.Entry(user.UserSecret.Home).Reference(h => h.ComplexSecret).Load();
+                        dbContext.Entry(user.UserSecret.Home).Collection(h => h.Rooms).Load();
+                        dbContext.Entry(user.UserSecret.Home).Reference(h => h.ComplexSecret).Load();
                         
                         await context.RespondAsync(
                             new VerifyResponse()
                             {
                                 Packet = new Packet()
                                 {
-                                    Status = "success", Session = session, UserSecret = userAuth
+                                    Status = "success", Session = session, UserSecret = userAuth, ComplexSecret = user.UserSecret.Home.ComplexSecret
                                 }
                             });
                     }

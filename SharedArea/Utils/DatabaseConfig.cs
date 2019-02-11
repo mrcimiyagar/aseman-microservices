@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GreenPipes.Util;
+using Microsoft.EntityFrameworkCore;
 
 namespace SharedArea.Utils
 {
@@ -6,7 +7,7 @@ namespace SharedArea.Utils
     {
         public static void ConfigDatabase(DbContext context)
         {
-            //context.Database.EnsureDeleted();
+            context.Database.SetCommandTimeout(60000);
             context.Database.EnsureCreated();
         }
     }
