@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApiGateway.DbContexts;
@@ -7,6 +8,7 @@ using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
 using SharedArea.Commands.Internal.Responses;
 using SharedArea.Commands.Pushes;
+using SharedArea.Entities;
 using SharedArea.Notifications;
 
 namespace ApiGateway.Consumers
@@ -24,7 +26,7 @@ namespace ApiGateway.Consumers
         , IConsumer<PutUserRequest>, IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
         , IConsumer<PutMembershipRequest>, IConsumer<PutSessionRequest>, IConsumer<UpdateUserSecretRequest>
         , IConsumer<PutServiceMessageRequest>, IConsumer<ConsolidateContactRequest>, IConsumer<ConsolidateSessionRequest>
-        , IConsumer<MakeAccountRequest>
+        , IConsumer<MakeAccountRequest>, IConsumer<ConsolidateDeleteAccountRequest>
 
         , IConsumer<ComplexDeletionPush>, IConsumer<RoomDeletionPush>, IConsumer<ContactCreationPush>
         , IConsumer<ServiceMessagePush>, IConsumer<InviteCreationPush>, IConsumer<InviteCancellationPush>
@@ -416,7 +418,36 @@ namespace ApiGateway.Consumers
 
             await context.RespondAsync(new ConsolidateSessionResponse());
         }
-        
+
+        public async Task Consume(ConsumeContext<ConsolidateDeleteAccountRequest> context)
+        {
+            if (context.Message.Destination == "")
+            {
+                var gSessions = context.Message.Packet.Sessions;
+
+                using (var dbContext = new DatabaseContext())
+                {
+                    var lSessions = new List<Session>();
+                    foreach (var gSession in gSessions)
+                        lSessions.Add(dbContext.Sessions.Find(gSession.SessionId));
+                    
+                    dbContext.Sessions.RemoveRange(lSessions);
+
+                    dbContext.SaveChanges();
+                }
+                await context.RespondAsync(new ConsolidateDeleteAccountResponse());
+            }
+            else
+            {
+                var result = await SharedArea.Transport
+                    .DirectService<ConsolidateDeleteAccountRequest, ConsolidateDeleteAccountResponse>(
+                        Program.Bus,
+                        context.Message.Destination,
+                        context.Message.Packet);
+                await context.RespondAsync(result);
+            }
+        }
+
         public Task Consume(ConsumeContext<ComplexDeletionPush> context)
         {
             using (var dbContext = new DatabaseContext())

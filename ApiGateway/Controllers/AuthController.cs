@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using ApiGateway.DbContexts;
@@ -79,6 +80,25 @@ namespace ApiGateway.Controllers
                         session.SessionId,
                         Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()));
                 
+                return result.Packet;
+            }
+        }
+
+        [Route("~/api/auth/delete_account")]
+        [HttpPost]
+        public async Task<ActionResult<Packet>> DeleteAccount()
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = Security.Authenticate(dbContext, Request.Headers[AuthExtracter.AK]);
+                if (session == null) return new Packet() {Status = "error_0"};
+
+                var result = await SharedArea.Transport.DirectService<DeleteAccountRequest, DeleteAccountResponse>(
+                    Program.Bus,
+                    SharedArea.GlobalVariables.ENTRY_QUEUE_NAME,
+                    session.SessionId,
+                    Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()));
+
                 return result.Packet;
             }
         }

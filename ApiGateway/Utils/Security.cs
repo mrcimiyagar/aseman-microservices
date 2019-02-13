@@ -26,10 +26,19 @@ namespace ApiGateway.Utils
         public static Session Authenticate(DatabaseContext context, string authorization)
         {
             var auth = AuthExtracter.Extract(authorization);
+            if (auth == null) return null;
+            if (auth.Token.StartsWith("+")) return null;
             var session = context.Sessions.Find(auth.SessionId);
-            if (session != null && session.Token == auth.Token)
-                return session;
-            return null;
+            return session == null || session.Token != auth.Token ? null : session;
+        }
+
+        public static Session AuthenticateBot(DatabaseContext context, string authorization)
+        {
+            var auth = AuthExtracter.Extract(authorization);
+            if (auth == null) return null;
+            if (!auth.Token.StartsWith("+")) return null;
+            var session = context.Sessions.Find(auth.SessionId);
+            return session == null || session.Token != auth.Token ? null : session;
         }
     }
 }

@@ -23,14 +23,5 @@ namespace EntryPlatform.Utils
                 result.Append(KeySource[rnd.Next(KeySource.Length - 1)]);
             return result.ToString();
         }
-
-        public static Session Authenticate(DatabaseContext context, string authorization)
-        {
-            var auth = AuthExtracter.Extract(authorization);
-            var session = context.Sessions.Find(auth.SessionId);
-            if (session != null && session.Token == auth.Token)
-                return session;
-            return null;
-        }
     }
 }

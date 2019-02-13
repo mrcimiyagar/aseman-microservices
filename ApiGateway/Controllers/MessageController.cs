@@ -81,18 +81,13 @@ namespace ApiGateway.Controllers
         {
             using (var context = new DatabaseContext())
             {
-                string authHeader = Request.Headers[AuthExtracter.AK];
-                var parts = authHeader.Split(" ");
-                var sessionId = long.Parse(parts[0]);
-                var token = parts[1];
-                var session = context.Sessions.Find(sessionId);
+                var session = Security.Authenticate(context, Request.Headers[AuthExtracter.AK]);
                 if (session == null) return new Packet {Status = "error_1"};
-                if (session.Token != token) return new Packet {Status = "error_2"};
                 
                 var result = await SharedArea.Transport.DirectService<BotCreateTextMessageRequest, BotCreateTextMessageResponse>(
                     Program.Bus,
                     SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
-                    sessionId,
+                    session.SessionId,
                     Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                     packet);
 
@@ -106,18 +101,13 @@ namespace ApiGateway.Controllers
         {
             using (var context = new DatabaseContext())
             {
-                string authHeader = Request.Headers[AuthExtracter.AK];
-                var parts = authHeader.Split(" ");
-                var sessionId = long.Parse(parts[0]);
-                var token = parts[1];
-                var session = context.Sessions.Find(sessionId);
+                var session = Security.Authenticate(context, Request.Headers[AuthExtracter.AK]);
                 if (session == null) return new Packet {Status = "error_1"};
-                if (session.Token != token) return new Packet {Status = "error_2"};
                 
                 var result = await SharedArea.Transport.DirectService<BotCreateFileMessageRequest, BotCreateFileMessageResponse>(
                     Program.Bus,
                     SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
-                    sessionId,
+                    session.SessionId,
                     Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                     packet);
 

@@ -41,7 +41,7 @@ namespace ServiceManager.Controllers
             "StorePlatformDb"
         };
 
-        private string ServicesRoot = @"C:\Users\Administrator\Desktop\Aseman Backend Services\";
+        private const string ServicesRoot = @"C:\Users\Administrator\Desktop\Aseman Backend Services\";
         private const string ServicesFiles = @"C:\Users\Administrator\Desktop\Aseman Backend";
         //private const string ServicesRoot = @"F:\Desktop\Aseman Backend\Aseman Backend batches\";
         //private const string ServicesFiles=  @"F:\Desktop\Aseman Backend";
@@ -169,13 +169,6 @@ namespace ServiceManager.Controllers
                         using (var fs = new FileStream(path, FileMode.Create))
                             file.CopyToAsync(fs).Wait();
                     }
-                    var redirectUrl = Request.GetDisplayUrl();
-                    redirectUrl = redirectUrl.Substring(0, redirectUrl.IndexOf(
-                        "/api/Service/UpdateService", StringComparison.Ordinal));
-                    redirectUrl = redirectUrl.EndsWith("/")
-                        ? redirectUrl.Substring(0, redirectUrl.Length - 1)
-                        : redirectUrl;                        
-                    Response.Redirect(redirectUrl + "/" + token);
                     return "{ \"status\" : \"success\" }";
                 }
                 

@@ -8,13 +8,14 @@ using Newtonsoft.Json;
 using SharedArea.Commands.Bot;
 using StorePlatform.DbContexts;
 using SharedArea.Commands.Internal.Notifications;
+using SharedArea.Commands.Internal.Requests;
 using SharedArea.Entities;
 using SharedArea.Middles;
 
 namespace StorePlatform.Consumers
 {
     public class StoreConsumer : IConsumer<GetBotStoreContentRequest>, IConsumer<BotSubscribedNotif>
-        , IConsumer<BotCreatedNotif>, IConsumer<BotProfileUpdatedNotif>
+        , IConsumer<BotCreatedNotif>, IConsumer<BotProfileUpdatedNotif>, IConsumer<ConsolidateDeleteAccountRequest>
     {
         public async Task Consume(ConsumeContext<GetBotStoreContentRequest> context)
         {
@@ -110,6 +111,31 @@ namespace StorePlatform.Consumers
             }
             
             return Task.CompletedTask;
+        }
+
+        public async Task Consume(ConsumeContext<ConsolidateDeleteAccountRequest> context)
+        {
+            var gUser = context.Message.Packet.User;
+
+            using (var dbContext = new DatabaseContext())
+            {
+                var user = (User) dbContext.BaseUsers.Find(gUser.BaseUserId);
+
+                if (user != null)
+                {
+                    dbContext.Entry(user).Collection(u => u.Sessions).Load();
+                    dbContext.Entry(user).Reference(u => u.UserSecret).Load();
+
+                    user.Title = "Deleted User";
+                    user.Avatar = -1;
+                    user.UserSecret.Email = "";
+                    dbContext.Sessions.RemoveRange(user.Sessions);
+
+                    dbContext.SaveChanges();
+                }
+            }
+
+            await context.RespondAsync(new ConsolidateDeleteAccountResponse());
         }
     }
 }

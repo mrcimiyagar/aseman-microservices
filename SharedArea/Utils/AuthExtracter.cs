@@ -10,11 +10,15 @@ namespace SharedArea.Utils
         public static ReqAuth Extract(string header)
         {
             var parts = header.Split(" ");
-            return new ReqAuth()
+            if (parts.Length == 2)
             {
-                SessionId = long.Parse(parts[0]),
-                Token = parts[1]
-            };
+                return new ReqAuth()
+                {
+                    SessionId = long.Parse(parts[0]),
+                    Token = parts[1]
+                };
+            }
+            return null;
         }
     }
 }

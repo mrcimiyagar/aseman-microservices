@@ -33,6 +33,7 @@ namespace CityPlatform.Consumers
         , IConsumer<GetBotsRequest>, IConsumer<GetCreatedBotsRequest>, IConsumer<GetSubscribedBotsRequest>
         , IConsumer<SearchBotsRequest>, IConsumer<UpdateBotProfileRequest>, IConsumer<GetBotRequest>
         , IConsumer<SubscribeBotRequest>, IConsumer<CreateBotRequest>, IConsumer<CreateRoomRequest>
+        , IConsumer<ConsolidateDeleteAccountRequest>
     {
         public async Task Consume(ConsumeContext<PutComplexRequest> context)
         {
@@ -588,7 +589,8 @@ namespace CityPlatform.Consumers
                     var complex = new Complex
                     {
                         Title = "",
-                        Avatar = -1
+                        Avatar = -1,
+                        Mode = 2
                     };
                     var complexSecret = new ComplexSecret
                     {
@@ -1330,7 +1332,7 @@ namespace CityPlatform.Consumers
                 {
                     Bot = bot,
                     Creator = user,
-                    Token = Security.MakeKey64()
+                    Token = "+" + Security.MakeKey64()
                 };
                 bot.BotSecret = botSecret;
                 var botSess = new Session()
@@ -1527,6 +1529,31 @@ namespace CityPlatform.Consumers
                     Console.WriteLine(ex.ToString());
                 }
             }
+        }
+
+        public async Task Consume(ConsumeContext<ConsolidateDeleteAccountRequest> context)
+        {
+            var gUser = context.Message.Packet.User;
+
+            using (var dbContext = new DatabaseContext())
+            {
+                var user = (User) dbContext.BaseUsers.Find(gUser.BaseUserId);
+
+                if (user != null)
+                {
+                    dbContext.Entry(user).Collection(u => u.Sessions).Load();
+                    dbContext.Entry(user).Reference(u => u.UserSecret).Load();
+
+                    user.Title = "Deleted User";
+                    user.Avatar = -1;
+                    user.UserSecret.Email = "";
+                    dbContext.Sessions.RemoveRange(user.Sessions);
+
+                    dbContext.SaveChanges();
+                }
+            }
+
+            await context.RespondAsync(new ConsolidateDeleteAccountResponse());
         }
     }
 }

@@ -12,12 +12,11 @@ using SharedArea.Commands.Internal.Requests;
 using SharedArea.Commands.Internal.Responses;
 using SharedArea.Entities;
 using SharedArea.Middles;
-using SharedArea.Utils;
 
 namespace EntryPlatform.Consumers
 {
     public class EntryConsumer : IConsumer<RegisterRequest>, IConsumer<LoginRequest>, IConsumer<VerifyRequest>
-        , IConsumer<LogoutRequest>
+        , IConsumer<LogoutRequest>, IConsumer<DeleteAccountRequest>
     {
         private const string EmailAddress = "keyhan.mohammadi1997@gmail.com";
         private const string EmailPassword = "2&b165sf4j)684tkt87El^o9w68i87u6s*4h48#98aq";
@@ -263,6 +262,48 @@ namespace EntryPlatform.Consumers
                             Status = "success"
                         }
                     });
+            }
+        }
+
+        public async Task Consume(ConsumeContext<DeleteAccountRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
+                dbContext.Entry(user).Collection(u => u.Sessions).Load();
+                dbContext.Entry(user).Reference(u => u.UserSecret).Load();
+
+                user.Title = "Deleted User";
+                user.Avatar = -1;
+                user.UserSecret.Email = "";                
+                dbContext.Sessions.RemoveRange(user.Sessions);
+
+                dbContext.SaveChanges();
+
+                var allServices = SharedArea.GlobalVariables.AllQueuesExcept(new string[] {SharedArea.GlobalVariables.ENTRY_QUEUE_NAME});
+                var deleteTasks = new Task[allServices.Length + 1];
+                deleteTasks[0] = SharedArea.Transport.RequestService<ConsolidateDeleteAccountRequest, ConsolidateDeleteAccountResponse>(
+                    Program.Bus,
+                    "",
+                    new Packet() {User = user, Sessions = user.Sessions});
+                var counter = 1;
+                foreach (var serviceName in allServices)
+                {
+                    deleteTasks[counter] = SharedArea.Transport.RequestService<ConsolidateDeleteAccountRequest, ConsolidateDeleteAccountResponse>(
+                        Program.Bus,
+                        serviceName,
+                        new Packet() {User = user, Sessions = user.Sessions});
+                    counter++;
+                }
+
+                Task.WaitAll(deleteTasks);
+
+                await context.RespondAsync(new DeleteAccountResponse()
+                {
+                    Packet = new Packet() {Status = "success"}
+                });
             }
         }
 

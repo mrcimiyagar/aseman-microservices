@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 export class Home extends Component {
     
@@ -8,11 +9,7 @@ export class Home extends Component {
         fetch('api/Service/GetServiceData?token=' + this.state.accessToken)
             .then(response => response.json())
             .then(data => {
-                let buttonNextClicks = [];
-                for (let counter = 0; counter < data.length; counter++) {
-                    buttonNextClicks[counter] = false;
-                }
-                this.setState({bnc : buttonNextClicks, services : data, loading: false});
+                this.setState({services : data, files : [], loading: false});
             });
     }
     
@@ -23,11 +20,7 @@ export class Home extends Component {
                 if (data.status === 'success') {
                     let ser = this.state.services;
                     ser[serviceId].state = 'Running';
-                    let buttonNextClicks = [];
-                    for (let counter = 0; counter < data.length; counter++) {
-                        buttonNextClicks[counter] = false;
-                    }
-                    this.setState({services: ser, bnc: buttonNextClicks});
+                    this.setState({services: ser});
                 }
             });
     }
@@ -39,11 +32,7 @@ export class Home extends Component {
                 if (data.status === 'success') {
                     let ser = this.state.services;
                     ser[serviceId].state = 'Stopped';
-                    let buttonNextClicks = [];
-                    for (let counter = 0; counter < data.length; counter++) {
-                        buttonNextClicks[counter] = false;
-                    }
-                    this.setState({services: ser, bnc: buttonNextClicks});
+                    this.setState({services: ser});
                 }
             });
     }
@@ -59,6 +48,52 @@ export class Home extends Component {
                 });
         }
     }
+    
+    handleSelectedFiles(serviceId, event) {
+        let cache = [];
+        alert('selected files ' + JSON.stringify(event.target, function(key, value) {
+            if (typeof value === 'object' && value !== null) {
+                if (cache.indexOf(value) !== -1) {
+                    try {
+                        return JSON.parse(JSON.stringify(value));
+                    } catch (error) {
+                        return;
+                    }
+                }
+                cache.push(value);
+            }
+            return value;
+        }));
+        cache = null;
+        
+        let sfs = this.state.files;
+        sfs[serviceId] = event.target.value;
+        this.setState({
+            files: sfs,
+        });
+    }
+
+    handleUpload() {
+        for (let counter = 0; counter < this.state.services.length; counter++) {
+            let files = this.refs['fileInput' + counter].files;
+            if (files !== undefined && files.length > 0) {
+                let index = counter;
+                const data = new FormData();
+                data.append('Token', this.state.accessToken);
+                Array.prototype.forEach.call(files, file => {
+                    data.append('Files', file);
+                });
+                axios.post("api/Service/UpdateService", data)
+                    .then(res => {
+                        if (res.data.status === 'success') {
+                            alert('success : ' + this.state.services[index].name + ' updated.');
+                        } else {
+                            alert('error : ' + this.state.services[index].name + ' not updated.');
+                        }
+                    });
+            }
+        }
+    }
 
     renderServicesTable (serviceDataList) {
         return (
@@ -68,7 +103,7 @@ export class Home extends Component {
                     <th> ServiceID</th>
                     <th>Service</th>
                     <th>Status</th>
-                    <th>LifeCyle Control</th>
+                    <th>Life Control</th>
                     <th>Version Control</th>
                     <th>Database</th>
                 </tr>
@@ -87,17 +122,7 @@ export class Home extends Component {
                             </button>
                         </td>
                         <td>
-                            <form ref={'updateForm' + serviceData.id}
-                                  encType={'multipart/form-data'} 
-                                  action={'api/Service/UpdateService'} 
-                                  method={'post'}>
-                                <fieldset disabled={serviceData.state === 'Running'}>
-                                    <input id='Files' name={'Files'} type='file' multiple/>
-                                    <input id='Token' name={'Token'} type='hidden' value={this.state.accessToken}/>
-                                    <input id='ServiceId' name={'ServiceId'} type='hidden' value={serviceData.id}/>
-                                    <input id='SubmitButton' name={'Submit'} type='submit' title={'Update'}/>
-                                </fieldset>
-                            </form>
+                            <input id='Files' name={'Files'} type='file' ref={'fileInput' + serviceData.id} multiple/>
                         </td>
                         <td>
                             <button onClick={() => this.clearDatabase(serviceData.id)}>
@@ -106,6 +131,16 @@ export class Home extends Component {
                         </td>
                     </tr>
                 )}
+                <tr key={serviceDataList.length}>
+                    <td>{}</td>
+                    <td>{}</td>
+                    <td>{}</td>
+                    <td>{}</td>
+                    <td>
+                        <button onClick={() => {this.handleUpload()}}>Upload Files</button>
+                    </td>
+                    <td>{}</td>
+                </tr>
                 </tbody>
             </table>
         );

@@ -25,6 +25,8 @@ namespace ApiGateway.Utils
 
         public void NextPush(long sessionId)
         {
+            Console.WriteLine("Pusing notification to client...");
+            
             if (_cancellationTokens.ContainsKey(sessionId))
             {
                 try
@@ -37,17 +39,25 @@ namespace ApiGateway.Utils
                 }
             }
             
+            Console.WriteLine("hello 1");
+            
             var cts = new CancellationTokenSource();
             _cancellationTokens[sessionId] = cts;
             
+            Console.WriteLine("hello 2");
+            
             Task.Factory.StartNew(async () =>
             {
+                Console.WriteLine("hello 3");
+             
                 using (var dbContext = new DatabaseContext())
                 {
+                    Console.WriteLine("hello 4");
+                    
                     var session = dbContext.Sessions.Find(sessionId);
-                    if (session.Online) return;
+                    if (!session.Online) return;
                     dbContext.Entry(session).Collection(s => s.Notifications).Load();
-                    if (session.Notifications.LongCount() <= 0) return;
+                    if (session.Notifications.LongCount() == 0) return;
                     PushNotification(session, session.Notifications.FirstOrDefault());
                     await Task.Delay(10000, cts.Token);
                     NextPush(sessionId);

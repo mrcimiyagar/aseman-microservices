@@ -23,7 +23,7 @@ namespace MessengerPlatform.Consumers
         , IConsumer<BotCreateFileMessageRequest>, IConsumer<PhotoCreatedNotif>, IConsumer<AudioCreatedNotif>
         , IConsumer<VideoCreatedNotif>, IConsumer<PutServiceMessageRequest>, IConsumer<ConsolidateContactRequest>
         , IConsumer<WorkershipCreatedNotif>, IConsumer<WorkershipUpdatedNotif>, IConsumer<WorkershipDeletedNotif>
-        , IConsumer<BotProfileUpdatedNotif>
+        , IConsumer<BotProfileUpdatedNotif>, IConsumer<ConsolidateDeleteAccountRequest>
     {
         public Task Consume(ConsumeContext<BotCreatedNotif> context)
         {
@@ -911,6 +911,31 @@ namespace MessengerPlatform.Consumers
             }
             
             return Task.CompletedTask;
+        }
+
+        public async Task Consume(ConsumeContext<ConsolidateDeleteAccountRequest> context)
+        {
+            var gUser = context.Message.Packet.User;
+
+            using (var dbContext = new DatabaseContext())
+            {
+                var user = (User) dbContext.BaseUsers.Find(gUser.BaseUserId);
+
+                if (user != null)
+                {
+                    dbContext.Entry(user).Collection(u => u.Sessions).Load();
+                    dbContext.Entry(user).Reference(u => u.UserSecret).Load();
+
+                    user.Title = "Deleted User";
+                    user.Avatar = -1;
+                    user.UserSecret.Email = "";
+                    dbContext.Sessions.RemoveRange(user.Sessions);
+
+                    dbContext.SaveChanges();
+                }
+            }
+
+            await context.RespondAsync(new ConsolidateDeleteAccountResponse());
         }
     }
 }

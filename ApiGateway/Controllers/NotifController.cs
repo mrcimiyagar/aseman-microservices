@@ -1,8 +1,13 @@
-﻿using ApiGateway.DbContexts;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net.WebSockets;
+using ApiGateway.DbContexts;
 using ApiGateway.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SharedArea.Middles;
 using SharedArea.Utils;
+using Notification = SharedArea.Notifications.Notification;
 
 namespace ApiGateway.Controllers
 {
@@ -32,6 +37,16 @@ namespace ApiGateway.Controllers
             }
 
             return new Packet() {Status = "success"};
+        }
+
+        [Route("~/api/notif/get_notifs")]
+        [HttpGet]
+        public ActionResult<List<Notification>> GetNotifs()
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                return dbContext.Notifications.Include(n => n.Session).ThenInclude(s => s.BaseUser).ToList();
+            }
         }
     }
 }

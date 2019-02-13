@@ -83,9 +83,6 @@
           </e>
         </e>
         <e p="Program.cs" t="Include" />
-        <e p="Utils" t="Include">
-          <e p="Security.cs" t="Include" />
-        </e>
       </e>
       <e p="CityPlatform" t="IncludeRecursive">
         <e p="Bin" t="ExcludeRecursive" />
@@ -227,8 +224,8 @@
                 <e p="main.477ccc83.css.map" t="Include" />
               </e>
               <e p="js" t="Include">
-                <e p="main.c0a53f2e.js" t="Include" />
-                <e p="main.c0a53f2e.js.map" t="Include" />
+                <e p="main.b9ff5876.js" t="Include" />
+                <e p="main.b9ff5876.js.map" t="Include" />
               </e>
             </e>
           </e>
@@ -285,6 +282,8 @@
         <e p="Bin" t="ExcludeRecursive" />
         <e p="Commands" t="Include">
           <e p="Auth" t="Include">
+            <e p="DeleteAccountRequest.cs" t="Include" />
+            <e p="DeleteAccountResponse.cs" t="Include" />
             <e p="LoginRequest.cs" t="Include" />
             <e p="LoginResponse.cs" t="Include" />
             <e p="LogoutRequest.cs" t="Include" />
@@ -391,6 +390,8 @@
             <e p="Requests" t="Include">
               <e p="ConsolidateContactRequest.cs" t="Include" />
               <e p="ConsolidateContactResponse.cs" t="Include" />
+              <e p="ConsolidateDeleteAccountRequest.cs" t="Include" />
+              <e p="ConsolidateDeleteAccountResponse.cs" t="Include" />
               <e p="ConsolidateSessionRequest.cs" t="Include" />
               <e p="ConsolidateSessionResponse.cs" t="Include" />
               <e p="MakeAccountRequest.cs" t="Include" />

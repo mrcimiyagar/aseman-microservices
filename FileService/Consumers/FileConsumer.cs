@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SharedArea.Commands.File;
 using SharedArea.Commands.Internal.Notifications;
+using SharedArea.Commands.Internal.Requests;
 using SharedArea.Entities;
 using SharedArea.Middles;
 using File = System.IO.File;
@@ -18,8 +19,8 @@ namespace FileService.Consumers
 {
     public class FileConsumer : IConsumer<UploadPhotoRequest>, IConsumer<UploadAudioRequest>
         , IConsumer<UploadVideoRequest>, IConsumer<DownloadFileRequest>, IConsumer<DownloadBotAvatarRequest>
-        , IConsumer<DownloadRoomAvatarRequest>, IConsumer<DownloadComplexAvatarRequest>,
-        IConsumer<DownloadUserAvatarRequest>
+        , IConsumer<DownloadRoomAvatarRequest>, IConsumer<DownloadComplexAvatarRequest>
+        , IConsumer<DownloadUserAvatarRequest>, IConsumer<ConsolidateDeleteAccountRequest>
     {
         public const string DirPath = @"C:\\Aseman\Files";
 
@@ -614,6 +615,31 @@ namespace FileService.Consumers
                     });
                 }
             }
+        }
+
+        public async Task Consume(ConsumeContext<ConsolidateDeleteAccountRequest> context)
+        {
+            var gUser = context.Message.Packet.User;
+
+            using (var dbContext = new DatabaseContext())
+            {
+                var user = (User) dbContext.BaseUsers.Find(gUser.BaseUserId);
+
+                if (user != null)
+                {
+                    dbContext.Entry(user).Collection(u => u.Sessions).Load();
+                    dbContext.Entry(user).Reference(u => u.UserSecret).Load();
+
+                    user.Title = "Deleted User";
+                    user.Avatar = -1;
+                    user.UserSecret.Email = "";
+                    dbContext.Sessions.RemoveRange(user.Sessions);
+
+                    dbContext.SaveChanges();
+                }
+            }
+
+            await context.RespondAsync(new ConsolidateDeleteAccountResponse());
         }
     }
 }
