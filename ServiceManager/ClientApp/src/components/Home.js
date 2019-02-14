@@ -79,6 +79,7 @@ export class Home extends Component {
             if (files !== undefined && files.length > 0) {
                 let index = counter;
                 const data = new FormData();
+                data.append('ServiceId', index.toString());
                 data.append('Token', this.state.accessToken);
                 Array.prototype.forEach.call(files, file => {
                     data.append('Files', file);

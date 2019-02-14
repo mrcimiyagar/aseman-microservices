@@ -18,6 +18,8 @@ namespace SharedArea.Entities
         public virtual List<BotCreation> CreatedBots { get; set; }
         [JsonProperty("subscribedBots")]
         public virtual List<BotSubscription> SubscribedBots { get; set; }
+        [JsonProperty("messageSeens")]
+        public virtual List<MessageSeen> MessageSeens { get; set; }
         [JsonProperty("userSecret")]
         public virtual UserSecret UserSecret { get; set; }
 

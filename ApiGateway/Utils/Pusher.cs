@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ApiGateway.DbContexts;
 using ApiGateway.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using MongoDB.Driver;
 using Remotion.Linq.Clauses;
 using SharedArea.Entities;
 using SharedArea.Notifications;
@@ -39,28 +40,23 @@ namespace ApiGateway.Utils
                 }
             }
             
-            Console.WriteLine("hello 1");
-            
             var cts = new CancellationTokenSource();
             _cancellationTokens[sessionId] = cts;
             
-            Console.WriteLine("hello 2");
-            
             Task.Factory.StartNew(async () =>
             {
-                Console.WriteLine("hello 3");
-             
                 using (var dbContext = new DatabaseContext())
                 {
-                    Console.WriteLine("hello 4");
-                    
                     var session = dbContext.Sessions.Find(sessionId);
                     if (!session.Online) return;
-                    dbContext.Entry(session).Collection(s => s.Notifications).Load();
-                    if (session.Notifications.LongCount() == 0) return;
-                    PushNotification(session, session.Notifications.FirstOrDefault());
-                    await Task.Delay(10000, cts.Token);
-                    NextPush(sessionId);
+                    using (var mongo = new MongoLayer())
+                    {
+                        var n = mongo.GetNotifsColl().Find(notif => true).FirstOrDefault();
+                        if (n == null) return;
+                        PushNotification(session, n);
+                        await Task.Delay(10000, cts.Token);
+                        NextPush(sessionId);
+                    }
                 }
             }, cts.Token);
         }
@@ -168,6 +164,11 @@ namespace ApiGateway.Utils
             {
                 await _notifsHub.Clients.Client(session.ConnectionId)
                     .SendAsync("NotifyVideoMessageReceived", notif);
+            }
+            else if (notif.GetType() == typeof(MessageSeenNotification))
+            {
+                await _notifsHub.Clients.Client(session.ConnectionId)
+                    .SendAsync("NotifyMessageSeen", notif);
             }
         }
     }

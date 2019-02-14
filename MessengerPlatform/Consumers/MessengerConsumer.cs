@@ -6,6 +6,7 @@ using MassTransit;
 using MessengerPlatform.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Remotion.Linq.Clauses;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
 using SharedArea.Commands.Internal.Responses;
@@ -23,7 +24,8 @@ namespace MessengerPlatform.Consumers
         , IConsumer<BotCreateFileMessageRequest>, IConsumer<PhotoCreatedNotif>, IConsumer<AudioCreatedNotif>
         , IConsumer<VideoCreatedNotif>, IConsumer<PutServiceMessageRequest>, IConsumer<ConsolidateContactRequest>
         , IConsumer<WorkershipCreatedNotif>, IConsumer<WorkershipUpdatedNotif>, IConsumer<WorkershipDeletedNotif>
-        , IConsumer<BotProfileUpdatedNotif>, IConsumer<ConsolidateDeleteAccountRequest>
+        , IConsumer<BotProfileUpdatedNotif>, IConsumer<ConsolidateDeleteAccountRequest>, IConsumer<NotifyMessageSeenRequest>
+        , IConsumer<GetMessageSeenCountRequest>
     {
         public Task Consume(ConsumeContext<BotCreatedNotif> context)
         {
@@ -936,6 +938,156 @@ namespace MessengerPlatform.Consumers
             }
 
             await context.RespondAsync(new ConsolidateDeleteAccountResponse());
+        }
+
+        public async Task Consume(ConsumeContext<NotifyMessageSeenRequest> context)
+        {
+            Console.WriteLine("hello");
+            
+            using (var dbContext = new DatabaseContext())
+            {
+                try
+                {
+                    var session = dbContext.Sessions.Find(context.Message.SessionId);
+
+                    dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                    var user = (User) session.BaseUser;
+
+                    var message = dbContext.Messages.Find(context.Message.Packet.Message.MessageId);
+                    if (message == null)
+                    {
+                        await context.RespondAsync(new NotifyMessageSeenResponse()
+                        {
+                            Packet = new Packet() {Status = "error_2"}
+                        });
+                        return;
+                    }
+
+                    var messageSeen = dbContext.MessageSeens.Find(user.BaseUserId + "_" + message.MessageId);
+                    if (messageSeen != null)
+                    {
+                        await context.RespondAsync(new NotifyMessageSeenResponse()
+                        {
+                            Packet = new Packet() {Status = "error_3"}
+                        });
+                        return;
+                    }
+
+                    dbContext.Entry(message).Reference(m => m.Room).Load();
+                    var room = message.Room;
+                    dbContext.Entry(room).Reference(r => r.Complex).Load();
+                    var complex = room.Complex;
+                    dbContext.Entry(complex).Collection(c => c.Members).Load();
+                    if (complex.Members.Any(m => m.UserId == user.BaseUserId))
+                    {
+                        if (message.AuthorId == user.BaseUserId)
+                        {
+                            await context.RespondAsync(new NotifyMessageSeenResponse()
+                            {
+                                Packet = new Packet() {Status = "error_5"}
+                            });
+                            return;
+                        }
+
+                        messageSeen = new MessageSeen()
+                        {
+                            MessageSeenId = user.BaseUserId + "_" + message.MessageId,
+                            Message = message,
+                            User = user
+                        };
+
+                        dbContext.MessageSeens.Add(messageSeen);
+
+                        dbContext.SaveChanges();
+
+                        if (complex.Mode == 1 || complex.Mode == 2)
+                        {
+                            var notif = new MessageSeenNotification()
+                            {
+                                MessageId = message.MessageId,
+                                MessageSeenCount =
+                                    dbContext.MessageSeens.LongCount(ms => ms.MessageId == message.MessageId)
+                            };
+                            dbContext.Entry(complex)
+                                .Collection(c => c.Members).Query()
+                                .Include(m => m.User)
+                                .ThenInclude(u => u.Sessions)
+                                .Load();
+                            var push = new MessageSeenPush()
+                            {
+                                Notif = notif,
+                                SessionIds = (from m in complex.Members
+                                    where m.User.BaseUserId != user.BaseUserId
+                                    from s in m.User.Sessions
+                                    select s.SessionId).ToList()
+                            };
+                            Console.WriteLine(JsonConvert.SerializeObject(push.SessionIds));
+                            SharedArea.Transport.Push<MessageSeenPush>(
+                                Program.Bus,
+                                push);
+                        }
+
+                        await context.RespondAsync(new NotifyMessageSeenResponse()
+                        {
+                            Packet = new Packet() {Status = "success"}
+                        });
+                    }
+                    else
+                    {
+                        await context.RespondAsync(new NotifyMessageSeenResponse()
+                        {
+                            Packet = new Packet() {Status = "error_4"}
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+        }
+
+        public async Task Consume(ConsumeContext<GetMessageSeenCountRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+                
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
+                
+                var message = dbContext.Messages.Find(context.Message.Packet.Message.MessageId);
+                if (message == null)
+                {
+                    await context.RespondAsync(new NotifyMessageSeenResponse()
+                    {
+                        Packet = new Packet() {Status = "error_2"}
+                    });
+                    return;
+                }
+                
+                dbContext.Entry(message).Reference(m => m.Room).Load();
+                var room = message.Room;
+                dbContext.Entry(room).Reference(r => r.Complex).Load();
+                var complex = room.Complex;
+                dbContext.Entry(complex).Collection(c => c.Members).Load();
+                if (complex.Members.Any(m => m.UserId == user.BaseUserId))
+                {
+                    var seenCount = dbContext.MessageSeens.LongCount(ms => ms.MessageId == message.MessageId);
+                    
+                    await context.RespondAsync(new NotifyMessageSeenResponse()
+                    {
+                        Packet = new Packet() {Status = "success", MessageSeenCount = seenCount}
+                    });
+                }
+                else
+                {
+                    await context.RespondAsync(new NotifyMessageSeenResponse()
+                    {
+                        Packet = new Packet() {Status = "error_3"}
+                    });
+                }
+            }
         }
     }
 }

@@ -27,6 +27,7 @@
         </e>
         <e p="DbContexts" t="Include">
           <e p="DatabaseContext.cs" t="Include" />
+          <e p="MongoLayer.cs" t="Include" />
           <e p="StreamRepo.cs" t="Include" />
         </e>
         <e p="Documentations" t="Include">
@@ -224,8 +225,8 @@
                 <e p="main.477ccc83.css.map" t="Include" />
               </e>
               <e p="js" t="Include">
-                <e p="main.b9ff5876.js" t="Include" />
-                <e p="main.b9ff5876.js.map" t="Include" />
+                <e p="main.1068daf0.js" t="Include" />
+                <e p="main.1068daf0.js.map" t="Include" />
               </e>
             </e>
           </e>
@@ -433,8 +434,12 @@
             <e p="CreateFileMessageResponse.cs" t="Include" />
             <e p="CreateTextMessageRequest.cs" t="Include" />
             <e p="CreateTextMessageResponse.cs" t="Include" />
+            <e p="GetMessageSeenCountRequest.cs" t="Include" />
+            <e p="GetMessageSeenCountResponse.cs" t="Include" />
             <e p="GetMessagesRequest.cs" t="Include" />
             <e p="GetMessagesResponse.cs" t="Include" />
+            <e p="NotifyMessageSeenRequest.cs" t="Include" />
+            <e p="NotifyMessageSeenResponse.cs" t="Include" />
           </e>
           <e p="Notification.cs" t="Include" />
           <e p="Pulse" t="Include">
@@ -464,6 +469,7 @@
             <e p="InviteCancellationPush.cs" t="Include" />
             <e p="InviteCreationPush.cs" t="Include" />
             <e p="InviteIgnoredPush.cs" t="Include" />
+            <e p="MessageSeenPush.cs" t="Include" />
             <e p="PhotoMessagePush.cs" t="Include" />
             <e p="RoomDeletionPush.cs" t="Include" />
             <e p="ServiceMessagePush.cs" t="Include" />
@@ -520,6 +526,7 @@
           <e p="Invite.cs" t="Include" />
           <e p="Membership.cs" t="Include" />
           <e p="Message.cs" t="Include" />
+          <e p="MessageSeen.cs" t="Include" />
           <e p="Pending.cs" t="Include" />
           <e p="Photo.cs" t="Include" />
           <e p="PhotoMessage.cs" t="Include" />
@@ -557,6 +564,7 @@
           <e p="InviteCancellationNotification.cs" t="Include" />
           <e p="InviteCreationNotification.cs" t="Include" />
           <e p="InviteIgnoranceNotification.cs" t="Include" />
+          <e p="MessageSeenNotification.cs" t="Include" />
           <e p="Notification.cs" t="Include" />
           <e p="PhotoMessageNotification.cs" t="Include" />
           <e p="RoomDeletionNotification.cs" t="Include" />

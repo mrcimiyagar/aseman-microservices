@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using ApiGateway.Consumers;
 using ApiGateway.DbContexts;
@@ -85,6 +86,8 @@ namespace ApiGateway
                 DatabaseConfig.ConfigDatabase(dbContext);
             }
             
+            MongoLayer.Setup();
+            
             Pusher = new Pusher(notifsHub);
                         
             Program.Bus = MassTransit.Bus.Factory.CreateUsingRabbitMq(sbc =>
@@ -115,6 +118,14 @@ namespace ApiGateway
             });
 
             Program.Bus.Start();
+
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var session in dbContext.Sessions)
+                {
+                    Pusher.NextPush(session.SessionId);
+                }
+            }
         }
     }
 }

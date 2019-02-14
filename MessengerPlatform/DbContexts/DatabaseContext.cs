@@ -7,6 +7,7 @@ namespace MessengerPlatform.DbContexts
 {
     public class DatabaseContext : SharedArea.DbContexts.DatabaseContext
     {
+        public DbSet<MessageSeen> MessageSeens { get; set; }
         public DbSet<File> Files { get; set; }
         public DbSet<FileUsage> FileUsages { get; set; }
         public DbSet<Workership> Workerships { get; set; }
@@ -34,6 +35,10 @@ namespace MessengerPlatform.DbContexts
 
             modelBuilder.Entity<FileUsage>()
                 .HasIndex(fu => new {fu.FileId, fu.RoomId})
+                .IsUnique();
+            
+            modelBuilder.Entity<MessageSeen>()
+                .HasIndex(ms => new {ms.MessageId, ms.UserId})
                 .IsUnique();
 
             modelBuilder.Entity<User>()

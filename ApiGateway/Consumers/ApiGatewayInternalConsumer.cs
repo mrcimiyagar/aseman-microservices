@@ -34,7 +34,7 @@ namespace ApiGateway.Consumers
         , IConsumer<BotAdditionToRoomPush>, IConsumer<BotRemovationFromRoomPush>, IConsumer<TextMessagePush>
         , IConsumer<PhotoMessagePush>, IConsumer<AudioMessagePush>, IConsumer<VideoMessagePush>
         , IConsumer<UserRequestedBotViewPush>, IConsumer<BotSentBotViewPush>, IConsumer<BotUpdatedBotViewPush>
-        , IConsumer<BotAnimatedBotViewPush>, IConsumer<BotRanCommandsOnBotViewPush>
+        , IConsumer<BotAnimatedBotViewPush>, IConsumer<BotRanCommandsOnBotViewPush>, IConsumer<MessageSeenPush>
     {   
         public Task Consume(ConsumeContext<UserCreatedNotif> context)
         {
@@ -462,10 +462,11 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
-
-                dbContext.SaveChanges();
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -491,10 +492,11 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
-
-                dbContext.SaveChanges();
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -519,10 +521,11 @@ namespace ApiGateway.Consumers
                         Session = s
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
-
-                dbContext.SaveChanges();
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -547,10 +550,11 @@ namespace ApiGateway.Consumers
                         Session = s
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
-
-                dbContext.SaveChanges();
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -575,10 +579,11 @@ namespace ApiGateway.Consumers
                         Session = s
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
-
-                dbContext.SaveChanges();
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -603,10 +608,11 @@ namespace ApiGateway.Consumers
                         Session = s
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
-
-                dbContext.SaveChanges();
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -632,10 +638,11 @@ namespace ApiGateway.Consumers
                         Session = s
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
-
-                dbContext.SaveChanges();
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -660,10 +667,11 @@ namespace ApiGateway.Consumers
                         Session = s
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
-
-                dbContext.SaveChanges();
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -688,10 +696,11 @@ namespace ApiGateway.Consumers
                         Session = s
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
-
-                dbContext.SaveChanges();
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -716,10 +725,11 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
-
-                dbContext.SaveChanges();
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -744,10 +754,11 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
-
-                dbContext.SaveChanges();
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -765,17 +776,24 @@ namespace ApiGateway.Consumers
                 foreach (var sessionId in context.Message.SessionIds)
                 {
                     var session = dbContext.Sessions.Find(sessionId);
-
                     var notification = new TextMessageNotification()
                     {
                         Message = context.Message.Notif.Message,
                         Session = session
                     };
-                    
-                    dbContext.Notifications.Add(notification);
-                }
 
-                dbContext.SaveChanges();
+                    using (var mongo = new MongoLayer())
+                    {
+                        try
+                        {
+                            mongo.GetNotifsColl().InsertOne(notification);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.ToString());
+                        }
+                    }
+                }
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -800,10 +818,11 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
-
-                dbContext.SaveChanges();
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -828,10 +847,11 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
-
-                dbContext.SaveChanges();
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -856,10 +876,11 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
-
-                dbContext.SaveChanges();
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -887,10 +908,11 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
-
-                dbContext.SaveChanges();
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -918,10 +940,11 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
-
-                dbContext.SaveChanges();
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -949,10 +972,11 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
-
-                dbContext.SaveChanges();
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -980,10 +1004,11 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
-
-                dbContext.SaveChanges();
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
@@ -1011,10 +1036,41 @@ namespace ApiGateway.Consumers
                         Session = session
                     };
                     
-                    dbContext.Notifications.Add(notification);
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
                 }
 
-                dbContext.SaveChanges();
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);                    
+                }
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<MessageSeenPush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var session = dbContext.Sessions.Find(sessionId);
+
+                    var notification = new MessageSeenNotification()
+                    {
+                        MessageId = context.Message.Notif.MessageId,
+                        MessageSeenCount = context.Message.Notif.MessageSeenCount,
+                        Session = session
+                    };
+                    
+                    using (var mongo = new MongoLayer())
+                    {
+                        mongo.GetNotifsColl().InsertOne(notification);
+                    }
+                }
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {

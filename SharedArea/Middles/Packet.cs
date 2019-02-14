@@ -33,6 +33,7 @@ namespace SharedArea.Middles
         public List<File> Files { get; set; }
         public List<Message> Messages { get; set; }
         public File File { get; set; }
+        public Message Message { get; set; }
         public TextMessage TextMessage { get; set; }
         public PhotoMessage PhotoMessage { get; set; }
         public AudioMessage AudioMessage { get; set; }
@@ -54,5 +55,6 @@ namespace SharedArea.Middles
         public string Password { get; set; }
         public string StreamCode { get; set; }
         public string RawJson { get; set; }
+        public long? MessageSeenCount { get; set; }
     }
 }

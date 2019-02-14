@@ -5,6 +5,7 @@ using ApiGateway.DbContexts;
 using ApiGateway.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 using SharedArea.Middles;
 using SharedArea.Utils;
 using Notification = SharedArea.Notifications.Notification;
@@ -24,14 +25,14 @@ namespace ApiGateway.Controllers
             {
                 var session = Security.Authenticate(dbContext, Request.Headers[AuthExtracter.AK]);
                 if (session == null) return new Packet() {Status = "error_0"};
-                
-                dbContext.Entry(session).Collection(s => s.Notifications).Load();
-                
-                var notif = session.Notifications.Find(n => n.NotificationId == packet.Notif.NotificationId);
-                if (notif == null) return new Packet() {Status = "error_1"};
-                
-                session.Notifications.Remove(notif);
-                dbContext.SaveChanges();
+
+                using (var mongo = new MongoLayer())
+                {
+                    var notif = mongo.GetNotifsColl().FindOneAndDelete(n =>
+                        n.NotificationId == packet.Notif.NotificationId 
+                        && n.Session.SessionId == session.SessionId);
+                    if (notif == null) return new Packet() {Status = "error_1"};
+                }
                 
                 Startup.Pusher.NextPush(session.SessionId);
             }

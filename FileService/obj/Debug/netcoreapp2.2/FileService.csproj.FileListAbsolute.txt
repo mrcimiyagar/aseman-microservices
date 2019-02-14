@@ -5,10 +5,10 @@ F:\Desktop\asemanbackendprojects\FileService\bin\Debug\netcoreapp2.2\FileService
 F:\Desktop\asemanbackendprojects\FileService\bin\Debug\netcoreapp2.2\FileService.pdb
 F:\Desktop\asemanbackendprojects\FileService\bin\Debug\netcoreapp2.2\SharedArea.dll
 F:\Desktop\asemanbackendprojects\FileService\bin\Debug\netcoreapp2.2\SharedArea.pdb
-F:\Desktop\asemanbackendprojects\FileService\obj\Debug\netcoreapp2.2\FileService.csprojAssemblyReference.cache
 F:\Desktop\asemanbackendprojects\FileService\obj\Debug\netcoreapp2.2\FileService.csproj.CoreCompileInputs.cache
 F:\Desktop\asemanbackendprojects\FileService\obj\Debug\netcoreapp2.2\FileService.AssemblyInfoInputs.cache
 F:\Desktop\asemanbackendprojects\FileService\obj\Debug\netcoreapp2.2\FileService.AssemblyInfo.cs
 F:\Desktop\asemanbackendprojects\FileService\obj\Debug\netcoreapp2.2\FileService.csproj.CopyComplete
 F:\Desktop\asemanbackendprojects\FileService\obj\Debug\netcoreapp2.2\FileService.dll
 F:\Desktop\asemanbackendprojects\FileService\obj\Debug\netcoreapp2.2\FileService.pdb
+F:\Desktop\asemanbackendprojects\FileService\obj\Debug\netcoreapp2.2\FileService.csprojAssemblyReference.cache

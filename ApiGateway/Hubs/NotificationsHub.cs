@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ApiGateway.DbContexts;
 using ApiGateway.Utils;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 
 namespace ApiGateway.Hubs
@@ -19,6 +20,7 @@ namespace ApiGateway.Hubs
                 session.ConnectionId = Context.ConnectionId;
                 session.Online = true;
                 context.SaveChanges();
+                Startup.Pusher.NextPush(sessionId);
                 return "success";
             }
         }
@@ -39,8 +41,24 @@ namespace ApiGateway.Hubs
 
         public string KeepAlive()
         {
-            return "keep-alive : " + Convert.ToInt64((DateTime.Now - DateTime.MinValue)
-                           .TotalMilliseconds).ToString(CultureInfo.InvariantCulture);
+            using (var dbContext = new DatabaseContext())
+            {
+                if (dbContext.Sessions.FirstOrDefault(s => s.ConnectionId == Context.ConnectionId) == null)
+                {
+                    return "failure";
+                }
+                else
+                {
+                    return "keep-alive : " + Convert.ToInt64((DateTime.Now - DateTime.MinValue)
+                               .TotalMilliseconds).ToString(CultureInfo.InvariantCulture);
+                }
+            }
+        }
+
+        public override Task OnConnectedAsync()
+        {
+            Console.WriteLine(Context.ConnectionId + " client connected");
+            return base.OnConnectedAsync();
         }
 
         public override Task OnDisconnectedAsync(Exception exception)

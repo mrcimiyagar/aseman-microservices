@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
 namespace SharedArea.Entities
@@ -20,5 +21,7 @@ namespace SharedArea.Entities
         public long? RoomId { get; set; }
         [JsonProperty("room")]
         public virtual Room Room { get; set; }
+        [JsonProperty("messageSeens")]
+        public virtual List<MessageSeen> MessageSeens { get; set; }
     }
 }

@@ -114,5 +114,45 @@ namespace ApiGateway.Controllers
                 return result.Packet;
             }
         }
+
+        [Route("~/api/message/notify_message_seen")]
+        [HttpPost]
+        public async Task<ActionResult<Packet>> NotifyMessageSeen([FromBody] Packet packet)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = Security.Authenticate(dbContext, Request.Headers[AuthExtracter.AK]);
+                if (session == null) return new Packet {Status = "error_1"};
+                
+                var result = await SharedArea.Transport.DirectService<NotifyMessageSeenRequest, NotifyMessageSeenResponse>(
+                    Program.Bus,
+                    SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                    session.SessionId,
+                    Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
+                    packet);
+
+                return result.Packet;
+            }
+        }
+        
+        [Route("~/api/message/get_message_seen_count")]
+        [HttpPost]
+        public async Task<ActionResult<Packet>> GetMessageSeenCount([FromBody] Packet packet)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = Security.Authenticate(dbContext, Request.Headers[AuthExtracter.AK]);
+                if (session == null) return new Packet {Status = "error_1"};
+                
+                var result = await SharedArea.Transport.DirectService<GetMessageSeenCountRequest, GetMessageSeenCountResponse>(
+                    Program.Bus,
+                    SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                    session.SessionId,
+                    Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
+                    packet);
+
+                return result.Packet;
+            }
+        }
     }
 }
