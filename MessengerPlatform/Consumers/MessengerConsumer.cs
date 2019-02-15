@@ -812,6 +812,7 @@ namespace MessengerPlatform.Consumers
                     ComplexId = complex.ComplexId,
                     Title = complex.Title,
                     Avatar = complex.Avatar,
+                    Mode = complex.Mode,
                     ComplexSecret = new ComplexSecret()
                     {
                         ComplexSecretId = complexSecret.ComplexSecretId,
@@ -845,13 +846,13 @@ namespace MessengerPlatform.Consumers
                 dbContext.SaveChanges();
 
                 var myContact = context.Message.Packet.Contacts[0];
-                myContact.Complex = complex;
+                myContact.Complex = lComplex;
                 myContact.User = me;
                 myContact.Peer = peer;
                 dbContext.Contacts.Add(myContact);
 
                 var peerContact = context.Message.Packet.Contacts[1];
-                peerContact.Complex = complex;
+                peerContact.Complex = lComplex;
                 peerContact.User = peer;
                 peerContact.Peer = me;
                 dbContext.Contacts.Add(peerContact);
@@ -1000,6 +1001,8 @@ namespace MessengerPlatform.Consumers
 
                         dbContext.SaveChanges();
 
+                        Console.WriteLine("Complex mode is " + complex.Mode);
+
                         if (complex.Mode == 1 || complex.Mode == 2)
                         {
                             var notif = new MessageSeenNotification()
@@ -1021,7 +1024,6 @@ namespace MessengerPlatform.Consumers
                                     from s in m.User.Sessions
                                     select s.SessionId).ToList()
                             };
-                            Console.WriteLine(JsonConvert.SerializeObject(push.SessionIds));
                             SharedArea.Transport.Push<MessageSeenPush>(
                                 Program.Bus,
                                 push);

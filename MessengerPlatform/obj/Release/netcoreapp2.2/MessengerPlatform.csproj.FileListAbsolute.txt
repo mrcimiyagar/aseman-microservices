@@ -1,0 +1,13 @@
+F:\Desktop\asemanbackendprojects\MessengerPlatform\bin\Release\netcoreapp2.2\MessengerPlatform.deps.json
+F:\Desktop\asemanbackendprojects\MessengerPlatform\bin\Release\netcoreapp2.2\MessengerPlatform.runtimeconfig.json
+F:\Desktop\asemanbackendprojects\MessengerPlatform\bin\Release\netcoreapp2.2\MessengerPlatform.runtimeconfig.dev.json
+F:\Desktop\asemanbackendprojects\MessengerPlatform\bin\Release\netcoreapp2.2\MessengerPlatform.dll
+F:\Desktop\asemanbackendprojects\MessengerPlatform\bin\Release\netcoreapp2.2\MessengerPlatform.pdb
+F:\Desktop\asemanbackendprojects\MessengerPlatform\bin\Release\netcoreapp2.2\SharedArea.dll
+F:\Desktop\asemanbackendprojects\MessengerPlatform\bin\Release\netcoreapp2.2\SharedArea.pdb
+F:\Desktop\asemanbackendprojects\MessengerPlatform\obj\Release\netcoreapp2.2\MessengerPlatform.csproj.CoreCompileInputs.cache
+F:\Desktop\asemanbackendprojects\MessengerPlatform\obj\Release\netcoreapp2.2\MessengerPlatform.AssemblyInfoInputs.cache
+F:\Desktop\asemanbackendprojects\MessengerPlatform\obj\Release\netcoreapp2.2\MessengerPlatform.AssemblyInfo.cs
+F:\Desktop\asemanbackendprojects\MessengerPlatform\obj\Release\netcoreapp2.2\MessengerPlatform.csproj.CopyComplete
+F:\Desktop\asemanbackendprojects\MessengerPlatform\obj\Release\netcoreapp2.2\MessengerPlatform.dll
+F:\Desktop\asemanbackendprojects\MessengerPlatform\obj\Release\netcoreapp2.2\MessengerPlatform.pdb

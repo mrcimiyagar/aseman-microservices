@@ -35,6 +35,7 @@ namespace ApiGateway.Hubs
                 session.ConnectionId = Context.ConnectionId;
                 session.Online = true;
                 context.SaveChanges();
+                Startup.Pusher.NextPush(sessionId);
                 return "success";
             }
         }

@@ -163,8 +163,7 @@ namespace ServiceManager.Controllers
                     {
                         var serviceDirName = _serviceTitles[form.ServiceId];
                         if (file.Length <= 0) return "{ \"status\" : \"failure\" }";
-                        var path = Path.Combine(Path.Combine(ServicesFiles, serviceDirName)
-                            , file.FileName);
+                        var path = Path.Combine(ServicesFiles, file.FileName);
                         System.IO.File.Delete(path);
                         using (var fs = new FileStream(path, FileMode.Create))
                             file.CopyToAsync(fs).Wait();
@@ -194,7 +193,7 @@ namespace ServiceManager.Controllers
         }
 
         public class ServiceData
-        {   
+        {
             public int Id { get; set; }
             public string Name { get; set; }
             public string State { get; set; }

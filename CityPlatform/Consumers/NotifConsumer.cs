@@ -268,13 +268,13 @@ namespace CityPlatform.Consumers
                 dbContext.SaveChanges();
 
                 var myContact = context.Message.Packet.Contacts[0];
-                myContact.Complex = complex;
+                myContact.Complex = lComplex;
                 myContact.User = me;
                 myContact.Peer = peer;
                 dbContext.Contacts.Add(myContact);
 
                 var peerContact = context.Message.Packet.Contacts[1];
-                peerContact.Complex = complex;
+                peerContact.Complex = lComplex;
                 peerContact.User = peer;
                 peerContact.Peer = me;
                 dbContext.Contacts.Add(peerContact);

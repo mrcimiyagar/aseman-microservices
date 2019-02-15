@@ -51,7 +51,7 @@ namespace ApiGateway.Utils
                     if (!session.Online) return;
                     using (var mongo = new MongoLayer())
                     {
-                        var n = mongo.GetNotifsColl().Find(notif => true).FirstOrDefault();
+                        var n = mongo.GetNotifsColl().Find(notif => notif.Session.SessionId == sessionId).FirstOrDefault();
                         if (n == null) return;
                         PushNotification(session, n);
                         await Task.Delay(10000, cts.Token);

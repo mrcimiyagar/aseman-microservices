@@ -9,14 +9,14 @@ using SharedArea.Entities;
 
 namespace MessengerPlatform.Consumers
 {
-    public class NotifConsumer : IConsumer<UserCreatedNotif>, IConsumer<ComplexCreatedNotif>, IConsumer<RoomCreatedNotif>
+    public class NotifConsumer : IConsumer<UserCreatedNotif>, IConsumer<ComplexCreatedNotif>,
+        IConsumer<RoomCreatedNotif>
         , IConsumer<MembershipCreatedNotif>, IConsumer<SessionCreatedNotif>, IConsumer<UserProfileUpdatedNotif>
         , IConsumer<ComplexProfileUpdatedNotif>, IConsumer<ComplexDeletionNotif>, IConsumer<RoomProfileUpdatedNotif>
         , IConsumer<RoomDeletionNotif>, IConsumer<InviteCreatedNotif>, IConsumer<InviteCancelledNotif>
         , IConsumer<InviteAcceptedNotif>, IConsumer<InvitedIgnoredNotif>, IConsumer<SessionUpdatedNotif>
         , IConsumer<ContactCreatedNotif>
     {
-
         public Task Consume(ConsumeContext<ContactCreatedNotif> context)
         {
             using (var dbContext = new DatabaseContext())
@@ -35,6 +35,7 @@ namespace MessengerPlatform.Consumers
                     ComplexId = complex.ComplexId,
                     Title = complex.Title,
                     Avatar = complex.Avatar,
+                    Mode = complex.Mode,
                     ComplexSecret = new ComplexSecret()
                     {
                         ComplexSecretId = complexSecret.ComplexSecretId,
@@ -68,23 +69,23 @@ namespace MessengerPlatform.Consumers
                 dbContext.SaveChanges();
 
                 var myContact = context.Message.Packet.Contacts[0];
-                myContact.Complex = complex;
+                myContact.Complex = lComplex;
                 myContact.User = me;
                 myContact.Peer = peer;
                 dbContext.Contacts.Add(myContact);
 
                 var peerContact = context.Message.Packet.Contacts[1];
-                peerContact.Complex = complex;
+                peerContact.Complex = lComplex;
                 peerContact.User = peer;
                 peerContact.Peer = me;
                 dbContext.Contacts.Add(peerContact);
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<UserCreatedNotif> context)
         {
             using (var dbContext = new DatabaseContext())
@@ -94,11 +95,11 @@ namespace MessengerPlatform.Consumers
 
                 user.UserSecret = userSecret;
                 userSecret.User = user;
-                
+
                 dbContext.AddRange(user, userSecret);
 
                 dbContext.SaveChanges();
-                
+
                 return Task.CompletedTask;
             }
         }
@@ -119,7 +120,7 @@ namespace MessengerPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -129,7 +130,7 @@ namespace MessengerPlatform.Consumers
             {
                 var complex = context.Message.Packet.Complex;
                 var room = context.Message.Packet.Room;
-                
+
                 room.Complex = complex;
 
                 dbContext.AddRange(room);
@@ -150,11 +151,11 @@ namespace MessengerPlatform.Consumers
 
                 membership.User = user;
                 membership.Complex = complex;
-                
+
                 dbContext.AddRange(membership);
 
                 dbContext.SaveChanges();
-                
+
                 return Task.CompletedTask;
             }
         }
@@ -167,11 +168,11 @@ namespace MessengerPlatform.Consumers
                 var user = context.Message.Packet.BaseUser;
 
                 session.BaseUser = dbContext.BaseUsers.Find(user.BaseUserId);
-                
+
                 dbContext.AddRange(session);
 
                 dbContext.SaveChanges();
-                
+
                 return Task.CompletedTask;
             }
         }
@@ -239,6 +240,7 @@ namespace MessengerPlatform.Consumers
                     dbContext.SaveChanges();
                 }
             }
+
             return Task.CompletedTask;
         }
 
@@ -255,7 +257,7 @@ namespace MessengerPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -266,7 +268,7 @@ namespace MessengerPlatform.Consumers
                 var globalRoom = context.Message.Packet.Room;
 
                 var localRoom = dbContext.Rooms.Find(globalRoom.RoomId);
-                
+
                 dbContext.Entry(localRoom).Reference(r => r.Complex).Load();
                 var complex = localRoom.Complex;
                 dbContext.Entry(complex).Collection(c => c.Rooms).Load();
@@ -276,7 +278,7 @@ namespace MessengerPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -287,18 +289,18 @@ namespace MessengerPlatform.Consumers
                 var invite = context.Message.Packet.Invite;
                 var complex = dbContext.Complexes.Find(context.Message.Packet.Complex.ComplexId);
                 var user = (User) dbContext.BaseUsers.Find(context.Message.Packet.User.BaseUserId);
-                
+
                 invite.Complex = complex;
                 invite.User = user;
-                
+
                 dbContext.AddRange(invite);
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<InviteCancelledNotif> context)
         {
             using (var dbContext = new DatabaseContext())
@@ -311,7 +313,7 @@ namespace MessengerPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -323,7 +325,7 @@ namespace MessengerPlatform.Consumers
                 var membership = context.Message.Packet.Membership;
                 var message = context.Message.Packet.ServiceMessage;
                 var human = (User) dbContext.BaseUsers.Find(context.Message.Packet.User.BaseUserId);
-                
+
                 dbContext.Entry(invite).Reference(i => i.Complex).Load();
                 var complex = invite.Complex;
                 human.Invites.Remove(invite);
@@ -338,7 +340,7 @@ namespace MessengerPlatform.Consumers
                 dbContext.Messages.Add(message);
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -348,14 +350,14 @@ namespace MessengerPlatform.Consumers
             {
                 var invite = dbContext.Invites.Find(context.Message.Packet.Invite.InviteId);
                 var human = (User) dbContext.BaseUsers.Find(context.Message.Packet.User.BaseUserId);
-                
+
                 dbContext.Entry(invite).Reference(i => i.Complex).Load();
                 human.Invites.Remove(invite);
                 dbContext.Invites.Remove(invite);
-                
+
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -373,7 +375,7 @@ namespace MessengerPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
     }

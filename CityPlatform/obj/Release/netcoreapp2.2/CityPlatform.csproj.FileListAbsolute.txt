@@ -1,0 +1,14 @@
+F:\Desktop\asemanbackendprojects\CityPlatform\bin\Release\netcoreapp2.2\CityPlatform.deps.json
+F:\Desktop\asemanbackendprojects\CityPlatform\bin\Release\netcoreapp2.2\CityPlatform.runtimeconfig.json
+F:\Desktop\asemanbackendprojects\CityPlatform\bin\Release\netcoreapp2.2\CityPlatform.runtimeconfig.dev.json
+F:\Desktop\asemanbackendprojects\CityPlatform\bin\Release\netcoreapp2.2\CityPlatform.dll
+F:\Desktop\asemanbackendprojects\CityPlatform\bin\Release\netcoreapp2.2\CityPlatform.pdb
+F:\Desktop\asemanbackendprojects\CityPlatform\bin\Release\netcoreapp2.2\SharedArea.dll
+F:\Desktop\asemanbackendprojects\CityPlatform\bin\Release\netcoreapp2.2\SharedArea.pdb
+F:\Desktop\asemanbackendprojects\CityPlatform\obj\Release\netcoreapp2.2\CityPlatform.csproj.CoreCompileInputs.cache
+F:\Desktop\asemanbackendprojects\CityPlatform\obj\Release\netcoreapp2.2\CityPlatform.AssemblyInfoInputs.cache
+F:\Desktop\asemanbackendprojects\CityPlatform\obj\Release\netcoreapp2.2\CityPlatform.AssemblyInfo.cs
+F:\Desktop\asemanbackendprojects\CityPlatform\obj\Release\netcoreapp2.2\CityPlatform.csproj.CopyComplete
+F:\Desktop\asemanbackendprojects\CityPlatform\obj\Release\netcoreapp2.2\CityPlatform.dll
+F:\Desktop\asemanbackendprojects\CityPlatform\obj\Release\netcoreapp2.2\CityPlatform.pdb
+F:\Desktop\asemanbackendprojects\CityPlatform\obj\Release\netcoreapp2.2\CityPlatform.csprojAssemblyReference.cache

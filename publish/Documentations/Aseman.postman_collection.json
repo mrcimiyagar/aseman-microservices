@@ -1,0 +1,1883 @@
+{
+	"info": {
+		"_postman_id": "bc1ae57c-976d-4a02-9123-4d1087a6c769",
+		"name": "Aseman",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Email\": \"theprogrammermachine@gmail.com\"\n}"
+				},
+				"url": {
+					"raw": "{{root}}/auth/register",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f1ac8b58-204f-4e8e-8550-4fcfc87620c7",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"sessionId\", jsonData.session.sessionId)",
+							"postman.setEnvironmentVariable(\"token\", jsonData.session.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Email\": \"theprogrammermachine@gmail.com\",\n    \"VerifyCode\": \"123\"\n}"
+				},
+				"url": {
+					"raw": "{{root}}/auth/verify",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"auth",
+						"verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8c8046c6-4782-4d49-9f0e-58d281315c51",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"token\", jsonData.session.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{root}}/auth/login",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{root}}/auth/logout",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateComplex",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"Title\": \"holly Complex\",\n\t\t\"Avatar\": \"502\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/complex/create_complex",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"complex",
+						"create_complex"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateComplexProfile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t    \"ComplexId\": 6,\n\t    \"Title\": \"Jerdo Complex\",\n    \t\"Avatar\": \"476\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/complex/update_complex_profile",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"complex",
+						"update_complex_profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteComplex",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"ComplexId\": 7\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/complex/delete_complex",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"complex",
+						"delete_complex"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetComplexes",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{root}}/complex/get_complexes",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"complex",
+						"get_complexes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetComplexById",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"ComplexId\": 1\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/complex/get_complex_by_id",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"complex",
+						"get_complex_by_id"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SearchComplexes",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"SearchQuery\": \"Complex1\"\n}"
+				},
+				"url": {
+					"raw": "{{root}}/complex/search_complexes",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"complex",
+						"search_complexes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateRoom",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"ComplexId\": 8\n\t},\n\t\"Room\": {\n\t\t\"Title\": \"holly room\",\n\t\t\"Avatar\": 567235\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/room/create_room",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"room",
+						"create_room"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateRoomProfile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Room\": {\n\t\t\"ComplexId\": 6,\n\t\t\"RoomId\": 8,\n\t\t\"Title\": \"Room of Tom\",\n\t\t\"Avatar\": 852\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/room/update_room_profile",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"room",
+						"update_room_profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteRoom",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Room\": {\n\t\t\"ComplexId\": 8,\n\t\t\"RoomId\": 10\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/room/delete_room",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"room",
+						"delete_room"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetRooms",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"ComplexId\": 1\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/room/get_rooms",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"room",
+						"get_rooms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetRoomById",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"ComplexId\": 1\n\t},\n\t\"Room\": {\n\t\t\"RoomId\": 1\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/room/get_room_by_id",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"room",
+						"get_room_by_id"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateUserProfile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"User\": {\n\t\t\"Title\": \"Keyhan Kasperius\",\n\t\t\"Avatar\": \"2\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/user/update_user_profile",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"user",
+						"update_user_profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetMe",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{root}}/user/get_me",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"user",
+						"get_me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUserById",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"BaseUser\": {\n\t\t\"BaseUserId\": 2\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/user/get_user_by_id",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"user",
+						"get_user_by_id"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SearchUsers",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"SearchQuery\": \"User0\"\n}"
+				},
+				"url": {
+					"raw": "{{root}}/user/search_users",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"user",
+						"search_users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateInvite",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"ComplexId\": 3\n\t},\n\t\"User\": {\n\t\t\"UserId\": 2\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/invite/create_invite",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"invite",
+						"create_invite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CancelInvite",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"ComplexId\": 3\n\t},\n\t\"User\": {\n\t\t\"UserId\": 2\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/invite/cancel_invite",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"invite",
+						"cancel_invite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AcceptInvite",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"ComplexId\": 3\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/invite/accept_invite",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"invite",
+						"accept_invite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IgnoreInvite",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"ComplexId\": 3\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/invite/ignore_invite",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"invite",
+						"ignore_invite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateContact",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"User\": {\n\t\t\"UserId\": 2\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/contact/create_contact",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"contact",
+						"create_contact"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetContacts",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{root}}/contact/get_contacts",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"contact",
+						"get_contacts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetBots",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{root}}/bot/get_bots",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"bot",
+						"get_bots"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddBotToRoom",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"ComplexId\": 1\n\t},\n\t\"Room\": {\n\t\t\"RoomId\": 1\n\t},\n\t\"Bot\": {\n\t\t\"BotId\": 1\n\t},\n\t\"Workership\": {\n\t\t\"PosX\": 150,\n\t\t\"PosY\": 150,\n\t\t\"Width\": 100,\n\t\t\"Height\": 100\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/robot/add_bot_to_room",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"robot",
+						"add_bot_to_room"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RemoveBotFromRoom",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"ComplexId\": 1\n\t},\n\t\"Room\": {\n\t\t\"RoomId\": 1\n\t},\n\t\"Bot\": {\n\t\t\"BotId\": 1\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/robot/remove_bot_from_room",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"robot",
+						"remove_bot_from_room"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetBotStoreContent",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{root}}/robot/get_bot_store_content",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"robot",
+						"get_bot_store_content"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateWorkership",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"ComplexId\": 1\n\t},\n\t\"Room\": {\n\t\t\"RoomId\": 1\n\t},\n\t\"Bot\": {\n\t\t\"BotId\": 1\n\t},\n\t\"Workership\": {\n\t\t\"PosX\": 50,\n\t\t\"PosY\": 100,\n\t\t\"Width\": 150,\n\t\t\"Height\": 200\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/robot/update_workership",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"robot",
+						"update_workership"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetCreatedBots",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{root}}/robot/get_created_bots",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"robot",
+						"get_created_bots"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetSubscribedBots",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{root}}/robot/get_subscribed_bots",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"robot",
+						"get_subscribed_bots"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SubscribeBot",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Bot\": {\n\t\t\"BotId\": 2\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/robot/subscribe_bot",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"robot",
+						"subscribe_bot"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateBot",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Bot\": {\n\t\t\"Title\": \"KasperBot\",\n\t\t\"Avatar\": 1,\n\t\t\"ViewURL\": \"https://www.google.com\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/robot/create_bot",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"robot",
+						"create_bot"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetRobot",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Bot\": {\n\t\t\"BotId\": 2\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/robot/get_robot",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"robot",
+						"get_robot"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateBotProfile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Bot\": {\n\t\t\"BotId\": 3,\n\t\t\"Title\": \"Kay2\",\n\t\t\"Avatar\": 456,\n\t\t\"ViewURL\": \"https://www.yahoo.com\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/robot/update_bot_profile",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"robot",
+						"update_bot_profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetWorkerships",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"ComplexId\": 2\n\t},\n\t\"Room\": {\n\t\t\"RoomId\": 2\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/robot/get_workerships",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"robot",
+						"get_workerships"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SearchBots",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"SearchQuery\": \"k\"\n}"
+				},
+				"url": {
+					"raw": "{{root}}/robot/search_bots",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"robot",
+						"search_bots"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UploadPhoto",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "616dfcf3-2414-456f-a171-a957a33ec8c9",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "637b55f8-202f-47c1-a310-e1bdd218375d",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "ComplexId",
+							"value": "3",
+							"type": "text"
+						},
+						{
+							"key": "RoomId",
+							"value": "3",
+							"type": "text"
+						},
+						{
+							"key": "Width",
+							"value": "150",
+							"type": "text"
+						},
+						{
+							"key": "Height",
+							"value": "150",
+							"type": "text"
+						},
+						{
+							"key": "File",
+							"type": "file",
+							"src": ""
+						}
+					]
+				},
+				"url": {
+					"raw": "{{root2}}/file/upload_photo",
+					"host": [
+						"{{root2}}"
+					],
+					"path": [
+						"file",
+						"upload_photo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UploadAudio",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "ComplexId",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "RoomId",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "Title",
+							"value": "Zedbazi",
+							"type": "text"
+						},
+						{
+							"key": "Duration",
+							"value": "2603263",
+							"type": "text"
+						},
+						{
+							"key": "File",
+							"type": "file",
+							"src": ""
+						}
+					]
+				},
+				"url": {
+					"raw": "{{root}}/file/upload_audio",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"file",
+						"upload_audio"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UploadVideo",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{sessionId}} {{token}}"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "ComplexId",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "RoomId",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "Title",
+							"value": "Dark Knigh Rises",
+							"type": "text"
+						},
+						{
+							"key": "Duration",
+							"value": "260326300",
+							"type": "text"
+						},
+						{
+							"key": "File",
+							"type": "file",
+							"src": ""
+						}
+					]
+				},
+				"url": {
+					"raw": "{{root}}/file/upload_video",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"file",
+						"upload_video"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DownloadBotAvatar",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{root}}/file/download_bot_avatar?botId=1",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"file",
+						"download_bot_avatar"
+					],
+					"query": [
+						{
+							"key": "botId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DownloadUserAvatar",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{root}}/file/download_user_avatar?userId=1",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"file",
+						"download_user_avatar"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DownloadRoomAvatar",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{root}}/file/download_room_avatar?complexId=1&roomId=1",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"file",
+						"download_room_avatar"
+					],
+					"query": [
+						{
+							"key": "complexId",
+							"value": "1"
+						},
+						{
+							"key": "roomId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DownloadComplexAvatar",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{root}}/file/download_complex_avatar?complexId=1",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"file",
+						"download_complex_avatar"
+					],
+					"query": [
+						{
+							"key": "complexId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DownloadFile",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{root}}/file/download_file?fileId=2",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"file",
+						"download_file"
+					],
+					"query": [
+						{
+							"key": "fileId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetMessages",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"ComplexId\": 1\n\t},\n\t\"Room\": {\n\t\t\"RoomId\": 1\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/message/get_messages",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"message",
+						"get_messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateTextMEssage",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"ComplexId\": 1\n\t},\n\t\"Room\": {\n\t\t\"RoomId\": 1\n\t},\n\t\"TextMessage\": {\n\t\t\"Text\": \"Hello World !\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/message/create_text_message",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"message",
+						"create_text_message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateFileMessage",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{sessionId}} {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"ComplexId\": 1\n\t},\n\t\"Room\": {\n\t\t\"RoomId\": 1\n\t},\n\t\"File\": {\n\t\t\"FileId\": 1\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/message/create_file_message",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"message",
+						"create_file_message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BotCreateTextMessage",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{botId}} {{botToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"ComplexId\": 5\n\t},\n\t\"Room\": {\n\t\t\"RoomId\": 5\n\t},\n\t\"TextMessage\": {\n\t\t\"Text\": \"Hello World !\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/message/bot_create_text_message",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"message",
+						"bot_create_text_message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BotCreateFileMessage",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{botId}} {{botToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Complex\": {\n\t\t\"ComplexId\": 5\n\t},\n\t\"Room\": {\n\t\t\"RoomId\": 5\n\t},\n\t\"File\": {\n\t\t\"FileId\": 10\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{root}}/message/bot_create_file_message",
+					"host": [
+						"{{root}}"
+					],
+					"path": [
+						"message",
+						"bot_create_file_message"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "4774311e-d63c-4c95-b782-15499c51e9da",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "74ae9bfc-fabf-491d-a22d-106fb8f34845",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

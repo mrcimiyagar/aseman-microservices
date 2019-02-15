@@ -6,7 +6,6 @@ using CityPlatform.DbContexts;
 using CityPlatform.Utils;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Remotion.Linq.Clauses;
 using SharedArea.Commands.Bot;
 using SharedArea.Commands.Complex;
 using SharedArea.Commands.Contact;
@@ -191,6 +190,16 @@ namespace CityPlatform.Consumers
             using (var dbContext = new DatabaseContext())
             {
                 var packet = context.Message.Packet;
+
+                if (packet.User.Title.Length == 0)
+                {
+                    await context.RespondAsync(new UpdateUserProfileResponse()
+                    {
+                        Packet = new Packet() {Status = "error_2"}
+                    });
+                    return;
+                }
+                
                 var session = dbContext.Sessions.Find(context.Message.SessionId);
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
                 var user = session.BaseUser;
@@ -234,7 +243,7 @@ namespace CityPlatform.Consumers
                     });
                     return;
                 }
-                if (complex?.Title.ToLower() != "home" && complex?.ComplexSecret.AdminId == session.BaseUser.BaseUserId)
+                if (complex.Title.ToLower() != "home" && complex.ComplexSecret.AdminId == session.BaseUser.BaseUserId)
                 {
                     complex.Title = packet.Complex.Title;
                     complex.Avatar = packet.Complex.Avatar;
@@ -488,7 +497,7 @@ namespace CityPlatform.Consumers
                 {
                     var complex = dbContext.Complexes.Find(packet.Room.ComplexId);
                     dbContext.Entry(complex).Collection(c => c.Rooms).Load();
-                    if (complex.Rooms.Count() > 1 && complex.Rooms.Any(r => r.RoomId == packet.Room.RoomId))
+                    if (complex.Rooms.Count > 1 && complex.Rooms.Any(r => r.RoomId == packet.Room.RoomId))
                     {
                         var room = complex.Rooms.Find(r => r.RoomId == packet.Room.RoomId);
                         complex.Rooms.Remove(room);
@@ -782,7 +791,7 @@ namespace CityPlatform.Consumers
                                 var sessionIds = new List<long>();
                                 foreach (var targetSession in human.Sessions)
                                 {
-                                    sessionIds.Add(session.SessionId);
+                                    sessionIds.Add(targetSession.SessionId);
                                 }
 
                                 var inviteNotification = new InviteCreationNotification()
@@ -843,8 +852,21 @@ namespace CityPlatform.Consumers
             {
                 var packet = context.Message.Packet;
                 var session = dbContext.Sessions.Find(context.Message.SessionId);
-
-                var complex = dbContext.Complexes.Find(packet.Complex.ComplexId);
+                
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
+                dbContext.Entry(user).Collection(u => u.Memberships).Load();
+                var mem = user.Memberships.Find(m => m.ComplexId == packet.Complex.ComplexId);
+                if (mem == null)
+                {
+                    await context.RespondAsync(new CancelInviteResponse()
+                    {
+                        Packet = new Packet {Status = "error_3"}
+                    });
+                    return;
+                }
+                dbContext.Entry(mem).Reference(m => m.Complex).Load();
+                var complex = mem.Complex;
                 if (complex != null)
                 {
                     dbContext.Entry(complex).Collection(c => c.Invites).Load();
@@ -1017,7 +1039,7 @@ namespace CityPlatform.Consumers
                         new InviteAcceptancePush()
                         {
                             Notif = notification,
-                            SessionIds = sessionIds
+                            SessionIds = inviterSessiondIds
                         });
 
                     await context.RespondAsync(new AcceptInviteResponse()
@@ -1439,7 +1461,20 @@ namespace CityPlatform.Consumers
                 var packet = context.Message.Packet;
                 var session = dbContext.Sessions.Find(context.Message.SessionId);
 
-                var complex = dbContext.Complexes.Find(packet.Complex.ComplexId);
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
+                dbContext.Entry(user).Collection(u => u.Memberships).Load();
+                var mem = user.Memberships.Find(m => m.ComplexId == packet.Complex.ComplexId);
+                if (mem == null)
+                {
+                    await context.RespondAsync(new CreateRoomResponse()
+                    {
+                        Packet = new Packet {Status = "error_2"}
+                    });
+                    return;
+                }
+                dbContext.Entry(mem).Reference(m => m.Complex).Load();
+                var complex = mem.Complex;
                 if (complex != null)
                 {
                     if (!string.IsNullOrEmpty(packet.Room.Title))

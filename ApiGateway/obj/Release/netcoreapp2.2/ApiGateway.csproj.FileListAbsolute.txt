@@ -1,0 +1,17 @@
+F:\Desktop\asemanbackendprojects\ApiGateway\bin\Release\netcoreapp2.2\ApiGateway.deps.json
+F:\Desktop\asemanbackendprojects\ApiGateway\bin\Release\netcoreapp2.2\ApiGateway.runtimeconfig.json
+F:\Desktop\asemanbackendprojects\ApiGateway\bin\Release\netcoreapp2.2\ApiGateway.runtimeconfig.dev.json
+F:\Desktop\asemanbackendprojects\ApiGateway\bin\Release\netcoreapp2.2\ApiGateway.dll
+F:\Desktop\asemanbackendprojects\ApiGateway\bin\Release\netcoreapp2.2\ApiGateway.pdb
+F:\Desktop\asemanbackendprojects\ApiGateway\bin\Release\netcoreapp2.2\SharedArea.dll
+F:\Desktop\asemanbackendprojects\ApiGateway\bin\Release\netcoreapp2.2\SharedArea.pdb
+F:\Desktop\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.csprojAssemblyReference.cache
+F:\Desktop\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.csproj.CoreCompileInputs.cache
+F:\Desktop\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.RazorAssemblyInfo.cache
+F:\Desktop\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.RazorAssemblyInfo.cs
+F:\Desktop\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.AssemblyInfoInputs.cache
+F:\Desktop\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.AssemblyInfo.cs
+F:\Desktop\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.RazorTargetAssemblyInfo.cache
+F:\Desktop\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.csproj.CopyComplete
+F:\Desktop\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.dll
+F:\Desktop\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.pdb

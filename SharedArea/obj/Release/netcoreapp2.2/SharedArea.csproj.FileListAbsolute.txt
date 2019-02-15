@@ -1,0 +1,9 @@
+F:\Desktop\asemanbackendprojects\SharedArea\bin\Release\netcoreapp2.2\SharedArea.deps.json
+F:\Desktop\asemanbackendprojects\SharedArea\bin\Release\netcoreapp2.2\SharedArea.dll
+F:\Desktop\asemanbackendprojects\SharedArea\bin\Release\netcoreapp2.2\SharedArea.pdb
+F:\Desktop\asemanbackendprojects\SharedArea\obj\Release\netcoreapp2.2\SharedArea.csproj.CoreCompileInputs.cache
+F:\Desktop\asemanbackendprojects\SharedArea\obj\Release\netcoreapp2.2\SharedArea.AssemblyInfoInputs.cache
+F:\Desktop\asemanbackendprojects\SharedArea\obj\Release\netcoreapp2.2\SharedArea.AssemblyInfo.cs
+F:\Desktop\asemanbackendprojects\SharedArea\obj\Release\netcoreapp2.2\SharedArea.dll
+F:\Desktop\asemanbackendprojects\SharedArea\obj\Release\netcoreapp2.2\SharedArea.pdb
+F:\Desktop\asemanbackendprojects\SharedArea\obj\Release\netcoreapp2.2\SharedArea.csprojAssemblyReference.cache

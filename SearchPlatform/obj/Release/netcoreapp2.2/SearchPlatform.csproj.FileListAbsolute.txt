@@ -1,0 +1,14 @@
+F:\Desktop\asemanbackendprojects\SearchPlatform\bin\Release\netcoreapp2.2\SearchPlatform.deps.json
+F:\Desktop\asemanbackendprojects\SearchPlatform\bin\Release\netcoreapp2.2\SearchPlatform.runtimeconfig.json
+F:\Desktop\asemanbackendprojects\SearchPlatform\bin\Release\netcoreapp2.2\SearchPlatform.runtimeconfig.dev.json
+F:\Desktop\asemanbackendprojects\SearchPlatform\bin\Release\netcoreapp2.2\SearchPlatform.dll
+F:\Desktop\asemanbackendprojects\SearchPlatform\bin\Release\netcoreapp2.2\SearchPlatform.pdb
+F:\Desktop\asemanbackendprojects\SearchPlatform\bin\Release\netcoreapp2.2\SharedArea.dll
+F:\Desktop\asemanbackendprojects\SearchPlatform\bin\Release\netcoreapp2.2\SharedArea.pdb
+F:\Desktop\asemanbackendprojects\SearchPlatform\obj\Release\netcoreapp2.2\SearchPlatform.csprojAssemblyReference.cache
+F:\Desktop\asemanbackendprojects\SearchPlatform\obj\Release\netcoreapp2.2\SearchPlatform.csproj.CoreCompileInputs.cache
+F:\Desktop\asemanbackendprojects\SearchPlatform\obj\Release\netcoreapp2.2\SearchPlatform.AssemblyInfoInputs.cache
+F:\Desktop\asemanbackendprojects\SearchPlatform\obj\Release\netcoreapp2.2\SearchPlatform.AssemblyInfo.cs
+F:\Desktop\asemanbackendprojects\SearchPlatform\obj\Release\netcoreapp2.2\SearchPlatform.csproj.CopyComplete
+F:\Desktop\asemanbackendprojects\SearchPlatform\obj\Release\netcoreapp2.2\SearchPlatform.dll
+F:\Desktop\asemanbackendprojects\SearchPlatform\obj\Release\netcoreapp2.2\SearchPlatform.pdb
