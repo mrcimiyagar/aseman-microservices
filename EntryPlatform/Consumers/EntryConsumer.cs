@@ -1,4 +1,6 @@
 ﻿
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -98,82 +100,100 @@ namespace EntryPlatform.Consumers
                             user = new User()
                             {
                                 Title = "New User",
-                                Avatar = -1
-                            };                            
-                            userAuth = new UserSecret()
-                            {
-                                User = user,
-                                Email = packet.Email
+                                Avatar = -1,
+                                UserSecret = new UserSecret()
+                                {
+                                    Email = packet.Email
+                                },
+                                Memberships = new List<Membership>()
+                                {
+                                    new Membership()
+                                    {
+                                        Complex = new Complex()
+                                        {
+                                            Title = "Home",
+                                            Avatar = 0,
+                                            Mode = 1,
+                                            ComplexSecret = new ComplexSecret()
+                                            {
+                                                
+                                            },
+                                            Rooms = new List<Room>()
+                                            {
+                                                new Room()
+                                                {
+                                                    Title = "Main",
+                                                    Avatar = 0
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             };
-                            user.UserSecret = userAuth;
-                                                        
-                            var complex = new Complex()
-                            {
-                                Title = "Home",
-                                Avatar = 0,
-                                Mode = 1
-                            };
-                            var ca = new ComplexSecret()
-                            {
-                                Admin = user,
-                                Complex = complex
-                            };
-                            
-                            complex.ComplexSecret = ca;
-                            var room = new Room()
-                            {
-                                Title = "Main",
-                                Avatar = 0,
-                                Complex = complex
-                            };
-                            
-                            userAuth.Home = complex;
-                            
-                            var mem = new Membership()
-                            {
-                                User = user,
-                                Complex = complex
-                            };
+                            user.UserSecret.User = user;
+                            user.Memberships[0].User = user;
+                            user.Memberships[0].Complex.ComplexSecret.Complex = user.Memberships[0].Complex;
+                            user.Memberships[0].Complex.ComplexSecret.Admin = user;
+                            user.Memberships[0].Complex.Rooms[0].Complex = user.Memberships[0].Complex;
+                            user.UserSecret.Home = user.Memberships[0].Complex;
+                            user.Memberships[0].User = user;
                             
                             var result = await SharedArea.Transport.RequestService<MakeAccountRequest, MakeAccountResponse>(
                                 Program.Bus,
                                 SharedArea.GlobalVariables.CITY_QUEUE_NAME,
-                                new Packet() {User = user, UserSecret = userAuth, Complex = complex, ComplexSecret = ca, Room = room});
+                                new Packet() {User = user, UserSecret = user.UserSecret,
+                                    ComplexSecret = user.Memberships[0].Complex.ComplexSecret});
 
                             user.BaseUserId = result.Packet.User.BaseUserId;
-                            userAuth.UserSecretId = result.Packet.UserSecret.UserSecretId;
-                            complex.ComplexId = result.Packet.Complex.ComplexId;
-                            ca.ComplexSecretId = result.Packet.ComplexSecret.ComplexSecretId;
-                            room.RoomId = result.Packet.Room.RoomId;
-                            mem.MembershipId = result.Packet.Membership.MembershipId;
+                            user.UserSecret.UserSecretId = result.Packet.UserSecret.UserSecretId;
+                            user.Memberships[0].Complex.ComplexId = result.Packet.Complex.ComplexId;
+                            user.Memberships[0].Complex.ComplexSecret.ComplexSecretId = result.Packet.ComplexSecret.ComplexSecretId;
+                            user.Memberships[0].Complex.Rooms[0].RoomId = result.Packet.Room.RoomId;
+                            user.Memberships[0].MembershipId = result.Packet.Membership.MembershipId;
                             
-                            dbContext.AddRange(user, userAuth, complex, ca, room, mem);
+                            dbContext.AddRange(user);
 
                             dbContext.SaveChanges();
                             
-                            SharedArea.Transport.NotifyService<UserCreatedNotif>(
+                            SharedArea.Transport.NotifyService<AccountCreatedNotif>(
                                 Program.Bus,
-                                new Packet() {User = user, UserSecret = userAuth},
+                                new Packet() {User = user, UserSecret = user.UserSecret,
+                                    ComplexSecret = user.Memberships[0].Complex.ComplexSecret},
                                 SharedArea.GlobalVariables.AllQueuesExcept(new []
                                 {
                                     SharedArea.GlobalVariables.ENTRY_QUEUE_NAME,
-                                    SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                                    SharedArea.GlobalVariables.CITY_QUEUE_NAME,
+                                    SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME
                                 }));
                             
-                            SharedArea.Transport.NotifyService<ComplexCreatedNotif>(
+                            await SharedArea.Transport.RequestService<ConsolidateMakeAccountRequest, ConsolidateMakeAccountResponse>(
                                 Program.Bus,
-                                new Packet() {User = user, Complex = complex, ComplexSecret = ca, Room = room, Membership = mem},
-                                SharedArea.GlobalVariables.AllQueuesExcept(new []
-                                {
-                                    SharedArea.GlobalVariables.ENTRY_QUEUE_NAME,
-                                    SharedArea.GlobalVariables.CITY_QUEUE_NAME
-                                }));
+                                SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                                new Packet() {User = user, UserSecret = user.UserSecret,
+                                    ComplexSecret = user.Memberships[0].Complex.ComplexSecret});
+
+                            var message = new ServiceMessage()
+                            {
+                                Author = null,
+                                Room = user.Memberships[0].Complex.Rooms[0],
+                                RoomId = user.Memberships[0].Complex.Rooms[0].RoomId
+                            };
+                            
+                            await SharedArea.Transport
+                                .RequestService<PutServiceMessageRequest, PutServiceMessageResponse>(
+                                    Program.Bus,
+                                    SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                                    new Packet()
+                                    {
+                                        ServiceMessage = message
+                                    });
                         }
                         else
                         {
                             dbContext.Entry(userAuth).Reference(us => us.User).Load();
                             user = userAuth.User;
                         }
+                        
                         var session = new Session()
                         {
                             Token = token,
@@ -215,7 +235,8 @@ namespace EntryPlatform.Consumers
                             {
                                 Packet = new Packet()
                                 {
-                                    Status = "success", Session = session, UserSecret = userAuth, ComplexSecret = user.UserSecret.Home.ComplexSecret
+                                    Status = "success", Session = session, UserSecret = userAuth
+                                    , ComplexSecret = user.UserSecret.Home.ComplexSecret
                                 }
                             });
                     }

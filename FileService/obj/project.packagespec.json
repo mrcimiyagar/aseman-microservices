@@ -55,6 +55,10 @@
           "target": "Package",
           "version": "[2.2.0, )",
           "autoReferenced": true
+        },
+        "SixLabors.ImageSharp": {
+          "target": "Package",
+          "version": "[1.0.0-beta0006, )"
         }
       },
       "imports": [

@@ -20,7 +20,7 @@ namespace SharedArea.Entities
         public virtual List<BotSubscription> SubscribedBots { get; set; }
         [JsonProperty("messageSeens")]
         public virtual List<MessageSeen> MessageSeens { get; set; }
-        [JsonProperty("userSecret")]
+        [JsonIgnore]
         public virtual UserSecret UserSecret { get; set; }
 
         public User()

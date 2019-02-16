@@ -21,12 +21,14 @@ namespace ApiGateway.Consumers
         , IConsumer<BotProfileUpdatedNotif>, IConsumer<BotSubscribedNotif>, IConsumer<BotCreatedNotif>
         , IConsumer<PhotoCreatedNotif>, IConsumer<AudioCreatedNotif>, IConsumer<VideoCreatedNotif>
         , IConsumer<SessionUpdatedNotif>, IConsumer<RoomDeletionNotif>, IConsumer<WorkershipCreatedNotif>
-        , IConsumer<WorkershipUpdatedNotif>, IConsumer<WorkershipDeletedNotif>
+        , IConsumer<WorkershipUpdatedNotif>, IConsumer<WorkershipDeletedNotif>, IConsumer<AccountCreatedNotif>
 
         , IConsumer<PutUserRequest>, IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
         , IConsumer<PutMembershipRequest>, IConsumer<PutSessionRequest>, IConsumer<UpdateUserSecretRequest>
-        , IConsumer<PutServiceMessageRequest>, IConsumer<ConsolidateContactRequest>, IConsumer<ConsolidateSessionRequest>
-        , IConsumer<MakeAccountRequest>, IConsumer<ConsolidateDeleteAccountRequest>
+        , IConsumer<PutServiceMessageRequest>, IConsumer<ConsolidateContactRequest>,
+        IConsumer<ConsolidateSessionRequest>
+        , IConsumer<MakeAccountRequest>, IConsumer<ConsolidateDeleteAccountRequest>,
+        IConsumer<ConsolidateMakeAccountRequest>, IConsumer<ConsolidateCreateComplexRequest>
 
         , IConsumer<ComplexDeletionPush>, IConsumer<RoomDeletionPush>, IConsumer<ContactCreationPush>
         , IConsumer<ServiceMessagePush>, IConsumer<InviteCreationPush>, IConsumer<InviteCancellationPush>
@@ -35,7 +37,7 @@ namespace ApiGateway.Consumers
         , IConsumer<PhotoMessagePush>, IConsumer<AudioMessagePush>, IConsumer<VideoMessagePush>
         , IConsumer<UserRequestedBotViewPush>, IConsumer<BotSentBotViewPush>, IConsumer<BotUpdatedBotViewPush>
         , IConsumer<BotAnimatedBotViewPush>, IConsumer<BotRanCommandsOnBotViewPush>, IConsumer<MessageSeenPush>
-    {   
+    {
         public Task Consume(ConsumeContext<UserCreatedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -43,6 +45,7 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
             return Task.CompletedTask;
         }
 
@@ -53,6 +56,7 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
             return Task.CompletedTask;
         }
 
@@ -63,6 +67,7 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
             return Task.CompletedTask;
         }
 
@@ -73,9 +78,10 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<SessionCreatedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -95,10 +101,10 @@ namespace ApiGateway.Consumers
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<UserProfileUpdatedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -106,9 +112,10 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<ComplexProfileUpdatedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -116,6 +123,7 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
             return Task.CompletedTask;
         }
 
@@ -126,9 +134,10 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<RoomProfileUpdatedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -136,9 +145,10 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<ContactCreatedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -146,9 +156,10 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<InviteCreatedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -156,9 +167,10 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<InviteCancelledNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -166,9 +178,10 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<InviteAcceptedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -176,9 +189,10 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<InvitedIgnoredNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -186,9 +200,10 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<BotProfileUpdatedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -196,9 +211,10 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<BotSubscribedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -206,9 +222,10 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<BotCreatedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -234,7 +251,7 @@ namespace ApiGateway.Consumers
 
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<PhotoCreatedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -242,9 +259,10 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<AudioCreatedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -252,9 +270,10 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<VideoCreatedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -262,9 +281,10 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<SessionUpdatedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -272,10 +292,10 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
-            
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<RoomDeletionNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -283,7 +303,7 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -294,10 +314,10 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
-            
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<WorkershipUpdatedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -305,10 +325,10 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
-            
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<WorkershipDeletedNotif> context)
         {
             foreach (var destination in context.Message.Destinations)
@@ -316,7 +336,7 @@ namespace ApiGateway.Consumers
                 Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
                     .Result.Send(context.Message);
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -355,7 +375,7 @@ namespace ApiGateway.Consumers
                 context.Message.Packet);
             await context.RespondAsync(result);
         }
-        
+
         public async Task Consume(ConsumeContext<PutSessionRequest> context)
         {
             var result = await SharedArea.Transport.DirectService<PutSessionRequest, PutSessionResponse>(
@@ -364,7 +384,7 @@ namespace ApiGateway.Consumers
                 context.Message.Packet);
             await context.RespondAsync(result);
         }
-        
+
         public async Task Consume(ConsumeContext<UpdateUserSecretRequest> context)
         {
             var result = await SharedArea.Transport.DirectService<UpdateUserSecretRequest, UpdateUserSecretResponse>(
@@ -373,7 +393,7 @@ namespace ApiGateway.Consumers
                 context.Message.Packet);
             await context.RespondAsync(result);
         }
-        
+
         public async Task Consume(ConsumeContext<PutServiceMessageRequest> context)
         {
             var result = await SharedArea.Transport.DirectService<PutServiceMessageRequest, PutServiceMessageResponse>(
@@ -382,16 +402,17 @@ namespace ApiGateway.Consumers
                 context.Message.Packet);
             await context.RespondAsync(result);
         }
-        
+
         public async Task Consume(ConsumeContext<ConsolidateContactRequest> context)
         {
-            var result = await SharedArea.Transport.DirectService<ConsolidateContactRequest, ConsolidateContactResponse>(
-                Program.Bus,
-                context.Message.Destination,
-                context.Message.Packet);
+            var result =
+                await SharedArea.Transport.DirectService<ConsolidateContactRequest, ConsolidateContactResponse>(
+                    Program.Bus,
+                    context.Message.Destination,
+                    context.Message.Packet);
             await context.RespondAsync(result);
         }
-        
+
         public async Task Consume(ConsumeContext<MakeAccountRequest> context)
         {
             var result = await SharedArea.Transport.DirectService<MakeAccountRequest, MakeAccountResponse>(
@@ -430,11 +451,12 @@ namespace ApiGateway.Consumers
                     var lSessions = new List<Session>();
                     foreach (var gSession in gSessions)
                         lSessions.Add(dbContext.Sessions.Find(gSession.SessionId));
-                    
+
                     dbContext.Sessions.RemoveRange(lSessions);
 
                     dbContext.SaveChanges();
                 }
+
                 await context.RespondAsync(new ConsolidateDeleteAccountResponse());
             }
             else
@@ -461,7 +483,7 @@ namespace ApiGateway.Consumers
                         ComplexId = context.Message.Notif.ComplexId,
                         Session = session
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -470,10 +492,10 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -491,7 +513,7 @@ namespace ApiGateway.Consumers
                         RoomId = context.Message.Notif.RoomId,
                         Session = session
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -500,10 +522,10 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -520,7 +542,7 @@ namespace ApiGateway.Consumers
                         Contact = context.Message.Notif.Contact,
                         Session = s
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -529,10 +551,10 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -549,7 +571,7 @@ namespace ApiGateway.Consumers
                         Message = context.Message.Notif.Message,
                         Session = s
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -558,13 +580,13 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<InviteCreationPush> context)
         {
             using (var dbContext = new DatabaseContext())
@@ -578,7 +600,7 @@ namespace ApiGateway.Consumers
                         Invite = context.Message.Notif.Invite,
                         Session = s
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -587,13 +609,13 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<InviteCancellationPush> context)
         {
             using (var dbContext = new DatabaseContext())
@@ -607,7 +629,7 @@ namespace ApiGateway.Consumers
                         Invite = context.Message.Notif.Invite,
                         Session = s
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -616,13 +638,13 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<UserJointComplexPush> context)
         {
             using (var dbContext = new DatabaseContext())
@@ -637,7 +659,7 @@ namespace ApiGateway.Consumers
                         UserId = context.Message.Notif.UserId,
                         Session = s
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -646,13 +668,13 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<InviteAcceptancePush> context)
         {
             using (var dbContext = new DatabaseContext())
@@ -666,7 +688,7 @@ namespace ApiGateway.Consumers
                         Invite = context.Message.Notif.Invite,
                         Session = s
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -675,13 +697,13 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<InviteIgnoredPush> context)
         {
             using (var dbContext = new DatabaseContext())
@@ -695,7 +717,7 @@ namespace ApiGateway.Consumers
                         Invite = context.Message.Notif.Invite,
                         Session = s
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -704,13 +726,13 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<BotAdditionToRoomPush> context)
         {
             using (var dbContext = new DatabaseContext())
@@ -724,7 +746,7 @@ namespace ApiGateway.Consumers
                         Room = context.Message.Notif.Room,
                         Session = session
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -733,13 +755,13 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<BotRemovationFromRoomPush> context)
         {
             using (var dbContext = new DatabaseContext())
@@ -753,7 +775,7 @@ namespace ApiGateway.Consumers
                         Room = context.Message.Notif.Room,
                         Session = session
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -762,10 +784,10 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -797,10 +819,10 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -817,7 +839,7 @@ namespace ApiGateway.Consumers
                         Message = context.Message.Notif.Message,
                         Session = session
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -826,10 +848,10 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -846,7 +868,7 @@ namespace ApiGateway.Consumers
                         Message = context.Message.Notif.Message,
                         Session = session
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -855,10 +877,10 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -875,7 +897,7 @@ namespace ApiGateway.Consumers
                         Message = context.Message.Notif.Message,
                         Session = session
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -884,10 +906,10 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -907,7 +929,7 @@ namespace ApiGateway.Consumers
                         UserSessionId = context.Message.Notif.UserSessionId,
                         Session = session
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -916,10 +938,10 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -939,7 +961,7 @@ namespace ApiGateway.Consumers
                         ViewData = context.Message.Notif.ViewData,
                         Session = session
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -948,13 +970,13 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<BotUpdatedBotViewPush> context)
         {
             using (var dbContext = new DatabaseContext())
@@ -971,7 +993,7 @@ namespace ApiGateway.Consumers
                         UpdateData = context.Message.Notif.UpdateData,
                         Session = session
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -980,13 +1002,13 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<BotAnimatedBotViewPush> context)
         {
             using (var dbContext = new DatabaseContext())
@@ -1003,7 +1025,7 @@ namespace ApiGateway.Consumers
                         AnimData = context.Message.Notif.AnimData,
                         Session = session
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -1012,13 +1034,13 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
-        
+
         public Task Consume(ConsumeContext<BotRanCommandsOnBotViewPush> context)
         {
             using (var dbContext = new DatabaseContext())
@@ -1035,7 +1057,7 @@ namespace ApiGateway.Consumers
                         CommandsData = context.Message.Notif.CommandsData,
                         Session = session
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -1044,10 +1066,10 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -1065,7 +1087,7 @@ namespace ApiGateway.Consumers
                         MessageSeenCount = context.Message.Notif.MessageSeenCount,
                         Session = session
                     };
-                    
+
                     using (var mongo = new MongoLayer())
                     {
                         mongo.GetNotifsColl().InsertOne(notification);
@@ -1074,11 +1096,43 @@ namespace ApiGateway.Consumers
 
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Startup.Pusher.NextPush(sessionId);                    
+                    Startup.Pusher.NextPush(sessionId);
                 }
             }
-            
+
             return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<AccountCreatedNotif> context)
+        {
+            foreach (var destination in context.Message.Destinations)
+            {
+                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
+                    .Result.Send(context.Message);
+            }
+
+            return Task.CompletedTask;
+        }
+
+
+        public async Task Consume(ConsumeContext<ConsolidateMakeAccountRequest> context)
+        {
+            var result = await SharedArea.Transport
+                .DirectService<ConsolidateMakeAccountRequest, ConsolidateMakeAccountResponse>(
+                    Program.Bus,
+                    context.Message.Destination,
+                    context.Message.Packet);
+            await context.RespondAsync(result);
+        }
+        
+        public async Task Consume(ConsumeContext<ConsolidateCreateComplexRequest> context)
+        {
+            var result = await SharedArea.Transport
+                .DirectService<ConsolidateCreateComplexRequest, ConsolidateCreateComplexResponse>(
+                    Program.Bus,
+                    context.Message.Destination,
+                    context.Message.Packet);
+            await context.RespondAsync(result);
         }
     }
 }

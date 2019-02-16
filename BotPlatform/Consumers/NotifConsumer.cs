@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using BotPlatform.DbContexts;
@@ -15,7 +16,7 @@ namespace BotPlatform.Consumers
         , IConsumer<ComplexProfileUpdatedNotif>, IConsumer<ComplexDeletionNotif>, IConsumer<RoomProfileUpdatedNotif>
         , IConsumer<RoomDeletionNotif>, IConsumer<ContactCreatedNotif>, IConsumer<InviteCreatedNotif>
         , IConsumer<InviteCancelledNotif>, IConsumer<InviteAcceptedNotif>, IConsumer<InvitedIgnoredNotif>
-        , IConsumer<SessionUpdatedNotif>
+        , IConsumer<SessionUpdatedNotif>, IConsumer<AccountCreatedNotif>
     {
         public Task Consume(ConsumeContext<UserCreatedNotif> context)
         {
@@ -44,10 +45,14 @@ namespace BotPlatform.Consumers
                 var complexSecret = context.Message.Packet.ComplexSecret;
 
                 complex.ComplexSecret = complexSecret;
-                complexSecret.Admin = admin;
                 complexSecret.Complex = complex;
+                complex.Rooms[0].Complex = complex;
+                complex.Members[0].Complex = complex;
+                complex.Rooms[0].Messages[0].Room = complex.Rooms[0];
+                complexSecret.Admin = admin;
+                complex.Members[0].User = admin;
 
-                dbContext.AddRange(complex, complexSecret);
+                dbContext.AddRange(complex);
 
                 dbContext.SaveChanges();
             }
@@ -376,6 +381,32 @@ namespace BotPlatform.Consumers
                 dbContext.SaveChanges();
             }
 
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<AccountCreatedNotif> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var user = context.Message.Packet.User;
+                var userSecret = context.Message.Packet.UserSecret;
+                var complexSecret = context.Message.Packet.ComplexSecret;
+
+                user.UserSecret = userSecret;
+                userSecret.User = user;
+                user.Memberships[0].User = user;
+                user.Memberships[0].Complex.ComplexSecret = complexSecret;
+                user.Memberships[0].Complex.ComplexSecret.Complex = user.Memberships[0].Complex;
+                user.Memberships[0].Complex.ComplexSecret.Admin = user;
+                user.Memberships[0].Complex.Rooms[0].Complex = user.Memberships[0].Complex;
+                user.UserSecret.Home = user.Memberships[0].Complex;
+                user.Memberships[0].User = user;
+                
+                dbContext.AddRange(user);
+
+                dbContext.SaveChanges();
+            }
+            
             return Task.CompletedTask;
         }
     }

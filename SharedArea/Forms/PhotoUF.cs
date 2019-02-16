@@ -7,5 +7,6 @@ namespace SharedArea.Forms
         public long RoomId { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
+        public bool IsAvatar { get; set; }
     }
 }

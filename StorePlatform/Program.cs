@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using MassTransit;
+using MassTransit.Logging;
 using MassTransit.NLogIntegration;
 using Newtonsoft.Json;
+using Serilog;
 using SharedArea.Entities;
 using SharedArea.Utils;
 using StorePlatform.Consumers;
@@ -50,7 +52,7 @@ namespace StorePlatform
                     options.NullValueHandling = NullValueHandling.Ignore;
                     return options;
                 });
-                sbc.UseNLog();
+                sbc.UseSerilog();
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.STORE_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<StoreConsumer>();

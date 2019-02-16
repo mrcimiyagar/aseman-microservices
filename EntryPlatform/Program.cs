@@ -39,7 +39,7 @@ namespace EntryPlatform
                     options.NullValueHandling = NullValueHandling.Ignore;
                     return options;
                 });
-                sbc.UseNLog();
+                sbc.UseSerilog();
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.ENTRY_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<EntryConsumer>();

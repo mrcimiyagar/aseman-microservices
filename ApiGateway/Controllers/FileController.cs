@@ -62,7 +62,8 @@ namespace ApiGateway.Controllers
                     ComplexId = form.ComplexId,
                     RoomId = form.RoomId,
                     Width = form.Width,
-                    Height = form.Height
+                    Height = form.Height,
+                    IsAvatar = form.IsAvatar
                 };
                 var result = await client.Request(new
                 {

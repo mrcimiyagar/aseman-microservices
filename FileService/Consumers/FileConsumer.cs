@@ -13,6 +13,9 @@ using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
 using SharedArea.Entities;
 using SharedArea.Middles;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using File = System.IO.File;
 
 namespace FileService.Consumers
@@ -127,7 +130,28 @@ namespace FileService.Consumers
                         File.Create(filePath).Close();
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
-                            contentStream.CopyTo(stream);
+                            await contentStream.CopyToAsync(stream);
+                        }
+
+                        if (form.IsAvatar)
+                        {
+                            using (var image = Image.Load(filePath))
+                            {
+                                float width, height;
+                                if (image.Width > image.Height)
+                                {
+                                    width = image.Width > 256 ? 256 : image.Width;
+                                    height = (float)image.Height / (float)image.Width * width;
+                                }
+                                else
+                                {
+                                    height = image.Height > 256 ? 256 : image.Height;
+                                    width = (float)image.Width / (float)image.Height * height;
+                                }
+                                image.Mutate(x => x.Resize((int)width, (int)height));
+                                File.Delete(filePath);
+                                image.Save(filePath + ".png");
+                            }
                         }
                     }
                 }
@@ -373,15 +397,6 @@ namespace FileService.Consumers
         {
             var fileId = context.Message.FileId;
             var streamCode = context.Message.StreamCode;
-            if (fileId == 0)
-            {
-                await UploadFileToApiGateWay(streamCode, 0);
-                await context.RespondAsync(new DownloadFileResponse()
-                {
-                    Packet = new Packet {Status = "success"}
-                });
-                return;
-            }
             using (var dbContext = new DatabaseContext())
             {
                 var session = dbContext.Sessions.Find(context.Message.SessionId);
@@ -443,7 +458,10 @@ namespace FileService.Consumers
             {
                 using (var content = new MultipartFormDataContent())
                 {
-                    using (var stream = File.OpenRead(DirPath + @"\" + fileId))
+                    using (var stream = 
+                        File.Exists(DirPath + @"\" + fileId) ?
+                        File.OpenRead(DirPath + @"\" + fileId) :
+                        File.OpenRead(DirPath + @"\" + fileId + ".png"))
                     {
                         content.Add(new StreamContent(stream), "File", "File");
                         content.Add(new StringContent(streamCode), "StreamCode");

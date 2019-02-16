@@ -288,41 +288,67 @@ namespace CityPlatform.Consumers
                     {
                         Title = packet.Complex.Title,
                         Avatar = packet.Complex.Avatar > 0 ? packet.Complex.Avatar : 0,
-                        Mode = 3
+                        Mode = 3,
+                        ComplexSecret = new ComplexSecret()
+                        {
+                            Admin = user
+                        },
+                        Rooms = new List<Room>()
+                        {
+                            new Room()
+                            {
+                                Title = "Hall",
+                                Avatar = 0,
+                            }
+                        },
+                        Members = new List<Membership>()
+                        {
+                            new Membership()
+                            {
+                                User = user
+                            }
+                        }
                     };
-                    var cs = new ComplexSecret()
-                    {
-                        Admin = user,
-                        Complex = complex,
-                    };
-                    complex.ComplexSecret = cs;
-                    var room = new Room()
-                    {
-                        Title = "Hall",
-                        Avatar = 0,
-                        Complex = complex
-                    };
-                    var mem = new Membership()
-                    {
-                        Complex = complex,
-                        User = user
-                    };
-                    dbContext.AddRange(complex, cs, room, mem);
+                    complex.ComplexSecret.Complex = complex;
+                    complex.Rooms[0].Complex = complex;
+                    complex.Members[0].Complex = complex;
+                    
+                    dbContext.AddRange(complex);
                     dbContext.SaveChanges();
 
                     SharedArea.Transport.NotifyService<ComplexCreatedNotif>(
                         Program.Bus,
-                        new Packet() {User = user, Complex = complex, ComplexSecret = cs},
+                        new Packet() {User = user, Complex = complex, ComplexSecret = complex.ComplexSecret},
                         SharedArea.GlobalVariables.AllQueuesExcept(new[]
                         {
-                            SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                            SharedArea.GlobalVariables.CITY_QUEUE_NAME,
+                            SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME
                         }));
 
-                    dbContext.Entry(complex).Collection(c => c.Rooms).Load();
+                    await SharedArea.Transport
+                        .RequestService<ConsolidateCreateComplexRequest, ConsolidateCreateComplexResponse>(
+                            Program.Bus,
+                            SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                            new Packet() {User = user, Complex = complex, ComplexSecret = complex.ComplexSecret});
+
+                    var message = new ServiceMessage()
+                    {
+                        Author = null,
+                        Room = complex.Rooms[0],
+                        RoomId = complex.Rooms[0].RoomId,
+                        Text = "Room created.",
+                        Time = (long) ((DateTime.Now - DateTime.MinValue).TotalMilliseconds)
+                    };
+
+                    await SharedArea.Transport.RequestService<PutServiceMessageRequest, PutServiceMessageResponse>(
+                        Program.Bus,
+                        SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                        new Packet() {ServiceMessage = message});
 
                     await context.RespondAsync(new CreateComplexResponse()
                     {
-                        Packet = new Packet {Status = "success", Complex = complex, ComplexSecret = cs}
+                        Packet = new Packet {Status = "success", Complex = complex
+                            , ComplexSecret = complex.ComplexSecret, ServiceMessage = message}
                     });
                 }
                 else

@@ -40,7 +40,7 @@ namespace MessengerPlatform
                     options.NullValueHandling = NullValueHandling.Ignore;
                     return options;
                 });
-                sbc.UseNLog();
+                sbc.UseSerilog();
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<MessengerConsumer>();

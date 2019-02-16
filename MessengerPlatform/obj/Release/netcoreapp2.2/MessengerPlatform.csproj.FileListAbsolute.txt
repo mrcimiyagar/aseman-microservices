@@ -11,3 +11,4 @@ F:\Desktop\asemanbackendprojects\MessengerPlatform\obj\Release\netcoreapp2.2\Mes
 F:\Desktop\asemanbackendprojects\MessengerPlatform\obj\Release\netcoreapp2.2\MessengerPlatform.csproj.CopyComplete
 F:\Desktop\asemanbackendprojects\MessengerPlatform\obj\Release\netcoreapp2.2\MessengerPlatform.dll
 F:\Desktop\asemanbackendprojects\MessengerPlatform\obj\Release\netcoreapp2.2\MessengerPlatform.pdb
+F:\Desktop\asemanbackendprojects\MessengerPlatform\obj\release\netcoreapp2.2\MessengerPlatform.csprojAssemblyReference.cache

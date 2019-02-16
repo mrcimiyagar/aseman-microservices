@@ -38,6 +38,10 @@
           "target": "Package",
           "version": "[5.2.1, )"
         },
+        "MassTransit.SerilogIntegration": {
+          "target": "Package",
+          "version": "[5.2.1, )"
+        },
         "Microsoft.EntityFrameworkCore": {
           "target": "Package",
           "version": "[2.2.1, )"

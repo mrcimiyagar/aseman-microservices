@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using MassTransit;
 using MessengerPlatform.DbContexts;
 using SharedArea.Commands.Internal.Notifications;
+using SharedArea.Commands.Internal.Requests;
+using SharedArea.Commands.Internal.Responses;
 using SharedArea.Entities;
 
 namespace MessengerPlatform.Consumers
@@ -15,7 +17,7 @@ namespace MessengerPlatform.Consumers
         , IConsumer<ComplexProfileUpdatedNotif>, IConsumer<ComplexDeletionNotif>, IConsumer<RoomProfileUpdatedNotif>
         , IConsumer<RoomDeletionNotif>, IConsumer<InviteCreatedNotif>, IConsumer<InviteCancelledNotif>
         , IConsumer<InviteAcceptedNotif>, IConsumer<InvitedIgnoredNotif>, IConsumer<SessionUpdatedNotif>
-        , IConsumer<ContactCreatedNotif>
+        , IConsumer<ContactCreatedNotif>, IConsumer<ConsolidateCreateComplexRequest>
     {
         public Task Consume(ConsumeContext<ContactCreatedNotif> context)
         {
@@ -113,10 +115,14 @@ namespace MessengerPlatform.Consumers
                 var complexSecret = context.Message.Packet.ComplexSecret;
 
                 complex.ComplexSecret = complexSecret;
-                complexSecret.Admin = admin;
                 complexSecret.Complex = complex;
+                complex.Rooms[0].Complex = complex;
+                complex.Members[0].Complex = complex;
+                complex.Rooms[0].Messages[0].Room = complex.Rooms[0];
+                complexSecret.Admin = admin;
+                complex.Members[0].User = admin;
 
-                dbContext.AddRange(complex, complexSecret);
+                dbContext.AddRange(complex);
 
                 dbContext.SaveChanges();
             }
@@ -377,6 +383,29 @@ namespace MessengerPlatform.Consumers
             }
 
             return Task.CompletedTask;
+        }
+
+        public async Task Consume(ConsumeContext<ConsolidateCreateComplexRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var admin = (User) dbContext.BaseUsers.Find(context.Message.Packet.User.BaseUserId);
+                var complex = context.Message.Packet.Complex;
+                var complexSecret = context.Message.Packet.ComplexSecret;
+
+                complex.ComplexSecret = complexSecret;
+                complexSecret.Complex = complex;
+                complex.Rooms[0].Complex = complex;
+                complex.Members[0].Complex = complex;
+                complexSecret.Admin = admin;
+                complex.Members[0].User = admin;
+
+                dbContext.AddRange(complex);
+
+                dbContext.SaveChanges();
+            }
+
+            await context.RespondAsync(new ConsolidateCreateComplexResponse());
         }
     }
 }

@@ -25,7 +25,7 @@ namespace MessengerPlatform.Consumers
         , IConsumer<VideoCreatedNotif>, IConsumer<PutServiceMessageRequest>, IConsumer<ConsolidateContactRequest>
         , IConsumer<WorkershipCreatedNotif>, IConsumer<WorkershipUpdatedNotif>, IConsumer<WorkershipDeletedNotif>
         , IConsumer<BotProfileUpdatedNotif>, IConsumer<ConsolidateDeleteAccountRequest>, IConsumer<NotifyMessageSeenRequest>
-        , IConsumer<GetMessageSeenCountRequest>
+        , IConsumer<GetMessageSeenCountRequest>, IConsumer<ConsolidateMakeAccountRequest>
     {
         public Task Consume(ConsumeContext<BotCreatedNotif> context)
         {
@@ -1090,6 +1090,32 @@ namespace MessengerPlatform.Consumers
                     });
                 }
             }
+        }
+
+        public async Task Consume(ConsumeContext<ConsolidateMakeAccountRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var user = context.Message.Packet.User;
+                var userSecret = context.Message.Packet.UserSecret;
+                var complexSecret = context.Message.Packet.ComplexSecret;
+
+                user.UserSecret = userSecret;
+                userSecret.User = user;
+                user.Memberships[0].User = user;
+                user.Memberships[0].Complex.ComplexSecret = complexSecret;
+                user.Memberships[0].Complex.ComplexSecret.Complex = user.Memberships[0].Complex;
+                user.Memberships[0].Complex.ComplexSecret.Admin = user;
+                user.Memberships[0].Complex.Rooms[0].Complex = user.Memberships[0].Complex;
+                user.UserSecret.Home = user.Memberships[0].Complex;
+                user.Memberships[0].User = user;
+                
+                dbContext.AddRange(user);
+
+                dbContext.SaveChanges();
+            }
+
+            await context.RespondAsync(new ConsolidateMakeAccountResponse());
         }
     }
 }
