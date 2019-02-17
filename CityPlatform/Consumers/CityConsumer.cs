@@ -340,11 +340,13 @@ namespace CityPlatform.Consumers
                         Time = (long) ((DateTime.Now - DateTime.MinValue).TotalMilliseconds)
                     };
 
-                    await SharedArea.Transport.RequestService<PutServiceMessageRequest, PutServiceMessageResponse>(
+                    var result = await SharedArea.Transport.RequestService<PutServiceMessageRequest, PutServiceMessageResponse>(
                         Program.Bus,
                         SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
                         new Packet() {ServiceMessage = message});
 
+                    message.MessageId = result.Packet.ServiceMessage.MessageId;
+                    
                     await context.RespondAsync(new CreateComplexResponse()
                     {
                         Packet = new Packet {Status = "success", Complex = complex
@@ -1519,12 +1521,35 @@ namespace CityPlatform.Consumers
                             new Packet() {Room = room},
                             SharedArea.GlobalVariables.AllQueuesExcept(new[]
                             {
-                                SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                                SharedArea.GlobalVariables.CITY_QUEUE_NAME,
+                                SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME
                             }));
 
+                        await SharedArea.Transport
+                            .RequestService<ConsolidateCreateRoomRequest, ConsolidateCreateRoomResponse>(
+                                Program.Bus,
+                                SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                                new Packet() {Room = room});
+
+                        var message = new ServiceMessage()
+                        {
+                            Author = null,
+                            Room = room,
+                            RoomId = room.RoomId,
+                            Text = "Room created.",
+                            Time = (long) ((DateTime.Now - DateTime.MinValue).TotalMilliseconds)
+                        };
+
+                        var result = await SharedArea.Transport.RequestService<PutServiceMessageRequest, PutServiceMessageResponse>(
+                            Program.Bus,
+                            SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                            new Packet() {ServiceMessage = message});
+
+                        message.MessageId = result.Packet.ServiceMessage.MessageId;
+                        
                         await context.RespondAsync(new CreateRoomResponse()
                         {
-                            Packet = new Packet {Status = "success", Room = room}
+                            Packet = new Packet {Status = "success", Room = room, ServiceMessage = message}
                         });
                     }
                     else
@@ -1549,46 +1574,35 @@ namespace CityPlatform.Consumers
         {
             using (var dbContext = new DatabaseContext())
             {
-                try
+                var user = context.Message.Packet.User;
+                var userAuth = context.Message.Packet.UserSecret;
+                var complexSecret = context.Message.Packet.ComplexSecret;
+
+                user.UserSecret = userAuth;
+                userAuth.User = user;
+                userAuth.Home = user.Memberships[0].Complex;
+                user.Memberships[0].Complex.ComplexSecret = complexSecret;
+                complexSecret.Complex = user.Memberships[0].Complex;
+                complexSecret.Admin = user;
+                user.Memberships[0].Complex.Rooms[0].Complex = user.Memberships[0].Complex;
+                user.Memberships[0].User = user;
+
+                dbContext.AddRange(user, userAuth, complexSecret);
+
+                dbContext.SaveChanges();
+
+                await context.RespondAsync(new MakeAccountResponse()
                 {
-                    var user = context.Message.Packet.User;
-                    var userAuth = context.Message.Packet.UserSecret;
-                    var complex = context.Message.Packet.Complex;
-                    var ca = context.Message.Packet.ComplexSecret;
-                    var room = context.Message.Packet.Room;
-                    var mem = new Membership();
-
-                    user.UserSecret = userAuth;
-                    userAuth.User = user;
-                    userAuth.Home = complex;
-                    complex.ComplexSecret = ca;
-                    ca.Complex = complex;
-                    ca.Admin = user;
-                    room.Complex = complex;
-                    mem.User = user;
-                    mem.Complex = complex;
-
-                    dbContext.AddRange(user, userAuth, complex, ca, room, mem);
-
-                    dbContext.SaveChanges();
-
-                    await context.RespondAsync(new MakeAccountResponse()
+                    Packet = new Packet()
                     {
-                        Packet = new Packet()
-                        {
-                            User = user,
-                            UserSecret = userAuth,
-                            Complex = complex,
-                            ComplexSecret = ca,
-                            Room = room,
-                            Membership = mem
-                        }
-                    });
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
+                        User = user,
+                        UserSecret = userAuth,
+                        Complex = user.Memberships[0].Complex,
+                        ComplexSecret = complexSecret,
+                        Room = user.Memberships[0].Complex.Rooms[0],
+                        Membership = user.Memberships[0]
+                    }
+                });
             }
         }
 

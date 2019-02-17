@@ -19,6 +19,7 @@ namespace SharedArea.Middles
         public Room Room { get; set; }
         public Complex Complex { get; set; }
         public ComplexSecret ComplexSecret { get; set; }
+        public List<ComplexSecret> ComplexSecrets { get; set; }
         public List<Workership> Workerships { get; set; }
         public Workership Workership { get; set; }
         public Bot Bot { get; set; }

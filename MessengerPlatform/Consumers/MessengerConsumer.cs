@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 using MassTransit;
 using MessengerPlatform.DbContexts;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using Remotion.Linq.Clauses;
+using SharedArea.Commands;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
 using SharedArea.Commands.Internal.Responses;
@@ -15,17 +14,19 @@ using SharedArea.Commands.Pushes;
 using SharedArea.Entities;
 using SharedArea.Middles;
 using SharedArea.Notifications;
-using SharedArea.Utils;
 
 namespace MessengerPlatform.Consumers
 {
     public class MessengerConsumer : IConsumer<BotCreatedNotif>, IConsumer<GetMessagesRequest>
-        , IConsumer<CreateTextMessageRequest>, IConsumer<CreateFileMessageRequest>, IConsumer<BotCreateTextMessageRequest>
+        , IConsumer<CreateTextMessageRequest>, IConsumer<CreateFileMessageRequest>,
+        IConsumer<BotCreateTextMessageRequest>
         , IConsumer<BotCreateFileMessageRequest>, IConsumer<PhotoCreatedNotif>, IConsumer<AudioCreatedNotif>
         , IConsumer<VideoCreatedNotif>, IConsumer<PutServiceMessageRequest>, IConsumer<ConsolidateContactRequest>
         , IConsumer<WorkershipCreatedNotif>, IConsumer<WorkershipUpdatedNotif>, IConsumer<WorkershipDeletedNotif>
-        , IConsumer<BotProfileUpdatedNotif>, IConsumer<ConsolidateDeleteAccountRequest>, IConsumer<NotifyMessageSeenRequest>
-        , IConsumer<GetMessageSeenCountRequest>, IConsumer<ConsolidateMakeAccountRequest>
+        , IConsumer<BotProfileUpdatedNotif>, IConsumer<ConsolidateDeleteAccountRequest>,
+        IConsumer<NotifyMessageSeenRequest>
+        , IConsumer<GetMessageSeenCountRequest>, IConsumer<ConsolidateMakeAccountRequest>,
+        IConsumer<ConsolidateCreateRoomRequest>, IConsumer<Fault<Request>>
     {
         public Task Consume(ConsumeContext<BotCreatedNotif> context)
         {
@@ -68,7 +69,7 @@ namespace MessengerPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -91,6 +92,7 @@ namespace MessengerPlatform.Consumers
                     });
                     return;
                 }
+
                 dbContext.Entry(membership).Reference(m => m.Complex).Load();
                 var complex = membership.Complex;
                 dbContext.Entry(complex).Collection(c => c.Rooms).Load();
@@ -103,9 +105,10 @@ namespace MessengerPlatform.Consumers
                     });
                     return;
                 }
+
                 dbContext.Entry(room).Collection(r => r.Messages).Load();
                 var messages = room.Messages.Skip(room.Messages.Count() - 100).ToList();
-                
+
                 await context.RespondAsync(new GetMessagesResponse()
                 {
                     Packet = new Packet {Status = "success", Messages = messages}
@@ -132,6 +135,7 @@ namespace MessengerPlatform.Consumers
                     });
                     return;
                 }
+
                 dbContext.Entry(membership).Reference(m => m.Complex).Load();
                 var complex = membership.Complex;
                 dbContext.Entry(complex).Collection(c => c.Rooms).Load();
@@ -144,6 +148,7 @@ namespace MessengerPlatform.Consumers
                     });
                     return;
                 }
+
                 var message = new TextMessage()
                 {
                     Author = human,
@@ -168,11 +173,15 @@ namespace MessengerPlatform.Consumers
                     nextContext.Entry(nextMessage.Room).Reference(r => r.Complex).Load();
                     nextContext.Entry(nextMessage).Reference(m => m.Author).Load();
                 }
-                var sessionIds = (from m in complex.Members where m.User.BaseUserId != human.BaseUserId
-                    from s in m.User.Sessions select s.SessionId).ToList();
-                sessionIds.AddRange((from w in room.Workers from s in dbContext.Bots.Include(b => b.Sessions)
+
+                var sessionIds = (from m in complex.Members
+                    where m.User.BaseUserId != human.BaseUserId
+                    from s in m.User.Sessions
+                    select s.SessionId).ToList();
+                sessionIds.AddRange((from w in room.Workers
+                    from s in dbContext.Bots.Include(b => b.Sessions)
                         .FirstOrDefault(b => b.BaseUserId == w.BotId).Sessions
-                        select s.SessionId).ToList());
+                    select s.SessionId).ToList());
                 var mcn = new TextMessageNotification()
                 {
                     Message = nextMessage
@@ -197,210 +206,210 @@ namespace MessengerPlatform.Consumers
             using (var dbContext = new DatabaseContext())
             {
                 var packet = context.Message.Packet;
-                    var session = dbContext.Sessions.Find(context.Message.SessionId);
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
 
-                    dbContext.Entry(session).Reference(s => s.BaseUser).Load();
-                    var human = (User) session.BaseUser;
-                    dbContext.Entry(human).Collection(h => h.Memberships).Load();
-                    var membership = human.Memberships.Find(mem => mem.ComplexId == packet.Complex.ComplexId);
-                    if (membership == null)
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var human = (User) session.BaseUser;
+                dbContext.Entry(human).Collection(h => h.Memberships).Load();
+                var membership = human.Memberships.Find(mem => mem.ComplexId == packet.Complex.ComplexId);
+                if (membership == null)
+                {
+                    await context.RespondAsync(new CreateFileMessageResponse()
                     {
-                        await context.RespondAsync(new CreateFileMessageResponse()
+                        Packet = new Packet {Status = "error_1"}
+                    });
+                    return;
+                }
+
+                dbContext.Entry(membership).Reference(mem => mem.Complex).Load();
+                var complex = membership.Complex;
+                dbContext.Entry(complex).Collection(c => c.Rooms).Load();
+                var room = complex.Rooms.Find(r => r.RoomId == packet.Room.RoomId);
+                if (room == null)
+                {
+                    await context.RespondAsync(new CreateFileMessageResponse()
+                    {
+                        Packet = new Packet {Status = "error_2"}
+                    });
+                    return;
+                }
+
+                Message message = null;
+                dbContext.Entry(room).Collection(r => r.Files).Load();
+                var fileUsage = room.Files.Find(fu => fu.FileId == packet.File.FileId);
+                if (fileUsage == null)
+                {
+                    await context.RespondAsync(new CreateFileMessageResponse()
+                    {
+                        Packet = new Packet {Status = "error_3"}
+                    });
+                    return;
+                }
+
+                dbContext.Entry(fileUsage).Reference(fu => fu.File).Load();
+                var file = fileUsage.File;
+                switch (file)
+                {
+                    case Photo photo:
+                        message = new PhotoMessage()
                         {
-                            Packet = new Packet {Status = "error_1"}
-                        });
-                        return;
-                    }
-
-                    dbContext.Entry(membership).Reference(mem => mem.Complex).Load();
-                    var complex = membership.Complex;
-                    dbContext.Entry(complex).Collection(c => c.Rooms).Load();
-                    var room = complex.Rooms.Find(r => r.RoomId == packet.Room.RoomId);
-                    if (room == null)
-                    {
-                        await context.RespondAsync(new CreateFileMessageResponse()
+                            Author = human,
+                            Room = room,
+                            Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds),
+                            Photo = photo
+                        };
+                        break;
+                    case Audio audio:
+                        message = new AudioMessage()
                         {
-                            Packet = new Packet {Status = "error_2"}
-                        });
-                        return;
-                    }
-
-                    Message message = null;
-                    dbContext.Entry(room).Collection(r => r.Files).Load();
-                    var fileUsage = room.Files.Find(fu => fu.FileId == packet.File.FileId);
-                    if (fileUsage == null)
-                    {
-                        await context.RespondAsync(new CreateFileMessageResponse()
+                            Author = human,
+                            Room = room,
+                            Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds),
+                            Audio = audio
+                        };
+                        break;
+                    case Video video:
+                        message = new VideoMessage()
                         {
-                            Packet = new Packet {Status = "error_3"}
-                        });
-                        return;
-                    }
+                            Author = human,
+                            Room = room,
+                            Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds),
+                            Video = video
+                        };
+                        break;
+                }
 
-                    dbContext.Entry(fileUsage).Reference(fu => fu.File).Load();
-                    var file = fileUsage.File;
-                    switch (file)
+                if (message == null)
+                {
+                    await context.RespondAsync(new CreateFileMessageResponse()
                     {
-                        case Photo photo:
-                            message = new PhotoMessage()
-                            {
-                                Author = human,
-                                Room = room,
-                                Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds),
-                                Photo = photo
-                            };
-                            break;
-                        case Audio audio:
-                            message = new AudioMessage()
-                            {
-                                Author = human,
-                                Room = room,
-                                Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds),
-                                Audio = audio
-                            };
-                            break;
-                        case Video video:
-                            message = new VideoMessage()
-                            {
-                                Author = human,
-                                Room = room,
-                                Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds),
-                                Video = video
-                            };
-                            break;
-                    }
+                        Packet = new Packet {Status = "error_4"}
+                    });
+                    return;
+                }
 
-                    if (message == null)
-                    {
-                        await context.RespondAsync(new CreateFileMessageResponse()
-                        {
-                            Packet = new Packet {Status = "error_4"}
-                        });
-                        return;
-                    }
+                dbContext.Messages.Add(message);
+                dbContext.SaveChanges();
 
-                    dbContext.Messages.Add(message);
-                    dbContext.SaveChanges();
-
-                    Message nextMessage;
-                    using (var nextContext = new DatabaseContext())
-                    {
-                        nextMessage = nextContext.Messages
-                            .Include(msg => msg.Room)
-                            .ThenInclude(r => r.Complex)
-                            .Include(msg => msg.Author)
-                            .FirstOrDefault(msg => msg.MessageId == message.MessageId);
-                        switch (nextMessage)
-                        {
-                            case PhotoMessage _:
-                                nextContext.Entry(nextMessage).Reference(msg => ((PhotoMessage) msg).Photo).Load();
-                                nextContext.Entry(((PhotoMessage) nextMessage).Photo).Collection(f => f.FileUsages)
-                                    .Query().Where(fu => fu.FileUsageId == fileUsage.FileUsageId).Load();
-                                break;
-                            case AudioMessage _:
-                                nextContext.Entry(nextMessage).Reference(msg => ((AudioMessage) msg).Audio).Load();
-                                nextContext.Entry(((AudioMessage) nextMessage).Audio).Collection(f => f.FileUsages)
-                                    .Query().Where(fu => fu.FileUsageId == fileUsage.FileUsageId).Load();
-                                break;
-                            case VideoMessage _:
-                                nextContext.Entry(nextMessage).Reference(msg => ((VideoMessage) msg).Video).Load();
-                                nextContext.Entry(((VideoMessage) nextMessage).Video).Collection(f => f.FileUsages)
-                                    .Query().Where(fu => fu.FileUsageId == fileUsage.FileUsageId).Load();
-                                break;
-                        }
-                    }
-
-                    dbContext.Entry(complex)
-                        .Collection(c => c.Members)
-                        .Query().Include(m => m.User)
-                        .ThenInclude(u => u.Sessions)
-                        .Load();
-                    dbContext.Entry(room).Collection(r => r.Workers).Load();
-                    var sessionIds = (from m in complex.Members
-                        where m.User.BaseUserId != human.BaseUserId
-                        from s in m.User.Sessions
-                        select s.SessionId).ToList();
-                    sessionIds.AddRange((from w in room.Workers
-                        from s in dbContext.Bots.Include(b => b.Sessions)
-                            .FirstOrDefault(b => b.BaseUserId == w.BotId).Sessions
-                        select s.SessionId).ToList());
-
+                Message nextMessage;
+                using (var nextContext = new DatabaseContext())
+                {
+                    nextMessage = nextContext.Messages
+                        .Include(msg => msg.Room)
+                        .ThenInclude(r => r.Complex)
+                        .Include(msg => msg.Author)
+                        .FirstOrDefault(msg => msg.MessageId == message.MessageId);
                     switch (nextMessage)
                     {
-                        case PhotoMessage msg:
-                        {
-                            var notif = new PhotoMessageNotification()
-                            {
-                                Message = msg,
-                            };
-                            SharedArea.Transport.Push<PhotoMessagePush>(
-                                Program.Bus,
-                                new PhotoMessagePush()
-                                {
-                                    Notif = notif,
-                                    SessionIds = sessionIds
-                                });
+                        case PhotoMessage _:
+                            nextContext.Entry(nextMessage).Reference(msg => ((PhotoMessage) msg).Photo).Load();
+                            nextContext.Entry(((PhotoMessage) nextMessage).Photo).Collection(f => f.FileUsages)
+                                .Query().Where(fu => fu.FileUsageId == fileUsage.FileUsageId).Load();
                             break;
-                        }
-                        case AudioMessage msg:
-                        {
-                            var notif = new AudioMessageNotification()
-                            {
-                                Message = msg
-                            };
-                            SharedArea.Transport.Push<AudioMessagePush>(
-                                Program.Bus,
-                                new AudioMessagePush()
-                                {
-                                    Notif = notif,
-                                    SessionIds = sessionIds
-                                });
+                        case AudioMessage _:
+                            nextContext.Entry(nextMessage).Reference(msg => ((AudioMessage) msg).Audio).Load();
+                            nextContext.Entry(((AudioMessage) nextMessage).Audio).Collection(f => f.FileUsages)
+                                .Query().Where(fu => fu.FileUsageId == fileUsage.FileUsageId).Load();
                             break;
-                        }
-                        case VideoMessage msg:
-                        {
-                            var notif = new VideoMessageNotification()
-                            {
-                                Message = msg
-                            };
-                            SharedArea.Transport.Push<VideoMessagePush>(
-                                Program.Bus,
-                                new VideoMessagePush()
-                                {
-                                    Notif = notif,
-                                    SessionIds = sessionIds
-                                });
+                        case VideoMessage _:
+                            nextContext.Entry(nextMessage).Reference(msg => ((VideoMessage) msg).Video).Load();
+                            nextContext.Entry(((VideoMessage) nextMessage).Video).Collection(f => f.FileUsages)
+                                .Query().Where(fu => fu.FileUsageId == fileUsage.FileUsageId).Load();
                             break;
-                        }
                     }
+                }
 
-                    switch (nextMessage)
+                dbContext.Entry(complex)
+                    .Collection(c => c.Members)
+                    .Query().Include(m => m.User)
+                    .ThenInclude(u => u.Sessions)
+                    .Load();
+                dbContext.Entry(room).Collection(r => r.Workers).Load();
+                var sessionIds = (from m in complex.Members
+                    where m.User.BaseUserId != human.BaseUserId
+                    from s in m.User.Sessions
+                    select s.SessionId).ToList();
+                sessionIds.AddRange((from w in room.Workers
+                    from s in dbContext.Bots.Include(b => b.Sessions)
+                        .FirstOrDefault(b => b.BaseUserId == w.BotId).Sessions
+                    select s.SessionId).ToList());
+
+                switch (nextMessage)
+                {
+                    case PhotoMessage msg:
                     {
-                        case PhotoMessage msg:
-                            await context.RespondAsync(new CreateFileMessageResponse()
+                        var notif = new PhotoMessageNotification()
+                        {
+                            Message = msg,
+                        };
+                        SharedArea.Transport.Push<PhotoMessagePush>(
+                            Program.Bus,
+                            new PhotoMessagePush()
                             {
-                                Packet = new Packet {Status = "success", PhotoMessage = msg}
+                                Notif = notif,
+                                SessionIds = sessionIds
                             });
-                            break;
-                        case AudioMessage msg:
-                            await context.RespondAsync(new CreateFileMessageResponse()
-                            {
-                                Packet = new Packet {Status = "success", AudioMessage = msg}
-                            });
-                            break;
-                        case VideoMessage msg:
-                            await context.RespondAsync(new CreateFileMessageResponse()
-                            {
-                                Packet = new Packet {Status = "success", VideoMessage = msg}
-                            });
-                            break;
-                        default:
-                            await context.RespondAsync(new CreateFileMessageResponse()
-                            {
-                                Packet = new Packet {Status = "error_5"}
-                            });
-                            break;
+                        break;
                     }
+                    case AudioMessage msg:
+                    {
+                        var notif = new AudioMessageNotification()
+                        {
+                            Message = msg
+                        };
+                        SharedArea.Transport.Push<AudioMessagePush>(
+                            Program.Bus,
+                            new AudioMessagePush()
+                            {
+                                Notif = notif,
+                                SessionIds = sessionIds
+                            });
+                        break;
+                    }
+                    case VideoMessage msg:
+                    {
+                        var notif = new VideoMessageNotification()
+                        {
+                            Message = msg
+                        };
+                        SharedArea.Transport.Push<VideoMessagePush>(
+                            Program.Bus,
+                            new VideoMessagePush()
+                            {
+                                Notif = notif,
+                                SessionIds = sessionIds
+                            });
+                        break;
+                    }
+                }
+
+                switch (nextMessage)
+                {
+                    case PhotoMessage msg:
+                        await context.RespondAsync(new CreateFileMessageResponse()
+                        {
+                            Packet = new Packet {Status = "success", PhotoMessage = msg}
+                        });
+                        break;
+                    case AudioMessage msg:
+                        await context.RespondAsync(new CreateFileMessageResponse()
+                        {
+                            Packet = new Packet {Status = "success", AudioMessage = msg}
+                        });
+                        break;
+                    case VideoMessage msg:
+                        await context.RespondAsync(new CreateFileMessageResponse()
+                        {
+                            Packet = new Packet {Status = "success", VideoMessage = msg}
+                        });
+                        break;
+                    default:
+                        await context.RespondAsync(new CreateFileMessageResponse()
+                        {
+                            Packet = new Packet {Status = "error_5"}
+                        });
+                        break;
+                }
             }
         }
 
@@ -422,6 +431,7 @@ namespace MessengerPlatform.Consumers
                     });
                     return;
                 }
+
                 dbContext.Entry(complex).Collection(c => c.Rooms).Load();
                 var room = complex.Rooms.Find(r => r.RoomId == packet.Room.RoomId);
                 if (room == null)
@@ -432,6 +442,7 @@ namespace MessengerPlatform.Consumers
                     });
                     return;
                 }
+
                 dbContext.Entry(room).Collection(r => r.Workers).Load();
                 var workership = room.Workers.Find(w => w.BotId == bot.BaseUserId);
                 if (workership == null)
@@ -442,6 +453,7 @@ namespace MessengerPlatform.Consumers
                     });
                     return;
                 }
+
                 var message = new TextMessage()
                 {
                     Author = bot,
@@ -459,16 +471,19 @@ namespace MessengerPlatform.Consumers
                     nextContext.Entry(nextMessage.Room).Reference(r => r.Complex).Load();
                     nextContext.Entry(nextMessage).Reference(m => m.Author).Load();
                 }
+
                 dbContext.Entry(complex)
                     .Collection(c => c.Members)
                     .Query().Include(m => m.User)
                     .ThenInclude(u => u.Sessions)
                     .Load();
                 dbContext.Entry(room).Collection(r => r.Workers).Load();
-                
-                var sessionIds = (from m in complex.Members from s in m.User.Sessions 
+
+                var sessionIds = (from m in complex.Members
+                    from s in m.User.Sessions
                     select s.SessionId).ToList();
-                sessionIds.AddRange((from w in room.Workers where w.BotId != bot.BaseUserId
+                sessionIds.AddRange((from w in room.Workers
+                    where w.BotId != bot.BaseUserId
                     from s in dbContext.Bots.Include(b => b.Sessions)
                         .FirstOrDefault(b => b.BaseUserId == w.BotId).Sessions
                     select s.SessionId).ToList());
@@ -483,7 +498,7 @@ namespace MessengerPlatform.Consumers
                         Notif = mcn,
                         SessionIds = sessionIds
                     });
-                
+
                 await context.RespondAsync(new BotCreateTextMessageResponse()
                 {
                     Packet = new Packet {Status = "success", TextMessage = nextMessage}
@@ -509,6 +524,7 @@ namespace MessengerPlatform.Consumers
                     });
                     return;
                 }
+
                 dbContext.Entry(complex).Collection(c => c.Rooms).Load();
                 var room = complex.Rooms.Find(r => r.RoomId == packet.Room.RoomId);
                 if (room == null)
@@ -519,6 +535,7 @@ namespace MessengerPlatform.Consumers
                     });
                     return;
                 }
+
                 dbContext.Entry(room).Collection(r => r.Workers).Load();
                 var workership = room.Workers.Find(w => w.BotId == bot.BaseUserId);
                 if (workership == null)
@@ -529,6 +546,7 @@ namespace MessengerPlatform.Consumers
                     });
                     return;
                 }
+
                 Message message = null;
                 dbContext.Entry(room).Collection(r => r.Files).Load();
                 var fileUsage = room.Files.Find(fu => fu.FileId == packet.File.FileId);
@@ -540,6 +558,7 @@ namespace MessengerPlatform.Consumers
                     });
                     return;
                 }
+
                 dbContext.Entry(fileUsage).Reference(fu => fu.File).Load();
                 var file = fileUsage.File;
                 switch (file)
@@ -581,9 +600,10 @@ namespace MessengerPlatform.Consumers
                     });
                     return;
                 }
+
                 dbContext.Messages.Add(message);
                 dbContext.SaveChanges();
-                
+
                 Message nextMessage;
                 using (var nextContext = new DatabaseContext())
                 {
@@ -593,86 +613,88 @@ namespace MessengerPlatform.Consumers
                     nextContext.Entry(nextMessage).Reference(msg => msg.Author).Load();
                     switch (nextMessage)
                     {
-                        case PhotoMessage _ :
-                            nextContext.Entry(nextMessage).Reference(msg => ((PhotoMessage)msg).Photo).Load();
-                            nextContext.Entry(((PhotoMessage)nextMessage).Photo).Collection(f => f.FileUsages)
+                        case PhotoMessage _:
+                            nextContext.Entry(nextMessage).Reference(msg => ((PhotoMessage) msg).Photo).Load();
+                            nextContext.Entry(((PhotoMessage) nextMessage).Photo).Collection(f => f.FileUsages)
                                 .Query().Where(fu => fu.FileUsageId == fileUsage.FileUsageId).Load();
                             break;
-                        case AudioMessage _ :
-                            nextContext.Entry(nextMessage).Reference(msg => ((AudioMessage)msg).Audio).Load();
-                            nextContext.Entry(((AudioMessage)nextMessage).Audio).Collection(f => f.FileUsages)
+                        case AudioMessage _:
+                            nextContext.Entry(nextMessage).Reference(msg => ((AudioMessage) msg).Audio).Load();
+                            nextContext.Entry(((AudioMessage) nextMessage).Audio).Collection(f => f.FileUsages)
                                 .Query().Where(fu => fu.FileUsageId == fileUsage.FileUsageId).Load();
                             break;
-                        case VideoMessage _ :
-                            nextContext.Entry(nextMessage).Reference(msg => ((VideoMessage)msg).Video).Load();
-                            nextContext.Entry(((VideoMessage)nextMessage).Video).Collection(f => f.FileUsages)
+                        case VideoMessage _:
+                            nextContext.Entry(nextMessage).Reference(msg => ((VideoMessage) msg).Video).Load();
+                            nextContext.Entry(((VideoMessage) nextMessage).Video).Collection(f => f.FileUsages)
                                 .Query().Where(fu => fu.FileUsageId == fileUsage.FileUsageId).Load();
                             break;
                     }
                 }
-                
+
                 dbContext.Entry(complex)
                     .Collection(c => c.Members)
                     .Query().Include(m => m.User)
                     .ThenInclude(u => u.Sessions)
                     .Load();
                 dbContext.Entry(room).Collection(r => r.Workers).Load();
-             
-                var sessionIds = (from m in complex.Members from s in m.User.Sessions 
+
+                var sessionIds = (from m in complex.Members
+                    from s in m.User.Sessions
                     select s.SessionId).ToList();
-                sessionIds.AddRange((from w in room.Workers where w.BotId != bot.BaseUserId
+                sessionIds.AddRange((from w in room.Workers
+                    where w.BotId != bot.BaseUserId
                     from s in dbContext.Bots.Include(b => b.Sessions)
                         .FirstOrDefault(b => b.BaseUserId == w.BotId).Sessions
                     select s.SessionId).ToList());
-                
+
                 switch (nextMessage)
+                {
+                    case PhotoMessage msg:
+                    {
+                        var notif = new PhotoMessageNotification()
                         {
-                            case PhotoMessage msg:
+                            Message = msg
+                        };
+                        SharedArea.Transport.Push<PhotoMessagePush>(
+                            Program.Bus,
+                            new PhotoMessagePush()
                             {
-                                var notif = new PhotoMessageNotification()
-                                {
-                                    Message = msg
-                                };
-                                SharedArea.Transport.Push<PhotoMessagePush>(
-                                    Program.Bus,
-                                    new PhotoMessagePush()
-                                    {
-                                        Notif = notif,
-                                        SessionIds = sessionIds
-                                    });
-                                break;
-                            }
-                            case AudioMessage msg:
+                                Notif = notif,
+                                SessionIds = sessionIds
+                            });
+                        break;
+                    }
+                    case AudioMessage msg:
+                    {
+                        var notif = new AudioMessageNotification()
+                        {
+                            Message = msg
+                        };
+                        SharedArea.Transport.Push<AudioMessagePush>(
+                            Program.Bus,
+                            new AudioMessagePush()
                             {
-                                var notif = new AudioMessageNotification()
-                                {
-                                    Message = msg
-                                };
-                                SharedArea.Transport.Push<AudioMessagePush>(
-                                    Program.Bus,
-                                    new AudioMessagePush()
-                                    {
-                                        Notif = notif,
-                                        SessionIds = sessionIds
-                                    });
-                                break;
-                            }
-                            case VideoMessage msg:
+                                Notif = notif,
+                                SessionIds = sessionIds
+                            });
+                        break;
+                    }
+                    case VideoMessage msg:
+                    {
+                        var notif = new VideoMessageNotification()
+                        {
+                            Message = msg
+                        };
+                        SharedArea.Transport.Push<VideoMessagePush>(
+                            Program.Bus,
+                            new VideoMessagePush()
                             {
-                                var notif = new VideoMessageNotification()
-                                {
-                                    Message = msg
-                                };
-                                SharedArea.Transport.Push<VideoMessagePush>(
-                                    Program.Bus,
-                                    new VideoMessagePush()
-                                    {
-                                        Notif = notif,
-                                        SessionIds = sessionIds
-                                    });
-                                break;
-                            }
-                        }
+                                Notif = notif,
+                                SessionIds = sessionIds
+                            });
+                        break;
+                    }
+                }
 
                 switch (nextMessage)
                 {
@@ -746,7 +768,7 @@ namespace MessengerPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -769,7 +791,7 @@ namespace MessengerPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -778,7 +800,7 @@ namespace MessengerPlatform.Consumers
             using (var dbContext = new DatabaseContext())
             {
                 var message = context.Message.Packet.ServiceMessage;
-                    
+
                 var room = dbContext.Rooms.Find(message.Room.RoomId);
 
                 message.Room = room;
@@ -874,7 +896,7 @@ namespace MessengerPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -893,7 +915,7 @@ namespace MessengerPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -912,7 +934,7 @@ namespace MessengerPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -943,121 +965,13 @@ namespace MessengerPlatform.Consumers
 
         public async Task Consume(ConsumeContext<NotifyMessageSeenRequest> context)
         {
-            Console.WriteLine("hello");
-            
-            using (var dbContext = new DatabaseContext())
-            {
-                try
-                {
-                    var session = dbContext.Sessions.Find(context.Message.SessionId);
-
-                    dbContext.Entry(session).Reference(s => s.BaseUser).Load();
-                    var user = (User) session.BaseUser;
-
-                    var message = dbContext.Messages.Find(context.Message.Packet.Message.MessageId);
-                    if (message == null)
-                    {
-                        await context.RespondAsync(new NotifyMessageSeenResponse()
-                        {
-                            Packet = new Packet() {Status = "error_2"}
-                        });
-                        return;
-                    }
-
-                    var messageSeen = dbContext.MessageSeens.Find(user.BaseUserId + "_" + message.MessageId);
-                    if (messageSeen != null)
-                    {
-                        await context.RespondAsync(new NotifyMessageSeenResponse()
-                        {
-                            Packet = new Packet() {Status = "error_3"}
-                        });
-                        return;
-                    }
-
-                    dbContext.Entry(message).Reference(m => m.Room).Load();
-                    var room = message.Room;
-                    dbContext.Entry(room).Reference(r => r.Complex).Load();
-                    var complex = room.Complex;
-                    dbContext.Entry(complex).Collection(c => c.Members).Load();
-                    if (complex.Members.Any(m => m.UserId == user.BaseUserId))
-                    {
-                        if (message.AuthorId == user.BaseUserId)
-                        {
-                            await context.RespondAsync(new NotifyMessageSeenResponse()
-                            {
-                                Packet = new Packet() {Status = "error_5"}
-                            });
-                            return;
-                        }
-
-                        messageSeen = new MessageSeen()
-                        {
-                            MessageSeenId = user.BaseUserId + "_" + message.MessageId,
-                            Message = message,
-                            User = user
-                        };
-
-                        dbContext.MessageSeens.Add(messageSeen);
-
-                        dbContext.SaveChanges();
-
-                        Console.WriteLine("Complex mode is " + complex.Mode);
-
-                        if (complex.Mode == 1 || complex.Mode == 2)
-                        {
-                            var notif = new MessageSeenNotification()
-                            {
-                                MessageId = message.MessageId,
-                                MessageSeenCount =
-                                    dbContext.MessageSeens.LongCount(ms => ms.MessageId == message.MessageId)
-                            };
-                            dbContext.Entry(complex)
-                                .Collection(c => c.Members).Query()
-                                .Include(m => m.User)
-                                .ThenInclude(u => u.Sessions)
-                                .Load();
-                            var push = new MessageSeenPush()
-                            {
-                                Notif = notif,
-                                SessionIds = (from m in complex.Members
-                                    where m.User.BaseUserId != user.BaseUserId
-                                    from s in m.User.Sessions
-                                    select s.SessionId).ToList()
-                            };
-                            SharedArea.Transport.Push<MessageSeenPush>(
-                                Program.Bus,
-                                push);
-                        }
-
-                        await context.RespondAsync(new NotifyMessageSeenResponse()
-                        {
-                            Packet = new Packet() {Status = "success"}
-                        });
-                    }
-                    else
-                    {
-                        await context.RespondAsync(new NotifyMessageSeenResponse()
-                        {
-                            Packet = new Packet() {Status = "error_4"}
-                        });
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
-            }
-        }
-
-        public async Task Consume(ConsumeContext<GetMessageSeenCountRequest> context)
-        {
             using (var dbContext = new DatabaseContext())
             {
                 var session = dbContext.Sessions.Find(context.Message.SessionId);
-                
+
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
                 var user = (User) session.BaseUser;
-                
+
                 var message = dbContext.Messages.Find(context.Message.Packet.Message.MessageId);
                 if (message == null)
                 {
@@ -1067,7 +981,106 @@ namespace MessengerPlatform.Consumers
                     });
                     return;
                 }
-                
+
+                var messageSeen = dbContext.MessageSeens.Find(user.BaseUserId + "_" + message.MessageId);
+                if (messageSeen != null)
+                {
+                    await context.RespondAsync(new NotifyMessageSeenResponse()
+                    {
+                        Packet = new Packet() {Status = "error_3"}
+                    });
+                    return;
+                }
+
+                dbContext.Entry(message).Reference(m => m.Room).Load();
+                var room = message.Room;
+                dbContext.Entry(room).Reference(r => r.Complex).Load();
+                var complex = room.Complex;
+                dbContext.Entry(complex).Collection(c => c.Members).Load();
+                if (complex.Members.Any(m => m.UserId == user.BaseUserId))
+                {
+                    if (message.AuthorId == user.BaseUserId)
+                    {
+                        await context.RespondAsync(new NotifyMessageSeenResponse()
+                        {
+                            Packet = new Packet() {Status = "error_5"}
+                        });
+                        return;
+                    }
+
+                    messageSeen = new MessageSeen()
+                    {
+                        MessageSeenId = user.BaseUserId + "_" + message.MessageId,
+                        Message = message,
+                        User = user
+                    };
+
+                    dbContext.MessageSeens.Add(messageSeen);
+
+                    dbContext.SaveChanges();
+
+                    Console.WriteLine("Complex mode is " + complex.Mode);
+
+                    if (complex.Mode == 1 || complex.Mode == 2)
+                    {
+                        var notif = new MessageSeenNotification()
+                        {
+                            MessageId = message.MessageId,
+                            MessageSeenCount =
+                                dbContext.MessageSeens.LongCount(ms => ms.MessageId == message.MessageId)
+                        };
+                        dbContext.Entry(complex)
+                            .Collection(c => c.Members).Query()
+                            .Include(m => m.User)
+                            .ThenInclude(u => u.Sessions)
+                            .Load();
+                        var push = new MessageSeenPush()
+                        {
+                            Notif = notif,
+                            SessionIds = (from m in complex.Members
+                                where m.User.BaseUserId != user.BaseUserId
+                                from s in m.User.Sessions
+                                select s.SessionId).ToList()
+                        };
+                        SharedArea.Transport.Push<MessageSeenPush>(
+                            Program.Bus,
+                            push);
+                    }
+
+                    await context.RespondAsync(new NotifyMessageSeenResponse()
+                    {
+                        Packet = new Packet() {Status = "success"}
+                    });
+                }
+                else
+                {
+                    await context.RespondAsync(new NotifyMessageSeenResponse()
+                    {
+                        Packet = new Packet() {Status = "error_4"}
+                    });
+                }
+            }
+        }
+
+        public async Task Consume(ConsumeContext<GetMessageSeenCountRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
+
+                var message = dbContext.Messages.Find(context.Message.Packet.Message.MessageId);
+                if (message == null)
+                {
+                    await context.RespondAsync(new NotifyMessageSeenResponse()
+                    {
+                        Packet = new Packet() {Status = "error_2"}
+                    });
+                    return;
+                }
+
                 dbContext.Entry(message).Reference(m => m.Room).Load();
                 var room = message.Room;
                 dbContext.Entry(room).Reference(r => r.Complex).Load();
@@ -1076,7 +1089,7 @@ namespace MessengerPlatform.Consumers
                 if (complex.Members.Any(m => m.UserId == user.BaseUserId))
                 {
                     var seenCount = dbContext.MessageSeens.LongCount(ms => ms.MessageId == message.MessageId);
-                    
+
                     await context.RespondAsync(new NotifyMessageSeenResponse()
                     {
                         Packet = new Packet() {Status = "success", MessageSeenCount = seenCount}
@@ -1109,13 +1122,39 @@ namespace MessengerPlatform.Consumers
                 user.Memberships[0].Complex.Rooms[0].Complex = user.Memberships[0].Complex;
                 user.UserSecret.Home = user.Memberships[0].Complex;
                 user.Memberships[0].User = user;
-                
+
                 dbContext.AddRange(user);
 
                 dbContext.SaveChanges();
             }
 
             await context.RespondAsync(new ConsolidateMakeAccountResponse());
+        }
+
+        public async Task Consume(ConsumeContext<ConsolidateCreateRoomRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var room = context.Message.Packet.Room;
+                var complex = dbContext.Complexes.Find(room.ComplexId);
+
+                room.Complex = complex;
+
+                dbContext.AddRange(room);
+
+                dbContext.SaveChanges();
+            }
+
+            await context.RespondAsync(new ConsolidateCreateRoomResponse());
+        }
+
+        public Task Consume(ConsumeContext<Fault<Request>> context)
+        {
+            foreach (var ex in context.Message.Exceptions)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            return Task.CompletedTask;
         }
     }
 }

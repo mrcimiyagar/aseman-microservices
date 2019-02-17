@@ -66,6 +66,18 @@
           "lib/netstandard2.0/MassTransit.dll": {}
         }
       },
+      "MassTransit.LibLog/1.0.0": {
+        "type": "package",
+        "dependencies": {
+          "MassTransit": "2.7.0"
+        },
+        "compile": {
+          "lib/net40/MassTransit.LibLog.dll": {}
+        },
+        "runtime": {
+          "lib/net40/MassTransit.LibLog.dll": {}
+        }
+      },
       "MassTransit.NLog/5.2.1": {
         "type": "package",
         "dependencies": {
@@ -2330,6 +2342,7 @@
         "framework": ".NETCoreApp,Version=v2.2",
         "dependencies": {
           "MassTransit": "5.2.1",
+          "MassTransit.LibLog": "1.0.0",
           "MassTransit.NLog": "5.2.1",
           "MassTransit.RabbitMQ": "5.2.1",
           "MassTransit.SerilogIntegration": "5.2.1",
@@ -2389,6 +2402,17 @@
         "lib/netstandard2.0/MassTransit.xml",
         "masstransit.5.2.1.nupkg.sha512",
         "masstransit.nuspec"
+      ]
+    },
+    "MassTransit.LibLog/1.0.0": {
+      "sha512": "L5If0D4BpMG0XErBz0R0WxTxF2X34vqkujOkITtHG7cxNnVB0XrjS2DpxNXhRsLVMirCQn6itdWQGwP4QARd8w==",
+      "type": "package",
+      "path": "masstransit.liblog/1.0.0",
+      "files": [
+        ".signature.p7s",
+        "lib/net40/MassTransit.LibLog.dll",
+        "masstransit.liblog.1.0.0.nupkg.sha512",
+        "masstransit.liblog.nuspec"
       ]
     },
     "MassTransit.NLog/5.2.1": {
@@ -7717,5 +7741,17 @@
         "warn": true
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'MassTransit.LibLog 1.0.0' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.2'. This package may not be fully compatible with your project.",
+      "libraryId": "MassTransit.LibLog",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v2.2"
+      ]
+    }
+  ]
 }

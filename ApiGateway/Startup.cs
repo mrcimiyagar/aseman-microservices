@@ -8,6 +8,7 @@ using ApiGateway.DbContexts;
 using ApiGateway.Hubs;
 using ApiGateway.Middleware;
 using ApiGateway.Utils;
+using GreenPipes;
 using MassTransit;
 using MassTransit.NLogIntegration;
 using Microsoft.AspNetCore.Builder;
@@ -110,7 +111,7 @@ namespace ApiGateway
                     options.NullValueHandling = NullValueHandling.Ignore;
                     return options;
                 });
-                sbc.UseSerilog();
+                sbc.UseLog(Console.Out, MessageFormatter.Formatter);
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.API_GATEWAY_INTERNAL_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<ApiGatewayInternalConsumer>();

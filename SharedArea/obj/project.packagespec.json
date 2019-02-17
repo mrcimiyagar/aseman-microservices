@@ -30,6 +30,10 @@
           "target": "Package",
           "version": "[5.2.1, )"
         },
+        "MassTransit.LibLog": {
+          "target": "Package",
+          "version": "[1.0.0, )"
+        },
         "MassTransit.NLog": {
           "target": "Package",
           "version": "[5.2.1, )"

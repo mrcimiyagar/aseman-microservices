@@ -1,5 +1,7 @@
 ﻿
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using MassTransit;
@@ -259,17 +261,44 @@ namespace SearchPlatform.Consumers
         {
             using (var dbContext = new DatabaseContext())
             {
-                var session = dbContext.Sessions.Find(context.Message.SessionId);
-
-                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
-                var user = (User) session.BaseUser;
-                dbContext.Entry(user).Collection(u => u.Memberships).Query().Include(m => m.Complex).Load();
-                var complexes = user.Memberships.Select(m => m.Complex).ToList();
-
-                await context.RespondAsync(new GetComplexesResponse()
+                try
                 {
-                    Packet = new Packet {Status = "success", Complexes = complexes}
-                });
+                    Console.WriteLine("hello 1");
+                    var session = dbContext.Sessions.Find(context.Message.SessionId);
+                    Console.WriteLine("hello 2");
+                    dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                    Console.WriteLine("hello 3");
+                    var user = (User) session.BaseUser;
+                    Console.WriteLine("hello 4");
+                    dbContext.Entry(user).Collection(u => u.Memberships).Query().Include(m => m.Complex).Load();
+                    Console.WriteLine("hello 5");
+                    var complexes = user.Memberships.Select(m => m.Complex).ToList();
+                    Console.WriteLine("hello 6");
+                    var complexSecrets = new List<ComplexSecret>();
+                    Console.WriteLine("hello 7");
+                    foreach (var complex in complexes)
+                    {
+                        Console.WriteLine("hello 8");
+                        dbContext.Entry(complex).Collection(c => c.Rooms).Load();
+                        Console.WriteLine("hello 9");
+                        dbContext.Entry(complex).Collection(c => c.Members).Load();
+                        Console.WriteLine("hello 10");
+                        dbContext.Entry(complex).Reference(c => c.ComplexSecret).Load();
+                        Console.WriteLine("hello 11");
+                        if (complex.ComplexSecret.AdminId == user.BaseUserId)
+                            complexSecrets.Add(complex.ComplexSecret);
+                        Console.WriteLine("hello 12");
+                    }
+                    Console.WriteLine("hello 13");
+                    await context.RespondAsync(new GetComplexesResponse()
+                    {
+                        Packet = new Packet {Status = "success", Complexes = complexes, ComplexSecrets = complexSecrets}
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
             }
         }
 

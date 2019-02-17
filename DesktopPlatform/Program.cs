@@ -1,6 +1,7 @@
 ﻿using System;
 using DesktopPlatform.Consumers;
 using DesktopPlatform.DbContexts;
+using GreenPipes;
 using MassTransit;
 using MassTransit.NLogIntegration;
 using Newtonsoft.Json;
@@ -39,7 +40,7 @@ namespace DesktopPlatform
                     options.NullValueHandling = NullValueHandling.Ignore;
                     return options;
                 });
-                sbc.UseSerilog();
+                sbc.UseLog(Console.Out, MessageFormatter.Formatter);
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.DESKTOP_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<DesktopConsumer>();

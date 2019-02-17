@@ -1,6 +1,7 @@
 ﻿using System;
 using BotPlatform.Consumers;
 using BotPlatform.DbContexts;
+using GreenPipes;
 using MassTransit;
 using MassTransit.NLogIntegration;
 using Newtonsoft.Json;
@@ -39,7 +40,7 @@ namespace BotPlatform
                     options.NullValueHandling = NullValueHandling.Ignore;
                     return options;
                 });
-                sbc.UseSerilog();
+                sbc.UseLog(Console.Out, MessageFormatter.Formatter);
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.BOT_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<BotConsumer>();

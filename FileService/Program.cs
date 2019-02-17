@@ -1,6 +1,7 @@
 ﻿using System;
 using FileService.Consumers;
 using FileService.DbContexts;
+using GreenPipes;
 using MassTransit;
 using MassTransit.NLogIntegration;
 using Newtonsoft.Json;
@@ -39,7 +40,7 @@ namespace FileService
                     options.NullValueHandling = NullValueHandling.Ignore;
                     return options;
                 });
-                sbc.UseSerilog();
+                sbc.UseLog(Console.Out, MessageFormatter.Formatter);
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.FILE_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<FileConsumer>();

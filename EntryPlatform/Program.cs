@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Threading.Tasks;
 using EntryPlatform.Consumers;
 using EntryPlatform.DbContexts;
+using GreenPipes;
+using GreenPipes.Filters.Log;
 using MassTransit;
+using MassTransit.LibLog;
 using MassTransit.NLogIntegration;
 using Newtonsoft.Json;
+using NLog;
 using SharedArea.Utils;
 
 namespace EntryPlatform
@@ -39,7 +44,7 @@ namespace EntryPlatform
                     options.NullValueHandling = NullValueHandling.Ignore;
                     return options;
                 });
-                sbc.UseSerilog();
+                sbc.UseLog(Console.Out, MessageFormatter.Formatter);
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.ENTRY_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<EntryConsumer>();

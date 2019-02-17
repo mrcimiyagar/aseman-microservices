@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MassTransit" Version="5.2.1" />
+    <PackageReference Include="MassTransit.LibLog" Version="1.0.0" />
     <PackageReference Include="MassTransit.NLog" Version="5.2.1" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="5.2.1" />
     <PackageReference Include="MassTransit.SerilogIntegration" Version="5.2.1" />

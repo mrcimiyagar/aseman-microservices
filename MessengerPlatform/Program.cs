@@ -1,4 +1,5 @@
 ﻿using System;
+using GreenPipes;
 using MassTransit;
 using MassTransit.NLogIntegration;
 using MessengerPlatform.Consumers;
@@ -40,7 +41,7 @@ namespace MessengerPlatform
                     options.NullValueHandling = NullValueHandling.Ignore;
                     return options;
                 });
-                sbc.UseSerilog();
+                sbc.UseLog(Console.Out, MessageFormatter.Formatter);
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<MessengerConsumer>();

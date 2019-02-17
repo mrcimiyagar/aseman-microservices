@@ -62,17 +62,17 @@ namespace SearchPlatform.Consumers
         {
             using (var dbContext = new DatabaseContext())
             {
-                var complex = context.Message.Packet.Complex;
                 var room = context.Message.Packet.Room;
+                var complex = dbContext.Complexes.Find(room.ComplexId);
                 
                 room.Complex = complex;
 
                 dbContext.AddRange(room);
 
                 dbContext.SaveChanges();
-
-                return Task.CompletedTask;
             }
+
+            return Task.CompletedTask;
         }
 
         public Task Consume(ConsumeContext<MembershipCreatedNotif> context)

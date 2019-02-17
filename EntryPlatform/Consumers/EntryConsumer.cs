@@ -171,12 +171,14 @@ namespace EntryPlatform.Consumers
                                 SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
                                 new Packet() {User = user, UserSecret = user.UserSecret,
                                     ComplexSecret = user.Memberships[0].Complex.ComplexSecret});
-
+                            
                             var message = new ServiceMessage()
                             {
                                 Author = null,
                                 Room = user.Memberships[0].Complex.Rooms[0],
-                                RoomId = user.Memberships[0].Complex.Rooms[0].RoomId
+                                RoomId = user.Memberships[0].Complex.Rooms[0].RoomId,
+                                Text = "Room created.",
+                                Time = (long)((DateTime.Now - DateTime.MinValue).TotalMilliseconds)
                             };
                             
                             await SharedArea.Transport
@@ -187,6 +189,8 @@ namespace EntryPlatform.Consumers
                                     {
                                         ServiceMessage = message
                                     });
+
+                            userAuth = user.UserSecret;
                         }
                         else
                         {

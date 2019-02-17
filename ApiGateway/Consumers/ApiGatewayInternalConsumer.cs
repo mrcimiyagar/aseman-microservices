@@ -25,10 +25,11 @@ namespace ApiGateway.Consumers
 
         , IConsumer<PutUserRequest>, IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
         , IConsumer<PutMembershipRequest>, IConsumer<PutSessionRequest>, IConsumer<UpdateUserSecretRequest>
-        , IConsumer<PutServiceMessageRequest>, IConsumer<ConsolidateContactRequest>,
-        IConsumer<ConsolidateSessionRequest>
-        , IConsumer<MakeAccountRequest>, IConsumer<ConsolidateDeleteAccountRequest>,
-        IConsumer<ConsolidateMakeAccountRequest>, IConsumer<ConsolidateCreateComplexRequest>
+        , IConsumer<PutServiceMessageRequest>, IConsumer<ConsolidateContactRequest>
+        , IConsumer<ConsolidateSessionRequest>
+        , IConsumer<MakeAccountRequest>, IConsumer<ConsolidateDeleteAccountRequest>
+        , IConsumer<ConsolidateMakeAccountRequest>, IConsumer<ConsolidateCreateComplexRequest>
+        , IConsumer<ConsolidateCreateRoomRequest>
 
         , IConsumer<ComplexDeletionPush>, IConsumer<RoomDeletionPush>, IConsumer<ContactCreationPush>
         , IConsumer<ServiceMessagePush>, IConsumer<InviteCreationPush>, IConsumer<InviteCancellationPush>
@@ -1129,6 +1130,16 @@ namespace ApiGateway.Consumers
         {
             var result = await SharedArea.Transport
                 .DirectService<ConsolidateCreateComplexRequest, ConsolidateCreateComplexResponse>(
+                    Program.Bus,
+                    context.Message.Destination,
+                    context.Message.Packet);
+            await context.RespondAsync(result);
+        }
+
+        public async Task Consume(ConsumeContext<ConsolidateCreateRoomRequest> context)
+        {
+            var result = await SharedArea.Transport
+                .DirectService<ConsolidateCreateRoomRequest, ConsolidateCreateRoomResponse>(
                     Program.Bus,
                     context.Message.Destination,
                     context.Message.Packet);

@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.2",
-    "signature": "fa60d70bcd338f0ab64ef313138d340d60bc6671"
+    "signature": "78a05798e1c53392d36d69f38a23a8a1178f5b81"
   },
   "compilationOptions": {},
   "targets": {
@@ -77,6 +77,17 @@
           "lib/netstandard2.0/MassTransit.dll": {
             "assemblyVersion": "5.2.1.1808",
             "fileVersion": "5.2.1.1808"
+          }
+        }
+      },
+      "MassTransit.LibLog/1.0.0": {
+        "dependencies": {
+          "MassTransit": "5.2.1"
+        },
+        "runtime": {
+          "lib/net40/MassTransit.LibLog.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
           }
         }
       },
@@ -1564,6 +1575,7 @@
       "SharedArea/1.0.0": {
         "dependencies": {
           "MassTransit": "5.2.1",
+          "MassTransit.LibLog": "1.0.0",
           "MassTransit.NLog": "5.2.1",
           "MassTransit.RabbitMQ": "5.2.1",
           "MassTransit.SerilogIntegration": "5.2.1",
@@ -1603,6 +1615,13 @@
       "sha512": "sha512-K9F/FZL+FgpfWhZtAVLQJ2xJ5z5nz/utu6WNsbRyIZ9jFaeoXDpn0+sINfRUdKtocm9wvzXUQsA693R6CE8LHA==",
       "path": "masstransit/5.2.1",
       "hashPath": "masstransit.5.2.1.nupkg.sha512"
+    },
+    "MassTransit.LibLog/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-L5If0D4BpMG0XErBz0R0WxTxF2X34vqkujOkITtHG7cxNnVB0XrjS2DpxNXhRsLVMirCQn6itdWQGwP4QARd8w==",
+      "path": "masstransit.liblog/1.0.0",
+      "hashPath": "masstransit.liblog.1.0.0.nupkg.sha512"
     },
     "MassTransit.NLog/5.2.1": {
       "type": "package",

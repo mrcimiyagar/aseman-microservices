@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
+using GreenPipes;
+using GreenPipes.Filters.Log;
 using MassTransit;
 using MassTransit.Logging;
 using MassTransit.NLogIntegration;
@@ -15,7 +18,7 @@ namespace StorePlatform
     class Program
     {
         public static IBusControl Bus { get; set; }
-        
+
         static void Main(string[] args)
         {
             using (var dbContext = new DatabaseContext())
@@ -31,7 +34,7 @@ namespace StorePlatform
                     dbContext.SaveChanges();
                 }
             }
-            
+
             Bus = MassTransit.Bus.Factory.CreateUsingRabbitMq(sbc =>
             {
                 var host = sbc.Host(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_PATH), h =>
@@ -52,7 +55,7 @@ namespace StorePlatform
                     options.NullValueHandling = NullValueHandling.Ignore;
                     return options;
                 });
-                sbc.UseSerilog();
+                sbc.UseLog(Console.Out, MessageFormatter.Formatter);
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.STORE_QUEUE_NAME, ep =>
                 {
                     ep.Consumer<StoreConsumer>();
