@@ -4531,7 +4531,7 @@
       ]
     },
     "System.Diagnostics.TraceSource/4.3.0": {
-      "sha512": "PXWAEqWXamctxvdYSlHY+HG0e++cVkg0FwiqtiOZ4Ziy31GD9uab2QAgkuDKUARcCdVq3DfruvdMnPfalEJbNw==",
+      "sha512": "BlWWL9q/HKM0KBzuOSOqchFga5MqnvkK5mb+IU7f4ecInSyghlswR3ib3nww1ruBmLrtdI5coCBB2H2AltTFyA==",
       "type": "package",
       "path": "system.diagnostics.tracesource/4.3.0",
       "files": [
@@ -7665,23 +7665,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\keyhan\\.nuget\\packages\\": {},
+    "C:\\Users\\Keyhan\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\Desktop\\asemanbackendprojects\\SearchPlatform\\SearchPlatform.csproj",
+      "projectUniqueName": "D:\\My Documents\\Projects\\Dotnet\\asemanbackendprojects\\SearchPlatform\\SearchPlatform.csproj",
       "projectName": "SearchPlatform",
-      "projectPath": "F:\\Desktop\\asemanbackendprojects\\SearchPlatform\\SearchPlatform.csproj",
-      "packagesPath": "C:\\Users\\keyhan\\.nuget\\packages\\",
-      "outputPath": "F:\\Desktop\\asemanbackendprojects\\SearchPlatform\\obj\\",
+      "projectPath": "D:\\My Documents\\Projects\\Dotnet\\asemanbackendprojects\\SearchPlatform\\SearchPlatform.csproj",
+      "packagesPath": "C:\\Users\\Keyhan\\.nuget\\packages\\",
+      "outputPath": "D:\\My Documents\\Projects\\Dotnet\\asemanbackendprojects\\SearchPlatform\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\keyhan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Keyhan\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.2"
@@ -7692,8 +7692,8 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "F:\\Desktop\\asemanbackendprojects\\SharedArea\\SharedArea.csproj": {
-              "projectPath": "F:\\Desktop\\asemanbackendprojects\\SharedArea\\SharedArea.csproj"
+            "D:\\My Documents\\Projects\\Dotnet\\asemanbackendprojects\\SharedArea\\SharedArea.csproj": {
+              "projectPath": "D:\\My Documents\\Projects\\Dotnet\\asemanbackendprojects\\SharedArea\\SharedArea.csproj"
             }
           }
         }

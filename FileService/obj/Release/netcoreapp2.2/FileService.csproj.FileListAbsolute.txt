@@ -12,3 +12,17 @@ F:\Desktop\asemanbackendprojects\FileService\obj\Release\netcoreapp2.2\FileServi
 F:\Desktop\asemanbackendprojects\FileService\obj\Release\netcoreapp2.2\FileService.dll
 F:\Desktop\asemanbackendprojects\FileService\obj\Release\netcoreapp2.2\FileService.pdb
 F:\Desktop\asemanbackendprojects\FileService\obj\Release\netcoreapp2.2\FileService.csprojAssemblyReference.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\FileService\bin\Release\netcoreapp2.2\FileService.deps.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\FileService\bin\Release\netcoreapp2.2\FileService.runtimeconfig.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\FileService\bin\Release\netcoreapp2.2\FileService.runtimeconfig.dev.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\FileService\bin\Release\netcoreapp2.2\FileService.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\FileService\bin\Release\netcoreapp2.2\FileService.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\FileService\bin\Release\netcoreapp2.2\SharedArea.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\FileService\bin\Release\netcoreapp2.2\SharedArea.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\FileService\obj\Release\netcoreapp2.2\FileService.csprojAssemblyReference.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\FileService\obj\Release\netcoreapp2.2\FileService.csproj.CoreCompileInputs.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\FileService\obj\Release\netcoreapp2.2\FileService.AssemblyInfoInputs.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\FileService\obj\Release\netcoreapp2.2\FileService.AssemblyInfo.cs
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\FileService\obj\Release\netcoreapp2.2\FileService.csproj.CopyComplete
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\FileService\obj\Release\netcoreapp2.2\FileService.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\FileService\obj\Release\netcoreapp2.2\FileService.pdb

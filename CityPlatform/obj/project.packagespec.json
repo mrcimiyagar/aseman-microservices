@@ -1,10 +1,10 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "F:\\Desktop\\asemanbackendprojects\\CityPlatform\\CityPlatform.csproj",
+    "projectUniqueName": "D:\\My Documents\\Projects\\Dotnet\\asemanbackendprojects\\CityPlatform\\CityPlatform.csproj",
     "projectName": "CityPlatform",
-    "projectPath": "F:\\Desktop\\asemanbackendprojects\\CityPlatform\\CityPlatform.csproj",
-    "outputPath": "F:\\Desktop\\asemanbackendprojects\\CityPlatform\\obj\\",
+    "projectPath": "D:\\My Documents\\Projects\\Dotnet\\asemanbackendprojects\\CityPlatform\\CityPlatform.csproj",
+    "outputPath": "D:\\My Documents\\Projects\\Dotnet\\asemanbackendprojects\\CityPlatform\\obj\\",
     "projectStyle": "PackageReference",
     "fallbackFolders": [
       "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -15,8 +15,8 @@
     "frameworks": {
       "netcoreapp2.2": {
         "projectReferences": {
-          "F:\\Desktop\\asemanbackendprojects\\SharedArea\\SharedArea.csproj": {
-            "projectPath": "F:\\Desktop\\asemanbackendprojects\\SharedArea\\SharedArea.csproj"
+          "D:\\My Documents\\Projects\\Dotnet\\asemanbackendprojects\\SharedArea\\SharedArea.csproj": {
+            "projectPath": "D:\\My Documents\\Projects\\Dotnet\\asemanbackendprojects\\SharedArea\\SharedArea.csproj"
           }
         }
       }

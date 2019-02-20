@@ -12,3 +12,17 @@ F:\Desktop\asemanbackendprojects\MessengerPlatform\obj\Debug\netcoreapp2.2\Messe
 F:\Desktop\asemanbackendprojects\MessengerPlatform\obj\Debug\netcoreapp2.2\MessengerPlatform.csproj.CopyComplete
 F:\Desktop\asemanbackendprojects\MessengerPlatform\obj\Debug\netcoreapp2.2\MessengerPlatform.dll
 F:\Desktop\asemanbackendprojects\MessengerPlatform\obj\Debug\netcoreapp2.2\MessengerPlatform.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\MessengerPlatform\bin\Debug\netcoreapp2.2\MessengerPlatform.deps.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\MessengerPlatform\bin\Debug\netcoreapp2.2\MessengerPlatform.runtimeconfig.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\MessengerPlatform\bin\Debug\netcoreapp2.2\MessengerPlatform.runtimeconfig.dev.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\MessengerPlatform\bin\Debug\netcoreapp2.2\MessengerPlatform.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\MessengerPlatform\bin\Debug\netcoreapp2.2\MessengerPlatform.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\MessengerPlatform\bin\Debug\netcoreapp2.2\SharedArea.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\MessengerPlatform\bin\Debug\netcoreapp2.2\SharedArea.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\MessengerPlatform\obj\Debug\netcoreapp2.2\MessengerPlatform.csprojAssemblyReference.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\MessengerPlatform\obj\Debug\netcoreapp2.2\MessengerPlatform.csproj.CoreCompileInputs.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\MessengerPlatform\obj\Debug\netcoreapp2.2\MessengerPlatform.AssemblyInfoInputs.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\MessengerPlatform\obj\Debug\netcoreapp2.2\MessengerPlatform.AssemblyInfo.cs
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\MessengerPlatform\obj\Debug\netcoreapp2.2\MessengerPlatform.csproj.CopyComplete
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\MessengerPlatform\obj\Debug\netcoreapp2.2\MessengerPlatform.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\MessengerPlatform\obj\Debug\netcoreapp2.2\MessengerPlatform.pdb

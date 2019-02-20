@@ -12,3 +12,17 @@ F:\Desktop\asemanbackendprojects\CityPlatform\obj\Release\netcoreapp2.2\CityPlat
 F:\Desktop\asemanbackendprojects\CityPlatform\obj\Release\netcoreapp2.2\CityPlatform.dll
 F:\Desktop\asemanbackendprojects\CityPlatform\obj\Release\netcoreapp2.2\CityPlatform.pdb
 F:\Desktop\asemanbackendprojects\CityPlatform\obj\Release\netcoreapp2.2\CityPlatform.csprojAssemblyReference.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\CityPlatform\bin\Release\netcoreapp2.2\CityPlatform.deps.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\CityPlatform\bin\Release\netcoreapp2.2\CityPlatform.runtimeconfig.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\CityPlatform\bin\Release\netcoreapp2.2\CityPlatform.runtimeconfig.dev.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\CityPlatform\bin\Release\netcoreapp2.2\CityPlatform.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\CityPlatform\bin\Release\netcoreapp2.2\CityPlatform.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\CityPlatform\bin\Release\netcoreapp2.2\SharedArea.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\CityPlatform\bin\Release\netcoreapp2.2\SharedArea.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\CityPlatform\obj\Release\netcoreapp2.2\CityPlatform.csprojAssemblyReference.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\CityPlatform\obj\Release\netcoreapp2.2\CityPlatform.csproj.CoreCompileInputs.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\CityPlatform\obj\Release\netcoreapp2.2\CityPlatform.AssemblyInfoInputs.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\CityPlatform\obj\Release\netcoreapp2.2\CityPlatform.AssemblyInfo.cs
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\CityPlatform\obj\Release\netcoreapp2.2\CityPlatform.csproj.CopyComplete
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\CityPlatform\obj\Release\netcoreapp2.2\CityPlatform.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\CityPlatform\obj\Release\netcoreapp2.2\CityPlatform.pdb

@@ -12,3 +12,17 @@ F:\Desktop\asemanbackendprojects\StorePlatform\obj\Release\netcoreapp2.2\StorePl
 F:\Desktop\asemanbackendprojects\StorePlatform\obj\Release\netcoreapp2.2\StorePlatform.csproj.CopyComplete
 F:\Desktop\asemanbackendprojects\StorePlatform\obj\Release\netcoreapp2.2\StorePlatform.dll
 F:\Desktop\asemanbackendprojects\StorePlatform\obj\Release\netcoreapp2.2\StorePlatform.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\StorePlatform\bin\Release\netcoreapp2.2\StorePlatform.deps.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\StorePlatform\bin\Release\netcoreapp2.2\StorePlatform.runtimeconfig.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\StorePlatform\bin\Release\netcoreapp2.2\StorePlatform.runtimeconfig.dev.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\StorePlatform\bin\Release\netcoreapp2.2\StorePlatform.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\StorePlatform\bin\Release\netcoreapp2.2\StorePlatform.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\StorePlatform\bin\Release\netcoreapp2.2\SharedArea.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\StorePlatform\bin\Release\netcoreapp2.2\SharedArea.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\StorePlatform\obj\Release\netcoreapp2.2\StorePlatform.csprojAssemblyReference.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\StorePlatform\obj\Release\netcoreapp2.2\StorePlatform.csproj.CoreCompileInputs.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\StorePlatform\obj\Release\netcoreapp2.2\StorePlatform.AssemblyInfoInputs.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\StorePlatform\obj\Release\netcoreapp2.2\StorePlatform.AssemblyInfo.cs
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\StorePlatform\obj\Release\netcoreapp2.2\StorePlatform.csproj.CopyComplete
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\StorePlatform\obj\Release\netcoreapp2.2\StorePlatform.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\StorePlatform\obj\Release\netcoreapp2.2\StorePlatform.pdb

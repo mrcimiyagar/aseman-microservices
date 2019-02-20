@@ -15,3 +15,20 @@ F:\Desktop\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway
 F:\Desktop\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.csproj.CopyComplete
 F:\Desktop\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.dll
 F:\Desktop\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\ApiGateway\bin\Release\netcoreapp2.2\ApiGateway.deps.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\ApiGateway\bin\Release\netcoreapp2.2\ApiGateway.runtimeconfig.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\ApiGateway\bin\Release\netcoreapp2.2\ApiGateway.runtimeconfig.dev.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\ApiGateway\bin\Release\netcoreapp2.2\ApiGateway.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\ApiGateway\bin\Release\netcoreapp2.2\ApiGateway.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\ApiGateway\bin\Release\netcoreapp2.2\SharedArea.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\ApiGateway\bin\Release\netcoreapp2.2\SharedArea.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.csprojAssemblyReference.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.csproj.CoreCompileInputs.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.RazorAssemblyInfo.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.RazorAssemblyInfo.cs
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.AssemblyInfoInputs.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.AssemblyInfo.cs
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.RazorTargetAssemblyInfo.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.csproj.CopyComplete
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\ApiGateway\obj\Release\netcoreapp2.2\ApiGateway.pdb

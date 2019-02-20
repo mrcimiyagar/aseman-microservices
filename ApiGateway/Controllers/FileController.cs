@@ -38,6 +38,7 @@ namespace ApiGateway.Controllers
         }
 
         [Route("~/api/file/upload_photo")]
+        [RequestSizeLimit(1024 * 1024 * 1024)]
         [HttpPost]
         public async Task<ActionResult<Packet>> UploadPhoto([FromForm] PhotoUploadForm form)
         {
@@ -80,6 +81,7 @@ namespace ApiGateway.Controllers
         }
 
         [Route("~/api/file/upload_audio")]
+        [RequestSizeLimit(1024 * 1024 * 1024)]
         [HttpPost]
         public async Task<ActionResult<Packet>> UploadAudio([FromForm] AudioUploadForm form)
         {
@@ -121,6 +123,7 @@ namespace ApiGateway.Controllers
         }
 
         [Route("~/api/file/upload_video")]
+        [RequestSizeLimit(1024 * 1024 * 1024)]
         [HttpPost]
         public async Task<ActionResult<Packet>> UploadVideo([FromForm] VideoUploadForm form)
         {
@@ -358,6 +361,7 @@ namespace ApiGateway.Controllers
         }
 
         [Route("~/api/file/take_file_download_stream")]
+        [RequestSizeLimit(1024 * 1024 * 1024)]
         [HttpPost]
         public ActionResult TakeFileDownloadStream([FromForm] TakeFileDSF form)
         {

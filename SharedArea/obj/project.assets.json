@@ -2345,6 +2345,7 @@
       "type": "package",
       "path": "dnsclient/1.0.7",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "dnsclient.1.0.7.nupkg.sha512",
         "dnsclient.nuspec",
@@ -2359,6 +2360,7 @@
       "type": "package",
       "path": "greenpipes/2.1.3",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "greenpipes.2.1.3.nupkg.sha512",
         "greenpipes.nuspec",
@@ -2373,6 +2375,7 @@
       "type": "package",
       "path": "masstransit/5.2.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net452/MassTransit.dll",
         "lib/net452/MassTransit.pdb",
@@ -2389,6 +2392,7 @@
       "type": "package",
       "path": "masstransit.liblog/1.0.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net40/MassTransit.LibLog.dll",
         "masstransit.liblog.1.0.0.nupkg.sha512",
@@ -2400,6 +2404,7 @@
       "type": "package",
       "path": "masstransit.nlog/5.2.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net452/MassTransit.NLogIntegration.dll",
         "lib/net452/MassTransit.NLogIntegration.pdb",
@@ -2416,6 +2421,7 @@
       "type": "package",
       "path": "masstransit.rabbitmq/5.2.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net452/MassTransit.RabbitMqTransport.dll",
         "lib/net452/MassTransit.RabbitMqTransport.pdb",
@@ -2432,6 +2438,7 @@
       "type": "package",
       "path": "masstransit.serilogintegration/5.2.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net452/MassTransit.SerilogIntegration.dll",
         "lib/net452/MassTransit.SerilogIntegration.pdb",
@@ -2448,6 +2455,7 @@
       "type": "package",
       "path": "microsoft.entityframeworkcore/2.2.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.EntityFrameworkCore.dll",
         "lib/netstandard2.0/Microsoft.EntityFrameworkCore.xml",
@@ -2460,6 +2468,7 @@
       "type": "package",
       "path": "microsoft.entityframeworkcore.abstractions/2.2.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.EntityFrameworkCore.Abstractions.dll",
         "lib/netstandard2.0/Microsoft.EntityFrameworkCore.Abstractions.xml",
@@ -2472,6 +2481,7 @@
       "type": "package",
       "path": "microsoft.entityframeworkcore.analyzers/2.2.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "analyzers/dotnet/cs/Microsoft.EntityFrameworkCore.Analyzers.dll",
         "microsoft.entityframeworkcore.analyzers.2.2.1.nupkg.sha512",
@@ -2483,6 +2493,7 @@
       "type": "package",
       "path": "microsoft.entityframeworkcore.relational/2.2.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.EntityFrameworkCore.Relational.dll",
         "lib/netstandard2.0/Microsoft.EntityFrameworkCore.Relational.xml",
@@ -2495,6 +2506,7 @@
       "type": "package",
       "path": "microsoft.entityframeworkcore.sqlserver/2.2.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.EntityFrameworkCore.SqlServer.dll",
         "lib/netstandard2.0/Microsoft.EntityFrameworkCore.SqlServer.xml",
@@ -3085,6 +3097,7 @@
       "type": "package",
       "path": "mongodb.bson/2.7.3",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "License.rtf",
         "lib/net45/MongoDB.Bson.dll",
@@ -3100,6 +3113,7 @@
       "type": "package",
       "path": "mongodb.driver/2.7.3",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "License.rtf",
         "lib/net45/MongoDB.Driver.dll",
@@ -3115,6 +3129,7 @@
       "type": "package",
       "path": "mongodb.driver.core/2.7.3",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "License.rtf",
         "lib/net45/MongoDB.Driver.Core.dll",
@@ -3258,6 +3273,7 @@
       "type": "package",
       "path": "newid/3.0.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net452/NewId.dll",
         "lib/net452/NewId.xml",
@@ -3317,6 +3333,7 @@
       "type": "package",
       "path": "nlog/4.5.11",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/monoandroid44/NLog.dll",
         "lib/monoandroid44/NLog.xml",
@@ -3349,6 +3366,7 @@
       "type": "package",
       "path": "rabbitmq.client/5.1.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net451/RabbitMQ.Client.dll",
         "lib/net451/RabbitMQ.Client.xml",
@@ -3652,6 +3670,7 @@
       "type": "package",
       "path": "serilog/2.7.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net45/Serilog.dll",
         "lib/net45/Serilog.pdb",
@@ -3884,6 +3903,7 @@
       "type": "package",
       "path": "system.collections.specialized/4.0.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -3922,6 +3942,7 @@
       "type": "package",
       "path": "system.componentmodel/4.0.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -4069,6 +4090,7 @@
       "type": "package",
       "path": "system.componentmodel.primitives/4.1.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -4107,6 +4129,7 @@
       "type": "package",
       "path": "system.componentmodel.typeconverter/4.1.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -4397,6 +4420,7 @@
       "type": "package",
       "path": "system.diagnostics.diagnosticsource/4.5.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
@@ -4477,6 +4501,7 @@
       "type": "package",
       "path": "system.diagnostics.textwritertracelistener/4.0.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -4511,10 +4536,11 @@
       ]
     },
     "System.Diagnostics.TraceSource/4.3.0": {
-      "sha512": "PXWAEqWXamctxvdYSlHY+HG0e++cVkg0FwiqtiOZ4Ziy31GD9uab2QAgkuDKUARcCdVq3DfruvdMnPfalEJbNw==",
+      "sha512": "BlWWL9q/HKM0KBzuOSOqchFga5MqnvkK5mb+IU7f4ecInSyghlswR3ib3nww1ruBmLrtdI5coCBB2H2AltTFyA==",
       "type": "package",
       "path": "system.diagnostics.tracesource/4.3.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -5312,6 +5338,7 @@
       "type": "package",
       "path": "system.net.networkinformation/4.3.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -6394,6 +6421,7 @@
       "type": "package",
       "path": "system.runtime.loader/4.3.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -6898,6 +6926,7 @@
       "type": "package",
       "path": "system.security.securestring/4.0.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -7273,6 +7302,7 @@
       "type": "package",
       "path": "system.threading.overlapped/4.3.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -7642,23 +7672,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\keyhan\\.nuget\\packages\\": {},
+    "C:\\Users\\Keyhan\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\Desktop\\asemanbackendprojects\\SharedArea\\SharedArea.csproj",
+      "projectUniqueName": "D:\\My Documents\\Projects\\Dotnet\\asemanbackendprojects\\SharedArea\\SharedArea.csproj",
       "projectName": "SharedArea",
-      "projectPath": "F:\\Desktop\\asemanbackendprojects\\SharedArea\\SharedArea.csproj",
-      "packagesPath": "C:\\Users\\keyhan\\.nuget\\packages\\",
-      "outputPath": "F:\\Desktop\\asemanbackendprojects\\SharedArea\\obj\\",
+      "projectPath": "D:\\My Documents\\Projects\\Dotnet\\asemanbackendprojects\\SharedArea\\SharedArea.csproj",
+      "packagesPath": "C:\\Users\\Keyhan\\.nuget\\packages\\",
+      "outputPath": "D:\\My Documents\\Projects\\Dotnet\\asemanbackendprojects\\SharedArea\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\keyhan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Keyhan\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.2"

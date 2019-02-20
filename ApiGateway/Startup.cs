@@ -103,12 +103,14 @@ namespace ApiGateway
                 {
                     options.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     options.NullValueHandling = NullValueHandling.Ignore;
+                    options.Converters.Add(new MessageConverter());
                     return options;
                 });
                 sbc.ConfigureJsonDeserializer(options =>
                 {
                     options.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     options.NullValueHandling = NullValueHandling.Ignore;
+                    options.Converters.Add(new MessageConverter());
                     return options;
                 });
                 sbc.UseLog(Console.Out, MessageFormatter.Formatter);

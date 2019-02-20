@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.2",
-    "signature": "5a229dd17044ec777b24445e733e91a37a1beeea"
+    "signature": "2ff513f14ab4de22ca9aefbc5379b29c469b9a68"
   },
   "compilationOptions": {
     "defines": [
@@ -112,6 +112,20 @@
           "lib/netstandard2.0/MassTransit.dll": {}
         }
       },
+      "MassTransit.LibLog/1.0.0": {
+        "dependencies": {
+          "MassTransit": "5.2.1"
+        },
+        "runtime": {
+          "lib/net40/MassTransit.LibLog.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        },
+        "compile": {
+          "lib/net40/MassTransit.LibLog.dll": {}
+        }
+      },
       "MassTransit.NLog/5.2.1": {
         "dependencies": {
           "GreenPipes": "2.1.3",
@@ -145,6 +159,23 @@
         },
         "compile": {
           "lib/netstandard2.0/MassTransit.RabbitMqTransport.dll": {}
+        }
+      },
+      "MassTransit.SerilogIntegration/5.2.1": {
+        "dependencies": {
+          "GreenPipes": "2.1.3",
+          "MassTransit": "5.2.1",
+          "Newtonsoft.Json": "11.0.2",
+          "Serilog": "2.7.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/MassTransit.SerilogIntegration.dll": {
+            "assemblyVersion": "5.2.1.1808",
+            "fileVersion": "5.2.1.1808"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/MassTransit.SerilogIntegration.dll": {}
         }
       },
       "Microsoft.EntityFrameworkCore/2.2.1": {
@@ -551,6 +582,21 @@
           "Microsoft.NETCore.Targets": "2.0.0"
         }
       },
+      "Serilog/2.7.1": {
+        "dependencies": {
+          "NETStandard.Library": "2.0.3",
+          "System.Collections.NonGeneric": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Serilog.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.7.1.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard1.3/Serilog.dll": {}
+        }
+      },
       "System.Collections.Immutable/1.5.0": {},
       "System.ComponentModel/4.0.1": {
         "dependencies": {
@@ -868,8 +914,10 @@
       "SharedArea/1.0.0": {
         "dependencies": {
           "MassTransit": "5.2.1",
+          "MassTransit.LibLog": "1.0.0",
           "MassTransit.NLog": "5.2.1",
           "MassTransit.RabbitMQ": "5.2.1",
+          "MassTransit.SerilogIntegration": "5.2.1",
           "Microsoft.EntityFrameworkCore": "2.2.1",
           "Microsoft.EntityFrameworkCore.SqlServer": "2.2.1",
           "MongoDB.Driver": "2.7.3"
@@ -3820,6 +3868,13 @@
       "path": "masstransit/5.2.1",
       "hashPath": "masstransit.5.2.1.nupkg.sha512"
     },
+    "MassTransit.LibLog/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-L5If0D4BpMG0XErBz0R0WxTxF2X34vqkujOkITtHG7cxNnVB0XrjS2DpxNXhRsLVMirCQn6itdWQGwP4QARd8w==",
+      "path": "masstransit.liblog/1.0.0",
+      "hashPath": "masstransit.liblog.1.0.0.nupkg.sha512"
+    },
     "MassTransit.NLog/5.2.1": {
       "type": "package",
       "serviceable": true,
@@ -3833,6 +3888,13 @@
       "sha512": "sha512-nR7Y+w9lgFpuMhXfOu6liqTkrezNM61YbewB6Gces0o3eRbgeje7DjoY5ZQnvVPUSc2+jbKaDfneFhDE2wDGSw==",
       "path": "masstransit.rabbitmq/5.2.1",
       "hashPath": "masstransit.rabbitmq.5.2.1.nupkg.sha512"
+    },
+    "MassTransit.SerilogIntegration/5.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-D8no+BiqJaZsBvsBrpKjSriWa5r3EbG+bikFBw4IZmaaRNagVDYlfhhP34jwrgRHB1++3pO0Ui3SDMQzILcZUA==",
+      "path": "masstransit.serilogintegration/5.2.1",
+      "hashPath": "masstransit.serilogintegration.5.2.1.nupkg.sha512"
     },
     "Microsoft.EntityFrameworkCore/2.2.1": {
       "type": "package",
@@ -3988,6 +4050,13 @@
       "path": "runtime.native.system.net.security/4.3.0",
       "hashPath": "runtime.native.system.net.security.4.3.0.nupkg.sha512"
     },
+    "Serilog/2.7.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mqFJqhgmTv4th/nC1roPMWjGB3YSRH34J5XKq2OqzolJfUO4H3eeM7EJIpOjXV2XpIxFsGgBqiuhNxUt8WMdtg==",
+      "path": "serilog/2.7.1",
+      "hashPath": "serilog.2.7.1.nupkg.sha512"
+    },
     "System.Collections.Immutable/1.5.0": {
       "type": "package",
       "serviceable": true,
@@ -4040,7 +4109,7 @@
     "System.Diagnostics.TraceSource/4.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-PXWAEqWXamctxvdYSlHY+HG0e++cVkg0FwiqtiOZ4Ziy31GD9uab2QAgkuDKUARcCdVq3DfruvdMnPfalEJbNw==",
+      "sha512": "sha512-BlWWL9q/HKM0KBzuOSOqchFga5MqnvkK5mb+IU7f4ecInSyghlswR3ib3nww1ruBmLrtdI5coCBB2H2AltTFyA==",
       "path": "system.diagnostics.tracesource/4.3.0",
       "hashPath": "system.diagnostics.tracesource.4.3.0.nupkg.sha512"
     },

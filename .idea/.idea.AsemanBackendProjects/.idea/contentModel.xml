@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\keyhan\.Rider2018.1\system\resharper-host\local\Transient\ReSharperHost\v12\SolutionCaches\_AsemanBackendProjects.1459735236.00" t="ExcludeRecursive" />
-    <e p="F:\Desktop\AsemanBackendProjects" t="IncludeFlat">
+    <e p="C:\Users\keyhan\.Rider2018.1\system\resharper-host\local\Transient\ReSharperHost\v12\SolutionCaches\_AsemanBackendProjects.407319470.00" t="ExcludeRecursive" />
+    <e p="D:\My Documents\Projects\dotnet\AsemanBackendProjects" t="IncludeFlat">
       <e p="ApiGateway" t="IncludeRecursive">
         <e p="ApiGateway.csproj" t="IncludeRecursive" />
         <e p="appsettings.Development.json" t="Include" />
@@ -59,6 +59,41 @@
         <e p="Properties" t="Include">
           <e p="launchSettings.json" t="Include" />
         </e>
+        <e p="publish" t="Include">
+          <e p="ApiGateway.deps.json" t="Include" />
+          <e p="ApiGateway.dll" t="Include" />
+          <e p="ApiGateway.pdb" t="Include" />
+          <e p="ApiGateway.runtimeconfig.json" t="Include" />
+          <e p="appsettings.Development.json" t="Include" />
+          <e p="appsettings.json" t="Include" />
+          <e p="DnsClient.dll" t="Include" />
+          <e p="Documentations" t="Include">
+            <e p="Aseman.postman_collection.json" t="Include" />
+          </e>
+          <e p="GreenPipes.dll" t="Include" />
+          <e p="MassTransit.dll" t="Include" />
+          <e p="MassTransit.LibLog.dll" t="Include" />
+          <e p="MassTransit.NLogIntegration.dll" t="Include" />
+          <e p="MassTransit.RabbitMqTransport.dll" t="Include" />
+          <e p="MassTransit.SerilogIntegration.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Abstractions.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Relational.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.SqlServer.dll" t="Include" />
+          <e p="Microsoft.Extensions.PlatformAbstractions.dll" t="Include" />
+          <e p="MongoDB.Bson.dll" t="Include" />
+          <e p="MongoDB.Driver.Core.dll" t="Include" />
+          <e p="MongoDB.Driver.dll" t="Include" />
+          <e p="NewId.dll" t="Include" />
+          <e p="NLog.dll" t="Include" />
+          <e p="RabbitMQ.Client.dll" t="Include" />
+          <e p="Remotion.Linq.dll" t="Include" />
+          <e p="Serilog.dll" t="Include" />
+          <e p="SharedArea.dll" t="Include" />
+          <e p="SharedArea.pdb" t="Include" />
+          <e p="System.Interactive.Async.dll" t="Include" />
+          <e p="web.config" t="Include" />
+        </e>
         <e p="Startup.cs" t="Include" />
         <e p="Utils" t="Include">
           <e p="Pusher.cs" t="Include" />
@@ -84,6 +119,85 @@
           </e>
         </e>
         <e p="Program.cs" t="Include" />
+        <e p="publish" t="Include">
+          <e p="BotPlatform.deps.json" t="Include" />
+          <e p="BotPlatform.dll" t="Include" />
+          <e p="BotPlatform.pdb" t="Include" />
+          <e p="BotPlatform.runtimeconfig.json" t="Include" />
+          <e p="DnsClient.dll" t="Include" />
+          <e p="GreenPipes.dll" t="Include" />
+          <e p="MassTransit.dll" t="Include" />
+          <e p="MassTransit.LibLog.dll" t="Include" />
+          <e p="MassTransit.NLogIntegration.dll" t="Include" />
+          <e p="MassTransit.RabbitMqTransport.dll" t="Include" />
+          <e p="MassTransit.SerilogIntegration.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Abstractions.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Relational.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.SqlServer.dll" t="Include" />
+          <e p="Microsoft.Extensions.Caching.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Caching.Memory.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.Binder.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.dll" t="Include" />
+          <e p="Microsoft.Extensions.DependencyInjection.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.DependencyInjection.dll" t="Include" />
+          <e p="Microsoft.Extensions.Logging.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Logging.dll" t="Include" />
+          <e p="Microsoft.Extensions.Options.dll" t="Include" />
+          <e p="Microsoft.Extensions.PlatformAbstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Primitives.dll" t="Include" />
+          <e p="MongoDB.Bson.dll" t="Include" />
+          <e p="MongoDB.Driver.Core.dll" t="Include" />
+          <e p="MongoDB.Driver.dll" t="Include" />
+          <e p="NewId.dll" t="Include" />
+          <e p="Newtonsoft.Json.Bson.dll" t="Include" />
+          <e p="Newtonsoft.Json.dll" t="Include" />
+          <e p="NLog.dll" t="Include" />
+          <e p="RabbitMQ.Client.dll" t="Include" />
+          <e p="Remotion.Linq.dll" t="Include" />
+          <e p="runtimes" t="Include">
+            <e p="unix" t="Include">
+              <e p="lib" t="Include">
+                <e p="netcoreapp2.1" t="Include">
+                  <e p="System.Data.SqlClient.dll" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="win" t="Include">
+              <e p="lib" t="Include">
+                <e p="netcoreapp2.0" t="Include">
+                  <e p="System.Text.Encoding.CodePages.dll" t="Include" />
+                </e>
+                <e p="netcoreapp2.1" t="Include">
+                  <e p="System.Data.SqlClient.dll" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="win-arm64" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+            <e p="win-x64" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+            <e p="win-x86" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="Serilog.dll" t="Include" />
+          <e p="SharedArea.dll" t="Include" />
+          <e p="SharedArea.pdb" t="Include" />
+          <e p="System.Data.SqlClient.dll" t="Include" />
+          <e p="System.Interactive.Async.dll" t="Include" />
+          <e p="System.Runtime.CompilerServices.Unsafe.dll" t="Include" />
+          <e p="System.Text.Encoding.CodePages.dll" t="Include" />
+        </e>
       </e>
       <e p="CityPlatform" t="IncludeRecursive">
         <e p="Bin" t="ExcludeRecursive" />
@@ -103,6 +217,85 @@
           </e>
         </e>
         <e p="Program.cs" t="Include" />
+        <e p="publish" t="Include">
+          <e p="CityPlatform.deps.json" t="Include" />
+          <e p="CityPlatform.dll" t="Include" />
+          <e p="CityPlatform.pdb" t="Include" />
+          <e p="CityPlatform.runtimeconfig.json" t="Include" />
+          <e p="DnsClient.dll" t="Include" />
+          <e p="GreenPipes.dll" t="Include" />
+          <e p="MassTransit.dll" t="Include" />
+          <e p="MassTransit.LibLog.dll" t="Include" />
+          <e p="MassTransit.NLogIntegration.dll" t="Include" />
+          <e p="MassTransit.RabbitMqTransport.dll" t="Include" />
+          <e p="MassTransit.SerilogIntegration.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Abstractions.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Relational.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.SqlServer.dll" t="Include" />
+          <e p="Microsoft.Extensions.Caching.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Caching.Memory.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.Binder.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.dll" t="Include" />
+          <e p="Microsoft.Extensions.DependencyInjection.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.DependencyInjection.dll" t="Include" />
+          <e p="Microsoft.Extensions.Logging.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Logging.dll" t="Include" />
+          <e p="Microsoft.Extensions.Options.dll" t="Include" />
+          <e p="Microsoft.Extensions.PlatformAbstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Primitives.dll" t="Include" />
+          <e p="MongoDB.Bson.dll" t="Include" />
+          <e p="MongoDB.Driver.Core.dll" t="Include" />
+          <e p="MongoDB.Driver.dll" t="Include" />
+          <e p="NewId.dll" t="Include" />
+          <e p="Newtonsoft.Json.Bson.dll" t="Include" />
+          <e p="Newtonsoft.Json.dll" t="Include" />
+          <e p="NLog.dll" t="Include" />
+          <e p="RabbitMQ.Client.dll" t="Include" />
+          <e p="Remotion.Linq.dll" t="Include" />
+          <e p="runtimes" t="Include">
+            <e p="unix" t="Include">
+              <e p="lib" t="Include">
+                <e p="netcoreapp2.1" t="Include">
+                  <e p="System.Data.SqlClient.dll" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="win" t="Include">
+              <e p="lib" t="Include">
+                <e p="netcoreapp2.0" t="Include">
+                  <e p="System.Text.Encoding.CodePages.dll" t="Include" />
+                </e>
+                <e p="netcoreapp2.1" t="Include">
+                  <e p="System.Data.SqlClient.dll" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="win-arm64" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+            <e p="win-x64" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+            <e p="win-x86" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="Serilog.dll" t="Include" />
+          <e p="SharedArea.dll" t="Include" />
+          <e p="SharedArea.pdb" t="Include" />
+          <e p="System.Data.SqlClient.dll" t="Include" />
+          <e p="System.Interactive.Async.dll" t="Include" />
+          <e p="System.Runtime.CompilerServices.Unsafe.dll" t="Include" />
+          <e p="System.Text.Encoding.CodePages.dll" t="Include" />
+        </e>
         <e p="Utils" t="Include">
           <e p="Security.cs" t="Include" />
         </e>
@@ -125,6 +318,85 @@
           </e>
         </e>
         <e p="Program.cs" t="Include" />
+        <e p="publish" t="Include">
+          <e p="DesktopPlatform.deps.json" t="Include" />
+          <e p="DesktopPlatform.dll" t="Include" />
+          <e p="DesktopPlatform.pdb" t="Include" />
+          <e p="DesktopPlatform.runtimeconfig.json" t="Include" />
+          <e p="DnsClient.dll" t="Include" />
+          <e p="GreenPipes.dll" t="Include" />
+          <e p="MassTransit.dll" t="Include" />
+          <e p="MassTransit.LibLog.dll" t="Include" />
+          <e p="MassTransit.NLogIntegration.dll" t="Include" />
+          <e p="MassTransit.RabbitMqTransport.dll" t="Include" />
+          <e p="MassTransit.SerilogIntegration.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Abstractions.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Relational.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.SqlServer.dll" t="Include" />
+          <e p="Microsoft.Extensions.Caching.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Caching.Memory.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.Binder.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.dll" t="Include" />
+          <e p="Microsoft.Extensions.DependencyInjection.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.DependencyInjection.dll" t="Include" />
+          <e p="Microsoft.Extensions.Logging.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Logging.dll" t="Include" />
+          <e p="Microsoft.Extensions.Options.dll" t="Include" />
+          <e p="Microsoft.Extensions.PlatformAbstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Primitives.dll" t="Include" />
+          <e p="MongoDB.Bson.dll" t="Include" />
+          <e p="MongoDB.Driver.Core.dll" t="Include" />
+          <e p="MongoDB.Driver.dll" t="Include" />
+          <e p="NewId.dll" t="Include" />
+          <e p="Newtonsoft.Json.Bson.dll" t="Include" />
+          <e p="Newtonsoft.Json.dll" t="Include" />
+          <e p="NLog.dll" t="Include" />
+          <e p="RabbitMQ.Client.dll" t="Include" />
+          <e p="Remotion.Linq.dll" t="Include" />
+          <e p="runtimes" t="Include">
+            <e p="unix" t="Include">
+              <e p="lib" t="Include">
+                <e p="netcoreapp2.1" t="Include">
+                  <e p="System.Data.SqlClient.dll" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="win" t="Include">
+              <e p="lib" t="Include">
+                <e p="netcoreapp2.0" t="Include">
+                  <e p="System.Text.Encoding.CodePages.dll" t="Include" />
+                </e>
+                <e p="netcoreapp2.1" t="Include">
+                  <e p="System.Data.SqlClient.dll" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="win-arm64" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+            <e p="win-x64" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+            <e p="win-x86" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="Serilog.dll" t="Include" />
+          <e p="SharedArea.dll" t="Include" />
+          <e p="SharedArea.pdb" t="Include" />
+          <e p="System.Data.SqlClient.dll" t="Include" />
+          <e p="System.Interactive.Async.dll" t="Include" />
+          <e p="System.Runtime.CompilerServices.Unsafe.dll" t="Include" />
+          <e p="System.Text.Encoding.CodePages.dll" t="Include" />
+        </e>
       </e>
       <e p="EntryPlatform" t="IncludeRecursive">
         <e p="Bin" t="ExcludeRecursive" />
@@ -144,6 +416,85 @@
           </e>
         </e>
         <e p="Program.cs" t="Include" />
+        <e p="publish" t="Include">
+          <e p="DnsClient.dll" t="Include" />
+          <e p="EntryPlatform.deps.json" t="Include" />
+          <e p="EntryPlatform.dll" t="Include" />
+          <e p="EntryPlatform.pdb" t="Include" />
+          <e p="EntryPlatform.runtimeconfig.json" t="Include" />
+          <e p="GreenPipes.dll" t="Include" />
+          <e p="MassTransit.dll" t="Include" />
+          <e p="MassTransit.LibLog.dll" t="Include" />
+          <e p="MassTransit.NLogIntegration.dll" t="Include" />
+          <e p="MassTransit.RabbitMqTransport.dll" t="Include" />
+          <e p="MassTransit.SerilogIntegration.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Abstractions.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Relational.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.SqlServer.dll" t="Include" />
+          <e p="Microsoft.Extensions.Caching.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Caching.Memory.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.Binder.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.dll" t="Include" />
+          <e p="Microsoft.Extensions.DependencyInjection.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.DependencyInjection.dll" t="Include" />
+          <e p="Microsoft.Extensions.Logging.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Logging.dll" t="Include" />
+          <e p="Microsoft.Extensions.Options.dll" t="Include" />
+          <e p="Microsoft.Extensions.PlatformAbstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Primitives.dll" t="Include" />
+          <e p="MongoDB.Bson.dll" t="Include" />
+          <e p="MongoDB.Driver.Core.dll" t="Include" />
+          <e p="MongoDB.Driver.dll" t="Include" />
+          <e p="NewId.dll" t="Include" />
+          <e p="Newtonsoft.Json.Bson.dll" t="Include" />
+          <e p="Newtonsoft.Json.dll" t="Include" />
+          <e p="NLog.dll" t="Include" />
+          <e p="RabbitMQ.Client.dll" t="Include" />
+          <e p="Remotion.Linq.dll" t="Include" />
+          <e p="runtimes" t="Include">
+            <e p="unix" t="Include">
+              <e p="lib" t="Include">
+                <e p="netcoreapp2.1" t="Include">
+                  <e p="System.Data.SqlClient.dll" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="win" t="Include">
+              <e p="lib" t="Include">
+                <e p="netcoreapp2.0" t="Include">
+                  <e p="System.Text.Encoding.CodePages.dll" t="Include" />
+                </e>
+                <e p="netcoreapp2.1" t="Include">
+                  <e p="System.Data.SqlClient.dll" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="win-arm64" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+            <e p="win-x64" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+            <e p="win-x86" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="Serilog.dll" t="Include" />
+          <e p="SharedArea.dll" t="Include" />
+          <e p="SharedArea.pdb" t="Include" />
+          <e p="System.Data.SqlClient.dll" t="Include" />
+          <e p="System.Interactive.Async.dll" t="Include" />
+          <e p="System.Runtime.CompilerServices.Unsafe.dll" t="Include" />
+          <e p="System.Text.Encoding.CodePages.dll" t="Include" />
+        </e>
         <e p="Utils" t="Include">
           <e p="Security.cs" t="Include" />
         </e>
@@ -166,6 +517,87 @@
           </e>
         </e>
         <e p="Program.cs" t="Include" />
+        <e p="publish" t="Include">
+          <e p="DnsClient.dll" t="Include" />
+          <e p="FileService.deps.json" t="Include" />
+          <e p="FileService.dll" t="Include" />
+          <e p="FileService.pdb" t="Include" />
+          <e p="FileService.runtimeconfig.json" t="Include" />
+          <e p="GreenPipes.dll" t="Include" />
+          <e p="MassTransit.dll" t="Include" />
+          <e p="MassTransit.LibLog.dll" t="Include" />
+          <e p="MassTransit.NLogIntegration.dll" t="Include" />
+          <e p="MassTransit.RabbitMqTransport.dll" t="Include" />
+          <e p="MassTransit.SerilogIntegration.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Abstractions.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Relational.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.SqlServer.dll" t="Include" />
+          <e p="Microsoft.Extensions.Caching.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Caching.Memory.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.Binder.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.dll" t="Include" />
+          <e p="Microsoft.Extensions.DependencyInjection.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.DependencyInjection.dll" t="Include" />
+          <e p="Microsoft.Extensions.Logging.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Logging.dll" t="Include" />
+          <e p="Microsoft.Extensions.Options.dll" t="Include" />
+          <e p="Microsoft.Extensions.PlatformAbstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Primitives.dll" t="Include" />
+          <e p="MongoDB.Bson.dll" t="Include" />
+          <e p="MongoDB.Driver.Core.dll" t="Include" />
+          <e p="MongoDB.Driver.dll" t="Include" />
+          <e p="NewId.dll" t="Include" />
+          <e p="Newtonsoft.Json.Bson.dll" t="Include" />
+          <e p="Newtonsoft.Json.dll" t="Include" />
+          <e p="NLog.dll" t="Include" />
+          <e p="RabbitMQ.Client.dll" t="Include" />
+          <e p="Remotion.Linq.dll" t="Include" />
+          <e p="runtimes" t="Include">
+            <e p="unix" t="Include">
+              <e p="lib" t="Include">
+                <e p="netcoreapp2.1" t="Include">
+                  <e p="System.Data.SqlClient.dll" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="win" t="Include">
+              <e p="lib" t="Include">
+                <e p="netcoreapp2.0" t="Include">
+                  <e p="System.Text.Encoding.CodePages.dll" t="Include" />
+                </e>
+                <e p="netcoreapp2.1" t="Include">
+                  <e p="System.Data.SqlClient.dll" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="win-arm64" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+            <e p="win-x64" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+            <e p="win-x86" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="Serilog.dll" t="Include" />
+          <e p="SharedArea.dll" t="Include" />
+          <e p="SharedArea.pdb" t="Include" />
+          <e p="SixLabors.Core.dll" t="Include" />
+          <e p="SixLabors.ImageSharp.dll" t="Include" />
+          <e p="System.Data.SqlClient.dll" t="Include" />
+          <e p="System.Interactive.Async.dll" t="Include" />
+          <e p="System.Runtime.CompilerServices.Unsafe.dll" t="Include" />
+          <e p="System.Text.Encoding.CodePages.dll" t="Include" />
+        </e>
       </e>
       <e p="MessengerPlatform" t="IncludeRecursive">
         <e p="Bin" t="ExcludeRecursive" />
@@ -185,6 +617,85 @@
           </e>
         </e>
         <e p="Program.cs" t="Include" />
+        <e p="publish" t="Include">
+          <e p="DnsClient.dll" t="Include" />
+          <e p="GreenPipes.dll" t="Include" />
+          <e p="MassTransit.dll" t="Include" />
+          <e p="MassTransit.LibLog.dll" t="Include" />
+          <e p="MassTransit.NLogIntegration.dll" t="Include" />
+          <e p="MassTransit.RabbitMqTransport.dll" t="Include" />
+          <e p="MassTransit.SerilogIntegration.dll" t="Include" />
+          <e p="MessengerPlatform.deps.json" t="Include" />
+          <e p="MessengerPlatform.dll" t="Include" />
+          <e p="MessengerPlatform.pdb" t="Include" />
+          <e p="MessengerPlatform.runtimeconfig.json" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Abstractions.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Relational.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.SqlServer.dll" t="Include" />
+          <e p="Microsoft.Extensions.Caching.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Caching.Memory.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.Binder.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.dll" t="Include" />
+          <e p="Microsoft.Extensions.DependencyInjection.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.DependencyInjection.dll" t="Include" />
+          <e p="Microsoft.Extensions.Logging.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Logging.dll" t="Include" />
+          <e p="Microsoft.Extensions.Options.dll" t="Include" />
+          <e p="Microsoft.Extensions.PlatformAbstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Primitives.dll" t="Include" />
+          <e p="MongoDB.Bson.dll" t="Include" />
+          <e p="MongoDB.Driver.Core.dll" t="Include" />
+          <e p="MongoDB.Driver.dll" t="Include" />
+          <e p="NewId.dll" t="Include" />
+          <e p="Newtonsoft.Json.Bson.dll" t="Include" />
+          <e p="Newtonsoft.Json.dll" t="Include" />
+          <e p="NLog.dll" t="Include" />
+          <e p="RabbitMQ.Client.dll" t="Include" />
+          <e p="Remotion.Linq.dll" t="Include" />
+          <e p="runtimes" t="Include">
+            <e p="unix" t="Include">
+              <e p="lib" t="Include">
+                <e p="netcoreapp2.1" t="Include">
+                  <e p="System.Data.SqlClient.dll" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="win" t="Include">
+              <e p="lib" t="Include">
+                <e p="netcoreapp2.0" t="Include">
+                  <e p="System.Text.Encoding.CodePages.dll" t="Include" />
+                </e>
+                <e p="netcoreapp2.1" t="Include">
+                  <e p="System.Data.SqlClient.dll" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="win-arm64" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+            <e p="win-x64" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+            <e p="win-x86" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="Serilog.dll" t="Include" />
+          <e p="SharedArea.dll" t="Include" />
+          <e p="SharedArea.pdb" t="Include" />
+          <e p="System.Data.SqlClient.dll" t="Include" />
+          <e p="System.Interactive.Async.dll" t="Include" />
+          <e p="System.Runtime.CompilerServices.Unsafe.dll" t="Include" />
+          <e p="System.Text.Encoding.CodePages.dll" t="Include" />
+        </e>
       </e>
       <e p="packages" t="ExcludeRecursive" />
       <e p="SearchPlatform" t="IncludeRecursive">
@@ -204,6 +715,85 @@
           </e>
         </e>
         <e p="Program.cs" t="Include" />
+        <e p="publish" t="Include">
+          <e p="DnsClient.dll" t="Include" />
+          <e p="GreenPipes.dll" t="Include" />
+          <e p="MassTransit.dll" t="Include" />
+          <e p="MassTransit.LibLog.dll" t="Include" />
+          <e p="MassTransit.NLogIntegration.dll" t="Include" />
+          <e p="MassTransit.RabbitMqTransport.dll" t="Include" />
+          <e p="MassTransit.SerilogIntegration.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Abstractions.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Relational.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.SqlServer.dll" t="Include" />
+          <e p="Microsoft.Extensions.Caching.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Caching.Memory.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.Binder.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.dll" t="Include" />
+          <e p="Microsoft.Extensions.DependencyInjection.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.DependencyInjection.dll" t="Include" />
+          <e p="Microsoft.Extensions.Logging.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Logging.dll" t="Include" />
+          <e p="Microsoft.Extensions.Options.dll" t="Include" />
+          <e p="Microsoft.Extensions.PlatformAbstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Primitives.dll" t="Include" />
+          <e p="MongoDB.Bson.dll" t="Include" />
+          <e p="MongoDB.Driver.Core.dll" t="Include" />
+          <e p="MongoDB.Driver.dll" t="Include" />
+          <e p="NewId.dll" t="Include" />
+          <e p="Newtonsoft.Json.Bson.dll" t="Include" />
+          <e p="Newtonsoft.Json.dll" t="Include" />
+          <e p="NLog.dll" t="Include" />
+          <e p="RabbitMQ.Client.dll" t="Include" />
+          <e p="Remotion.Linq.dll" t="Include" />
+          <e p="runtimes" t="Include">
+            <e p="unix" t="Include">
+              <e p="lib" t="Include">
+                <e p="netcoreapp2.1" t="Include">
+                  <e p="System.Data.SqlClient.dll" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="win" t="Include">
+              <e p="lib" t="Include">
+                <e p="netcoreapp2.0" t="Include">
+                  <e p="System.Text.Encoding.CodePages.dll" t="Include" />
+                </e>
+                <e p="netcoreapp2.1" t="Include">
+                  <e p="System.Data.SqlClient.dll" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="win-arm64" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+            <e p="win-x64" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+            <e p="win-x86" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="SearchPlatform.deps.json" t="Include" />
+          <e p="SearchPlatform.dll" t="Include" />
+          <e p="SearchPlatform.pdb" t="Include" />
+          <e p="SearchPlatform.runtimeconfig.json" t="Include" />
+          <e p="Serilog.dll" t="Include" />
+          <e p="SharedArea.dll" t="Include" />
+          <e p="SharedArea.pdb" t="Include" />
+          <e p="System.Data.SqlClient.dll" t="Include" />
+          <e p="System.Interactive.Async.dll" t="Include" />
+          <e p="System.Runtime.CompilerServices.Unsafe.dll" t="Include" />
+          <e p="System.Text.Encoding.CodePages.dll" t="Include" />
+        </e>
         <e p="SearchPlatform.csproj" t="IncludeRecursive" />
       </e>
       <e p="ServiceManager" t="IncludeRecursive">
@@ -221,12 +811,12 @@
             <e p="service-worker.js" t="Include" />
             <e p="static" t="Include">
               <e p="css" t="Include">
-                <e p="main.477ccc83.css" t="Include" />
-                <e p="main.477ccc83.css.map" t="Include" />
+                <e p="main.637dbde2.css" t="Include" />
+                <e p="main.637dbde2.css.map" t="Include" />
               </e>
               <e p="js" t="Include">
-                <e p="main.1068daf0.js" t="Include" />
-                <e p="main.1068daf0.js.map" t="Include" />
+                <e p="main.f8b02876.js" t="Include" />
+                <e p="main.f8b02876.js.map" t="Include" />
               </e>
             </e>
           </e>
@@ -275,6 +865,36 @@
         <e p="Program.cs" t="Include" />
         <e p="Properties" t="Include">
           <e p="launchSettings.json" t="Include" />
+        </e>
+        <e p="publish" t="Include">
+          <e p="appsettings.Development.json" t="Include" />
+          <e p="appsettings.json" t="Include" />
+          <e p="ClientApp" t="Include">
+            <e p="build" t="Include">
+              <e p="asset-manifest.json" t="Include" />
+              <e p="favicon.ico" t="Include" />
+              <e p="index.html" t="Include" />
+              <e p="manifest.json" t="Include" />
+              <e p="service-worker.js" t="Include" />
+              <e p="static" t="Include">
+                <e p="css" t="Include">
+                  <e p="main.637dbde2.css" t="Include" />
+                  <e p="main.637dbde2.css.map" t="Include" />
+                </e>
+                <e p="js" t="Include">
+                  <e p="main.f8b02876.js" t="Include" />
+                  <e p="main.f8b02876.js.map" t="Include" />
+                </e>
+              </e>
+            </e>
+          </e>
+          <e p="ServiceManager.deps.json" t="Include" />
+          <e p="ServiceManager.dll" t="Include" />
+          <e p="ServiceManager.pdb" t="Include" />
+          <e p="ServiceManager.runtimeconfig.json" t="Include" />
+          <e p="ServiceManager.Views.dll" t="Include" />
+          <e p="ServiceManager.Views.pdb" t="Include" />
+          <e p="web.config" t="Include" />
         </e>
         <e p="ServiceManager.csproj" t="IncludeRecursive" />
         <e p="Startup.cs" t="Include" />
@@ -588,11 +1208,88 @@
             </e>
           </e>
         </e>
+        <e p="publish" t="Include">
+          <e p="DnsClient.dll" t="Include" />
+          <e p="GreenPipes.dll" t="Include" />
+          <e p="MassTransit.dll" t="Include" />
+          <e p="MassTransit.LibLog.dll" t="Include" />
+          <e p="MassTransit.NLogIntegration.dll" t="Include" />
+          <e p="MassTransit.RabbitMqTransport.dll" t="Include" />
+          <e p="MassTransit.SerilogIntegration.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Abstractions.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Relational.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.SqlServer.dll" t="Include" />
+          <e p="Microsoft.Extensions.Caching.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Caching.Memory.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.Binder.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.dll" t="Include" />
+          <e p="Microsoft.Extensions.DependencyInjection.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.DependencyInjection.dll" t="Include" />
+          <e p="Microsoft.Extensions.Logging.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Logging.dll" t="Include" />
+          <e p="Microsoft.Extensions.Options.dll" t="Include" />
+          <e p="Microsoft.Extensions.PlatformAbstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Primitives.dll" t="Include" />
+          <e p="MongoDB.Bson.dll" t="Include" />
+          <e p="MongoDB.Driver.Core.dll" t="Include" />
+          <e p="MongoDB.Driver.dll" t="Include" />
+          <e p="NewId.dll" t="Include" />
+          <e p="Newtonsoft.Json.Bson.dll" t="Include" />
+          <e p="Newtonsoft.Json.dll" t="Include" />
+          <e p="NLog.dll" t="Include" />
+          <e p="RabbitMQ.Client.dll" t="Include" />
+          <e p="Remotion.Linq.dll" t="Include" />
+          <e p="runtimes" t="Include">
+            <e p="unix" t="Include">
+              <e p="lib" t="Include">
+                <e p="netcoreapp2.1" t="Include">
+                  <e p="System.Data.SqlClient.dll" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="win" t="Include">
+              <e p="lib" t="Include">
+                <e p="netcoreapp2.0" t="Include">
+                  <e p="System.Text.Encoding.CodePages.dll" t="Include" />
+                </e>
+                <e p="netcoreapp2.1" t="Include">
+                  <e p="System.Data.SqlClient.dll" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="win-arm64" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+            <e p="win-x64" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+            <e p="win-x86" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="Serilog.dll" t="Include" />
+          <e p="SharedArea.deps.json" t="Include" />
+          <e p="SharedArea.dll" t="Include" />
+          <e p="SharedArea.pdb" t="Include" />
+          <e p="System.Data.SqlClient.dll" t="Include" />
+          <e p="System.Interactive.Async.dll" t="Include" />
+          <e p="System.Runtime.CompilerServices.Unsafe.dll" t="Include" />
+          <e p="System.Text.Encoding.CodePages.dll" t="Include" />
+        </e>
         <e p="SharedArea.csproj" t="IncludeRecursive" />
         <e p="Transport.cs" t="Include" />
         <e p="Utils" t="Include">
           <e p="AuthExtracter.cs" t="Include" />
           <e p="DatabaseConfig.cs" t="Include" />
+          <e p="MessageConverter.cs" t="Include" />
           <e p="MessageFormatter.cs" t="Include" />
         </e>
       </e>
@@ -613,6 +1310,85 @@
           </e>
         </e>
         <e p="Program.cs" t="Include" />
+        <e p="publish" t="Include">
+          <e p="DnsClient.dll" t="Include" />
+          <e p="GreenPipes.dll" t="Include" />
+          <e p="MassTransit.dll" t="Include" />
+          <e p="MassTransit.LibLog.dll" t="Include" />
+          <e p="MassTransit.NLogIntegration.dll" t="Include" />
+          <e p="MassTransit.RabbitMqTransport.dll" t="Include" />
+          <e p="MassTransit.SerilogIntegration.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Abstractions.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.Relational.dll" t="Include" />
+          <e p="Microsoft.EntityFrameworkCore.SqlServer.dll" t="Include" />
+          <e p="Microsoft.Extensions.Caching.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Caching.Memory.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.Binder.dll" t="Include" />
+          <e p="Microsoft.Extensions.Configuration.dll" t="Include" />
+          <e p="Microsoft.Extensions.DependencyInjection.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.DependencyInjection.dll" t="Include" />
+          <e p="Microsoft.Extensions.Logging.Abstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Logging.dll" t="Include" />
+          <e p="Microsoft.Extensions.Options.dll" t="Include" />
+          <e p="Microsoft.Extensions.PlatformAbstractions.dll" t="Include" />
+          <e p="Microsoft.Extensions.Primitives.dll" t="Include" />
+          <e p="MongoDB.Bson.dll" t="Include" />
+          <e p="MongoDB.Driver.Core.dll" t="Include" />
+          <e p="MongoDB.Driver.dll" t="Include" />
+          <e p="NewId.dll" t="Include" />
+          <e p="Newtonsoft.Json.Bson.dll" t="Include" />
+          <e p="Newtonsoft.Json.dll" t="Include" />
+          <e p="NLog.dll" t="Include" />
+          <e p="RabbitMQ.Client.dll" t="Include" />
+          <e p="Remotion.Linq.dll" t="Include" />
+          <e p="runtimes" t="Include">
+            <e p="unix" t="Include">
+              <e p="lib" t="Include">
+                <e p="netcoreapp2.1" t="Include">
+                  <e p="System.Data.SqlClient.dll" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="win" t="Include">
+              <e p="lib" t="Include">
+                <e p="netcoreapp2.0" t="Include">
+                  <e p="System.Text.Encoding.CodePages.dll" t="Include" />
+                </e>
+                <e p="netcoreapp2.1" t="Include">
+                  <e p="System.Data.SqlClient.dll" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="win-arm64" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+            <e p="win-x64" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+            <e p="win-x86" t="Include">
+              <e p="native" t="Include">
+                <e p="sni.dll" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="Serilog.dll" t="Include" />
+          <e p="SharedArea.dll" t="Include" />
+          <e p="SharedArea.pdb" t="Include" />
+          <e p="StorePlatform.deps.json" t="Include" />
+          <e p="StorePlatform.dll" t="Include" />
+          <e p="StorePlatform.pdb" t="Include" />
+          <e p="StorePlatform.runtimeconfig.json" t="Include" />
+          <e p="System.Data.SqlClient.dll" t="Include" />
+          <e p="System.Interactive.Async.dll" t="Include" />
+          <e p="System.Runtime.CompilerServices.Unsafe.dll" t="Include" />
+          <e p="System.Text.Encoding.CodePages.dll" t="Include" />
+        </e>
         <e p="StorePlatform.csproj" t="IncludeRecursive" />
       </e>
     </e>

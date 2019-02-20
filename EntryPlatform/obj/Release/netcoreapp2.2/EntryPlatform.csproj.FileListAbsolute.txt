@@ -12,3 +12,17 @@ F:\Desktop\asemanbackendprojects\EntryPlatform\obj\Release\netcoreapp2.2\EntryPl
 F:\Desktop\asemanbackendprojects\EntryPlatform\obj\Release\netcoreapp2.2\EntryPlatform.csproj.CopyComplete
 F:\Desktop\asemanbackendprojects\EntryPlatform\obj\Release\netcoreapp2.2\EntryPlatform.dll
 F:\Desktop\asemanbackendprojects\EntryPlatform\obj\Release\netcoreapp2.2\EntryPlatform.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\EntryPlatform\bin\Release\netcoreapp2.2\EntryPlatform.deps.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\EntryPlatform\bin\Release\netcoreapp2.2\EntryPlatform.runtimeconfig.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\EntryPlatform\bin\Release\netcoreapp2.2\EntryPlatform.runtimeconfig.dev.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\EntryPlatform\bin\Release\netcoreapp2.2\EntryPlatform.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\EntryPlatform\bin\Release\netcoreapp2.2\EntryPlatform.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\EntryPlatform\bin\Release\netcoreapp2.2\SharedArea.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\EntryPlatform\bin\Release\netcoreapp2.2\SharedArea.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\EntryPlatform\obj\Release\netcoreapp2.2\EntryPlatform.csprojAssemblyReference.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\EntryPlatform\obj\Release\netcoreapp2.2\EntryPlatform.csproj.CoreCompileInputs.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\EntryPlatform\obj\Release\netcoreapp2.2\EntryPlatform.AssemblyInfoInputs.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\EntryPlatform\obj\Release\netcoreapp2.2\EntryPlatform.AssemblyInfo.cs
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\EntryPlatform\obj\Release\netcoreapp2.2\EntryPlatform.csproj.CopyComplete
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\EntryPlatform\obj\Release\netcoreapp2.2\EntryPlatform.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\EntryPlatform\obj\Release\netcoreapp2.2\EntryPlatform.pdb

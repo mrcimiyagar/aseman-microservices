@@ -46,7 +46,6 @@ namespace SearchPlatform.Consumers
                 complexSecret.Complex = complex;
                 complex.Rooms[0].Complex = complex;
                 complex.Members[0].Complex = complex;
-                complex.Rooms[0].Messages[0].Room = complex.Rooms[0];
                 complexSecret.Admin = admin;
                 complex.Members[0].User = admin;
 

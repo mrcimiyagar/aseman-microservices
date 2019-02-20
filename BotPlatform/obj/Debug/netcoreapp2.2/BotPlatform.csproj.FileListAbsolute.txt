@@ -12,3 +12,17 @@ F:\Desktop\asemanbackendprojects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform
 F:\Desktop\asemanbackendprojects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.dll
 F:\Desktop\asemanbackendprojects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.pdb
 F:\Desktop\asemanbackendprojects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.csprojAssemblyReference.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\BotPlatform\bin\Debug\netcoreapp2.2\BotPlatform.deps.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\BotPlatform\bin\Debug\netcoreapp2.2\BotPlatform.runtimeconfig.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\BotPlatform\bin\Debug\netcoreapp2.2\BotPlatform.runtimeconfig.dev.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\BotPlatform\bin\Debug\netcoreapp2.2\BotPlatform.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\BotPlatform\bin\Debug\netcoreapp2.2\BotPlatform.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\BotPlatform\bin\Debug\netcoreapp2.2\SharedArea.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\BotPlatform\bin\Debug\netcoreapp2.2\SharedArea.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.csprojAssemblyReference.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.csproj.CoreCompileInputs.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.AssemblyInfoInputs.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.AssemblyInfo.cs
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.csproj.CopyComplete
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\BotPlatform\obj\Debug\netcoreapp2.2\BotPlatform.pdb

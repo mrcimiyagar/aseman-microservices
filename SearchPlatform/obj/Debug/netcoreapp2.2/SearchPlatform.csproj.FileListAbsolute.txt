@@ -12,3 +12,17 @@ F:\Desktop\asemanbackendprojects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPl
 F:\Desktop\asemanbackendprojects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.dll
 F:\Desktop\asemanbackendprojects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.pdb
 F:\Desktop\asemanbackendprojects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.csprojAssemblyReference.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\SearchPlatform\bin\Debug\netcoreapp2.2\SearchPlatform.deps.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\SearchPlatform\bin\Debug\netcoreapp2.2\SearchPlatform.runtimeconfig.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\SearchPlatform\bin\Debug\netcoreapp2.2\SearchPlatform.runtimeconfig.dev.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\SearchPlatform\bin\Debug\netcoreapp2.2\SearchPlatform.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\SearchPlatform\bin\Debug\netcoreapp2.2\SearchPlatform.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\SearchPlatform\bin\Debug\netcoreapp2.2\SharedArea.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\SearchPlatform\bin\Debug\netcoreapp2.2\SharedArea.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.csprojAssemblyReference.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.csproj.CoreCompileInputs.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.AssemblyInfoInputs.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.AssemblyInfo.cs
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.csproj.CopyComplete
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\SearchPlatform\obj\Debug\netcoreapp2.2\SearchPlatform.pdb

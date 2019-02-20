@@ -12,3 +12,17 @@ F:\Desktop\asemanbackendprojects\DesktopPlatform\obj\Release\netcoreapp2.2\Deskt
 F:\Desktop\asemanbackendprojects\DesktopPlatform\obj\Release\netcoreapp2.2\DesktopPlatform.dll
 F:\Desktop\asemanbackendprojects\DesktopPlatform\obj\Release\netcoreapp2.2\DesktopPlatform.pdb
 F:\Desktop\asemanbackendprojects\DesktopPlatform\obj\Release\netcoreapp2.2\DesktopPlatform.csprojAssemblyReference.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\DesktopPlatform\bin\Release\netcoreapp2.2\DesktopPlatform.deps.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\DesktopPlatform\bin\Release\netcoreapp2.2\DesktopPlatform.runtimeconfig.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\DesktopPlatform\bin\Release\netcoreapp2.2\DesktopPlatform.runtimeconfig.dev.json
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\DesktopPlatform\bin\Release\netcoreapp2.2\DesktopPlatform.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\DesktopPlatform\bin\Release\netcoreapp2.2\DesktopPlatform.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\DesktopPlatform\bin\Release\netcoreapp2.2\SharedArea.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\DesktopPlatform\bin\Release\netcoreapp2.2\SharedArea.pdb
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\DesktopPlatform\obj\Release\netcoreapp2.2\DesktopPlatform.csprojAssemblyReference.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\DesktopPlatform\obj\Release\netcoreapp2.2\DesktopPlatform.csproj.CoreCompileInputs.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\DesktopPlatform\obj\Release\netcoreapp2.2\DesktopPlatform.AssemblyInfoInputs.cache
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\DesktopPlatform\obj\Release\netcoreapp2.2\DesktopPlatform.AssemblyInfo.cs
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\DesktopPlatform\obj\Release\netcoreapp2.2\DesktopPlatform.csproj.CopyComplete
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\DesktopPlatform\obj\Release\netcoreapp2.2\DesktopPlatform.dll
+D:\My Documents\Projects\Dotnet\asemanbackendprojects\DesktopPlatform\obj\Release\netcoreapp2.2\DesktopPlatform.pdb

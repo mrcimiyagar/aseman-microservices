@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MassTransit;
 using MessengerPlatform.DbContexts;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using SharedArea.Commands;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
@@ -14,6 +15,7 @@ using SharedArea.Commands.Pushes;
 using SharedArea.Entities;
 using SharedArea.Middles;
 using SharedArea.Notifications;
+using Message = SharedArea.Entities.Message;
 
 namespace MessengerPlatform.Consumers
 {
@@ -107,7 +109,55 @@ namespace MessengerPlatform.Consumers
                 }
 
                 dbContext.Entry(room).Collection(r => r.Messages).Load();
-                var messages = room.Messages.Skip(room.Messages.Count() - 100).ToList();
+
+                List<Message> messages;
+
+                if (room.Messages.Count > 100000)
+                {
+                    messages = room.Messages.Skip(room.Messages.Count() - 100).ToList();
+
+                    foreach (var msg in messages)
+                    {
+                        if (msg.GetType() == typeof(PhotoMessage))
+                        {
+                            dbContext.Entry(msg).Reference(m => ((PhotoMessage) m).Photo).Load();
+                            dbContext.Entry(((PhotoMessage) msg).Photo).Collection(f => f.FileUsages).Load();
+                        }
+                        else if (msg.GetType() == typeof(AudioMessage))
+                        {
+                            dbContext.Entry(msg).Reference(m => ((AudioMessage) m).Audio).Load();
+                            dbContext.Entry(((AudioMessage) msg).Audio).Collection(f => f.FileUsages).Load();
+                        }
+                        else if (msg.GetType() == typeof(VideoMessage))
+                        {
+                            dbContext.Entry(msg).Reference(m => ((VideoMessage) m).Video).Load();
+                            dbContext.Entry(((VideoMessage) msg).Video).Collection(f => f.FileUsages).Load();
+                        }
+                    }
+                }
+                else
+                {
+                    messages = room.Messages.ToList();
+
+                    foreach (var msg in messages)
+                    {
+                        if (msg.GetType() == typeof(PhotoMessage))
+                        {
+                            dbContext.Entry(msg).Reference(m => ((PhotoMessage) m).Photo).Load();
+                            dbContext.Entry(((PhotoMessage) msg).Photo).Collection(f => f.FileUsages).Load();
+                        }
+                        else if (msg.GetType() == typeof(AudioMessage))
+                        {
+                            dbContext.Entry(msg).Reference(m => ((AudioMessage) m).Audio).Load();
+                            dbContext.Entry(((AudioMessage) msg).Audio).Collection(f => f.FileUsages).Load();
+                        }
+                        else if (msg.GetType() == typeof(VideoMessage))
+                        {
+                            dbContext.Entry(msg).Reference(m => ((VideoMessage) m).Video).Load();
+                            dbContext.Entry(((VideoMessage) msg).Video).Collection(f => f.FileUsages).Load();
+                        }
+                    }
+                }
 
                 await context.RespondAsync(new GetMessagesResponse()
                 {
@@ -968,10 +1018,8 @@ namespace MessengerPlatform.Consumers
             using (var dbContext = new DatabaseContext())
             {
                 var session = dbContext.Sessions.Find(context.Message.SessionId);
-
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
                 var user = (User) session.BaseUser;
-
                 var message = dbContext.Messages.Find(context.Message.Packet.Message.MessageId);
                 if (message == null)
                 {
@@ -1014,13 +1062,9 @@ namespace MessengerPlatform.Consumers
                         Message = message,
                         User = user
                     };
-
                     dbContext.MessageSeens.Add(messageSeen);
 
                     dbContext.SaveChanges();
-
-                    Console.WriteLine("Complex mode is " + complex.Mode);
-
                     if (complex.Mode == 1 || complex.Mode == 2)
                     {
                         var notif = new MessageSeenNotification()
@@ -1154,6 +1198,7 @@ namespace MessengerPlatform.Consumers
             {
                 Console.WriteLine(ex.ToString());
             }
+
             return Task.CompletedTask;
         }
     }
