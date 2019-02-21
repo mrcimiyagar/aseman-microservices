@@ -1016,6 +1016,7 @@
               <e p="ConsolidateCreateRoomRequest.cs" t="Include" />
               <e p="ConsolidateDeleteAccountRequest.cs" t="Include" />
               <e p="ConsolidateDeleteAccountResponse.cs" t="Include" />
+              <e p="ConsolidateLogoutRequest.cs" t="Include" />
               <e p="ConsolidateMakeAccountRequest.cs" t="Include" />
               <e p="ConsolidateSessionRequest.cs" t="Include" />
               <e p="ConsolidateSessionResponse.cs" t="Include" />
@@ -1031,6 +1032,7 @@
             <e p="Responses" t="Include">
               <e p="ConsolidateCreateComplexResponse.cs" t="Include" />
               <e p="ConsolidateCreateRoomResponse.cs" t="Include" />
+              <e p="ConsolidateLogoutResponse.cs" t="Include" />
               <e p="ConsolidateMakeAccountResponse.cs" t="Include" />
               <e p="MakeAccountResponse.cs" t="Include" />
               <e p="PutComplexResponse.cs" t="Include" />

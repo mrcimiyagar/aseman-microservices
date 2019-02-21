@@ -275,10 +275,35 @@ namespace EntryPlatform.Consumers
             using (var dbContext = new DatabaseContext())
             {
                 var session = dbContext.Sessions.Find(context.Message.SessionId);
+                
+                if (session != null)
+                {
+                    dbContext.Sessions.Remove(session);
+                    dbContext.SaveChanges();
+                }
+                else
+                {
+                    session = new Session {SessionId = context.Message.SessionId};
+                }
 
-                session.ConnectionId = "";
-                session.Online = false;
-                dbContext.SaveChanges();
+                var services = SharedArea.GlobalVariables.AllQueuesExcept(new []
+                {
+                    SharedArea.GlobalVariables.ENTRY_QUEUE_NAME
+                });
+                var tasks = new Task[services.Length + 1];
+                tasks[0] = SharedArea.Transport.RequestService<ConsolidateLogoutRequest, ConsolidateLogoutResponse>(
+                    Program.Bus,
+                    "",
+                    new Packet() {Session = session});
+                for(var counter = 1; counter < tasks.Length; counter++)
+                {
+                    tasks[counter] = SharedArea.Transport.RequestService<ConsolidateLogoutRequest, ConsolidateLogoutResponse>(
+                        Program.Bus,
+                        services[counter - 1],
+                        new Packet() {Session = session});
+                }
+                Task.WaitAll(tasks);
+
                 await context.RespondAsync(
                     new LogoutResponse()
                     {

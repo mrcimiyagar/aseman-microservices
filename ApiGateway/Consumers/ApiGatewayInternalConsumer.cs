@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ApiGateway.DbContexts;
 using MassTransit;
+using SharedArea.Commands.Auth;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
 using SharedArea.Commands.Internal.Responses;
@@ -29,7 +30,7 @@ namespace ApiGateway.Consumers
         , IConsumer<ConsolidateSessionRequest>
         , IConsumer<MakeAccountRequest>, IConsumer<ConsolidateDeleteAccountRequest>
         , IConsumer<ConsolidateMakeAccountRequest>, IConsumer<ConsolidateCreateComplexRequest>
-        , IConsumer<ConsolidateCreateRoomRequest>
+        , IConsumer<ConsolidateCreateRoomRequest>, IConsumer<ConsolidateLogoutRequest>
 
         , IConsumer<ComplexDeletionPush>, IConsumer<RoomDeletionPush>, IConsumer<ContactCreationPush>
         , IConsumer<ServiceMessagePush>, IConsumer<InviteCreationPush>, IConsumer<InviteCancellationPush>
@@ -464,6 +465,35 @@ namespace ApiGateway.Consumers
             {
                 var result = await SharedArea.Transport
                     .DirectService<ConsolidateDeleteAccountRequest, ConsolidateDeleteAccountResponse>(
+                        Program.Bus,
+                        context.Message.Destination,
+                        context.Message.Packet);
+                await context.RespondAsync(result);
+            }
+        }
+        
+        public async Task Consume(ConsumeContext<ConsolidateLogoutRequest> context)
+        {
+            if (context.Message.Destination == "")
+            {
+                var gSession = context.Message.Packet.Session;
+
+                using (var dbContext = new DatabaseContext())
+                {
+                    var lSess = dbContext.Sessions.Find(gSession.SessionId);
+                    if (lSess != null)
+                    {
+                        dbContext.Sessions.RemoveRange(lSess);
+                        dbContext.SaveChanges();
+                    }
+                }
+
+                await context.RespondAsync(new ConsolidateLogoutResponse());
+            }
+            else
+            {
+                var result = await SharedArea.Transport
+                    .DirectService<ConsolidateLogoutRequest, ConsolidateLogoutResponse>(
                         Program.Bus,
                         context.Message.Destination,
                         context.Message.Packet);

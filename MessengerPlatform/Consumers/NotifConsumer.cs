@@ -17,7 +17,7 @@ namespace MessengerPlatform.Consumers
         , IConsumer<ComplexProfileUpdatedNotif>, IConsumer<ComplexDeletionNotif>, IConsumer<RoomProfileUpdatedNotif>
         , IConsumer<RoomDeletionNotif>, IConsumer<InviteCreatedNotif>, IConsumer<InviteCancelledNotif>
         , IConsumer<InviteAcceptedNotif>, IConsumer<InvitedIgnoredNotif>, IConsumer<SessionUpdatedNotif>
-        , IConsumer<ContactCreatedNotif>, IConsumer<ConsolidateCreateComplexRequest>
+        , IConsumer<ContactCreatedNotif>, IConsumer<ConsolidateCreateComplexRequest>, IConsumer<ConsolidateLogoutRequest>
     {
         public Task Consume(ConsumeContext<ContactCreatedNotif> context)
         {
@@ -405,6 +405,23 @@ namespace MessengerPlatform.Consumers
             }
 
             await context.RespondAsync(new ConsolidateCreateComplexResponse());
+        }
+
+        public async Task Consume(ConsumeContext<ConsolidateLogoutRequest> context)
+        {
+            var gSession = context.Message.Packet.Session;
+
+            using (var dbContext = new DatabaseContext())
+            {
+                var lSess = dbContext.Sessions.Find(gSession.SessionId);
+                if (lSess != null)
+                {
+                    dbContext.Sessions.RemoveRange(lSess);
+                    dbContext.SaveChanges();
+                }
+            }
+
+            await context.RespondAsync(new ConsolidateLogoutResponse());
         }
     }
 }

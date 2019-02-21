@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using BotPlatform.DbContexts;
 using MassTransit;
 using SharedArea.Commands.Internal.Notifications;
+using SharedArea.Commands.Internal.Requests;
+using SharedArea.Commands.Internal.Responses;
 using SharedArea.Entities;
 
 namespace BotPlatform.Consumers
@@ -16,7 +18,7 @@ namespace BotPlatform.Consumers
         , IConsumer<ComplexProfileUpdatedNotif>, IConsumer<ComplexDeletionNotif>, IConsumer<RoomProfileUpdatedNotif>
         , IConsumer<RoomDeletionNotif>, IConsumer<ContactCreatedNotif>, IConsumer<InviteCreatedNotif>
         , IConsumer<InviteCancelledNotif>, IConsumer<InviteAcceptedNotif>, IConsumer<InvitedIgnoredNotif>
-        , IConsumer<SessionUpdatedNotif>, IConsumer<AccountCreatedNotif>
+        , IConsumer<SessionUpdatedNotif>, IConsumer<AccountCreatedNotif>, IConsumer<ConsolidateLogoutRequest>
     {
         public Task Consume(ConsumeContext<UserCreatedNotif> context)
         {
@@ -407,6 +409,23 @@ namespace BotPlatform.Consumers
             }
             
             return Task.CompletedTask;
+        }
+
+        public async Task Consume(ConsumeContext<ConsolidateLogoutRequest> context)
+        {
+            var gSession = context.Message.Packet.Session;
+
+            using (var dbContext = new DatabaseContext())
+            {
+                var lSess = dbContext.Sessions.Find(gSession.SessionId);
+                if (lSess != null)
+                {
+                    dbContext.Sessions.RemoveRange(lSess);
+                    dbContext.SaveChanges();
+                }
+            }
+
+            await context.RespondAsync(new ConsolidateLogoutResponse());
         }
     }
 }
