@@ -133,6 +133,8 @@ namespace MessengerPlatform.Consumers
                             dbContext.Entry(msg).Reference(m => ((VideoMessage) m).Video).Load();
                             dbContext.Entry(((VideoMessage) msg).Video).Collection(f => f.FileUsages).Load();
                         }
+
+                        msg.SeenByMe = (dbContext.MessageSeens.Find(user.BaseUserId + "_" + msg.MessageId) != null);
                     }
                 }
                 else
@@ -156,6 +158,8 @@ namespace MessengerPlatform.Consumers
                             dbContext.Entry(msg).Reference(m => ((VideoMessage) m).Video).Load();
                             dbContext.Entry(((VideoMessage) msg).Video).Collection(f => f.FileUsages).Load();
                         }
+
+                        msg.SeenByMe = (dbContext.MessageSeens.Find(user.BaseUserId + "_" + msg.MessageId) != null);
                     }
                 }
 

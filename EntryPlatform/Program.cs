@@ -47,6 +47,8 @@ namespace EntryPlatform
                 sbc.UseLog(Console.Out, MessageFormatter.Formatter);
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.ENTRY_QUEUE_NAME, ep =>
                 {
+                    ep.UseConcurrencyLimit(1024);
+                    ep.PrefetchCount = 1024;
                     ep.Consumer<EntryConsumer>();
                     ep.Consumer<NotifConsumer>();
                 });

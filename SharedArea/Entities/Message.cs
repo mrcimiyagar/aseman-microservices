@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
 namespace SharedArea.Entities
@@ -23,5 +24,8 @@ namespace SharedArea.Entities
         public virtual Room Room { get; set; }
         [JsonProperty("messageSeens")]
         public virtual List<MessageSeen> MessageSeens { get; set; }
+        [NotMapped]
+        [JsonProperty("seenByMe")]
+        public bool SeenByMe { get; set; }
     }
 }

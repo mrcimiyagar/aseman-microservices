@@ -43,6 +43,8 @@ namespace CityPlatform
                 sbc.UseLog(Console.Out, MessageFormatter.Formatter);
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.CITY_QUEUE_NAME, ep =>
                 {
+                    ep.UseConcurrencyLimit(1024);
+                    ep.PrefetchCount = 1024;
                     ep.Consumer<CityConsumer>();
                     ep.Consumer<NotifConsumer>();
                 });

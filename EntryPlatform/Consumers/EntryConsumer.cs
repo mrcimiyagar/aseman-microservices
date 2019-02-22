@@ -178,7 +178,7 @@ namespace EntryPlatform.Consumers
                                 Room = user.Memberships[0].Complex.Rooms[0],
                                 RoomId = user.Memberships[0].Complex.Rooms[0].RoomId,
                                 Text = "Room created.",
-                                Time = (long)((DateTime.Now - DateTime.MinValue).TotalMilliseconds)
+                                Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds)
                             };
                             
                             await SharedArea.Transport
