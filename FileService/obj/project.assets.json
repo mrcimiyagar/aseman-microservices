@@ -29,7 +29,7 @@
           "lib/netstandard1.3/DnsClient.dll": {}
         }
       },
-      "GreenPipes/2.1.3": {
+      "GreenPipes/2.1.4": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.PlatformAbstractions": "1.1.0",
@@ -42,10 +42,10 @@
           "lib/netstandard2.0/GreenPipes.dll": {}
         }
       },
-      "MassTransit/5.2.1": {
+      "MassTransit/5.3.2": {
         "type": "package",
         "dependencies": {
-          "GreenPipes": "2.1.3",
+          "GreenPipes": "2.1.4",
           "NewId": "3.0.1",
           "Newtonsoft.Json": "11.0.2",
           "Newtonsoft.Json.Bson": "1.0.1",
@@ -66,38 +66,11 @@
           "lib/netstandard2.0/MassTransit.dll": {}
         }
       },
-      "MassTransit.LibLog/1.0.0": {
+      "MassTransit.RabbitMQ/5.3.2": {
         "type": "package",
         "dependencies": {
-          "MassTransit": "2.7.0"
-        },
-        "compile": {
-          "lib/net40/MassTransit.LibLog.dll": {}
-        },
-        "runtime": {
-          "lib/net40/MassTransit.LibLog.dll": {}
-        }
-      },
-      "MassTransit.NLog/5.2.1": {
-        "type": "package",
-        "dependencies": {
-          "GreenPipes": "2.1.3",
-          "MassTransit": "5.2.1",
-          "NLog": "4.5.11",
-          "Newtonsoft.Json": "11.0.2"
-        },
-        "compile": {
-          "lib/netstandard2.0/MassTransit.NLogIntegration.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/MassTransit.NLogIntegration.dll": {}
-        }
-      },
-      "MassTransit.RabbitMQ/5.2.1": {
-        "type": "package",
-        "dependencies": {
-          "GreenPipes": "2.1.3",
-          "MassTransit": "5.2.1",
+          "GreenPipes": "2.1.4",
+          "MassTransit": "5.3.2",
           "NewId": "3.0.1",
           "Newtonsoft.Json": "11.0.2",
           "RabbitMQ.Client": "5.1.0"
@@ -107,21 +80,6 @@
         },
         "runtime": {
           "lib/netstandard2.0/MassTransit.RabbitMqTransport.dll": {}
-        }
-      },
-      "MassTransit.SerilogIntegration/5.2.1": {
-        "type": "package",
-        "dependencies": {
-          "GreenPipes": "2.1.3",
-          "MassTransit": "5.2.1",
-          "Newtonsoft.Json": "11.0.2",
-          "Serilog": "2.7.1"
-        },
-        "compile": {
-          "lib/netstandard2.0/MassTransit.SerilogIntegration.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/MassTransit.SerilogIntegration.dll": {}
         }
       },
       "Microsoft.EntityFrameworkCore/2.2.1": {
@@ -659,15 +617,6 @@
           "lib/netstandard1.3/Newtonsoft.Json.Bson.dll": {}
         }
       },
-      "NLog/4.5.11": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/NLog.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/NLog.dll": {}
-        }
-      },
       "RabbitMQ.Client/5.1.0": {
         "type": "package",
         "dependencies": {
@@ -925,19 +874,6 @@
           }
         }
       },
-      "Serilog/2.7.1": {
-        "type": "package",
-        "dependencies": {
-          "NETStandard.Library": "1.6.1",
-          "System.Collections.NonGeneric": "4.3.0"
-        },
-        "compile": {
-          "lib/netstandard1.3/Serilog.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard1.3/Serilog.dll": {}
-        }
-      },
       "SixLabors.Core/1.0.0-beta0007": {
         "type": "package",
         "dependencies": {
@@ -1020,15 +956,15 @@
           "lib/netstandard2.0/System.Collections.Immutable.dll": {}
         }
       },
-      "System.Collections.NonGeneric/4.3.0": {
+      "System.Collections.NonGeneric/4.0.1": {
         "type": "package",
         "dependencies": {
-          "System.Diagnostics.Debug": "4.3.0",
-          "System.Globalization": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Threading": "4.3.0"
+          "System.Diagnostics.Debug": "4.0.11",
+          "System.Globalization": "4.0.11",
+          "System.Resources.ResourceManager": "4.0.1",
+          "System.Runtime": "4.1.0",
+          "System.Runtime.Extensions": "4.1.0",
+          "System.Threading": "4.0.11"
         },
         "compile": {
           "ref/netstandard1.3/System.Collections.NonGeneric.dll": {}
@@ -2366,11 +2302,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.2",
         "dependencies": {
-          "MassTransit": "5.2.1",
-          "MassTransit.LibLog": "1.0.0",
-          "MassTransit.NLog": "5.2.1",
-          "MassTransit.RabbitMQ": "5.2.1",
-          "MassTransit.SerilogIntegration": "5.2.1",
+          "MassTransit": "5.3.2",
+          "MassTransit.RabbitMQ": "5.3.2",
           "Microsoft.EntityFrameworkCore": "2.2.1",
           "Microsoft.EntityFrameworkCore.SqlServer": "2.2.1",
           "MongoDB.Driver": "2.7.3"
@@ -2399,13 +2332,13 @@
         "lib/netstandard1.3/DnsClient.xml"
       ]
     },
-    "GreenPipes/2.1.3": {
-      "sha512": "pZgFZw24uXg2K1vSKBLN6mIdbNowhicg8ryV8e3IjZB5cIGz471WnAvPV5lxeK5UV62tK2HGK0xi3C7OpO/58A==",
+    "GreenPipes/2.1.4": {
+      "sha512": "X5XFi7c3gsrCBqAVdZQ9ZRWSFgLElImp39uoq83oTBaI3rIOm4mVMu6PzXyfS4nPIFFR6SfnIoH51yJ1FgC8gg==",
       "type": "package",
-      "path": "greenpipes/2.1.3",
+      "path": "greenpipes/2.1.4",
       "files": [
         ".signature.p7s",
-        "greenpipes.2.1.3.nupkg.sha512",
+        "greenpipes.2.1.4.nupkg.sha512",
         "greenpipes.nuspec",
         "lib/net452/GreenPipes.dll",
         "lib/net452/GreenPipes.xml",
@@ -2413,79 +2346,32 @@
         "lib/netstandard2.0/GreenPipes.xml"
       ]
     },
-    "MassTransit/5.2.1": {
-      "sha512": "K9F/FZL+FgpfWhZtAVLQJ2xJ5z5nz/utu6WNsbRyIZ9jFaeoXDpn0+sINfRUdKtocm9wvzXUQsA693R6CE8LHA==",
+    "MassTransit/5.3.2": {
+      "sha512": "pfFRsaRtebfdSXLyjpoqp9K/OSaHWlIE4ioYhdr6EWVZrY8vFQv5C2tMgRJ73isQ7fooJnM1NHak+wHRN5D0Dw==",
       "type": "package",
-      "path": "masstransit/5.2.1",
+      "path": "masstransit/5.3.2",
       "files": [
         ".signature.p7s",
         "lib/net452/MassTransit.dll",
-        "lib/net452/MassTransit.pdb",
         "lib/net452/MassTransit.xml",
         "lib/netstandard2.0/MassTransit.dll",
-        "lib/netstandard2.0/MassTransit.pdb",
         "lib/netstandard2.0/MassTransit.xml",
-        "masstransit.5.2.1.nupkg.sha512",
+        "masstransit.5.3.2.nupkg.sha512",
         "masstransit.nuspec"
       ]
     },
-    "MassTransit.LibLog/1.0.0": {
-      "sha512": "L5If0D4BpMG0XErBz0R0WxTxF2X34vqkujOkITtHG7cxNnVB0XrjS2DpxNXhRsLVMirCQn6itdWQGwP4QARd8w==",
+    "MassTransit.RabbitMQ/5.3.2": {
+      "sha512": "9oZiZJWmTpZK35PMjUaet/Aisb5obDbT1bDcljkI5LyjguS3D9ueIDpy+TxG0O2/EejsNKFVzsqEKKvE6OyQ5A==",
       "type": "package",
-      "path": "masstransit.liblog/1.0.0",
-      "files": [
-        ".signature.p7s",
-        "lib/net40/MassTransit.LibLog.dll",
-        "masstransit.liblog.1.0.0.nupkg.sha512",
-        "masstransit.liblog.nuspec"
-      ]
-    },
-    "MassTransit.NLog/5.2.1": {
-      "sha512": "mWesRsEeBrfgm0cyLUPelxKitisEH79AdrWfQMWMo9w6m+tlwuQ1Puf8nTpkRotFqd+HG80lll+TRRDGi38cdw==",
-      "type": "package",
-      "path": "masstransit.nlog/5.2.1",
-      "files": [
-        ".signature.p7s",
-        "lib/net452/MassTransit.NLogIntegration.dll",
-        "lib/net452/MassTransit.NLogIntegration.pdb",
-        "lib/net452/MassTransit.NLogIntegration.xml",
-        "lib/netstandard2.0/MassTransit.NLogIntegration.dll",
-        "lib/netstandard2.0/MassTransit.NLogIntegration.pdb",
-        "lib/netstandard2.0/MassTransit.NLogIntegration.xml",
-        "masstransit.nlog.5.2.1.nupkg.sha512",
-        "masstransit.nlog.nuspec"
-      ]
-    },
-    "MassTransit.RabbitMQ/5.2.1": {
-      "sha512": "nR7Y+w9lgFpuMhXfOu6liqTkrezNM61YbewB6Gces0o3eRbgeje7DjoY5ZQnvVPUSc2+jbKaDfneFhDE2wDGSw==",
-      "type": "package",
-      "path": "masstransit.rabbitmq/5.2.1",
+      "path": "masstransit.rabbitmq/5.3.2",
       "files": [
         ".signature.p7s",
         "lib/net452/MassTransit.RabbitMqTransport.dll",
-        "lib/net452/MassTransit.RabbitMqTransport.pdb",
         "lib/net452/MassTransit.RabbitMqTransport.xml",
         "lib/netstandard2.0/MassTransit.RabbitMqTransport.dll",
-        "lib/netstandard2.0/MassTransit.RabbitMqTransport.pdb",
         "lib/netstandard2.0/MassTransit.RabbitMqTransport.xml",
-        "masstransit.rabbitmq.5.2.1.nupkg.sha512",
+        "masstransit.rabbitmq.5.3.2.nupkg.sha512",
         "masstransit.rabbitmq.nuspec"
-      ]
-    },
-    "MassTransit.SerilogIntegration/5.2.1": {
-      "sha512": "D8no+BiqJaZsBvsBrpKjSriWa5r3EbG+bikFBw4IZmaaRNagVDYlfhhP34jwrgRHB1++3pO0Ui3SDMQzILcZUA==",
-      "type": "package",
-      "path": "masstransit.serilogintegration/5.2.1",
-      "files": [
-        ".signature.p7s",
-        "lib/net452/MassTransit.SerilogIntegration.dll",
-        "lib/net452/MassTransit.SerilogIntegration.pdb",
-        "lib/net452/MassTransit.SerilogIntegration.xml",
-        "lib/netstandard2.0/MassTransit.SerilogIntegration.dll",
-        "lib/netstandard2.0/MassTransit.SerilogIntegration.pdb",
-        "lib/netstandard2.0/MassTransit.SerilogIntegration.xml",
-        "masstransit.serilogintegration.5.2.1.nupkg.sha512",
-        "masstransit.serilogintegration.nuspec"
       ]
     },
     "Microsoft.EntityFrameworkCore/2.2.1": {
@@ -3303,6 +3189,7 @@
       "type": "package",
       "path": "newid/3.0.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net452/NewId.dll",
         "lib/net452/NewId.xml",
@@ -3357,43 +3244,12 @@
         "newtonsoft.json.bson.nuspec"
       ]
     },
-    "NLog/4.5.11": {
-      "sha512": "7TI+dYvEIOcCN6fjr3yjMN5AtPBSbHNxKGmn/5rkqbBk81MGsnQBkParoGOidibDIe3dwThJJndxl7O3zmd3rA==",
-      "type": "package",
-      "path": "nlog/4.5.11",
-      "files": [
-        ".signature.p7s",
-        "lib/monoandroid44/NLog.dll",
-        "lib/monoandroid44/NLog.xml",
-        "lib/net35/NLog.dll",
-        "lib/net35/NLog.xml",
-        "lib/net40-client/NLog.dll",
-        "lib/net40-client/NLog.xml",
-        "lib/net45/NLog.dll",
-        "lib/net45/NLog.xml",
-        "lib/netstandard1.3/NLog.dll",
-        "lib/netstandard1.3/NLog.xml",
-        "lib/netstandard1.5/NLog.dll",
-        "lib/netstandard1.5/NLog.xml",
-        "lib/netstandard2.0/NLog.dll",
-        "lib/netstandard2.0/NLog.xml",
-        "lib/sl4/NLog.dll",
-        "lib/sl4/NLog.xml",
-        "lib/sl5/NLog.dll",
-        "lib/sl5/NLog.xml",
-        "lib/wp8/NLog.dll",
-        "lib/wp8/NLog.xml",
-        "lib/xamarinios10/NLog.dll",
-        "lib/xamarinios10/NLog.xml",
-        "nlog.4.5.11.nupkg.sha512",
-        "nlog.nuspec"
-      ]
-    },
     "RabbitMQ.Client/5.1.0": {
       "sha512": "6TzFS2nlpiqKX7joVM+ViYY+rtHdYLnXkv2aNsXXJXlEbDhgf1iNBUgelPlgQUpKWoL9yUfMpTroNgEljB2HuA==",
       "type": "package",
       "path": "rabbitmq.client/5.1.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net451/RabbitMQ.Client.dll",
         "lib/net451/RabbitMQ.Client.xml",
@@ -3692,28 +3548,6 @@
         "version.txt"
       ]
     },
-    "Serilog/2.7.1": {
-      "sha512": "mqFJqhgmTv4th/nC1roPMWjGB3YSRH34J5XKq2OqzolJfUO4H3eeM7EJIpOjXV2XpIxFsGgBqiuhNxUt8WMdtg==",
-      "type": "package",
-      "path": "serilog/2.7.1",
-      "files": [
-        ".signature.p7s",
-        "lib/net45/Serilog.dll",
-        "lib/net45/Serilog.pdb",
-        "lib/net45/Serilog.xml",
-        "lib/net46/Serilog.dll",
-        "lib/net46/Serilog.pdb",
-        "lib/net46/Serilog.xml",
-        "lib/netstandard1.0/Serilog.dll",
-        "lib/netstandard1.0/Serilog.pdb",
-        "lib/netstandard1.0/Serilog.xml",
-        "lib/netstandard1.3/Serilog.dll",
-        "lib/netstandard1.3/Serilog.pdb",
-        "lib/netstandard1.3/Serilog.xml",
-        "serilog.2.7.1.nupkg.sha512",
-        "serilog.nuspec"
-      ]
-    },
     "SixLabors.Core/1.0.0-beta0007": {
       "sha512": "c6n9x8AM5DN6WbbqHb2iDV7nwqmlViLp+y9dxerLoeFgXOfgSdsrAX4/gb8hQN3GamHc5pd3zm/OpCCH5W08LQ==",
       "type": "package",
@@ -3921,10 +3755,10 @@
         "version.txt"
       ]
     },
-    "System.Collections.NonGeneric/4.3.0": {
-      "sha512": "/D3jtX0+u5+6rS3RGvTMyICPpIuzBgqtUYLjK1aXLua0nWH4JpM1H/tRk1Uxs6Fo0fe22jyJaTpoXPSu0il8Ug==",
+    "System.Collections.NonGeneric/4.0.1": {
+      "sha512": "XDijxhtvTsIFqXB3PbkPztkxnN4ro7kodqLQSg6mOpfWewiJcufYIV0VgO/fG9f79cic6rFfrxuCEtcru8Vz8g==",
       "type": "package",
-      "path": "system.collections.nongeneric/4.3.0",
+      "path": "system.collections.nongeneric/4.0.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3956,7 +3790,7 @@
         "ref/xamarinmac20/_._",
         "ref/xamarintvos10/_._",
         "ref/xamarinwatchos10/_._",
-        "system.collections.nongeneric.4.3.0.nupkg.sha512",
+        "system.collections.nongeneric.4.0.1.nupkg.sha512",
         "system.collections.nongeneric.nuspec"
       ]
     },
@@ -4478,6 +4312,7 @@
       "type": "package",
       "path": "system.diagnostics.diagnosticsource/4.5.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
@@ -4596,6 +4431,7 @@
       "type": "package",
       "path": "system.diagnostics.tracesource/4.3.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -6475,6 +6311,7 @@
       "type": "package",
       "path": "system.runtime.loader/4.3.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -7716,9 +7553,6 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.2": [
-      "MassTransit >= 5.2.1",
-      "MassTransit.NLog >= 5.2.1",
-      "MassTransit.RabbitMQ >= 5.2.1",
       "Microsoft.EntityFrameworkCore >= 2.2.1",
       "Microsoft.EntityFrameworkCore.SqlServer >= 2.2.1",
       "Microsoft.NETCore.App >= 2.2.0",
@@ -7769,18 +7603,6 @@
     "frameworks": {
       "netcoreapp2.2": {
         "dependencies": {
-          "MassTransit": {
-            "target": "Package",
-            "version": "[5.2.1, )"
-          },
-          "MassTransit.NLog": {
-            "target": "Package",
-            "version": "[5.2.1, )"
-          },
-          "MassTransit.RabbitMQ": {
-            "target": "Package",
-            "version": "[5.2.1, )"
-          },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",
             "version": "[2.2.1, )"
@@ -7807,17 +7629,5 @@
         "warn": true
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'MassTransit.LibLog 1.0.0' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.2'. This package may not be fully compatible with your project.",
-      "libraryId": "MassTransit.LibLog",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v2.2"
-      ]
-    }
-  ]
+  }
 }

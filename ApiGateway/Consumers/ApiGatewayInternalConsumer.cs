@@ -18,7 +18,7 @@ namespace ApiGateway.Consumers
         , IConsumer<RoomCreatedNotif>, IConsumer<MembershipCreatedNotif>, IConsumer<SessionCreatedNotif>
         , IConsumer<UserProfileUpdatedNotif>, IConsumer<ComplexProfileUpdatedNotif>, IConsumer<ComplexDeletionNotif>
         , IConsumer<RoomProfileUpdatedNotif>, IConsumer<ContactCreatedNotif>, IConsumer<InviteCreatedNotif>
-        , IConsumer<InviteCancelledNotif>, IConsumer<InviteAcceptedNotif>, IConsumer<InvitedIgnoredNotif>
+        , IConsumer<InviteCancelledNotif>, IConsumer<InviteAcceptedNotif>, IConsumer<InviteIgnoredNotif>
         , IConsumer<BotProfileUpdatedNotif>, IConsumer<BotSubscribedNotif>, IConsumer<BotCreatedNotif>
         , IConsumer<PhotoCreatedNotif>, IConsumer<AudioCreatedNotif>, IConsumer<VideoCreatedNotif>
         , IConsumer<SessionUpdatedNotif>, IConsumer<RoomDeletionNotif>, IConsumer<WorkershipCreatedNotif>
@@ -40,58 +40,72 @@ namespace ApiGateway.Consumers
         , IConsumer<UserRequestedBotViewPush>, IConsumer<BotSentBotViewPush>, IConsumer<BotUpdatedBotViewPush>
         , IConsumer<BotAnimatedBotViewPush>, IConsumer<BotRanCommandsOnBotViewPush>, IConsumer<MessageSeenPush>
     {
-        public Task Consume(ConsumeContext<UserCreatedNotif> context)
+        public async Task Consume(ConsumeContext<UserCreatedNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<UserCreatedNotif, UserCreatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new UserCreatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<ComplexCreatedNotif> context)
+        public async Task Consume(ConsumeContext<ComplexCreatedNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<ComplexCreatedNotif, ComplexCreatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new ComplexCreatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<RoomCreatedNotif> context)
+        public async Task Consume(ConsumeContext<RoomCreatedNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<RoomCreatedNotif, RoomCreatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new RoomCreatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<MembershipCreatedNotif> context)
+        public async Task Consume(ConsumeContext<MembershipCreatedNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<MembershipCreatedNotif, MembershipCreatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new MembershipCreatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<SessionCreatedNotif> context)
+        public async Task Consume(ConsumeContext<SessionCreatedNotif> context)
         {
-            foreach (var destination in context.Message.Destinations)
-            {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
-            }
-
             using (var dbContext = new DatabaseContext())
             {
                 var session = context.Message.Packet.Session;
@@ -103,139 +117,199 @@ namespace ApiGateway.Consumers
 
                 dbContext.SaveChanges();
             }
-
-            return Task.CompletedTask;
-        }
-
-        public Task Consume(ConsumeContext<UserProfileUpdatedNotif> context)
-        {
+            
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<SessionCreatedNotif, SessionCreatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new SessionCreatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<ComplexProfileUpdatedNotif> context)
+        public async Task Consume(ConsumeContext<UserProfileUpdatedNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<UserProfileUpdatedNotif, UserProfileUpdatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new UserProfileUpdatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<ComplexDeletionNotif> context)
+        public async Task Consume(ConsumeContext<ComplexProfileUpdatedNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<ComplexProfileUpdatedNotif, ComplexProfileUpdatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new ComplexProfileUpdatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<RoomProfileUpdatedNotif> context)
+        public async Task Consume(ConsumeContext<ComplexDeletionNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<ComplexDeletionNotif, ComplexDeletionNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new ComplexDeletionNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<ContactCreatedNotif> context)
+        public async Task Consume(ConsumeContext<RoomProfileUpdatedNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<RoomProfileUpdatedNotif, RoomProfileUpdatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new RoomProfileUpdatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<InviteCreatedNotif> context)
+        public async Task Consume(ConsumeContext<ContactCreatedNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<ContactCreatedNotif, ContactCreatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new ContactCreatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<InviteCancelledNotif> context)
+        public async Task Consume(ConsumeContext<InviteCreatedNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<InviteCreatedNotif, InviteCreatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new InviteCreatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<InviteAcceptedNotif> context)
+        public async Task Consume(ConsumeContext<InviteCancelledNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<InviteCancelledNotif, InviteCancelledNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new InviteCancelledNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<InvitedIgnoredNotif> context)
+        public async Task Consume(ConsumeContext<InviteAcceptedNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<InviteAcceptedNotif, InviteAcceptedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new InviteAcceptedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<BotProfileUpdatedNotif> context)
+        public async Task Consume(ConsumeContext<InviteIgnoredNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<InviteIgnoredNotif, InviteIgnoredNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new InviteIgnoredNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<BotSubscribedNotif> context)
+        public async Task Consume(ConsumeContext<BotProfileUpdatedNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<BotProfileUpdatedNotif, BotProfileUpdatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new BotProfileUpdatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<BotCreatedNotif> context)
+        public async Task Consume(ConsumeContext<BotSubscribedNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<BotSubscribedNotif, BotSubscribedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new BotSubscribedNotifResponse());
+        }
 
+        public async Task Consume(ConsumeContext<BotCreatedNotif> context)
+        {
             using (var dbContext = new DatabaseContext())
             {
                 var session = context.Message.Packet.Bot.Sessions.FirstOrDefault();
@@ -250,96 +324,163 @@ namespace ApiGateway.Consumers
 
                 dbContext.SaveChanges();
             }
-
-            return Task.CompletedTask;
-        }
-
-        public Task Consume(ConsumeContext<PhotoCreatedNotif> context)
-        {
+            
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<BotCreatedNotif, BotCreatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new BotCreatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<AudioCreatedNotif> context)
+        public async Task Consume(ConsumeContext<PhotoCreatedNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<PhotoCreatedNotif, PhotoCreatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new PhotoCreatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<VideoCreatedNotif> context)
+        public async Task Consume(ConsumeContext<AudioCreatedNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<AudioCreatedNotif, AudioCreatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new AudioCreatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<SessionUpdatedNotif> context)
+        public async Task Consume(ConsumeContext<VideoCreatedNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<VideoCreatedNotif, VideoCreatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new VideoCreatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<RoomDeletionNotif> context)
+        public async Task Consume(ConsumeContext<SessionUpdatedNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<SessionUpdatedNotif, SessionUpdatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new SessionUpdatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<WorkershipCreatedNotif> context)
+        public async Task Consume(ConsumeContext<RoomDeletionNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<RoomDeletionNotif, RoomDeletionNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new RoomDeletionNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<WorkershipUpdatedNotif> context)
+        public async Task Consume(ConsumeContext<WorkershipCreatedNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<WorkershipCreatedNotif, WorkershipCreatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
-
-            return Task.CompletedTask;
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new WorkershipCreatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<WorkershipDeletedNotif> context)
+        public async Task Consume(ConsumeContext<WorkershipUpdatedNotif> context)
         {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
             foreach (var destination in context.Message.Destinations)
             {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
+                tasks[counter] = SharedArea.Transport.DirectService<WorkershipUpdatedNotif, WorkershipUpdatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
             }
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new WorkershipUpdatedNotifResponse());
+        }
 
-            return Task.CompletedTask;
+        public async Task Consume(ConsumeContext<WorkershipDeletedNotif> context)
+        {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
+            foreach (var destination in context.Message.Destinations)
+            {
+                tasks[counter] = SharedArea.Transport.DirectService<WorkershipDeletedNotif, WorkershipDeletedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
+            }
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new WorkershipDeletedNotifResponse());
+        }
+
+        public async Task Consume(ConsumeContext<AccountCreatedNotif> context)
+        {
+            var tasks = new Task[context.Message.Destinations.Length];
+            var counter = 0;
+            foreach (var destination in context.Message.Destinations)
+            {
+                tasks[counter] = SharedArea.Transport.DirectService<AccountCreatedNotif, AccountCreatedNotifResponse>(
+                    Program.Bus,
+                    destination,
+                    context.Message.Packet);
+                counter++;
+            }
+            Task.WaitAll(tasks);
+            await context.RespondAsync(new AccountCreatedNotifResponse());
         }
 
         public async Task Consume(ConsumeContext<PutUserRequest> context)
@@ -1133,18 +1274,6 @@ namespace ApiGateway.Consumers
 
             return Task.CompletedTask;
         }
-
-        public Task Consume(ConsumeContext<AccountCreatedNotif> context)
-        {
-            foreach (var destination in context.Message.Destinations)
-            {
-                Program.Bus.GetSendEndpoint(new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + destination))
-                    .Result.Send(context.Message);
-            }
-
-            return Task.CompletedTask;
-        }
-
 
         public async Task Consume(ConsumeContext<ConsolidateMakeAccountRequest> context)
         {

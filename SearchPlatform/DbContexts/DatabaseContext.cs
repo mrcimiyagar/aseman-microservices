@@ -1,6 +1,5 @@
 ﻿
 using SharedArea.Entities;
-using SharedArea.Notifications;
 using Microsoft.EntityFrameworkCore;
 
 namespace SearchPlatform.DbContexts

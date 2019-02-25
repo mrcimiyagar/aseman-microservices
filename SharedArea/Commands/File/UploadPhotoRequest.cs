@@ -5,6 +5,5 @@ namespace SharedArea.Commands.File
     public class UploadPhotoRequest : Request
     {
         public PhotoUF Form { get; set; }
-        public string StreamCode { get; set; }
     }
 }

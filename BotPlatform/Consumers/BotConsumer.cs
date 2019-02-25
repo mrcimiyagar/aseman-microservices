@@ -472,7 +472,7 @@ namespace BotPlatform.Consumers
             }
         }
         
-        public Task Consume(ConsumeContext<BotSubscribedNotif> context)
+        public async Task Consume(ConsumeContext<BotSubscribedNotif> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -490,11 +490,11 @@ namespace BotPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
-            return Task.CompletedTask;
+
+            await context.RespondAsync(new BotSubscribedNotifResponse());
         }
         
-        public Task Consume(ConsumeContext<BotCreatedNotif> context)
+        public async Task Consume(ConsumeContext<BotCreatedNotif> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -517,10 +517,10 @@ namespace BotPlatform.Consumers
                 dbContext.SaveChanges();
             }
 
-            return Task.CompletedTask;
+            await context.RespondAsync(new BotCreatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<WorkershipCreatedNotif> context)
+        public async Task Consume(ConsumeContext<WorkershipCreatedNotif> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -532,10 +532,10 @@ namespace BotPlatform.Consumers
                 dbContext.SaveChanges();
             }
             
-            return Task.CompletedTask;
+            await context.RespondAsync(new WorkershipCreatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<WorkershipUpdatedNotif> context)
+        public async Task Consume(ConsumeContext<WorkershipUpdatedNotif> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -551,10 +551,10 @@ namespace BotPlatform.Consumers
                 dbContext.SaveChanges();
             }
             
-            return Task.CompletedTask;
+            await context.RespondAsync(new WorkershipUpdatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<WorkershipDeletedNotif> context)
+        public async Task Consume(ConsumeContext<WorkershipDeletedNotif> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -570,10 +570,10 @@ namespace BotPlatform.Consumers
                 dbContext.SaveChanges();
             }
             
-            return Task.CompletedTask;
+            await context.RespondAsync(new WorkershipDeletedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<BotProfileUpdatedNotif> context)
+        public async Task Consume(ConsumeContext<BotProfileUpdatedNotif> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -589,7 +589,7 @@ namespace BotPlatform.Consumers
                 dbContext.SaveChanges();
             }
             
-            return Task.CompletedTask;
+            await context.RespondAsync(new BotProfileUpdatedNotifResponse());
         }
 
         public async Task Consume(ConsumeContext<ConsolidateDeleteAccountRequest> context)

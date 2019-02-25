@@ -27,5 +27,8 @@ namespace SharedArea.Entities
         [NotMapped]
         [JsonProperty("seenByMe")]
         public bool SeenByMe { get; set; }
+        [NotMapped]
+        [JsonProperty("seenCount")]
+        public long SeenCount { get; set; }
     }
 }

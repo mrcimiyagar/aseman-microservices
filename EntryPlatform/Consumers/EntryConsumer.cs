@@ -155,7 +155,7 @@ namespace EntryPlatform.Consumers
 
                             dbContext.SaveChanges();
                             
-                            SharedArea.Transport.NotifyService<AccountCreatedNotif>(
+                            SharedArea.Transport.NotifyService<AccountCreatedNotif, AccountCreatedNotifResponse>(
                                 Program.Bus,
                                 new Packet() {User = user, UserSecret = user.UserSecret,
                                     ComplexSecret = user.Memberships[0].Complex.ComplexSecret},
@@ -217,7 +217,7 @@ namespace EntryPlatform.Consumers
                         dbContext.Pendings.Remove(pending);
                         dbContext.SaveChanges();
                         
-                        SharedArea.Transport.NotifyService<SessionCreatedNotif>(
+                        SharedArea.Transport.NotifyService<SessionCreatedNotif, SessionCreatedNotifResponse>(
                             Program.Bus,
                             new Packet() {Session = session, BaseUser = user},
                             SharedArea.GlobalVariables.AllQueuesExcept(new []

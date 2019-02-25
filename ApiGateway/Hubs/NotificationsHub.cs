@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using ApiGateway.DbContexts;
 using ApiGateway.Utils;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 
 namespace ApiGateway.Hubs

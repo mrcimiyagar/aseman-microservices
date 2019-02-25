@@ -8,6 +8,5 @@ namespace ApiGateway.Models.Forms
         public long RoomId { get; set; }
         public string Title { get; set; }
         public long Duration { get; set; }
-        public IFormFile File { get; set; }
     }
 }

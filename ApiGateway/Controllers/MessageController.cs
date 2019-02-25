@@ -1,12 +1,9 @@
-﻿
-using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using ApiGateway.DbContexts;
 using ApiGateway.Utils;
 using SharedArea.Middles;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using SharedArea.Commands.Message;
 using SharedArea.Utils;
 
@@ -147,6 +144,26 @@ namespace ApiGateway.Controllers
                 if (session == null) return new Packet {Status = "error_1"};
                 
                 var result = await SharedArea.Transport.DirectService<GetMessageSeenCountRequest, GetMessageSeenCountResponse>(
+                    Program.Bus,
+                    SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                    session.SessionId,
+                    Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
+                    packet);
+
+                return result.Packet;
+            }
+        }
+
+        [Route("~/api/message/get_last_actions")]
+        [HttpPost]
+        public async Task<ActionResult<Packet>> GetLastActions([FromBody] Packet packet)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = Security.Authenticate(dbContext, Request.Headers[AuthExtracter.AK]);
+                if (session == null) return new Packet {Status = "error_1"};
+                
+                var result = await SharedArea.Transport.DirectService<GetLastActionsRequest, GetLastActionsResponse>(
                     Program.Bus,
                     SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
                     session.SessionId,

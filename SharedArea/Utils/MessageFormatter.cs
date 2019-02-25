@@ -4,7 +4,6 @@ using System.Text;
 using System.Threading.Tasks;
 using GreenPipes.Filters.Log;
 using MassTransit;
-using MongoDB.Bson.IO;
 using JsonConvert = Newtonsoft.Json.JsonConvert;
 
 namespace SharedArea.Utils

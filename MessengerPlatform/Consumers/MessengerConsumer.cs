@@ -5,9 +5,6 @@ using System.Threading.Tasks;
 using MassTransit;
 using MessengerPlatform.DbContexts;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using SharedArea.Commands;
-using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
 using SharedArea.Commands.Internal.Responses;
 using SharedArea.Commands.Message;
@@ -19,60 +16,55 @@ using Message = SharedArea.Entities.Message;
 
 namespace MessengerPlatform.Consumers
 {
-    public class MessengerConsumer : IConsumer<BotCreatedNotif>, IConsumer<GetMessagesRequest>
+    public class MessengerConsumer : IConsumer<GetMessagesRequest>
         , IConsumer<CreateTextMessageRequest>, IConsumer<CreateFileMessageRequest>,
         IConsumer<BotCreateTextMessageRequest>
-        , IConsumer<BotCreateFileMessageRequest>, IConsumer<PhotoCreatedNotif>, IConsumer<AudioCreatedNotif>
-        , IConsumer<VideoCreatedNotif>, IConsumer<PutServiceMessageRequest>, IConsumer<ConsolidateContactRequest>
-        , IConsumer<WorkershipCreatedNotif>, IConsumer<WorkershipUpdatedNotif>, IConsumer<WorkershipDeletedNotif>
-        , IConsumer<BotProfileUpdatedNotif>, IConsumer<ConsolidateDeleteAccountRequest>,
-        IConsumer<NotifyMessageSeenRequest>
+        , IConsumer<BotCreateFileMessageRequest>
+        , IConsumer<PutServiceMessageRequest>, IConsumer<ConsolidateContactRequest>
+        
+        , IConsumer<ConsolidateDeleteAccountRequest>,
+        IConsumer<NotifyMessageSeenRequest>, IConsumer<GetLastActionsRequest>
         , IConsumer<GetMessageSeenCountRequest>, IConsumer<ConsolidateMakeAccountRequest>,
-        IConsumer<ConsolidateCreateRoomRequest>, IConsumer<Fault<Request>>
+        IConsumer<ConsolidateCreateRoomRequest>, IConsumer<ConsolidateCreateComplexRequest>, IConsumer<ConsolidateLogoutRequest>
     {
-        public Task Consume(ConsumeContext<BotCreatedNotif> context)
+        public async Task Consume(ConsumeContext<ConsolidateCreateComplexRequest> context)
         {
             using (var dbContext = new DatabaseContext())
             {
-                var globalUser = context.Message.Packet.User;
-                var localUser = (User) dbContext.BaseUsers.Find(globalUser.BaseUserId);
-                var bot = context.Message.Packet.Bot;
-                var botSecret = bot.BotSecret;
-                var session = bot.Sessions.FirstOrDefault();
-                var creation = context.Message.Packet.BotCreation;
-                var subscription = context.Message.Packet.BotSubscription;
+                var admin = (User) dbContext.BaseUsers.Find(context.Message.Packet.User.BaseUserId);
+                var complex = context.Message.Packet.Complex;
+                var complexSecret = context.Message.Packet.ComplexSecret;
 
-                creation.Bot = bot;
-                creation.Creator = localUser;
+                complex.ComplexSecret = complexSecret;
+                complexSecret.Complex = complex;
+                complex.Rooms[0].Complex = complex;
+                complex.Members[0].Complex = complex;
+                complexSecret.Admin = admin;
+                complex.Members[0].User = admin;
 
-                subscription.Bot = bot;
-                subscription.Subscriber = localUser;
-
-                dbContext.AddRange(bot, botSecret, session, creation, subscription);
+                dbContext.AddRange(complex);
 
                 dbContext.SaveChanges();
             }
 
-            return Task.CompletedTask;
+            await context.RespondAsync(new ConsolidateCreateComplexResponse());
         }
 
-        public Task Consume(ConsumeContext<BotProfileUpdatedNotif> context)
+        public async Task Consume(ConsumeContext<ConsolidateLogoutRequest> context)
         {
+            var gSession = context.Message.Packet.Session;
+
             using (var dbContext = new DatabaseContext())
             {
-                var globalBot = context.Message.Packet.Bot;
-
-                var localBot = dbContext.Bots.Find(globalBot.BaseUserId);
-
-                localBot.Title = globalBot.Title;
-                localBot.Avatar = globalBot.Avatar;
-                localBot.Description = globalBot.Description;
-                localBot.ViewURL = globalBot.ViewURL;
-
-                dbContext.SaveChanges();
+                var lSess = dbContext.Sessions.Find(gSession.SessionId);
+                if (lSess != null)
+                {
+                    dbContext.Sessions.RemoveRange(lSess);
+                    dbContext.SaveChanges();
+                }
             }
 
-            return Task.CompletedTask;
+            await context.RespondAsync(new ConsolidateLogoutResponse());
         }
 
         public async Task Consume(ConsumeContext<GetMessagesRequest> context)
@@ -114,7 +106,7 @@ namespace MessengerPlatform.Consumers
 
                 if (room.Messages.Count > 100000)
                 {
-                    messages = room.Messages.Skip(room.Messages.Count() - 100).ToList();
+                    messages = room.Messages.Skip(room.Messages.Count - 100).ToList();
 
                     foreach (var msg in messages)
                     {
@@ -234,7 +226,8 @@ namespace MessengerPlatform.Consumers
                     select s.SessionId).ToList();
                 sessionIds.AddRange((from w in room.Workers
                     from s in dbContext.Bots.Include(b => b.Sessions)
-                        .FirstOrDefault(b => b.BaseUserId == w.BotId).Sessions
+                        .FirstOrDefault(b => b.BaseUserId == w.BotId)
+                        ?.Sessions
                     select s.SessionId).ToList());
                 var mcn = new TextMessageNotification()
                 {
@@ -385,7 +378,8 @@ namespace MessengerPlatform.Consumers
                     select s.SessionId).ToList();
                 sessionIds.AddRange((from w in room.Workers
                     from s in dbContext.Bots.Include(b => b.Sessions)
-                        .FirstOrDefault(b => b.BaseUserId == w.BotId).Sessions
+                        .FirstOrDefault(b => b.BaseUserId == w.BotId)
+                        ?.Sessions
                     select s.SessionId).ToList());
 
                 switch (nextMessage)
@@ -539,7 +533,8 @@ namespace MessengerPlatform.Consumers
                 sessionIds.AddRange((from w in room.Workers
                     where w.BotId != bot.BaseUserId
                     from s in dbContext.Bots.Include(b => b.Sessions)
-                        .FirstOrDefault(b => b.BaseUserId == w.BotId).Sessions
+                        .FirstOrDefault(b => b.BaseUserId == w.BotId)
+                        ?.Sessions
                     select s.SessionId).ToList());
                 var mcn = new TextMessageNotification()
                 {
@@ -698,7 +693,8 @@ namespace MessengerPlatform.Consumers
                 sessionIds.AddRange((from w in room.Workers
                     where w.BotId != bot.BaseUserId
                     from s in dbContext.Bots.Include(b => b.Sessions)
-                        .FirstOrDefault(b => b.BaseUserId == w.BotId).Sessions
+                        .FirstOrDefault(b => b.BaseUserId == w.BotId)
+                        ?.Sessions
                     select s.SessionId).ToList());
 
                 switch (nextMessage)
@@ -778,75 +774,6 @@ namespace MessengerPlatform.Consumers
                         return;
                 }
             }
-        }
-
-        public Task Consume(ConsumeContext<PhotoCreatedNotif> context)
-        {
-            using (var dbContext = new DatabaseContext())
-            {
-                var file = context.Message.Packet.Photo;
-                var fileUsage = context.Message.Packet.FileUsage;
-
-                if (fileUsage != null)
-                {
-                    file.FileUsages.Clear();
-                    fileUsage.File = file;
-                    fileUsage.Room = dbContext.Rooms.Find(fileUsage.Room.RoomId);
-                    dbContext.AddRange(fileUsage);
-                }
-                else
-                    dbContext.AddRange(file);
-
-                dbContext.SaveChanges();
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public Task Consume(ConsumeContext<AudioCreatedNotif> context)
-        {
-            using (var dbContext = new DatabaseContext())
-            {
-                var file = context.Message.Packet.Audio;
-                var fileUsage = context.Message.Packet.FileUsage;
-
-                if (fileUsage != null)
-                {
-                    file.FileUsages.Clear();
-                    fileUsage.File = file;
-                    fileUsage.Room = dbContext.Rooms.Find(fileUsage.Room.RoomId);
-                    dbContext.AddRange(fileUsage);
-                }
-                else
-                    dbContext.AddRange(file);
-
-                dbContext.SaveChanges();
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public Task Consume(ConsumeContext<VideoCreatedNotif> context)
-        {
-            using (var dbContext = new DatabaseContext())
-            {
-                var file = context.Message.Packet.Video;
-                var fileUsage = context.Message.Packet.FileUsage;
-
-                if (fileUsage != null)
-                {
-                    file.FileUsages.Clear();
-                    fileUsage.File = file;
-                    fileUsage.Room = dbContext.Rooms.Find(fileUsage.Room.RoomId);
-                    dbContext.AddRange(fileUsage);
-                }
-                else
-                    dbContext.AddRange(file);
-
-                dbContext.SaveChanges();
-            }
-
-            return Task.CompletedTask;
         }
 
         public async Task Consume(ConsumeContext<PutServiceMessageRequest> context)
@@ -937,59 +864,6 @@ namespace MessengerPlatform.Consumers
             }
 
             await context.RespondAsync(new ConsolidateContactResponse());
-        }
-
-        public Task Consume(ConsumeContext<WorkershipCreatedNotif> context)
-        {
-            using (var dbContext = new DatabaseContext())
-            {
-                var workership = context.Message.Packet.Workership;
-                workership.Room = dbContext.Rooms.Find(workership.Room.RoomId);
-
-                dbContext.Workerships.Add(workership);
-
-                dbContext.SaveChanges();
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public Task Consume(ConsumeContext<WorkershipUpdatedNotif> context)
-        {
-            using (var dbContext = new DatabaseContext())
-            {
-                var globalWs = context.Message.Packet.Workership;
-
-                var localWs = dbContext.Workerships.Find(globalWs.WorkershipId);
-
-                localWs.PosX = globalWs.PosX;
-                localWs.PosY = globalWs.PosY;
-                localWs.Width = globalWs.Width;
-                localWs.Height = globalWs.Height;
-
-                dbContext.SaveChanges();
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public Task Consume(ConsumeContext<WorkershipDeletedNotif> context)
-        {
-            using (var dbContext = new DatabaseContext())
-            {
-                var globalWs = context.Message.Packet.Workership;
-
-                var localWs = dbContext.Workerships.Find(globalWs.WorkershipId);
-                dbContext.Entry(localWs).Reference(ws => ws.Room).Load();
-                var room = localWs.Room;
-
-                room.Workers.Remove(localWs);
-                dbContext.Workerships.Remove(localWs);
-
-                dbContext.SaveChanges();
-            }
-
-            return Task.CompletedTask;
         }
 
         public async Task Consume(ConsumeContext<ConsolidateDeleteAccountRequest> context)
@@ -1196,14 +1070,59 @@ namespace MessengerPlatform.Consumers
             await context.RespondAsync(new ConsolidateCreateRoomResponse());
         }
 
-        public Task Consume(ConsumeContext<Fault<Request>> context)
+        public async Task Consume(ConsumeContext<GetLastActionsRequest> context)
         {
-            foreach (var ex in context.Message.Exceptions)
+            using (var dbContext = new DatabaseContext())
             {
-                Console.WriteLine(ex.ToString());
-            }
+                var rooms = context.Message.Packet.Rooms;
+                
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
+                dbContext.Entry(user).Collection(u => u.Memberships).Load();
 
-            return Task.CompletedTask;
+                foreach (var roomC in rooms)
+                {
+                    var membership = user.Memberships.Find(mem => mem.ComplexId == roomC.ComplexId);
+                    if (membership == null)
+                    {
+
+                        return;
+                    }
+
+                    dbContext.Entry(membership).Reference(m => m.Complex).Load();
+                    var complex = membership.Complex;
+                    dbContext.Entry(complex).Collection(c => c.Rooms).Load();
+                    var room = complex.Rooms.Find(r => r.RoomId == roomC.RoomId);
+                    if (room == null)
+                    {
+
+                        return;
+                    }
+
+                    roomC.LastAction = dbContext.Messages.Last(m => m.RoomId == room.RoomId);
+                    
+                    if (roomC.LastAction != null)
+                    {
+                        if (roomC.LastAction.GetType() == typeof(PhotoMessage))
+                            dbContext.Entry(roomC.LastAction).Reference(m => ((PhotoMessage) m).Photo).Load();
+                        else if (roomC.LastAction.GetType() == typeof(AudioMessage))
+                            dbContext.Entry(roomC.LastAction).Reference(m => ((AudioMessage) m).Audio).Load();
+                        else if (roomC.LastAction.GetType() == typeof(VideoMessage))
+                            dbContext.Entry(roomC.LastAction).Reference(m => ((VideoMessage) m).Video).Load();
+                        
+                        roomC.LastAction.SeenByMe =
+                            (dbContext.MessageSeens.Find(user.BaseUserId + "_" + roomC.LastAction.MessageId) != null);
+                        roomC.LastAction.SeenCount =
+                            dbContext.MessageSeens.LongCount(ms => ms.MessageId == roomC.LastAction.MessageId);
+                    }
+                }
+
+                await context.RespondAsync(new GetLastActionsResponse()
+                {
+                    Packet = new Packet() {Status = "success", Rooms = rooms}
+                });
+            }
         }
     }
 }

@@ -1,11 +1,8 @@
 ﻿using System;
-using GreenPipes;
 using MassTransit;
-using MassTransit.NLogIntegration;
 using MessengerPlatform.Consumers;
 using MessengerPlatform.DbContexts;
 using Newtonsoft.Json;
-using SharedArea.Commands.Auth;
 using SharedArea.Utils;
 
 namespace MessengerPlatform
@@ -41,17 +38,21 @@ namespace MessengerPlatform
                     options.NullValueHandling = NullValueHandling.Ignore;
                     return options;
                 });
-                sbc.UseLog(Console.Out, MessageFormatter.Formatter);
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME, ep =>
                 {
-                    ep.UseConcurrencyLimit(1024);
-                    ep.PrefetchCount = 1024;
-                    ep.Consumer<MessengerConsumer>();
-                    ep.Consumer<NotifConsumer>();
+                    EndpointConfigurator.ConfigEndpoint(ep);
+                    ep.Consumer<MessengerConsumer>(EndpointConfigurator.ConfigConsumer);
+                    ep.Consumer<NotifConsumer>(EndpointConfigurator.ConfigConsumer);
                 });
             });
 
+            Program.Bus.ConnectSendObserver(new SendObserver());
+            Program.Bus.ConnectConsumeObserver(new ConsumeObserver());
+            Program.Bus.ConnectReceiveObserver(new ReceiveObserver());
+
             Bus.Start();
+            
+            Console.WriteLine("Bus loaded");
         }
     }
 }

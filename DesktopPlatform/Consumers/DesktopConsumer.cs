@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using DesktopPlatform.DbContexts;
 using MassTransit;
-using Newtonsoft.Json;
 using SharedArea.Commands.Bot;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
@@ -80,7 +78,7 @@ namespace DesktopPlatform.Consumers
                 dbContext.AddRange(workership);
                 dbContext.SaveChanges();
                 
-                SharedArea.Transport.NotifyService<WorkershipCreatedNotif>(
+                SharedArea.Transport.NotifyService<WorkershipCreatedNotif, WorkershipCreatedNotifResponse>(
                     Program.Bus,
                     new Packet() {Workership = workership},
                     new []
@@ -103,14 +101,15 @@ namespace DesktopPlatform.Consumers
                     Room = finalRoom,
                     Session = botSess
                 };
-                SharedArea.Transport.Push<BotAdditionToRoomPush>(
-                    Program.Bus,
-                    new BotAdditionToRoomPush()
-                    {
-                        Notif = addition,
-                        SessionIds = new [] {botSess.SessionId}.ToList()
-                    });
-                
+                if (botSess != null)
+                    SharedArea.Transport.Push<BotAdditionToRoomPush>(
+                        Program.Bus,
+                        new BotAdditionToRoomPush()
+                        {
+                            Notif = addition,
+                            SessionIds = new[] {botSess.SessionId}.ToList()
+                        });
+
                 await context.RespondAsync(new AddBotToRoomResponse()
                 {
                     Packet = new Packet
@@ -169,7 +168,7 @@ namespace DesktopPlatform.Consumers
                 workership.Height = packet.Workership.Height;
                 dbContext.SaveChanges();
                 
-                SharedArea.Transport.NotifyService<WorkershipUpdatedNotif>(
+                SharedArea.Transport.NotifyService<WorkershipUpdatedNotif, WorkershipUpdatedNotifResponse>(
                     Program.Bus,
                     new Packet() {Workership = workership},
                     new []
@@ -230,7 +229,7 @@ namespace DesktopPlatform.Consumers
                 dbContext.Workerships.Remove(workership);
                 dbContext.SaveChanges();
                 
-                SharedArea.Transport.NotifyService<WorkershipDeletedNotif>(
+                SharedArea.Transport.NotifyService<WorkershipDeletedNotif, WorkershipDeletedNotifResponse>(
                     Program.Bus,
                     new Packet() {Workership = workership},
                     new []
@@ -246,13 +245,14 @@ namespace DesktopPlatform.Consumers
                 {
                     Room = room
                 };
-                SharedArea.Transport.Push<BotRemovationFromRoomPush>(
-                    Program.Bus,
-                    new BotRemovationFromRoomPush()
-                    {
-                        Notif = removation,
-                        SessionIds = new [] {botSess.SessionId}.ToList()
-                    });
+                if (botSess != null)
+                    SharedArea.Transport.Push<BotRemovationFromRoomPush>(
+                        Program.Bus,
+                        new BotRemovationFromRoomPush()
+                        {
+                            Notif = removation,
+                            SessionIds = new[] {botSess.SessionId}.ToList()
+                        });
 
                 await context.RespondAsync(new RemoveBotFromRoomResponse()
                 {
@@ -300,7 +300,7 @@ namespace DesktopPlatform.Consumers
             }
         }
 
-        public Task Consume(ConsumeContext<BotSubscribedNotif> context)
+        public async Task Consume(ConsumeContext<BotSubscribedNotif> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -318,11 +318,11 @@ namespace DesktopPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
-            return Task.CompletedTask;
+
+            await context.RespondAsync(new BotSubscribedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<BotCreatedNotif> context)
+        public async Task Consume(ConsumeContext<BotCreatedNotif> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -345,10 +345,10 @@ namespace DesktopPlatform.Consumers
                 dbContext.SaveChanges();
             }
 
-            return Task.CompletedTask;
+            await context.RespondAsync(new BotCreatedNotifResponse());
         }
 
-        public Task Consume(ConsumeContext<BotProfileUpdatedNotif> context)
+        public async Task Consume(ConsumeContext<BotProfileUpdatedNotif> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -363,8 +363,8 @@ namespace DesktopPlatform.Consumers
 
                 dbContext.SaveChanges();
             }
-            
-            return Task.CompletedTask;
+
+            await context.RespondAsync(new BotProfileUpdatedNotifResponse());
         }
 
         public async Task Consume(ConsumeContext<ConsolidateDeleteAccountRequest> context)

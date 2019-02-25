@@ -1,7 +1,4 @@
-﻿
-using System.ComponentModel.DataAnnotations.Schema;
-using SharedArea.Entities;
-using SharedArea.Notifications;
+﻿using SharedArea.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace BotPlatform.DbContexts

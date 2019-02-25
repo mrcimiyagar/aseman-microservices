@@ -1,27 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Channels;
-using System.Threading.Tasks;
 using ApiGateway.Consumers;
 using ApiGateway.DbContexts;
 using ApiGateway.Hubs;
 using ApiGateway.Middleware;
 using ApiGateway.Utils;
-using GreenPipes;
 using MassTransit;
-using MassTransit.NLogIntegration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using MongoDB.Driver.Core.Misc;
 using Newtonsoft.Json;
-using SharedArea.Commands;
 using SharedArea.Utils;
 
 namespace ApiGateway
@@ -113,16 +105,20 @@ namespace ApiGateway
                     options.Converters.Add(new MessageConverter());
                     return options;
                 });
-                sbc.UseLog(Console.Out, MessageFormatter.Formatter);
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.API_GATEWAY_INTERNAL_QUEUE_NAME, ep =>
                 {
-                    ep.UseConcurrencyLimit(1024);
-                    ep.PrefetchCount = 1024;
-                    ep.Consumer<ApiGatewayInternalConsumer>();
+                    EndpointConfigurator.ConfigEndpoint(ep);
+                    ep.Consumer<ApiGatewayInternalConsumer>(EndpointConfigurator.ConfigConsumer);
                 });
             });
 
+            Program.Bus.ConnectSendObserver(new SendObserver());
+            Program.Bus.ConnectConsumeObserver(new ConsumeObserver());
+            Program.Bus.ConnectReceiveObserver(new ReceiveObserver());
+            
             Program.Bus.Start();
+            
+            Console.WriteLine("Bus loaded");
 
             using (var dbContext = new DatabaseContext())
             {

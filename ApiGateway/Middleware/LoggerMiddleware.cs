@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
-using Microsoft.Extensions.Logging;
-using NLog.Fluent;
 
 namespace ApiGateway.Middleware
 {
     class LoggerMiddleware
     {
-        private const string MessageTemplate =
-            "{0} : HTTP {1} {2} responded {3} in {4} ms";
+        private const string PreTemplate = "Request : Http {0} {1}";
+        private const string PostTemplate = "Response : {0} : HTTP {1} {2} responded {3} in {4} ms";
 
         private enum LogEventLevel
         {
@@ -31,6 +25,8 @@ namespace ApiGateway.Middleware
         public async Task Invoke(HttpContext httpContext)
         {
             if (httpContext == null) throw new ArgumentNullException(nameof(httpContext));
+            
+            Console.WriteLine(PreTemplate, httpContext.Request.Method, httpContext.Request.Path);
 
             var sw = Stopwatch.StartNew();
             try
@@ -41,7 +37,7 @@ namespace ApiGateway.Middleware
                 var statusCode = httpContext.Response?.StatusCode;
                 var level = statusCode > 499 ? LogEventLevel.Error : LogEventLevel.Information;
 
-                Console.WriteLine(MessageTemplate, level, httpContext.Request.Method, httpContext.Request.Path, statusCode, sw.Elapsed.TotalMilliseconds);
+                Console.WriteLine(PostTemplate, level, httpContext.Request.Method, httpContext.Request.Path, statusCode, sw.Elapsed.TotalMilliseconds);
             }
             catch (Exception ex) when (LogException(httpContext, sw, ex)) { }
         }
@@ -50,7 +46,7 @@ namespace ApiGateway.Middleware
         {
             sw.Stop();
 
-            Console.WriteLine(ex.ToString() + " in " + sw.Elapsed.TotalMilliseconds + " ms");
+            Console.WriteLine(ex + " in " + sw.Elapsed.TotalMilliseconds + " ms");
 
             return false;
         }

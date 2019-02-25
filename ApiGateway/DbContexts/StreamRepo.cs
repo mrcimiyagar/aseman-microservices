@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
-using SharedArea.Middles;
 
 namespace ApiGateway.DbContexts
 {

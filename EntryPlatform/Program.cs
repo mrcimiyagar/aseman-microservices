@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Threading.Tasks;
 using EntryPlatform.Consumers;
 using EntryPlatform.DbContexts;
-using GreenPipes;
-using GreenPipes.Filters.Log;
 using MassTransit;
-using MassTransit.LibLog;
-using MassTransit.NLogIntegration;
 using Newtonsoft.Json;
-using NLog;
 using SharedArea.Utils;
 
 namespace EntryPlatform
@@ -44,17 +38,21 @@ namespace EntryPlatform
                     options.NullValueHandling = NullValueHandling.Ignore;
                     return options;
                 });
-                sbc.UseLog(Console.Out, MessageFormatter.Formatter);
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.ENTRY_QUEUE_NAME, ep =>
                 {
-                    ep.UseConcurrencyLimit(1024);
-                    ep.PrefetchCount = 1024;
-                    ep.Consumer<EntryConsumer>();
-                    ep.Consumer<NotifConsumer>();
+                    EndpointConfigurator.ConfigEndpoint(ep);
+                    ep.Consumer<EntryConsumer>(EndpointConfigurator.ConfigConsumer);
+                    ep.Consumer<NotifConsumer>(EndpointConfigurator.ConfigConsumer);
                 });
             });
 
+            Program.Bus.ConnectSendObserver(new SendObserver());
+            Program.Bus.ConnectConsumeObserver(new ConsumeObserver());
+            Program.Bus.ConnectReceiveObserver(new ReceiveObserver());
+
             Bus.Start();
+            
+            Console.WriteLine("Bus loaded");
         }
     }
 }

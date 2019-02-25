@@ -10,6 +10,7 @@ using SharedArea.Forms;
 using SharedArea.Middles;
 using Microsoft.AspNetCore.Mvc;
 using SharedArea.Commands.File;
+using SharedArea.Entities;
 using SharedArea.Utils;
 
 namespace ApiGateway.Controllers
@@ -20,6 +21,62 @@ namespace ApiGateway.Controllers
     public class FileController : Controller
     {
         public const string DirPath = @"C:\\Aseman\Files";
+
+        [Route("~/api/file/write_to_file")]
+        [HttpPost]
+        public async Task<ActionResult<Packet>> WriteToFile([FromForm] WriteToFileForm form)
+        {
+            if (form.File == null || form.File.Length == 0) return new Packet {Status = "error_0"};
+
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = Security.Authenticate(dbContext, Request.Headers[AuthExtracter.AK]);
+                if (session == null) return new Packet() {Status = "error_1"};
+                
+                var guid = Guid.NewGuid().ToString();
+
+                StreamRepo.FileStreams.Add(guid, form.File);
+                
+                var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
+                                      SharedArea.GlobalVariables.FILE_QUEUE_NAME + "?autodelete=true&durable=false&temporary=true");
+                var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
+                IRequestClient<WriteToFileRequest, WriteToFileResponse> client =
+                    new MessageRequestClient<WriteToFileRequest, WriteToFileResponse>(
+                        Program.Bus, address, requestTimeout);
+                
+                var result = await client.Request<WriteToFileRequest, WriteToFileResponse>(new
+                {
+                    Headers = Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
+                    SessionId = session.SessionId,
+                    StreamCode = guid,
+                    Packet = new Packet() {File = new File() {FileId = form.FileId}}
+                });
+
+                StreamRepo.FileStreams.Remove(guid);
+
+                return result.Packet;
+            }
+        }
+
+        [Route("~/api/file/get_file_size")]
+        [HttpPost]
+        public async Task<ActionResult<Packet>> GetFileSize([FromBody] Packet packet)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = Security.Authenticate(dbContext, Request.Headers[AuthExtracter.AK]);
+                if (session == null) return new Packet() {Status = "error_0"};
+
+                var result = await SharedArea.Transport.DirectService<GetFileSizeRequest, GetFileSizeResponse>(
+                    Program.Bus,
+                    SharedArea.GlobalVariables.FILE_QUEUE_NAME,
+                    session.SessionId,
+                    Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
+                    packet);
+
+                return result.Packet;
+            }
+        }
 
         [Route("~/api/file/get_file_upload_stream")]
         [HttpPost]
@@ -42,22 +99,18 @@ namespace ApiGateway.Controllers
         [HttpPost]
         public async Task<ActionResult<Packet>> UploadPhoto([FromForm] PhotoUploadForm form)
         {
-            if (form.File == null || form.File.Length == 0) return new Packet {Status = "error_3"};
             using (var context = new DatabaseContext())
             {
                 var session = Security.Authenticate(context, Request.Headers[AuthExtracter.AK]);
                 if (session == null) return new Packet {Status = "error_0"};
 
-                var guid = Guid.NewGuid().ToString();
-
-                StreamRepo.FileStreams.Add(guid, form.File);
-
                 var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
-                                      SharedArea.GlobalVariables.FILE_QUEUE_NAME);
+                                      SharedArea.GlobalVariables.FILE_QUEUE_NAME + "?autodelete=true&durable=false&temporary=true");
                 var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
                 IRequestClient<UploadPhotoRequest, UploadPhotoResponse> client =
                     new MessageRequestClient<UploadPhotoRequest, UploadPhotoResponse>(
                         Program.Bus, address, requestTimeout);
+                
                 var puf = new PhotoUF()
                 {
                     ComplexId = form.ComplexId,
@@ -66,15 +119,13 @@ namespace ApiGateway.Controllers
                     Height = form.Height,
                     IsAvatar = form.IsAvatar
                 };
-                var result = await client.Request(new
+                
+                var result = await client.Request<UploadPhotoRequest, UploadPhotoResponse>(new
                 {
                     Headers = Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                     Form = puf,
-                    SessionId = session.SessionId,
-                    StreamCode = guid
+                    SessionId = session.SessionId
                 });
-
-                StreamRepo.FileStreams.Remove(guid);
 
                 return result.Packet;
             }
@@ -85,18 +136,13 @@ namespace ApiGateway.Controllers
         [HttpPost]
         public async Task<ActionResult<Packet>> UploadAudio([FromForm] AudioUploadForm form)
         {
-            if (form.File == null || form.File.Length == 0) return new Packet {Status = "error_3"};
             using (var context = new DatabaseContext())
             {
                 var session = Security.Authenticate(context, Request.Headers[AuthExtracter.AK]);
                 if (session == null) return new Packet {Status = "error_0"};
 
-                var guid = Guid.NewGuid().ToString();
-
-                StreamRepo.FileStreams.Add(guid, form.File);
-
                 var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
-                                      SharedArea.GlobalVariables.FILE_QUEUE_NAME);
+                                      SharedArea.GlobalVariables.FILE_QUEUE_NAME + "?autodelete=true&durable=false&temporary=true");
                 var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
                 IRequestClient<UploadAudioRequest, UploadAudioResponse> client =
                     new MessageRequestClient<UploadAudioRequest, UploadAudioResponse>(
@@ -112,11 +158,8 @@ namespace ApiGateway.Controllers
                 {
                     Headers = Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                     Form = auf,
-                    SessionId = session.SessionId,
-                    StreamCode = guid
+                    SessionId = session.SessionId
                 });
-
-                StreamRepo.FileStreams.Remove(guid);
 
                 return result.Packet;
             }
@@ -127,18 +170,14 @@ namespace ApiGateway.Controllers
         [HttpPost]
         public async Task<ActionResult<Packet>> UploadVideo([FromForm] VideoUploadForm form)
         {
-            if (form.File == null || form.File.Length == 0) return new Packet {Status = "error_3"};
+            
             using (var context = new DatabaseContext())
             {
                 var session = Security.Authenticate(context, Request.Headers[AuthExtracter.AK]);
                 if (session == null) return new Packet {Status = "error_0"};
 
-                var guid = Guid.NewGuid().ToString();
-
-                StreamRepo.FileStreams.Add(guid, form.File);
-
                 var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
-                                      SharedArea.GlobalVariables.FILE_QUEUE_NAME);
+                                      SharedArea.GlobalVariables.FILE_QUEUE_NAME + "?autodelete=true&durable=false&temporary=true");
                 var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
                 IRequestClient<UploadVideoRequest, UploadVideoResponse> client =
                     new MessageRequestClient<UploadVideoRequest, UploadVideoResponse>(
@@ -154,11 +193,8 @@ namespace ApiGateway.Controllers
                 {
                     Headers = Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                     Form = vuf,
-                    SessionId = session.SessionId,
-                    StreamCode = guid
+                    SessionId = session.SessionId
                 });
-
-                StreamRepo.FileStreams.Remove(guid);
 
                 return result.Packet;
             }
@@ -171,7 +207,7 @@ namespace ApiGateway.Controllers
             var guid = Guid.NewGuid().ToString();
 
             var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
-                                  SharedArea.GlobalVariables.FILE_QUEUE_NAME);
+                                  SharedArea.GlobalVariables.FILE_QUEUE_NAME + "?autodelete=true&durable=false&temporary=true");
             var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
             IRequestClient<DownloadBotAvatarRequest, DownloadBotAvatarResponse> client =
                 new MessageRequestClient<DownloadBotAvatarRequest, DownloadBotAvatarResponse>(
@@ -223,7 +259,7 @@ namespace ApiGateway.Controllers
                 var guid = Guid.NewGuid().ToString();
 
                 var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
-                                      SharedArea.GlobalVariables.FILE_QUEUE_NAME);
+                                      SharedArea.GlobalVariables.FILE_QUEUE_NAME + "?autodelete=true&durable=false&temporary=true");
                 var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
                 IRequestClient<DownloadRoomAvatarRequest, DownloadRoomAvatarResponse> client =
                     new MessageRequestClient<DownloadRoomAvatarRequest, DownloadRoomAvatarResponse>(
@@ -273,7 +309,7 @@ namespace ApiGateway.Controllers
             var guid = Guid.NewGuid().ToString();
 
             var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
-                                  SharedArea.GlobalVariables.FILE_QUEUE_NAME);
+                                  SharedArea.GlobalVariables.FILE_QUEUE_NAME + "?autodelete=true&durable=false&temporary=true");
             var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
             IRequestClient<DownloadComplexAvatarRequest, DownloadComplexAvatarResponse> client =
                 new MessageRequestClient<DownloadComplexAvatarRequest, DownloadComplexAvatarResponse>(
@@ -320,7 +356,7 @@ namespace ApiGateway.Controllers
             var guid = Guid.NewGuid().ToString();
 
             var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
-                                  SharedArea.GlobalVariables.FILE_QUEUE_NAME);
+                                  SharedArea.GlobalVariables.FILE_QUEUE_NAME + "?autodelete=true&durable=false&temporary=true");
             var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
             IRequestClient<DownloadUserAvatarRequest, DownloadUserAvatarResponse> client =
                 new MessageRequestClient<DownloadUserAvatarRequest, DownloadUserAvatarResponse>(
@@ -397,7 +433,7 @@ namespace ApiGateway.Controllers
                 var guid = Guid.NewGuid().ToString();
 
                 var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
-                                      SharedArea.GlobalVariables.FILE_QUEUE_NAME);
+                                      SharedArea.GlobalVariables.FILE_QUEUE_NAME + "?autodelete=true&durable=false&temporary=true");
                 var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
                 IRequestClient<DownloadFileRequest, DownloadFileResponse> client =
                     new MessageRequestClient<DownloadFileRequest, DownloadFileResponse>(

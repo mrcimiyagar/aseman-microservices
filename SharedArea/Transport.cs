@@ -1,22 +1,31 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MassTransit;
 using SharedArea.Commands;
+using SharedArea.Commands.File;
+using SharedArea.Forms;
 using SharedArea.Middles;
 
 namespace SharedArea
 {
     public static class Transport
     {
-        public static void NotifyService<TA>(IBusControl bus, Packet packet, IEnumerable destinations) where TA : class
+        public static void NotifyService<TA, TB>(IBusControl bus, Packet packet, IEnumerable destinations) 
+            where TA : class
+            where TB : class
         {
-            var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + SharedArea.GlobalVariables.API_GATEWAY_INTERNAL_QUEUE_NAME);
-            bus.GetSendEndpoint(address).Result.Send<TA>(new
+            var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + SharedArea.GlobalVariables.API_GATEWAY_INTERNAL_QUEUE_NAME
+                                  + "?autodelete=true&durable=false&temporary=true");
+            var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
+            IRequestClient<TA, TB> client = new MessageRequestClient<TA, TB>(bus, address, requestTimeout);
+            var enumerable = destinations.Cast<object>().ToArray();
+            client.Request(new
             {
                 Packet = packet,
-                Destinations = destinations
+                Destinations = enumerable
             }).Wait();
         }
 
@@ -25,7 +34,7 @@ namespace SharedArea
             where TB : class
         {
             var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + SharedArea.GlobalVariables
-                                      .API_GATEWAY_INTERNAL_QUEUE_NAME);
+                                      .API_GATEWAY_INTERNAL_QUEUE_NAME+ "?autodelete=true&durable=false&temporary=true");
             var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
             IRequestClient<TA, TB> client = new MessageRequestClient<TA, TB>(bus, address, requestTimeout);
             var result = await client.Request<TA, TB>(new
@@ -41,7 +50,7 @@ namespace SharedArea
             where TA : class
             where TB : class
         {
-            var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + queueName);
+            var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + queueName + "?autodelete=true&durable=false&temporary=true");
             var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
             IRequestClient<TA, TB> client = new MessageRequestClient<TA, TB>(bus, address, requestTimeout);
             var result = await client.Request<TA, TB>(new
@@ -58,7 +67,7 @@ namespace SharedArea
             where TA : class
             where TB : class
         {
-            var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + queueName);
+            var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + queueName + "?autodelete=true&durable=false&temporary=true");
             var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
             IRequestClient<TA, TB> client = new MessageRequestClient<TA, TB>(bus, address, requestTimeout);
             var result = await client.Request<TA, TB>(new
@@ -74,7 +83,7 @@ namespace SharedArea
             where TA : class
             where TB : class
         {
-            var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + queueName);
+            var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + queueName + "?autodelete=true&durable=false&temporary=true");
             var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
             IRequestClient<TA, TB> client = new MessageRequestClient<TA, TB>(bus, address, requestTimeout);
             var result = await client.Request<TA, TB>(new
@@ -89,7 +98,7 @@ namespace SharedArea
             where TA : class
             where TB : class
         {
-            var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + queueName);
+            var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + queueName + "?autodelete=true&durable=false&temporary=true");
             var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
             IRequestClient<TA, TB> client = new MessageRequestClient<TA, TB>(bus, address, requestTimeout);
             var result = await client.Request<TA, TB>(new
@@ -104,7 +113,7 @@ namespace SharedArea
             where TA : class
             where TB : class
         {
-            var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + queueName);
+            var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + queueName + "?autodelete=true&durable=false&temporary=true");
             var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
             IRequestClient<TA, TB> client = new MessageRequestClient<TA, TB>(bus, address, requestTimeout);
             var result = await client.Request<TA, TB>(new
@@ -116,7 +125,8 @@ namespace SharedArea
         
         public static void Push<TA>(IBusControl bus, Push push) where TA : class
         {
-            var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + SharedArea.GlobalVariables.API_GATEWAY_INTERNAL_QUEUE_NAME);
+            var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" + SharedArea.GlobalVariables.API_GATEWAY_INTERNAL_QUEUE_NAME
+                                  + "?autodelete=true&durable=false&temporary=true");
             bus.GetSendEndpoint(address).Result.Send<TA>(push);
         }
     }

@@ -8,6 +8,8 @@ namespace SharedArea.Entities
         public int Width { get; set; }
         [JsonProperty("height")]
         public int Height { get; set; }
+        [JsonProperty("isAvatar")]
+        public bool IsAvatar { get; set; }
 
         public Photo()
         {

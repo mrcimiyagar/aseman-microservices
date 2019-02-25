@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using SharedArea.Entities;
+﻿using SharedArea.Entities;
 
 namespace SharedArea.Notifications
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
+using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
 namespace SharedArea.Entities
@@ -24,5 +24,8 @@ namespace SharedArea.Entities
         public virtual List<Message> Messages { get; set; }
         [JsonProperty("files")]
         public virtual List<FileUsage> Files { get; set; }
+        [NotMapped]
+        [JsonProperty("lastAction")]
+        public virtual Message LastAction { get; set; }
     }
 }

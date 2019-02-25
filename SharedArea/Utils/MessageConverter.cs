@@ -12,7 +12,7 @@ namespace SharedArea.Utils
             return (objectType == typeof(Message));
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
             var jo = JObject.Load(reader);
 
@@ -30,14 +30,14 @@ namespace SharedArea.Utils
                     return jo.ToObject<ServiceMessage>(serializer);
                 default:
                 {
-                    return jo.ToObject<Message>(JsonSerializer.CreateDefault());
+                    return jo.ToObject<Message>(Newtonsoft.Json.JsonSerializer.CreateDefault());
                 }
             }
         }
 
         public override bool CanWrite => false;
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)
         {
             throw new NotImplementedException();
         }

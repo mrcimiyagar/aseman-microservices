@@ -1,6 +1,4 @@
-﻿using SharedArea.Entities;
-
-namespace SharedArea.Notifications
+﻿namespace SharedArea.Notifications
 {
     public class UserJointComplexNotification : Notification
     {

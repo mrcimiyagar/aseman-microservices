@@ -30,18 +30,6 @@
   "frameworks": {
     "netcoreapp2.2": {
       "dependencies": {
-        "MassTransit": {
-          "target": "Package",
-          "version": "[5.2.1, )"
-        },
-        "MassTransit.NLog": {
-          "target": "Package",
-          "version": "[5.2.1, )"
-        },
-        "MassTransit.RabbitMQ": {
-          "target": "Package",
-          "version": "[5.2.1, )"
-        },
         "Microsoft.EntityFrameworkCore": {
           "target": "Package",
           "version": "[2.2.1, )"

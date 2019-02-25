@@ -45,6 +45,7 @@
             <e p="PhotoUploadForm.cs" t="Include" />
             <e p="TakeFileDSF.cs" t="Include" />
             <e p="VideoUploadForm.cs" t="Include" />
+            <e p="WriteToFileForm.cs" t="Include" />
           </e>
           <e p="NotifierStreamResult.cs" t="Include" />
         </e>
@@ -973,41 +974,71 @@
             <e p="DownloadRoomAvatarResponse.cs" t="Include" />
             <e p="DownloadUserAvatarRequest.cs" t="Include" />
             <e p="DownloadUserAvatarResponse.cs" t="Include" />
+            <e p="GetFileSizeRequest.cs" t="Include" />
+            <e p="GetFileSizeResponse.cs" t="Include" />
             <e p="UploadAudioRequest.cs" t="Include" />
             <e p="UploadAudioResponse.cs" t="Include" />
             <e p="UploadPhotoRequest.cs" t="Include" />
             <e p="UploadPhotoResponse.cs" t="Include" />
             <e p="UploadVideoRequest.cs" t="Include" />
             <e p="UploadVideoResponse.cs" t="Include" />
+            <e p="WriteToFileRequest.cs" t="Include" />
+            <e p="WriteToFileResponse.cs" t="Include" />
           </e>
           <e p="Internal" t="Include">
             <e p="Notifications" t="Include">
               <e p="AccountCreatedNotif.cs" t="Include" />
+              <e p="AccountCreatedNotifResponse.cs" t="Include" />
               <e p="AudioCreatedNotif.cs" t="Include" />
+              <e p="AudioCreatedNotifResponse.cs" t="Include" />
               <e p="BotCreatedNotif.cs" t="Include" />
+              <e p="BotCreatedNotifResponse.cs" t="Include" />
               <e p="BotProfileUpdatedNotif.cs" t="Include" />
+              <e p="BotProfileUpdatedNotifResponse.cs" t="Include" />
               <e p="BotSubscribedNotif.cs" t="Include" />
+              <e p="BotSubscribedNotifResponse.cs" t="Include" />
               <e p="ComplexCreatedNotif.cs" t="Include" />
+              <e p="ComplexCreatedNotifResponse.cs" t="Include" />
               <e p="ComplexDeletionNotif.cs" t="Include" />
+              <e p="ComplexDeletionNotifResponse.cs" t="Include" />
               <e p="ComplexProfileUpdatedNotif.cs" t="Include" />
+              <e p="ComplexProfileUpdatedNotifResponse.cs" t="Include" />
               <e p="ContactCreatedNotif.cs" t="Include" />
+              <e p="ContactCreatedNotifResponse.cs" t="Include" />
               <e p="InviteAcceptedNotif.cs" t="Include" />
+              <e p="InviteAcceptedNotifResponse.cs" t="Include" />
               <e p="InviteCancelledNotif.cs" t="Include" />
+              <e p="InviteCancelledNotifResponse.cs" t="Include" />
               <e p="InviteCreatedNotif.cs" t="Include" />
-              <e p="InvitedIgnoredNotif.cs" t="Include" />
+              <e p="InviteCreatedNotifResponse.cs" t="Include" />
+              <e p="InviteIgnoredNotif.cs" t="Include" />
+              <e p="InviteIgnoredNotifResponse.cs" t="Include" />
               <e p="MembershipCreatedNotif.cs" t="Include" />
+              <e p="MembershipCreatedNotifResponse.cs" t="Include" />
               <e p="PhotoCreatedNotif.cs" t="Include" />
+              <e p="PhotoCreatedNotifResponse.cs" t="Include" />
               <e p="RoomCreatedNotif.cs" t="Include" />
+              <e p="RoomCreatedNotifResponse.cs" t="Include" />
               <e p="RoomDeletionNotif.cs" t="Include" />
+              <e p="RoomDeletionNotifResponse.cs" t="Include" />
               <e p="RoomProfileUpdatedNotif.cs" t="Include" />
+              <e p="RoomProfileUpdatedNotifResponse.cs" t="Include" />
               <e p="SessionCreatedNotif.cs" t="Include" />
+              <e p="SessionCreatedNotifResponse.cs" t="Include" />
               <e p="SessionUpdatedNotif.cs" t="Include" />
+              <e p="SessionUpdatedNotifResponse.cs" t="Include" />
               <e p="UserCreatedNotif.cs" t="Include" />
+              <e p="UserCreatedNotifResponse.cs" t="Include" />
               <e p="UserProfileUpdatedNotif.cs" t="Include" />
+              <e p="UserProfileUpdatedNotifResponse.cs" t="Include" />
               <e p="VideoCreatedNotif.cs" t="Include" />
+              <e p="VideoCreatedNotifResponse.cs" t="Include" />
               <e p="WorkershipCreatedNotif.cs" t="Include" />
+              <e p="WorkershipCreatedNotifResponse.cs" t="Include" />
               <e p="WorkershipDeletedNotif.cs" t="Include" />
+              <e p="WorkershipDeletedNotifResponse.cs" t="Include" />
               <e p="WorkershipUpdatedNotif.cs" t="Include" />
+              <e p="WorkershipUpdatedNotifResponse.cs" t="Include" />
             </e>
             <e p="Requests" t="Include">
               <e p="ConsolidateContactRequest.cs" t="Include" />
@@ -1063,6 +1094,8 @@
             <e p="CreateFileMessageResponse.cs" t="Include" />
             <e p="CreateTextMessageRequest.cs" t="Include" />
             <e p="CreateTextMessageResponse.cs" t="Include" />
+            <e p="GetLastActionsRequest.cs" t="Include" />
+            <e p="GetLastActionsResponse.cs" t="Include" />
             <e p="GetMessageSeenCountRequest.cs" t="Include" />
             <e p="GetMessageSeenCountResponse.cs" t="Include" />
             <e p="GetMessagesRequest.cs" t="Include" />
@@ -1290,9 +1323,15 @@
         <e p="Transport.cs" t="Include" />
         <e p="Utils" t="Include">
           <e p="AuthExtracter.cs" t="Include" />
+          <e p="ConsumeObserver.cs" t="Include" />
           <e p="DatabaseConfig.cs" t="Include" />
+          <e p="EndpointConfigurator.cs" t="Include" />
+          <e p="GlobalConsumer.cs" t="Include" />
+          <e p="JsonSerializer.cs" t="Include" />
           <e p="MessageConverter.cs" t="Include" />
           <e p="MessageFormatter.cs" t="Include" />
+          <e p="ReceiveObserver.cs" t="Include" />
+          <e p="SendObserver.cs" t="Include" />
         </e>
       </e>
       <e p="StorePlatform" t="IncludeRecursive">

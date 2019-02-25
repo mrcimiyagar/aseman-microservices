@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
-using GreenPipes;
-using GreenPipes.Filters.Log;
 using MassTransit;
-using MassTransit.Logging;
-using MassTransit.NLogIntegration;
 using Newtonsoft.Json;
-using Serilog;
 using SharedArea.Entities;
 using SharedArea.Utils;
 using StorePlatform.Consumers;
@@ -55,17 +49,21 @@ namespace StorePlatform
                     options.NullValueHandling = NullValueHandling.Ignore;
                     return options;
                 });
-                sbc.UseLog(Console.Out, MessageFormatter.Formatter);
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.STORE_QUEUE_NAME, ep =>
                 {
-                    ep.UseConcurrencyLimit(1024);
-                    ep.PrefetchCount = 1024;
-                    ep.Consumer<StoreConsumer>();
-                    ep.Consumer<NotifConsumer>();
+                    EndpointConfigurator.ConfigEndpoint(ep);
+                    ep.Consumer<StoreConsumer>(EndpointConfigurator.ConfigConsumer);
+                    ep.Consumer<NotifConsumer>(EndpointConfigurator.ConfigConsumer);
                 });
             });
 
+            Program.Bus.ConnectSendObserver(new SendObserver());
+            Program.Bus.ConnectConsumeObserver(new ConsumeObserver());
+            Program.Bus.ConnectReceiveObserver(new ReceiveObserver());
+
             Bus.Start();
+            
+            Console.WriteLine("Bus loaded");
         }
     }
 }

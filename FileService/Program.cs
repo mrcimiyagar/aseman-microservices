@@ -1,9 +1,7 @@
 ﻿using System;
 using FileService.Consumers;
 using FileService.DbContexts;
-using GreenPipes;
 using MassTransit;
-using MassTransit.NLogIntegration;
 using Newtonsoft.Json;
 using SharedArea.Utils;
 
@@ -40,17 +38,21 @@ namespace FileService
                     options.NullValueHandling = NullValueHandling.Ignore;
                     return options;
                 });
-                sbc.UseLog(Console.Out, MessageFormatter.Formatter);
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.FILE_QUEUE_NAME, ep =>
                 {
-                    ep.UseConcurrencyLimit(1024);
-                    ep.PrefetchCount = 1024;
-                    ep.Consumer<FileConsumer>();
-                    ep.Consumer<NotifConsumer>();
+                    EndpointConfigurator.ConfigEndpoint(ep);
+                    ep.Consumer<FileConsumer>(EndpointConfigurator.ConfigConsumer);
+                    ep.Consumer<NotifConsumer>(EndpointConfigurator.ConfigConsumer);
                 });
             });
 
+            Program.Bus.ConnectSendObserver(new SendObserver());
+            Program.Bus.ConnectConsumeObserver(new ConsumeObserver());
+            Program.Bus.ConnectReceiveObserver(new ReceiveObserver());
+
             Bus.Start();
+            
+            Console.WriteLine("Bus loaded");
         }
     }
 }

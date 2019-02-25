@@ -1,7 +1,5 @@
 ﻿using System;
-using GreenPipes;
 using MassTransit;
-using MassTransit.NLogIntegration;
 using Newtonsoft.Json;
 using SearchPlatform.Consumers;
 using SearchPlatform.DbContexts;
@@ -40,17 +38,21 @@ namespace SearchPlatform
                     options.NullValueHandling = NullValueHandling.Ignore;
                     return options;
                 });
-                sbc.UseLog(Console.Out, MessageFormatter.Formatter);
                 sbc.ReceiveEndpoint(host, SharedArea.GlobalVariables.SEARCH_QUEUE_NAME, ep =>
                 {
-                    ep.UseConcurrencyLimit(1024);
-                    ep.PrefetchCount = 1024;
-                    ep.Consumer<SearchConsumer>();
-                    ep.Consumer<NotifConsumer>();
+                    EndpointConfigurator.ConfigEndpoint(ep);
+                    ep.Consumer<SearchConsumer>(EndpointConfigurator.ConfigConsumer);
+                    ep.Consumer<NotifConsumer>(EndpointConfigurator.ConfigConsumer);
                 });
             });
 
+            Program.Bus.ConnectSendObserver(new SendObserver());
+            Program.Bus.ConnectConsumeObserver(new ConsumeObserver());
+            Program.Bus.ConnectReceiveObserver(new ReceiveObserver());
+
             Bus.Start();
+            
+            Console.WriteLine("Bus loaded");
         }
     }
 }

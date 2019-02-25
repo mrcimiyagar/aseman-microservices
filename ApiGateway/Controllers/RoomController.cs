@@ -1,12 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using ApiGateway.DbContexts;
 using ApiGateway.Hubs;
 using ApiGateway.Utils;
-using SharedArea.Entities;
 using SharedArea.Middles;
-using SharedArea.Notifications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using SharedArea.Commands.Room;

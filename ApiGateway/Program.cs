@@ -1,11 +1,8 @@
-﻿using System;
+﻿
 using System.IO;
-using ApiGateway.Consumers;
 using MassTransit;
-using MassTransit.NLogIntegration;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Newtonsoft.Json;
 
 namespace ApiGateway
 {

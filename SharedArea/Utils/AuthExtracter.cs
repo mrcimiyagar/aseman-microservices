@@ -1,5 +1,4 @@
-﻿using System;
-using SharedArea.Middles;
+﻿using SharedArea.Middles;
 
 namespace SharedArea.Utils
 {

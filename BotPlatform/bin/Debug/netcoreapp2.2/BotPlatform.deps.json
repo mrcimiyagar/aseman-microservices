@@ -1,16 +1,13 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.2",
-    "signature": "8c90615c62dad6c7b79f0ba306af3ccf89125d83"
+    "signature": "73aad08c6ef2296bcbf31e3a92f4e6f6ad0b6f9f"
   },
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.2": {
       "BotPlatform/1.0.0": {
         "dependencies": {
-          "MassTransit": "5.2.1",
-          "MassTransit.NLog": "5.2.1",
-          "MassTransit.RabbitMQ": "5.2.1",
           "Microsoft.EntityFrameworkCore": "2.2.1",
           "Microsoft.EntityFrameworkCore.SqlServer": "2.2.1",
           "SharedArea": "1.0.0"
@@ -44,21 +41,21 @@
           }
         }
       },
-      "GreenPipes/2.1.3": {
+      "GreenPipes/2.1.4": {
         "dependencies": {
           "Microsoft.Extensions.PlatformAbstractions": "1.1.0",
           "System.Reflection.Emit": "4.3.0"
         },
         "runtime": {
           "lib/netstandard2.0/GreenPipes.dll": {
-            "assemblyVersion": "2.1.3.114",
-            "fileVersion": "2.1.3.114"
+            "assemblyVersion": "2.1.4.118",
+            "fileVersion": "2.1.4.118"
           }
         }
       },
-      "MassTransit/5.2.1": {
+      "MassTransit/5.3.2": {
         "dependencies": {
-          "GreenPipes": "2.1.3",
+          "GreenPipes": "2.1.4",
           "NewId": "3.0.1",
           "Newtonsoft.Json": "11.0.2",
           "Newtonsoft.Json.Bson": "1.0.1",
@@ -74,62 +71,23 @@
         },
         "runtime": {
           "lib/netstandard2.0/MassTransit.dll": {
-            "assemblyVersion": "5.2.1.1808",
-            "fileVersion": "5.2.1.1808"
+            "assemblyVersion": "5.3.2.0",
+            "fileVersion": "5.3.2.0"
           }
         }
       },
-      "MassTransit.LibLog/1.0.0": {
+      "MassTransit.RabbitMQ/5.3.2": {
         "dependencies": {
-          "MassTransit": "5.2.1"
-        },
-        "runtime": {
-          "lib/net40/MassTransit.LibLog.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
-          }
-        }
-      },
-      "MassTransit.NLog/5.2.1": {
-        "dependencies": {
-          "GreenPipes": "2.1.3",
-          "MassTransit": "5.2.1",
-          "NLog": "4.5.11",
-          "Newtonsoft.Json": "11.0.2"
-        },
-        "runtime": {
-          "lib/netstandard2.0/MassTransit.NLogIntegration.dll": {
-            "assemblyVersion": "5.2.1.1808",
-            "fileVersion": "5.2.1.1808"
-          }
-        }
-      },
-      "MassTransit.RabbitMQ/5.2.1": {
-        "dependencies": {
-          "GreenPipes": "2.1.3",
-          "MassTransit": "5.2.1",
+          "GreenPipes": "2.1.4",
+          "MassTransit": "5.3.2",
           "NewId": "3.0.1",
           "Newtonsoft.Json": "11.0.2",
           "RabbitMQ.Client": "5.1.0"
         },
         "runtime": {
           "lib/netstandard2.0/MassTransit.RabbitMqTransport.dll": {
-            "assemblyVersion": "5.2.1.1808",
-            "fileVersion": "5.2.1.1808"
-          }
-        }
-      },
-      "MassTransit.SerilogIntegration/5.2.1": {
-        "dependencies": {
-          "GreenPipes": "2.1.3",
-          "MassTransit": "5.2.1",
-          "Newtonsoft.Json": "11.0.2",
-          "Serilog": "2.7.1"
-        },
-        "runtime": {
-          "lib/netstandard2.0/MassTransit.SerilogIntegration.dll": {
-            "assemblyVersion": "5.2.1.1808",
-            "fileVersion": "5.2.1.1808"
+            "assemblyVersion": "5.3.2.0",
+            "fileVersion": "5.3.2.0"
           }
         }
       },
@@ -342,7 +300,7 @@
       },
       "MongoDB.Bson/2.7.3": {
         "dependencies": {
-          "System.Collections.NonGeneric": "4.3.0",
+          "System.Collections.NonGeneric": "4.0.1",
           "System.Diagnostics.Process": "4.3.0",
           "System.Dynamic.Runtime": "4.0.11",
           "System.Reflection.Emit.Lightweight": "4.3.0"
@@ -416,14 +374,6 @@
           "lib/netstandard1.3/Newtonsoft.Json.Bson.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.1.20722"
-          }
-        }
-      },
-      "NLog/4.5.11": {
-        "runtime": {
-          "lib/netstandard2.0/NLog.dll": {
-            "assemblyVersion": "4.0.0.0",
-            "fileVersion": "4.5.11.8645"
           }
         }
       },
@@ -619,17 +569,6 @@
           }
         }
       },
-      "Serilog/2.7.1": {
-        "dependencies": {
-          "System.Collections.NonGeneric": "4.3.0"
-        },
-        "runtime": {
-          "lib/netstandard1.3/Serilog.dll": {
-            "assemblyVersion": "2.0.0.0",
-            "fileVersion": "2.7.1.0"
-          }
-        }
-      },
       "System.Buffers/4.3.0": {
         "dependencies": {
           "System.Diagnostics.Debug": "4.3.0",
@@ -659,7 +598,7 @@
         }
       },
       "System.Collections.Immutable/1.5.0": {},
-      "System.Collections.NonGeneric/4.3.0": {
+      "System.Collections.NonGeneric/4.0.1": {
         "dependencies": {
           "System.Diagnostics.Debug": "4.3.0",
           "System.Globalization": "4.3.0",
@@ -671,7 +610,7 @@
       },
       "System.Collections.Specialized/4.0.1": {
         "dependencies": {
-          "System.Collections.NonGeneric": "4.3.0",
+          "System.Collections.NonGeneric": "4.0.1",
           "System.Globalization": "4.3.0",
           "System.Globalization.Extensions": "4.3.0",
           "System.Resources.ResourceManager": "4.3.0",
@@ -696,7 +635,7 @@
       "System.ComponentModel.TypeConverter/4.1.0": {
         "dependencies": {
           "System.Collections": "4.3.0",
-          "System.Collections.NonGeneric": "4.3.0",
+          "System.Collections.NonGeneric": "4.0.1",
           "System.Collections.Specialized": "4.0.1",
           "System.ComponentModel": "4.0.1",
           "System.ComponentModel.Primitives": "4.1.0",
@@ -1550,11 +1489,8 @@
       },
       "SharedArea/1.0.0": {
         "dependencies": {
-          "MassTransit": "5.2.1",
-          "MassTransit.LibLog": "1.0.0",
-          "MassTransit.NLog": "5.2.1",
-          "MassTransit.RabbitMQ": "5.2.1",
-          "MassTransit.SerilogIntegration": "5.2.1",
+          "MassTransit": "5.3.2",
+          "MassTransit.RabbitMQ": "5.3.2",
           "Microsoft.EntityFrameworkCore": "2.2.1",
           "Microsoft.EntityFrameworkCore.SqlServer": "2.2.1",
           "MongoDB.Driver": "2.7.3"
@@ -1578,47 +1514,26 @@
       "path": "dnsclient/1.0.7",
       "hashPath": "dnsclient.1.0.7.nupkg.sha512"
     },
-    "GreenPipes/2.1.3": {
+    "GreenPipes/2.1.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-pZgFZw24uXg2K1vSKBLN6mIdbNowhicg8ryV8e3IjZB5cIGz471WnAvPV5lxeK5UV62tK2HGK0xi3C7OpO/58A==",
-      "path": "greenpipes/2.1.3",
-      "hashPath": "greenpipes.2.1.3.nupkg.sha512"
+      "sha512": "sha512-X5XFi7c3gsrCBqAVdZQ9ZRWSFgLElImp39uoq83oTBaI3rIOm4mVMu6PzXyfS4nPIFFR6SfnIoH51yJ1FgC8gg==",
+      "path": "greenpipes/2.1.4",
+      "hashPath": "greenpipes.2.1.4.nupkg.sha512"
     },
-    "MassTransit/5.2.1": {
+    "MassTransit/5.3.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-K9F/FZL+FgpfWhZtAVLQJ2xJ5z5nz/utu6WNsbRyIZ9jFaeoXDpn0+sINfRUdKtocm9wvzXUQsA693R6CE8LHA==",
-      "path": "masstransit/5.2.1",
-      "hashPath": "masstransit.5.2.1.nupkg.sha512"
+      "sha512": "sha512-pfFRsaRtebfdSXLyjpoqp9K/OSaHWlIE4ioYhdr6EWVZrY8vFQv5C2tMgRJ73isQ7fooJnM1NHak+wHRN5D0Dw==",
+      "path": "masstransit/5.3.2",
+      "hashPath": "masstransit.5.3.2.nupkg.sha512"
     },
-    "MassTransit.LibLog/1.0.0": {
+    "MassTransit.RabbitMQ/5.3.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-L5If0D4BpMG0XErBz0R0WxTxF2X34vqkujOkITtHG7cxNnVB0XrjS2DpxNXhRsLVMirCQn6itdWQGwP4QARd8w==",
-      "path": "masstransit.liblog/1.0.0",
-      "hashPath": "masstransit.liblog.1.0.0.nupkg.sha512"
-    },
-    "MassTransit.NLog/5.2.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-mWesRsEeBrfgm0cyLUPelxKitisEH79AdrWfQMWMo9w6m+tlwuQ1Puf8nTpkRotFqd+HG80lll+TRRDGi38cdw==",
-      "path": "masstransit.nlog/5.2.1",
-      "hashPath": "masstransit.nlog.5.2.1.nupkg.sha512"
-    },
-    "MassTransit.RabbitMQ/5.2.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-nR7Y+w9lgFpuMhXfOu6liqTkrezNM61YbewB6Gces0o3eRbgeje7DjoY5ZQnvVPUSc2+jbKaDfneFhDE2wDGSw==",
-      "path": "masstransit.rabbitmq/5.2.1",
-      "hashPath": "masstransit.rabbitmq.5.2.1.nupkg.sha512"
-    },
-    "MassTransit.SerilogIntegration/5.2.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-D8no+BiqJaZsBvsBrpKjSriWa5r3EbG+bikFBw4IZmaaRNagVDYlfhhP34jwrgRHB1++3pO0Ui3SDMQzILcZUA==",
-      "path": "masstransit.serilogintegration/5.2.1",
-      "hashPath": "masstransit.serilogintegration.5.2.1.nupkg.sha512"
+      "sha512": "sha512-9oZiZJWmTpZK35PMjUaet/Aisb5obDbT1bDcljkI5LyjguS3D9ueIDpy+TxG0O2/EejsNKFVzsqEKKvE6OyQ5A==",
+      "path": "masstransit.rabbitmq/5.3.2",
+      "hashPath": "masstransit.rabbitmq.5.3.2.nupkg.sha512"
     },
     "Microsoft.EntityFrameworkCore/2.2.1": {
       "type": "package",
@@ -1795,13 +1710,6 @@
       "path": "newtonsoft.json.bson/1.0.1",
       "hashPath": "newtonsoft.json.bson.1.0.1.nupkg.sha512"
     },
-    "NLog/4.5.11": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-7TI+dYvEIOcCN6fjr3yjMN5AtPBSbHNxKGmn/5rkqbBk81MGsnQBkParoGOidibDIe3dwThJJndxl7O3zmd3rA==",
-      "path": "nlog/4.5.11",
-      "hashPath": "nlog.4.5.11.nupkg.sha512"
-    },
     "RabbitMQ.Client/5.1.0": {
       "type": "package",
       "serviceable": true,
@@ -1956,13 +1864,6 @@
       "path": "runtime.win-x86.runtime.native.system.data.sqlclient.sni/4.4.0",
       "hashPath": "runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512"
     },
-    "Serilog/2.7.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-mqFJqhgmTv4th/nC1roPMWjGB3YSRH34J5XKq2OqzolJfUO4H3eeM7EJIpOjXV2XpIxFsGgBqiuhNxUt8WMdtg==",
-      "path": "serilog/2.7.1",
-      "hashPath": "serilog.2.7.1.nupkg.sha512"
-    },
     "System.Buffers/4.3.0": {
       "type": "package",
       "serviceable": true,
@@ -1991,12 +1892,12 @@
       "path": "system.collections.immutable/1.5.0",
       "hashPath": "system.collections.immutable.1.5.0.nupkg.sha512"
     },
-    "System.Collections.NonGeneric/4.3.0": {
+    "System.Collections.NonGeneric/4.0.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-/D3jtX0+u5+6rS3RGvTMyICPpIuzBgqtUYLjK1aXLua0nWH4JpM1H/tRk1Uxs6Fo0fe22jyJaTpoXPSu0il8Ug==",
-      "path": "system.collections.nongeneric/4.3.0",
-      "hashPath": "system.collections.nongeneric.4.3.0.nupkg.sha512"
+      "sha512": "sha512-XDijxhtvTsIFqXB3PbkPztkxnN4ro7kodqLQSg6mOpfWewiJcufYIV0VgO/fG9f79cic6rFfrxuCEtcru8Vz8g==",
+      "path": "system.collections.nongeneric/4.0.1",
+      "hashPath": "system.collections.nongeneric.4.0.1.nupkg.sha512"
     },
     "System.Collections.Specialized/4.0.1": {
       "type": "package",

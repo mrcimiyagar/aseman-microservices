@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.WebSockets;
 using ApiGateway.DbContexts;
 using ApiGateway.Utils;
 using Microsoft.AspNetCore.Mvc;

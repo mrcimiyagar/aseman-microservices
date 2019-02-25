@@ -1,13 +1,11 @@
-﻿using System.Data;
-using System.Linq;
-using System.Runtime.Serialization;
+﻿using System.Linq;
 
 namespace SharedArea
 {
     public class GlobalVariables
     {
         public const string RABBITMQ_SERVER_URL = "rabbitmq://localhost";
-        public const string RABBITMQ_SERVER_PATH = RABBITMQ_SERVER_URL + "?prefetch=32";
+        public const string RABBITMQ_SERVER_PATH = RABBITMQ_SERVER_URL + "?autodelete=true&durable=false&temporary=true";
         public const string RABBITMQ_USERNAME = "guest", RABBITMQ_PASSWORD = "guest";
         public const string FILE_TRANSFER_USERNAME = "guest", FILE_TRANSFER_PASSWORD = "guest";
         public const string SERVER_URL = "http://localhost:8080/";

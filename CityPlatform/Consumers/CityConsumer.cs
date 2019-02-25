@@ -207,7 +207,7 @@ namespace CityPlatform.Consumers
                 user.Avatar = packet.User.Avatar;
                 dbContext.SaveChanges();
 
-                SharedArea.Transport.NotifyService<UserProfileUpdatedNotif>(
+                SharedArea.Transport.NotifyService<UserProfileUpdatedNotif, UserProfileUpdatedNotifResponse>(
                     Program.Bus,
                     new Packet() {BaseUser = user},
                     SharedArea.GlobalVariables.AllQueuesExcept(new[]
@@ -249,7 +249,7 @@ namespace CityPlatform.Consumers
                     complex.Avatar = packet.Complex.Avatar;
                     dbContext.SaveChanges();
 
-                    SharedArea.Transport.NotifyService<ComplexProfileUpdatedNotif>(
+                    SharedArea.Transport.NotifyService<ComplexProfileUpdatedNotif, ComplexProfileUpdatedNotifResponse>(
                         Program.Bus,
                         new Packet() {Complex = complex},
                         SharedArea.GlobalVariables.AllQueuesExcept(new[]
@@ -316,7 +316,7 @@ namespace CityPlatform.Consumers
                     dbContext.AddRange(complex);
                     dbContext.SaveChanges();
 
-                    SharedArea.Transport.NotifyService<ComplexCreatedNotif>(
+                    SharedArea.Transport.NotifyService<ComplexCreatedNotif, ComplexCreatedNotifResponse>(
                         Program.Bus,
                         new Packet() {User = user, Complex = complex, ComplexSecret = complex.ComplexSecret},
                         SharedArea.GlobalVariables.AllQueuesExcept(new[]
@@ -421,7 +421,7 @@ namespace CityPlatform.Consumers
 
                             dbContext.SaveChanges();
 
-                            SharedArea.Transport.NotifyService<ComplexDeletionNotif>(
+                            SharedArea.Transport.NotifyService<ComplexDeletionNotif, ComplexDeletionNotifResponse>(
                                 Program.Bus,
                                 new Packet() {Complex = new Complex() {ComplexId = complex.ComplexId}},
                                 SharedArea.GlobalVariables.AllQueuesExcept(new[]
@@ -480,7 +480,7 @@ namespace CityPlatform.Consumers
                         room.Avatar = packet.Room.Avatar;
                         dbContext.SaveChanges();
 
-                        SharedArea.Transport.NotifyService<RoomProfileUpdatedNotif>(
+                        SharedArea.Transport.NotifyService<RoomProfileUpdatedNotif, RoomProfileUpdatedNotifResponse>(
                             Program.Bus,
                             new Packet() {Room = room},
                             SharedArea.GlobalVariables.AllQueuesExcept(new[]
@@ -532,7 +532,7 @@ namespace CityPlatform.Consumers
                         dbContext.Rooms.Remove(room);
                         dbContext.SaveChanges();
 
-                        SharedArea.Transport.NotifyService<RoomDeletionNotif>(
+                        SharedArea.Transport.NotifyService<RoomDeletionNotif, RoomDeletionNotifResponse>(
                             Program.Bus,
                             new Packet() {Room = room},
                             SharedArea.GlobalVariables.AllQueuesExcept(new[]
@@ -666,7 +666,7 @@ namespace CityPlatform.Consumers
                     dbContext.AddRange(complex, complexSecret, room, m1, m2, myContact, peerContact);
                     dbContext.SaveChanges();
 
-                    SharedArea.Transport.NotifyService<ContactCreatedNotif>(
+                    SharedArea.Transport.NotifyService<ContactCreatedNotif, ContactCreatedNotifResponse>(
                         Program.Bus,
                         new Packet()
                         {
@@ -807,7 +807,7 @@ namespace CityPlatform.Consumers
                                 dbContext.AddRange(invite);
                                 dbContext.SaveChanges();
 
-                                SharedArea.Transport.NotifyService<InviteCreatedNotif>(
+                                SharedArea.Transport.NotifyService<InviteCreatedNotif, InviteCreatedNotifResponse>(
                                     Program.Bus,
                                     new Packet() {Invite = invite, Complex = complex, User = human},
                                     SharedArea.GlobalVariables.AllQueuesExcept(new[]
@@ -908,7 +908,7 @@ namespace CityPlatform.Consumers
                         dbContext.Invites.Remove(invite);
                         dbContext.SaveChanges();
 
-                        SharedArea.Transport.NotifyService<InviteCancelledNotif>(
+                        SharedArea.Transport.NotifyService<InviteCancelledNotif, InviteCancelledNotifResponse>(
                             Program.Bus,
                             new Packet() {User = human, Invite = invite},
                             SharedArea.GlobalVariables.AllQueuesExcept(new[]
@@ -999,7 +999,7 @@ namespace CityPlatform.Consumers
                     dbContext.Messages.Add(message);
                     dbContext.SaveChanges();
 
-                    SharedArea.Transport.NotifyService<InviteAcceptedNotif>(
+                    SharedArea.Transport.NotifyService<InviteAcceptedNotif, InviteAcceptedNotifResponse>(
                         Program.Bus,
                         new Packet() {Invite = invite, Membership = membership, ServiceMessage = message, User = human},
                         SharedArea.GlobalVariables.AllQueuesExcept(new[]
@@ -1104,7 +1104,7 @@ namespace CityPlatform.Consumers
                     dbContext.Invites.Remove(invite);
                     dbContext.SaveChanges();
 
-                    SharedArea.Transport.NotifyService<InvitedIgnoredNotif>(
+                    SharedArea.Transport.NotifyService<InviteIgnoredNotif, InviteIgnoredNotifResponse>(
                         Program.Bus,
                         new Packet() {Invite = invite, User = human},
                         SharedArea.GlobalVariables.AllQueuesExcept(new[]
@@ -1304,7 +1304,7 @@ namespace CityPlatform.Consumers
                 bot.ViewURL = packet.Bot.ViewURL;
                 dbContext.SaveChanges();
 
-                SharedArea.Transport.NotifyService<BotProfileUpdatedNotif>(
+                SharedArea.Transport.NotifyService<BotProfileUpdatedNotif, BotProfileUpdatedNotifResponse>(
                     Program.Bus,
                     new Packet() {Bot = bot},
                     new []
@@ -1403,7 +1403,7 @@ namespace CityPlatform.Consumers
                 dbContext.AddRange(bot, botSecret, botSess, botCreation, subscription);
                 dbContext.SaveChanges();
 
-                SharedArea.Transport.NotifyService<BotCreatedNotif>(
+                SharedArea.Transport.NotifyService<BotCreatedNotif, BotCreatedNotifResponse>(
                     Program.Bus,
                     new Packet() {Bot = bot, BotCreation = botCreation, BotSubscription = subscription, User = user},
                     new []
@@ -1465,7 +1465,7 @@ namespace CityPlatform.Consumers
                 dbContext.AddRange(subscription);
                 dbContext.SaveChanges();
 
-                SharedArea.Transport.NotifyService<BotSubscribedNotif>(
+                SharedArea.Transport.NotifyService<BotSubscribedNotif, BotSubscribedNotifResponse>(
                     Program.Bus,
                     new Packet() {BotSubscription = subscription, Bot = bot, User = user},
                     new[]
@@ -1516,7 +1516,7 @@ namespace CityPlatform.Consumers
                         dbContext.AddRange(room);
                         dbContext.SaveChanges();
 
-                        SharedArea.Transport.NotifyService<RoomCreatedNotif>(
+                        SharedArea.Transport.NotifyService<RoomCreatedNotif, RoomCreatedNotifResponse>(
                             Program.Bus,
                             new Packet() {Room = room},
                             SharedArea.GlobalVariables.AllQueuesExcept(new[]

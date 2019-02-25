@@ -1,6 +1,6 @@
 ﻿namespace SharedArea.Commands.Internal.Notifications
 {
-    public class InvitedIgnoredNotif : Notification
+    public class BotProfileUpdatedNotifResponse : Response
     {
         
     }

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ApiGateway.DbContexts;
 using ApiGateway.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using MongoDB.Driver;
-using Remotion.Linq.Clauses;
 using SharedArea.Entities;
 using SharedArea.Notifications;
 

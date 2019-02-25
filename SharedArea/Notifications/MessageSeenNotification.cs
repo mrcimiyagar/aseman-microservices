@@ -1,7 +1,4 @@
-﻿using SharedArea.Commands.Message;
-using SharedArea.Entities;
-
-namespace SharedArea.Notifications
+﻿namespace SharedArea.Notifications
 {
     public class MessageSeenNotification : Notification
     {
