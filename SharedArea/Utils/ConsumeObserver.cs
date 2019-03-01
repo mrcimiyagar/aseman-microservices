@@ -9,7 +9,7 @@ namespace SharedArea.Utils
         Task IConsumeObserver.PreConsume<T>(ConsumeContext<T> context)
         {            
             var content = JsonSerializer.SerializeObject(context.Message);
-            Console.WriteLine($"== Consuming ===========================================" + Environment.NewLine +
+            Logger.Log("Microservices Bus", $"== Consuming ===========================================" + Environment.NewLine +
                               $"Message-type: {context.Message}, " + Environment.NewLine +
                               $"Content: " + (content.Length > 500 ? "body too big to be printed" : content) + Environment.NewLine +
                               $"Source-address: {context.SourceAddress}, " + Environment.NewLine +
@@ -29,15 +29,15 @@ namespace SharedArea.Utils
         Task IConsumeObserver.ConsumeFault<T>(ConsumeContext<T> context, Exception exception)
         {         
             var content = JsonSerializer.SerializeObject(context.Message);
-            Console.WriteLine($"== Error Consuming =====================================" + Environment.NewLine +
+            Logger.Log("Microservices Bus", $"== Error Consuming =====================================" + Environment.NewLine +
                               $"Message-type: {context.Message}, " + Environment.NewLine +
                               $"Content: " + (content.Length > 500 ? "body too big to be printed" : content) + Environment.NewLine +
                               $"Source-address: {context.SourceAddress}, " + Environment.NewLine +
                               $"Destination-address: {context.DestinationAddress}, " + Environment.NewLine +
-                              $"Fault-address: {context.FaultAddress}" + Environment.NewLine);
-            Console.WriteLine("");
-            Console.WriteLine(exception.ToString());
-            Console.WriteLine($"========================================================");
+                              $"Fault-address: {context.FaultAddress}" + Environment.NewLine +
+                              $"" + Environment.NewLine +
+                              $"" + exception.ToString() + Environment.NewLine +
+                              $"========================================================");
             return Task.CompletedTask;
         }
     }

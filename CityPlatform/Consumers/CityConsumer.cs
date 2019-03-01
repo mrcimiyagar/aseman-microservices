@@ -337,7 +337,7 @@ namespace CityPlatform.Consumers
                         Room = complex.Rooms[0],
                         RoomId = complex.Rooms[0].RoomId,
                         Text = "Room created.",
-                        Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds)
+                        Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
                     };
 
                     var result = await SharedArea.Transport.RequestService<PutServiceMessageRequest, PutServiceMessageResponse>(
@@ -700,7 +700,7 @@ namespace CityPlatform.Consumers
                     {
                         Text = "Room created.",
                         Room = room,
-                        Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds),
+                        Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
                         Author = null
                     };
 
@@ -755,6 +755,8 @@ namespace CityPlatform.Consumers
                         finalContext.Entry(finalMyContact).Reference(c => c.Complex).Load();
                         finalContext.Entry(finalMyContact.Complex).Collection(c => c.Rooms).Load();
                         finalContext.Entry(finalMyContact).Reference(c => c.Peer).Load();
+                        finalContext.Entry(finalMyContact.Complex).Collection(c => c.Members)
+                            .Query().Include(m => m.User).Load();
                     }
 
                     await context.RespondAsync(new CreateContactResponse()
@@ -985,7 +987,7 @@ namespace CityPlatform.Consumers
                         Room = hall,
                         Author = null,
                         Text = human.Title + " entered complex by invite.",
-                        Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds)
+                        Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
                     };
 
                     var result1 = await SharedArea.Transport
@@ -1537,7 +1539,7 @@ namespace CityPlatform.Consumers
                             Room = room,
                             RoomId = room.RoomId,
                             Text = "Room created.",
-                            Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds)
+                            Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
                         };
 
                         var result = await SharedArea.Transport.RequestService<PutServiceMessageRequest, PutServiceMessageResponse>(

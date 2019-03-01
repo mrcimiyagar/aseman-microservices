@@ -178,7 +178,7 @@ namespace EntryPlatform.Consumers
                                 Room = user.Memberships[0].Complex.Rooms[0],
                                 RoomId = user.Memberships[0].Complex.Rooms[0].RoomId,
                                 Text = "Room created.",
-                                Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds)
+                                Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
                             };
                             
                             await SharedArea.Transport
@@ -327,17 +327,18 @@ namespace EntryPlatform.Consumers
 
                 user.Title = "Deleted User";
                 user.Avatar = -1;
-                user.UserSecret.Email = "";                
+                user.UserSecret.Email = "";
                 dbContext.Sessions.RemoveRange(user.Sessions);
 
                 dbContext.SaveChanges();
 
                 var allServices = SharedArea.GlobalVariables.AllQueuesExcept(new string[] {SharedArea.GlobalVariables.ENTRY_QUEUE_NAME});
                 var deleteTasks = new Task[allServices.Length + 1];
+                var sesses = user.Sessions.ToList();
                 deleteTasks[0] = SharedArea.Transport.RequestService<ConsolidateDeleteAccountRequest, ConsolidateDeleteAccountResponse>(
                     Program.Bus,
                     "",
-                    new Packet() {User = user, Sessions = user.Sessions});
+                    new Packet() {User = user, Sessions = sesses});
                 var counter = 1;
                 foreach (var serviceName in allServices)
                 {

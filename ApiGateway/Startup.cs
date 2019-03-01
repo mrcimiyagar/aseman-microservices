@@ -7,6 +7,7 @@ using ApiGateway.Utils;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
@@ -37,6 +38,11 @@ namespace ApiGateway
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                 .AddJsonOptions(options => options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
+            services.Configure<FormOptions>(x =>
+            {
+                x.ValueLengthLimit = int.MaxValue;
+                x.MultipartBodyLengthLimit = 4294967296;
+            });
             services.AddSignalR(hubOptions =>
             {
                 hubOptions.EnableDetailedErrors = true;
@@ -77,8 +83,17 @@ namespace ApiGateway
             using (var dbContext = new DatabaseContext())
             {
                 DatabaseConfig.ConfigDatabase(dbContext);
+
+                foreach (var session in dbContext.Sessions)
+                {
+                    session.Online = false;
+                    session.ConnectionId = "";
+                }
+
+                dbContext.SaveChanges();
             }
             
+            Logger.Setup();
             MongoLayer.Setup();
             
             Pusher = new Pusher(notifsHub);

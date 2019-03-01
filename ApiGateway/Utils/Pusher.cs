@@ -1,58 +1,93 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ApiGateway.DbContexts;
 using ApiGateway.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using MongoDB.Driver;
+using Newtonsoft.Json;
 using SharedArea.Entities;
 using SharedArea.Notifications;
+using SharedArea.Utils;
+using File = System.IO.File;
+using JsonSerializer = SharedArea.Utils.JsonSerializer;
 
 namespace ApiGateway.Utils
 {
     public class Pusher
     {
+        enum NotifSenderState { WaitingForAck, EmptyQueue }
+        
         private readonly IHubContext<NotificationsHub> _notifsHub;
         private readonly Dictionary<long, CancellationTokenSource> _cancellationTokens;
+        private readonly Dictionary<long, NotifSenderState> _senderStates;
+        private readonly Dictionary<long, object> _stateLocks;
         
         public Pusher(IHubContext<NotificationsHub> notifsHub)
         {
             _notifsHub = notifsHub;
             _cancellationTokens = new Dictionary<long, CancellationTokenSource>();
+            _senderStates = new Dictionary<long, NotifSenderState>();
+            _stateLocks = new Dictionary<long, object>();
+        }
+
+        public void NotifyNotificationReceived(long sessionId)
+        {
+            _senderStates[sessionId] = NotifSenderState.EmptyQueue;
         }
 
         public void NextPush(long sessionId)
         {
-            Console.WriteLine("Pusing notification to client...");
-            
-            if (_cancellationTokens.ContainsKey(sessionId))
+            if (_senderStates.ContainsKey(sessionId))
             {
-                try
+                lock (_stateLocks[sessionId])
                 {
-                    _cancellationTokens[sessionId].Cancel();
+                    if (_senderStates[sessionId] == NotifSenderState.WaitingForAck) return;
                 }
-                catch (Exception)
-                {
-                    // ignored
-                }
+            }
+            else
+            {
+                _stateLocks[sessionId] = new object();
+            }
+            
+            _senderStates[sessionId] = NotifSenderState.WaitingForAck;
+            
+            try
+            {
+                _cancellationTokens[sessionId]?.Cancel();
+            }
+            catch (Exception)
+            {
+                // ignored
             }
             
             var cts = new CancellationTokenSource();
             _cancellationTokens[sessionId] = cts;
             
-            Task.Factory.StartNew(async () =>
+            Task.Run(async () =>
             {
                 using (var dbContext = new DatabaseContext())
                 {
                     var session = dbContext.Sessions.Find(sessionId);
-                    if (!session.Online) return;
+                    if (!session.Online)
+                    {
+                        _senderStates[sessionId] = NotifSenderState.EmptyQueue;
+                        return;
+                    }
                     using (var mongo = new MongoLayer())
                     {
-                        var n = mongo.GetNotifsColl().Find(notif => notif.Session.SessionId == sessionId).FirstOrDefault();
-                        if (n == null) return;
+                        var findable = mongo.GetNotifsColl().Find(notif => notif.Session.SessionId == sessionId);
+                        var n = findable.FirstOrDefault();
+                        if (n == null)
+                        {
+                            _senderStates[sessionId] = NotifSenderState.EmptyQueue;
+                            return;
+                        }
                         PushNotification(session, n);
                         await Task.Delay(10000, cts.Token);
+                        _senderStates[sessionId] = NotifSenderState.EmptyQueue;
                         NextPush(sessionId);
                     }
                 }
@@ -62,6 +97,8 @@ namespace ApiGateway.Utils
         private async void PushNotification(Session session, Notification notif)
         {
             notif.Type = notif.GetType().Name;
+            
+            Logger.Log("NotificationsLog", $"Pushing notification : {Environment.NewLine + JsonSerializer.SerializeObject(notif) + Environment.NewLine} to client...");
             
             if (notif.GetType() == typeof(AudioMessageNotification))
             {

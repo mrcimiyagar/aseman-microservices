@@ -18,36 +18,10 @@ namespace SharedArea.Utils
         , IConsumer<RoomDeletionNotif>, IConsumer<ContactCreatedNotif>, IConsumer<InviteCreatedNotif>
         , IConsumer<InviteCancelledNotif>, IConsumer<InviteAcceptedNotif>, IConsumer<InviteIgnoredNotif>
         , IConsumer<SessionUpdatedNotif>, IConsumer<ConsolidateLogoutRequest>, IConsumer<AccountCreatedNotif>
-        , IConsumer<DeleteAccountRequest>
 
         where T : DatabaseContext
     
     {
-        public async Task Consume(ConsumeContext<DeleteAccountRequest> context)
-        {
-            var gUser = context.Message.Packet.User;
-
-            using (var dbContext = (DatabaseContext) Activator.CreateInstance<T>())
-            {
-                var user = (User) dbContext.BaseUsers.Find(gUser.BaseUserId);
-
-                if (user != null)
-                {
-                    dbContext.Entry(user).Collection(u => u.Sessions).Load();
-                    dbContext.Entry(user).Reference(u => u.UserSecret).Load();
-
-                    user.Title = "Deleted User";
-                    user.Avatar = -1;
-                    user.UserSecret.Email = "";
-                    dbContext.Sessions.RemoveRange(user.Sessions);
-
-                    dbContext.SaveChanges();
-                }
-            }
-
-            await context.RespondAsync(new DeleteAccountResponse());
-        }
-        
         public async Task Consume(ConsumeContext<UserCreatedNotif> context)
         {
             using (var dbContext = (DatabaseContext) Activator.CreateInstance<T>())

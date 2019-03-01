@@ -25,7 +25,7 @@ namespace MessengerPlatform.Consumers
         , IConsumer<ConsolidateDeleteAccountRequest>,
         IConsumer<NotifyMessageSeenRequest>, IConsumer<GetLastActionsRequest>
         , IConsumer<GetMessageSeenCountRequest>, IConsumer<ConsolidateMakeAccountRequest>,
-        IConsumer<ConsolidateCreateRoomRequest>, IConsumer<ConsolidateCreateComplexRequest>, IConsumer<ConsolidateLogoutRequest>
+        IConsumer<ConsolidateCreateRoomRequest>, IConsumer<ConsolidateCreateComplexRequest>
     {
         public async Task Consume(ConsumeContext<ConsolidateCreateComplexRequest> context)
         {
@@ -48,23 +48,6 @@ namespace MessengerPlatform.Consumers
             }
 
             await context.RespondAsync(new ConsolidateCreateComplexResponse());
-        }
-
-        public async Task Consume(ConsumeContext<ConsolidateLogoutRequest> context)
-        {
-            var gSession = context.Message.Packet.Session;
-
-            using (var dbContext = new DatabaseContext())
-            {
-                var lSess = dbContext.Sessions.Find(gSession.SessionId);
-                if (lSess != null)
-                {
-                    dbContext.Sessions.RemoveRange(lSess);
-                    dbContext.SaveChanges();
-                }
-            }
-
-            await context.RespondAsync(new ConsolidateLogoutResponse());
         }
 
         public async Task Consume(ConsumeContext<GetMessagesRequest> context)
@@ -200,7 +183,7 @@ namespace MessengerPlatform.Consumers
                     Author = human,
                     Room = room,
                     Text = packet.TextMessage.Text,
-                    Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds)
+                    Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
                 };
                 dbContext.Messages.Add(message);
                 dbContext.SaveChanges();
@@ -302,7 +285,7 @@ namespace MessengerPlatform.Consumers
                         {
                             Author = human,
                             Room = room,
-                            Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds),
+                            Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
                             Photo = photo
                         };
                         break;
@@ -311,7 +294,7 @@ namespace MessengerPlatform.Consumers
                         {
                             Author = human,
                             Room = room,
-                            Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds),
+                            Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
                             Audio = audio
                         };
                         break;
@@ -320,7 +303,7 @@ namespace MessengerPlatform.Consumers
                         {
                             Author = human,
                             Room = room,
-                            Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds),
+                            Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
                             Video = video
                         };
                         break;
@@ -507,7 +490,7 @@ namespace MessengerPlatform.Consumers
                     Author = bot,
                     Room = room,
                     Text = packet.TextMessage.Text,
-                    Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds)
+                    Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
                 };
                 dbContext.Messages.Add(message);
                 dbContext.SaveChanges();
@@ -617,7 +600,7 @@ namespace MessengerPlatform.Consumers
                         {
                             Author = bot,
                             Room = room,
-                            Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds),
+                            Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
                             Photo = photo
                         };
                         break;
@@ -626,7 +609,7 @@ namespace MessengerPlatform.Consumers
                         {
                             Author = bot,
                             Room = room,
-                            Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds),
+                            Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
                             Audio = audio
                         };
                         break;
@@ -635,7 +618,7 @@ namespace MessengerPlatform.Consumers
                         {
                             Author = bot,
                             Room = room,
-                            Time = Convert.ToInt64((DateTime.Now - DateTime.MinValue).TotalMilliseconds),
+                            Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
                             Video = video
                         };
                         break;
@@ -1105,11 +1088,23 @@ namespace MessengerPlatform.Consumers
                     if (roomC.LastAction != null)
                     {
                         if (roomC.LastAction.GetType() == typeof(PhotoMessage))
+                        {
                             dbContext.Entry(roomC.LastAction).Reference(m => ((PhotoMessage) m).Photo).Load();
+                            dbContext.Entry(((PhotoMessage) roomC.LastAction).Photo).Collection(f => f.FileUsages)
+                                .Query().Where(fu => fu.RoomId == roomC.RoomId).Load();
+                        }
                         else if (roomC.LastAction.GetType() == typeof(AudioMessage))
+                        {
                             dbContext.Entry(roomC.LastAction).Reference(m => ((AudioMessage) m).Audio).Load();
+                            dbContext.Entry(((AudioMessage) roomC.LastAction).Audio).Collection(f => f.FileUsages)
+                                .Query().Where(fu => fu.RoomId == roomC.RoomId).Load();
+                        }
                         else if (roomC.LastAction.GetType() == typeof(VideoMessage))
+                        {
                             dbContext.Entry(roomC.LastAction).Reference(m => ((VideoMessage) m).Video).Load();
+                            dbContext.Entry(((VideoMessage) roomC.LastAction).Video).Collection(f => f.FileUsages)
+                                .Query().Where(fu => fu.RoomId == roomC.RoomId).Load();
+                        }
                         
                         roomC.LastAction.SeenByMe =
                             (dbContext.MessageSeens.Find(user.BaseUserId + "_" + roomC.LastAction.MessageId) != null);

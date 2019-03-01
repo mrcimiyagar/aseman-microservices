@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApiGateway.DbContexts;
+using ApiGateway.Utils;
 using MassTransit;
 using SharedArea.Commands.Auth;
 using SharedArea.Commands.Internal.Notifications;
@@ -11,6 +12,7 @@ using SharedArea.Commands.Internal.Responses;
 using SharedArea.Commands.Pushes;
 using SharedArea.Entities;
 using SharedArea.Notifications;
+using SharedArea.Utils;
 
 namespace ApiGateway.Consumers
 {

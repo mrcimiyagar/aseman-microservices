@@ -15,7 +15,7 @@ namespace SharedArea.Utils
             var definition = new { message = new object() };
             var ctx = JsonConvert.DeserializeAnonymousType(str, definition);
             var body = JsonSerializer.SerializeObject(ctx.message);
-            Console.WriteLine(
+            Logger.Log("Microservices Bus",
                 $"== Receiving ===========================================" + Environment.NewLine +
                 $"Message-type: {ctx.message.GetType()}, " + Environment.NewLine +
                 $"Content: " + (body.Length > 500 ? "body too big to be printed" : body) + Environment.NewLine +
@@ -49,14 +49,13 @@ namespace SharedArea.Utils
             var definition = new { message = new object() };
             var ctx = JsonConvert.DeserializeAnonymousType(str, definition);
             var body = JsonSerializer.SerializeObject(ctx.message);
-            Console.WriteLine(
+            Logger.Log("Microservices Bus",
                 $"== Error Receiving =====================================" + Environment.NewLine +
                 $"Message-type: {ctx.message.GetType()}, " + Environment.NewLine +
                 $"Content: " + (body.Length > 500 ? "body too big to be printed" : body) + Environment.NewLine +
-                $"========================================================" + Environment.NewLine);
-            Console.WriteLine("");
-            Console.WriteLine(exception.ToString());
-            Console.WriteLine($"========================================================");
+                $"" + Environment.NewLine +
+                $"" + exception.ToString() + Environment.NewLine +
+                $"========================================================");
             return Task.CompletedTask;
         }
     }

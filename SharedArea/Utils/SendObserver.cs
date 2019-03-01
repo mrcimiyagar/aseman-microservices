@@ -10,7 +10,7 @@ namespace SharedArea.Utils
             where T : class
         {
             var content = JsonSerializer.SerializeObject(context.Message);
-            Console.WriteLine($"== Sending =============================================" + Environment.NewLine +
+            Logger.Log("Microservices Bus", $"== Sending =============================================" + Environment.NewLine +
                               $"Message-type: {context.Message}, " + Environment.NewLine +
                               $"Content: " + (content.Length > 500 ? "body too big to be printed" : content) + Environment.NewLine +
                               $"Source-address: {context.SourceAddress}, " + Environment.NewLine +
@@ -31,15 +31,15 @@ namespace SharedArea.Utils
             where T : class
         {
             var content = JsonSerializer.SerializeObject(context.Message);
-            Console.WriteLine($"== Error Sending =======================================" + Environment.NewLine +
+            Logger.Log("Microservices Bus", $"== Error Sending =======================================" + Environment.NewLine +
                               $"Message-type: {context.Message}, " + Environment.NewLine +
                               $"Content: " + (content.Length > 500 ? "body too big to be printed" : content) + Environment.NewLine +
                               $"Source-address: {context.SourceAddress}, " + Environment.NewLine +
                               $"Destination-address: {context.DestinationAddress}, " + Environment.NewLine +
-                              $"Fault-address: {context.FaultAddress}" + Environment.NewLine);
-            Console.WriteLine("");
-            Console.WriteLine(exception.ToString());
-            Console.WriteLine($"========================================================");
+                              $"Fault-address: {context.FaultAddress}" + Environment.NewLine+
+                              $"" + Environment.NewLine +
+                              $"" + exception.ToString() + Environment.NewLine +
+                              $"========================================================");
             return Task.CompletedTask;
         }
     }

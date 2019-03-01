@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using FileService.DbContexts;
 using MassTransit;
@@ -23,7 +25,8 @@ namespace FileService.Consumers
     public class FileConsumer : IConsumer<UploadPhotoRequest>, IConsumer<UploadAudioRequest>
         , IConsumer<UploadVideoRequest>, IConsumer<DownloadFileRequest>, IConsumer<DownloadBotAvatarRequest>
         , IConsumer<DownloadRoomAvatarRequest>, IConsumer<DownloadComplexAvatarRequest>
-        , IConsumer<DownloadUserAvatarRequest>, IConsumer<ConsolidateDeleteAccountRequest>, IConsumer<WriteToFileRequest>
+        , IConsumer<DownloadUserAvatarRequest>, IConsumer<ConsolidateDeleteAccountRequest>,
+        IConsumer<WriteToFileRequest>
         , IConsumer<GetFileSizeRequest>
     {
         public const string DirPath = @"C:\\Aseman\Files";
@@ -32,8 +35,8 @@ namespace FileService.Consumers
         {
             using (var dbContext = new DatabaseContext())
             {
-                var file = context.Message.Packet.File;
-                if (dbContext.Files.Find(file.FileId) == null)
+                var file = dbContext.Files.Find(context.Message.Packet.File.FileId);
+                if (file == null)
                 {
                     await context.RespondAsync(new GetFileSizeResponse()
                     {
@@ -41,21 +44,21 @@ namespace FileService.Consumers
                     });
                     return;
                 }
-                file.Size = new System.IO.FileInfo(DirPath + @"\" + file.FileId).Length;
+
                 await context.RespondAsync(new GetFileSizeResponse()
                 {
                     Packet = new Packet() {Status = "success", File = file}
                 });
             }
         }
-        
+
         public async Task Consume(ConsumeContext<WriteToFileRequest> context)
         {
             using (var dbContext = new DatabaseContext())
             {
                 var session = dbContext.Sessions.Find(context.Message.SessionId);
                 var streamCode = context.Message.StreamCode;
-                
+
                 var file = dbContext.Files.Find(context.Message.Packet.File.FileId);
                 if (file == null)
                 {
@@ -74,7 +77,7 @@ namespace FileService.Consumers
                     });
                     return;
                 }
-                
+
                 var myContent = JsonConvert.SerializeObject(new Packet()
                 {
                     Username = SharedArea.GlobalVariables.FILE_TRANSFER_USERNAME,
@@ -82,96 +85,61 @@ namespace FileService.Consumers
                     StreamCode = streamCode
                 });
                 var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
-                var byteContent = new ByteArrayContent(buffer);
-                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                using (var client = new HttpClient())
+                var client = WebRequest.Create(SharedArea.GlobalVariables.SERVER_URL +
+                                               SharedArea.GlobalVariables.FILE_TRANSFER_GET_UPLOAD_STREAM_URL);
+                client.Method = "POST";
+                client.ContentType = "application/json";
+                var encoding = new ASCIIEncoding();
+
+                var newStream = client.GetRequestStream();
+                newStream.Write(buffer, 0, buffer.Length);
+                newStream.Close();
+
+                var res = client.GetResponse();
+                var responseStream = res.GetResponseStream();
+
+                if (responseStream != null)
                 {
-                    client.BaseAddress = new Uri(SharedArea.GlobalVariables.SERVER_URL);
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
+                    Directory.CreateDirectory(DirPath);
+                    var filePath = DirPath + @"\" + file.FileId;
+                    File.Create(filePath).Close();
 
-                    var response = await client.PostAsync(
-                        SharedArea.GlobalVariables.FILE_TRANSFER_GET_UPLOAD_STREAM_URL,
-                        byteContent);
-                    if (response.IsSuccessStatusCode)
+                    using (var stream = new FileStream(filePath, FileMode.Append))
                     {
-                        var content = response.Content;
-                        var contentStream = await content.ReadAsStreamAsync();
-                        Directory.CreateDirectory(DirPath);
-                        var filePath = DirPath + @"\" + file.FileId;
-                        File.Create(filePath).Close();
-
-                        if (content.Headers.ContentLength != null)
+                        var b = new byte[128 * 1024];
+                        int read;
+                        while ((read = responseStream.Read(b, 0, b.Length)) > 0)
                         {
-                            file.Size = content.Headers.ContentLength.Value;
+                            stream.Write(b, 0, read);
+                            file.Size += read;
                             dbContext.SaveChanges();
                         }
+                    }
 
-                        using (var stream = new FileStream(filePath, FileMode.Append))
+                    if (file is Photo photo && photo.IsAvatar)
+                    {
+                        using (var image = Image.Load(filePath))
                         {
-                            await contentStream.CopyToAsync(stream);
-                        }
-
-                        if (file is Photo photo && photo.IsAvatar)
-                        {
-                            using (var image = Image.Load(filePath))
+                            float width, height;
+                            if (image.Width > image.Height)
                             {
-                                float width, height;
-                                if (image.Width > image.Height)
-                                {
-                                    width = image.Width > 256 ? 256 : image.Width;
-                                    height = (float)image.Height / (float)image.Width * width;
-                                }
-                                else
-                                {
-                                    height = image.Height > 256 ? 256 : image.Height;
-                                    width = (float)image.Width / (float)image.Height * height;
-                                }
-                                image.Mutate(x => x.Resize((int)width, (int)height));
-                                File.Delete(filePath);
-                                image.Save(filePath + ".png");
+                                width = image.Width > 256 ? 256 : image.Width;
+                                height = (float) image.Height / (float) image.Width * width;
                             }
+                            else
+                            {
+                                height = image.Height > 256 ? 256 : image.Height;
+                                width = (float) image.Width / (float) image.Height * height;
+                            }
+
+                            image.Mutate(x => x.Resize((int) width, (int) height));
+                            File.Delete(filePath);
+                            image.Save(filePath + ".png");
                         }
                     }
                 }
-                
-                dbContext.Entry(file).Reference(f => f.Uploader).Load();
-                dbContext.Entry(file).Collection(f => f.FileUsages).Load();
 
-                if (file.FileUsages.Count > 0)
-                    dbContext.Entry(file.FileUsages[0]).Reference(f => f.Room).Load();
-
-                switch (file)
-                {
-                    case Photo p:
-                        SharedArea.Transport.NotifyService<PhotoCreatedNotif, PhotoCreatedNotifResponse>(
-                            Program.Bus,
-                            new Packet() {Photo = p, FileUsage = file.FileUsages[0], BaseUser = file.Uploader},
-                            new[]
-                            {
-                                SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME
-                            });
-                        break;
-                    case Audio a:
-                        SharedArea.Transport.NotifyService<AudioCreatedNotif, AudioCreatedNotifResponse>(
-                            Program.Bus,
-                            new Packet() {Audio = a, FileUsage = file.FileUsages[0], BaseUser = file.Uploader},
-                            new[]
-                            {
-                                SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME
-                            });
-                        break;
-                    case Video v:
-                        SharedArea.Transport.NotifyService<VideoCreatedNotif, VideoCreatedNotifResponse>(
-                            Program.Bus,
-                            new Packet() {Video = v, FileUsage = file.FileUsages[0], BaseUser = file.Uploader},
-                            new[]
-                            {
-                                SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME
-                            });
-                        break;
-                }
 
                 await context.RespondAsync(new WriteToFileResponse()
                 {
@@ -192,7 +160,7 @@ namespace FileService.Consumers
 
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
                 var user = (User) session.BaseUser;
-                
+
                 if (form.RoomId > 0)
                 {
                     dbContext.Entry(user).Collection(u => u.Memberships).Load();
@@ -250,9 +218,17 @@ namespace FileService.Consumers
                 }
 
                 dbContext.SaveChanges();
-                
+
                 var filePath = DirPath + @"\" + photo.FileId;
                 File.Create(filePath).Close();
+
+                SharedArea.Transport.NotifyService<PhotoCreatedNotif, PhotoCreatedNotifResponse>(
+                    Program.Bus,
+                    new Packet() {Photo = photo, FileUsage = fileUsage, BaseUser = user},
+                    new[]
+                    {
+                        SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME
+                    });
 
                 await context.RespondAsync(new UploadPhotoResponse()
                 {
@@ -267,14 +243,14 @@ namespace FileService.Consumers
             {
                 var form = context.Message.Form;
                 var session = dbContext.Sessions.Find(context.Message.SessionId);
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
 
                 Audio audio;
                 FileUsage fileUsage;
 
                 if (form.RoomId > 0)
                 {
-                    dbContext.Entry(session).Reference(s => s.BaseUser).Load();
-                    var user = (User) session.BaseUser;
                     dbContext.Entry(user).Collection(u => u.Memberships).Load();
                     var membership = user.Memberships.Find(m => m.ComplexId == form.ComplexId);
                     if (membership == null)
@@ -303,7 +279,8 @@ namespace FileService.Consumers
                     {
                         Title = form.Title,
                         Duration = form.Duration,
-                        IsPublic = false
+                        IsPublic = false,
+                        Uploader = user,
                     };
                     dbContext.Files.Add(audio);
                     fileUsage = new FileUsage()
@@ -319,16 +296,25 @@ namespace FileService.Consumers
                     {
                         Title = form.Title,
                         Duration = form.Duration,
-                        IsPublic = true
+                        IsPublic = true,
+                        Uploader = user
                     };
                     dbContext.Files.Add(audio);
                     fileUsage = null;
                 }
 
                 dbContext.SaveChanges();
-                
+
                 var filePath = DirPath + @"\" + audio.FileId;
                 File.Create(filePath).Close();
+
+                SharedArea.Transport.NotifyService<AudioCreatedNotif, AudioCreatedNotifResponse>(
+                    Program.Bus,
+                    new Packet() {Audio = audio, FileUsage = fileUsage, BaseUser = user},
+                    new[]
+                    {
+                        SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME
+                    });
 
                 await context.RespondAsync(new UploadAudioResponse()
                 {
@@ -343,14 +329,14 @@ namespace FileService.Consumers
             {
                 var form = context.Message.Form;
                 var session = dbContext.Sessions.Find(context.Message.SessionId);
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
 
                 Video video;
                 FileUsage fileUsage;
 
                 if (form.RoomId > 0)
                 {
-                    dbContext.Entry(session).Reference(s => s.BaseUser).Load();
-                    var user = (User) session.BaseUser;
                     dbContext.Entry(user).Collection(u => u.Memberships).Load();
                     var membership = user.Memberships.Find(m => m.ComplexId == form.ComplexId);
                     if (membership == null)
@@ -379,7 +365,8 @@ namespace FileService.Consumers
                     {
                         Title = form.Title,
                         Duration = form.Duration,
-                        IsPublic = false
+                        IsPublic = false,
+                        Uploader = user
                     };
                     dbContext.Files.Add(video);
                     fileUsage = new FileUsage()
@@ -395,16 +382,25 @@ namespace FileService.Consumers
                     {
                         Title = form.Title,
                         Duration = form.Duration,
-                        IsPublic = true
+                        IsPublic = true,
+                        Uploader = user
                     };
                     dbContext.Files.Add(video);
                     fileUsage = null;
                 }
 
                 dbContext.SaveChanges();
-                
+
                 var filePath = DirPath + @"\" + video.FileId;
                 File.Create(filePath).Close();
+
+                SharedArea.Transport.NotifyService<VideoCreatedNotif, VideoCreatedNotifResponse>(
+                    Program.Bus,
+                    new Packet() {Video = video, FileUsage = fileUsage, BaseUser = user},
+                    new[]
+                    {
+                        SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME
+                    });
 
                 await context.RespondAsync(new UploadVideoResponse()
                 {
@@ -417,6 +413,7 @@ namespace FileService.Consumers
         {
             var fileId = context.Message.FileId;
             var streamCode = context.Message.StreamCode;
+            var offset = context.Message.Offset;
             using (var dbContext = new DatabaseContext())
             {
                 var session = dbContext.Sessions.Find(context.Message.SessionId);
@@ -444,19 +441,20 @@ namespace FileService.Consumers
                 dbContext.Entry(user).Collection(u => u.Memberships).Load();
                 if (file.IsPublic)
                 {
-                    await UploadFileToApiGateWay(streamCode, file.FileId);
+                    await UploadFileToApiGateWay(streamCode, file.FileId, offset);
                     await context.RespondAsync(new DownloadFileResponse()
                     {
                         Packet = new Packet {Status = "success"}
                     });
                     return;
                 }
+
                 dbContext.Entry(file).Collection(f => f.FileUsages).Query().Include(fu => fu.Room).Load();
                 var foundPath = (from fu in file.FileUsages select fu.Room.ComplexId)
                     .Intersect(from mem in user.Memberships select mem.ComplexId).Any();
                 if (foundPath)
                 {
-                    await UploadFileToApiGateWay(streamCode, file.FileId);
+                    await UploadFileToApiGateWay(streamCode, file.FileId, offset);
                     await context.RespondAsync(new DownloadFileResponse()
                     {
                         Packet = new Packet {Status = "success"}
@@ -472,17 +470,20 @@ namespace FileService.Consumers
             }
         }
 
-        private static async Task UploadFileToApiGateWay(string streamCode, long fileId)
+        private static async Task UploadFileToApiGateWay(string streamCode, long fileId, long offset)
         {
             using (var client = new HttpClient())
             {
                 using (var content = new MultipartFormDataContent())
                 {
-                    using (var stream = 
-                        File.Exists(DirPath + @"\" + fileId) ?
-                        File.OpenRead(DirPath + @"\" + fileId) :
-                        File.OpenRead(DirPath + @"\" + fileId + ".png"))
+                    using (var stream =
+                        File.Exists(DirPath + @"\" + fileId)
+                            ? File.OpenRead(DirPath + @"\" + fileId)
+                            : File.OpenRead(DirPath + @"\" + fileId + ".png"))
                     {
+                        Console.WriteLine(offset);
+                        stream.Seek(offset, SeekOrigin.Current);
+
                         content.Add(new StreamContent(stream), "File", "File");
                         content.Add(new StringContent(streamCode), "StreamCode");
 
@@ -516,7 +517,7 @@ namespace FileService.Consumers
 
                 if (file.IsPublic)
                 {
-                    await UploadFileToApiGateWay(streamCode, file.FileId);
+                    await UploadFileToApiGateWay(streamCode, file.FileId, 0);
                     await context.RespondAsync(new DownloadBotAvatarResponse()
                     {
                         Packet = new Packet() {Status = "success"}
@@ -569,7 +570,7 @@ namespace FileService.Consumers
 
                 if (file.IsPublic)
                 {
-                    await UploadFileToApiGateWay(streamCode, file.FileId);
+                    await UploadFileToApiGateWay(streamCode, file.FileId, 0);
                     await context.RespondAsync(new DownloadRoomAvatarResponse()
                     {
                         Packet = new Packet() {Status = "success"}
@@ -604,7 +605,7 @@ namespace FileService.Consumers
 
                 if (file.IsPublic)
                 {
-                    await UploadFileToApiGateWay(streamCode, file.FileId);
+                    await UploadFileToApiGateWay(streamCode, file.FileId, 0);
                     await context.RespondAsync(new DownloadComplexAvatarResponse()
                     {
                         Packet = new Packet() {Status = "success"}
@@ -639,7 +640,7 @@ namespace FileService.Consumers
 
                 if (file.IsPublic)
                 {
-                    await UploadFileToApiGateWay(streamCode, file.FileId);
+                    await UploadFileToApiGateWay(streamCode, file.FileId, 0);
                     await context.RespondAsync(new DownloadUserAvatarResponse()
                     {
                         Packet = new Packet() {Status = "success"}

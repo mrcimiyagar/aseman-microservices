@@ -33,6 +33,8 @@ namespace ApiGateway.Controllers
                     if (notif == null) return new Packet() {Status = "error_1"};
                 }
                 
+                Startup.Pusher.NotifyNotificationReceived(session.SessionId);
+                
                 Startup.Pusher.NextPush(session.SessionId);
             }
 

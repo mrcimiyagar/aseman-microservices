@@ -36,6 +36,7 @@
         <e p="Hubs" t="Include">
           <e p="NotificationsHub.cs" t="Include" />
         </e>
+        <e p="Microservices Bus.txt" t="Include" />
         <e p="Middleware" t="Include">
           <e p="LoggerMiddleware.cs" t="Include" />
         </e>
@@ -49,6 +50,7 @@
           </e>
           <e p="NotifierStreamResult.cs" t="Include" />
         </e>
+        <e p="NotificationsLog.txt" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp2.2" t="Include">
@@ -97,6 +99,7 @@
         </e>
         <e p="Startup.cs" t="Include" />
         <e p="Utils" t="Include">
+          <e p="MultipartRequestHelper.cs" t="Include" />
           <e p="Pusher.cs" t="Include" />
           <e p="Security.cs" t="Include" />
         </e>
@@ -1328,6 +1331,7 @@
           <e p="EndpointConfigurator.cs" t="Include" />
           <e p="GlobalConsumer.cs" t="Include" />
           <e p="JsonSerializer.cs" t="Include" />
+          <e p="Logger.cs" t="Include" />
           <e p="MessageConverter.cs" t="Include" />
           <e p="MessageFormatter.cs" t="Include" />
           <e p="ReceiveObserver.cs" t="Include" />

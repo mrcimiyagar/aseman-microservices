@@ -13,7 +13,7 @@ namespace SharedArea
 {
     public static class Transport
     {
-        public static void NotifyService<TA, TB>(IBusControl bus, Packet packet, IEnumerable destinations) 
+        public static void NotifyService<TA, TB>(IBusControl bus, Packet packet, IEnumerable destinations)
             where TA : class
             where TB : class
         {
