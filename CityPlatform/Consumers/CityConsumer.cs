@@ -32,7 +32,7 @@ namespace CityPlatform.Consumers
         , IConsumer<GetBotsRequest>, IConsumer<GetCreatedBotsRequest>, IConsumer<GetSubscribedBotsRequest>
         , IConsumer<SearchBotsRequest>, IConsumer<UpdateBotProfileRequest>, IConsumer<GetBotRequest>
         , IConsumer<SubscribeBotRequest>, IConsumer<CreateBotRequest>, IConsumer<CreateRoomRequest>
-        , IConsumer<ConsolidateDeleteAccountRequest>
+        , IConsumer<ConsolidateDeleteAccountRequest>, IConsumer<GetMyInvitesRequest>
     {
         public async Task Consume(ConsumeContext<PutComplexRequest> context)
         {
@@ -971,6 +971,8 @@ namespace CityPlatform.Consumers
                 {
                     dbContext.Entry(invite).Reference(i => i.Complex).Load();
                     var complex = invite.Complex;
+                    dbContext.Entry(complex).Collection(c => c.Rooms).Load();
+                    dbContext.Entry(complex).Collection(c => c.Members).Query().Include(m => m.User).Load();
                     human.Invites.Remove(invite);
                     dbContext.Invites.Remove(invite);
                     var membership = new Membership
@@ -982,6 +984,17 @@ namespace CityPlatform.Consumers
                     complex.Members.Add(membership);
                     dbContext.Entry(complex).Collection(c => c.Rooms).Load();
                     var hall = complex.Rooms.FirstOrDefault();
+                    
+                    dbContext.SaveChanges();
+
+                    SharedArea.Transport.NotifyService<InviteAcceptedNotif, InviteAcceptedNotifResponse>(
+                        Program.Bus,
+                        new Packet() {Invite = invite, Membership = membership, User = human},
+                        SharedArea.GlobalVariables.AllQueuesExcept(new[]
+                        {
+                            SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                        }));
+                    
                     var message = new ServiceMessage()
                     {
                         Room = hall,
@@ -990,24 +1003,11 @@ namespace CityPlatform.Consumers
                         Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
                     };
 
-                    var result1 = await SharedArea.Transport
+                    await SharedArea.Transport
                         .RequestService<PutServiceMessageRequest, PutServiceMessageResponse>(
                             Program.Bus,
                             SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
                             new Packet() {ServiceMessage = message, Room = hall});
-
-                    message.MessageId = result1.Packet.ServiceMessage.MessageId;
-
-                    dbContext.Messages.Add(message);
-                    dbContext.SaveChanges();
-
-                    SharedArea.Transport.NotifyService<InviteAcceptedNotif, InviteAcceptedNotifResponse>(
-                        Program.Bus,
-                        new Packet() {Invite = invite, Membership = membership, ServiceMessage = message, User = human},
-                        SharedArea.GlobalVariables.AllQueuesExcept(new[]
-                        {
-                            SharedArea.GlobalVariables.CITY_QUEUE_NAME
-                        }));
 
                     User user;
                     Complex jointComplex;
@@ -1021,7 +1021,7 @@ namespace CityPlatform.Consumers
                         .Collection(c => c.Members)
                         .Query().Include(m => m.User)
                         .ThenInclude(u => u.Sessions).Load();
-                    var sessionIds = (from sess in (from m in complex.Members
+                    var sessionIds = (from sess in (from m in complex.Members where m.UserId != user.BaseUserId
                             from s
                                 in m.User.Sessions
                             select s)
@@ -1032,8 +1032,7 @@ namespace CityPlatform.Consumers
                     };
                     var ujn = new UserJointComplexNotification
                     {
-                        UserId = user.BaseUserId,
-                        ComplexId = jointComplex.ComplexId
+                        Membership = membership
                     };
 
                     SharedArea.Transport.Push<UserJointComplexPush>(
@@ -1074,7 +1073,7 @@ namespace CityPlatform.Consumers
 
                     await context.RespondAsync(new AcceptInviteResponse()
                     {
-                        Packet = new Packet {Status = "success"}
+                        Packet = new Packet {Status = "success", Membership = membership, ServiceMessage = message}
                     });
                 }
                 else
@@ -1631,6 +1630,24 @@ namespace CityPlatform.Consumers
             }
 
             await context.RespondAsync(new ConsolidateDeleteAccountResponse());
+        }
+
+        public async Task Consume(ConsumeContext<GetMyInvitesRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
+                dbContext.Entry(user).Collection(u => u.Invites).Query()
+                    .Include(i => i.User).Include(i => i.Complex).Load();
+                var invites = user.Invites.ToList();
+
+                await context.RespondAsync(new GetMyInvitesResponse()
+                {
+                    Packet = new Packet() {Status = "success", Invites = invites}
+                });
+            }
         }
     }
 }

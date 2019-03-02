@@ -578,3 +578,587 @@ Pushing notification :
 Pushing notification : 
 {"MessageId":260,"MessageSeenCount":1,"NotificationId":"5c7958705914e02fbcc64fdb","type":"MessageSeenNotification","session":{"sessionId":61,"token":"iHOKT2osGqV2JkNpy3CzlAUuTKuUyZ0V8WlUo5mzrk2L0HQ06SAgDENQWtZjIC2P","online":true,"connectionId":"vojJmXr3GCi5MZvYuDiV9g"}}
  to client...
+
+Pushing notification : 
+{"Message":{"text":"hello","messageId":295,"time":1551512905058,"type":"TextMessage","authorId":46,"author":{"baseUserId":46,"title":"Adgar Kasperson","avatar":1682,"type":"User"},"roomId":96,"room":{"roomId":96,"title":"Hall","avatar":0,"complexId":92,"complex":{"complexId":92,"title":"","avatar":-1,"mode":2,"rooms":[]},"messages":[]},"seenByMe":false,"seenCount":0},"NotificationId":"5c7a354abdec273be0e63d89","type":"TextMessageNotification","session":{"sessionId":61,"token":"iHOKT2osGqV2JkNpy3CzlAUuTKuUyZ0V8WlUo5mzrk2L0HQ06SAgDENQWtZjIC2P","online":false,"connectionId":""}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"Room created.","messageId":3,"time":1551515236434,"type":"ServiceMessage","roomId":3,"room":{"roomId":3,"title":"Hall","avatar":0,"complexId":3,"complex":{"complexId":3,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":3,"userId":2,"user":{"memberships":[],"contacts":[{"contactId":1,"complexId":3,"userId":2,"peerId":1,"peer":{"memberships":[{"membershipId":4,"userId":1,"complexId":3}],"contacts":[{"contactId":2,"complexId":3,"userId":1,"peerId":2}],"peereds":[],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"}}],"peereds":[{"contactId":2,"complexId":3,"userId":1,"user":{"memberships":[{"membershipId":4,"userId":1,"complexId":3}],"contacts":[],"peereds":[{"contactId":1,"complexId":3,"userId":2,"peerId":1}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"peerId":2}],"baseUserId":2,"title":"Keyhan Mohammadi","avatar":3,"sessions":[{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","baseUserId":2,"online":false,"connectionId":""}],"type":"User"},"complexId":3},{"membershipId":4,"userId":1,"user":{"memberships":[],"contacts":[{"contactId":2,"complexId":3,"userId":1,"peerId":2,"peer":{"memberships":[{"membershipId":3,"userId":2,"complexId":3}],"contacts":[{"contactId":1,"complexId":3,"userId":2,"peerId":1}],"peereds":[],"baseUserId":2,"title":"Keyhan Mohammadi","avatar":3,"sessions":[{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","baseUserId":2,"online":false,"connectionId":""}],"type":"User"}}],"peereds":[{"contactId":1,"complexId":3,"userId":2,"user":{"memberships":[{"membershipId":3,"userId":2,"complexId":3}],"contacts":[],"peereds":[{"contactId":2,"complexId":3,"userId":1,"peerId":2}],"baseUserId":2,"title":"Keyhan Mohammadi","avatar":3,"sessions":[{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","baseUserId":2,"online":false,"connectionId":""}],"type":"User"},"peerId":1}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":3}],"rooms":[]},"messages":[]},"seenByMe":false,"seenCount":0},"NotificationId":"5c7a3e6444326240fcf2215e","type":"ServiceMessageNotification","session":{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","online":true,"connectionId":"udmDagD1CORmcZ-F6GtdmA"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"Room created.","messageId":3,"time":1551515236434,"type":"ServiceMessage","roomId":3,"room":{"roomId":3,"title":"Hall","avatar":0,"complexId":3,"complex":{"complexId":3,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":3,"userId":2,"user":{"memberships":[],"contacts":[{"contactId":1,"complexId":3,"userId":2,"peerId":1,"peer":{"memberships":[{"membershipId":4,"userId":1,"complexId":3}],"contacts":[{"contactId":2,"complexId":3,"userId":1,"peerId":2}],"peereds":[],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"}}],"peereds":[{"contactId":2,"complexId":3,"userId":1,"user":{"memberships":[{"membershipId":4,"userId":1,"complexId":3}],"contacts":[],"peereds":[{"contactId":1,"complexId":3,"userId":2,"peerId":1}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"peerId":2}],"baseUserId":2,"title":"Keyhan Mohammadi","avatar":3,"sessions":[{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","baseUserId":2,"online":false,"connectionId":""}],"type":"User"},"complexId":3},{"membershipId":4,"userId":1,"user":{"memberships":[],"contacts":[{"contactId":2,"complexId":3,"userId":1,"peerId":2,"peer":{"memberships":[{"membershipId":3,"userId":2,"complexId":3}],"contacts":[{"contactId":1,"complexId":3,"userId":2,"peerId":1}],"peereds":[],"baseUserId":2,"title":"Keyhan Mohammadi","avatar":3,"sessions":[{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","baseUserId":2,"online":false,"connectionId":""}],"type":"User"}}],"peereds":[{"contactId":1,"complexId":3,"userId":2,"user":{"memberships":[{"membershipId":3,"userId":2,"complexId":3}],"contacts":[],"peereds":[{"contactId":2,"complexId":3,"userId":1,"peerId":2}],"baseUserId":2,"title":"Keyhan Mohammadi","avatar":3,"sessions":[{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","baseUserId":2,"online":false,"connectionId":""}],"type":"User"},"peerId":1}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":3}],"rooms":[]},"messages":[]},"seenByMe":false,"seenCount":0},"NotificationId":"5c7a3e6444326240fcf2215e","type":"ServiceMessageNotification","session":{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","online":true,"connectionId":"udmDagD1CORmcZ-F6GtdmA"}}
+ to client...
+
+Pushing notification : 
+{"Contact":{"contactId":2,"complexId":3,"complex":{"complexId":3,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":3,"userId":2,"user":{"memberships":[],"contacts":[{"contactId":1,"complexId":3,"userId":2,"peerId":1,"peer":{"memberships":[{"membershipId":4,"userId":1,"complexId":3}],"contacts":[],"peereds":[],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"}}],"peereds":[],"baseUserId":2,"title":"Keyhan Mohammadi","avatar":3,"sessions":[{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","baseUserId":2,"online":false,"connectionId":""}],"type":"User"},"complexId":3},{"membershipId":4,"userId":1,"user":{"memberships":[],"contacts":[],"peereds":[{"contactId":1,"complexId":3,"userId":2,"user":{"memberships":[{"membershipId":3,"userId":2,"complexId":3}],"contacts":[],"peereds":[],"baseUserId":2,"title":"Keyhan Mohammadi","avatar":3,"sessions":[{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","baseUserId":2,"online":false,"connectionId":""}],"type":"User"},"peerId":1}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":3}],"rooms":[{"roomId":3,"title":"Hall","avatar":0,"complexId":3,"messages":[{"messageId":3,"time":1551515236434,"type":"ServiceMessage","roomId":3,"seenByMe":false,"seenCount":0}]}]},"userId":1,"user":{"memberships":[{"membershipId":4,"userId":1,"complexId":3,"complex":{"complexId":3,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":3,"userId":2,"user":{"memberships":[],"contacts":[{"contactId":1,"complexId":3,"userId":2,"peerId":1}],"peereds":[],"baseUserId":2,"title":"Keyhan Mohammadi","avatar":3,"sessions":[{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","baseUserId":2,"online":false,"connectionId":""}],"type":"User"},"complexId":3}],"rooms":[{"roomId":3,"title":"Hall","avatar":0,"complexId":3,"messages":[{"messageId":3,"time":1551515236434,"type":"ServiceMessage","roomId":3,"seenByMe":false,"seenCount":0}]}]}}],"contacts":[],"peereds":[{"contactId":1,"complexId":3,"complex":{"complexId":3,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":3,"userId":2,"user":{"memberships":[],"contacts":[],"peereds":[],"baseUserId":2,"title":"Keyhan Mohammadi","avatar":3,"sessions":[{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","baseUserId":2,"online":false,"connectionId":""}],"type":"User"},"complexId":3},{"membershipId":4,"userId":1,"complexId":3}],"rooms":[{"roomId":3,"title":"Hall","avatar":0,"complexId":3,"messages":[{"messageId":3,"time":1551515236434,"type":"ServiceMessage","roomId":3,"seenByMe":false,"seenCount":0}]}]},"userId":2,"user":{"memberships":[{"membershipId":3,"userId":2,"complexId":3,"complex":{"complexId":3,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":4,"userId":1,"complexId":3}],"rooms":[{"roomId":3,"title":"Hall","avatar":0,"complexId":3,"messages":[{"messageId":3,"time":1551515236434,"type":"ServiceMessage","roomId":3,"seenByMe":false,"seenCount":0}]}]}}],"contacts":[],"peereds":[],"baseUserId":2,"title":"Keyhan Mohammadi","avatar":3,"sessions":[{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","baseUserId":2,"online":false,"connectionId":""}],"type":"User"},"peerId":1}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"peerId":2,"peer":{"memberships":[{"membershipId":3,"userId":2,"complexId":3,"complex":{"complexId":3,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":4,"userId":1,"user":{"memberships":[],"contacts":[],"peereds":[{"contactId":1,"complexId":3,"userId":2,"peerId":1}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":3}],"rooms":[{"roomId":3,"title":"Hall","avatar":0,"complexId":3,"messages":[{"messageId":3,"time":1551515236434,"type":"ServiceMessage","roomId":3,"seenByMe":false,"seenCount":0}]}]}}],"contacts":[{"contactId":1,"complexId":3,"complex":{"complexId":3,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":3,"userId":2,"complexId":3},{"membershipId":4,"userId":1,"user":{"memberships":[],"contacts":[],"peereds":[],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":3}],"rooms":[{"roomId":3,"title":"Hall","avatar":0,"complexId":3,"messages":[{"messageId":3,"time":1551515236434,"type":"ServiceMessage","roomId":3,"seenByMe":false,"seenCount":0}]}]},"userId":2,"peerId":1,"peer":{"memberships":[{"membershipId":4,"userId":1,"complexId":3,"complex":{"complexId":3,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":3,"userId":2,"complexId":3}],"rooms":[{"roomId":3,"title":"Hall","avatar":0,"complexId":3,"messages":[{"messageId":3,"time":1551515236434,"type":"ServiceMessage","roomId":3,"seenByMe":false,"seenCount":0}]}]}}],"contacts":[],"peereds":[],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"}}],"peereds":[],"baseUserId":2,"title":"Keyhan Mohammadi","avatar":3,"sessions":[{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","baseUserId":2,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7a3e6444326240fcf2215d","type":"ContactCreationNotification","session":{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","online":true,"connectionId":"udmDagD1CORmcZ-F6GtdmA"}}
+ to client...
+
+Pushing notification : 
+{"MessageId":3,"MessageSeenCount":1,"NotificationId":"5c7a3ed244326240fcf2215f","type":"MessageSeenNotification","session":{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","online":true,"connectionId":"vitTxMsBr705_AKKeIwFyA"}}
+ to client...
+
+Pushing notification : 
+{"MessageId":3,"MessageSeenCount":2,"NotificationId":"5c7a3ed644326240fcf22160","type":"MessageSeenNotification","session":{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","online":true,"connectionId":"4wB82JZsCWGTYKhR1YMNIw"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"hi","messageId":4,"time":1551515354893,"type":"TextMessage","authorId":1,"author":{"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"type":"User"},"roomId":3,"room":{"roomId":3,"title":"Hall","avatar":0,"complexId":3,"complex":{"complexId":3,"title":"","avatar":-1,"mode":2,"rooms":[]},"messages":[]},"seenByMe":false,"seenCount":0},"NotificationId":"5c7a3eda44326240fcf22161","type":"TextMessageNotification","session":{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","online":true,"connectionId":"vitTxMsBr705_AKKeIwFyA"}}
+ to client...
+
+Pushing notification : 
+{"MessageId":4,"MessageSeenCount":1,"NotificationId":"5c7a3edb44326240fcf22162","type":"MessageSeenNotification","session":{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","online":true,"connectionId":"4wB82JZsCWGTYKhR1YMNIw"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"how are you ?","messageId":5,"time":1551515362968,"type":"TextMessage","authorId":1,"author":{"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"type":"User"},"roomId":3,"room":{"roomId":3,"title":"Hall","avatar":0,"complexId":3,"complex":{"complexId":3,"title":"","avatar":-1,"mode":2,"rooms":[]},"messages":[]},"seenByMe":false,"seenCount":0},"NotificationId":"5c7a3ee344326240fcf22163","type":"TextMessageNotification","session":{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","online":true,"connectionId":"vitTxMsBr705_AKKeIwFyA"}}
+ to client...
+
+Pushing notification : 
+{"MessageId":5,"MessageSeenCount":1,"NotificationId":"5c7a3ee344326240fcf22164","type":"MessageSeenNotification","session":{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","online":true,"connectionId":"4wB82JZsCWGTYKhR1YMNIw"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"I'm fine kaspershot","messageId":6,"time":1551515374041,"type":"TextMessage","authorId":2,"author":{"baseUserId":2,"title":"Keyhan Mohammadi","avatar":3,"type":"User"},"roomId":3,"room":{"roomId":3,"title":"Hall","avatar":0,"complexId":3,"complex":{"complexId":3,"title":"","avatar":-1,"mode":2,"rooms":[]},"messages":[]},"seenByMe":false,"seenCount":0},"NotificationId":"5c7a3eee44326240fcf22165","type":"TextMessageNotification","session":{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","online":true,"connectionId":"4wB82JZsCWGTYKhR1YMNIw"}}
+ to client...
+
+Pushing notification : 
+{"MessageId":6,"MessageSeenCount":1,"NotificationId":"5c7a3eee44326240fcf22166","type":"MessageSeenNotification","session":{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","online":true,"connectionId":"vitTxMsBr705_AKKeIwFyA"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"photoId":4,"photo":{"width":7857,"height":7462,"isAvatar":false,"fileId":4,"size":0,"isPublic":false,"type":"Photo","fileUsages":[{"fileUsageId":1,"fileId":4,"roomId":3,"room":{"roomId":3,"title":"Hall","avatar":0,"complexId":3,"complex":{"complexId":3,"title":"","avatar":-1,"mode":2,"rooms":[]},"messages":[],"files":[]}}]},"messageId":7,"time":1551515384799,"type":"PhotoMessage","authorId":2,"author":{"baseUserId":2,"title":"Keyhan Mohammadi","avatar":3,"type":"User"},"roomId":3,"room":{"roomId":3,"title":"Hall","avatar":0,"complexId":3,"complex":{"complexId":3,"title":"","avatar":-1,"mode":2,"rooms":[]},"messages":[],"files":[{"fileUsageId":1,"fileId":4,"file":{"fileId":4,"size":0,"isPublic":false,"type":"Photo","fileUsages":[]},"roomId":3}]},"seenByMe":false,"seenCount":0},"NotificationId":"5c7a3ef844326240fcf22167","type":"PhotoMessageNotification","session":{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","online":true,"connectionId":"4wB82JZsCWGTYKhR1YMNIw"}}
+ to client...
+
+Pushing notification : 
+{"MessageId":7,"MessageSeenCount":1,"NotificationId":"5c7a3ef944326240fcf22168","type":"MessageSeenNotification","session":{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","online":true,"connectionId":"vitTxMsBr705_AKKeIwFyA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":1,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"invites":[]},"userId":2,"user":{"memberships":[{"membershipId":2,"userId":2,"complexId":2},{"membershipId":3,"userId":2,"complexId":3}],"invites":[],"baseUserId":2,"title":"Keyhan Mohammadi","avatar":3,"sessions":[{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","baseUserId":2,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7a3f3044326240fcf22169","type":"InviteCreationNotification","session":{"sessionId":2,"token":"yTtfeSHHoBXBPZ0IOgsbMNdRI8LzChgwV4ryz4CqABveU3CLbOy8jj7TQLFehheh","online":true,"connectionId":"vitTxMsBr705_AKKeIwFyA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":2,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"invites":[]},"userId":3,"user":{"memberships":[{"membershipId":6,"userId":3,"complexId":5}],"invites":[],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7a428f44326240fcf2216a","type":"InviteCreationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"KZU4apF1lrjhcFKt34uLiA"}}
+ to client...
+
+Pushing notification : 
+{"Contact":{"contactId":4,"complexId":6,"complex":{"complexId":6,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":7,"userId":1,"user":{"memberships":[],"contacts":[{"contactId":2,"complexId":3,"userId":1,"peerId":2},{"contactId":3,"complexId":6,"userId":1,"peerId":3,"peer":{"memberships":[{"membershipId":8,"userId":3,"complexId":6}],"contacts":[],"peereds":[],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"}}],"peereds":[],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":6},{"membershipId":8,"userId":3,"user":{"memberships":[],"contacts":[],"peereds":[{"contactId":3,"complexId":6,"userId":1,"user":{"memberships":[{"membershipId":7,"userId":1,"complexId":6}],"contacts":[{"contactId":2,"complexId":3,"userId":1,"peerId":2}],"peereds":[],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"peerId":3}],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"},"complexId":6}],"rooms":[{"roomId":6,"title":"Hall","avatar":0,"complexId":6,"messages":[{"messageId":10,"time":1551519286758,"type":"ServiceMessage","roomId":6,"seenByMe":false,"seenCount":0}]}]},"userId":3,"user":{"memberships":[{"membershipId":8,"userId":3,"complexId":6,"complex":{"complexId":6,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":7,"userId":1,"user":{"memberships":[],"contacts":[{"contactId":2,"complexId":3,"userId":1,"peerId":2},{"contactId":3,"complexId":6,"userId":1,"peerId":3}],"peereds":[],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":6}],"rooms":[{"roomId":6,"title":"Hall","avatar":0,"complexId":6,"messages":[{"messageId":10,"time":1551519286758,"type":"ServiceMessage","roomId":6,"seenByMe":false,"seenCount":0}]}]}}],"contacts":[],"peereds":[{"contactId":3,"complexId":6,"complex":{"complexId":6,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":7,"userId":1,"user":{"memberships":[],"contacts":[{"contactId":2,"complexId":3,"userId":1,"peerId":2}],"peereds":[],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":6},{"membershipId":8,"userId":3,"complexId":6}],"rooms":[{"roomId":6,"title":"Hall","avatar":0,"complexId":6,"messages":[{"messageId":10,"time":1551519286758,"type":"ServiceMessage","roomId":6,"seenByMe":false,"seenCount":0}]}]},"userId":1,"user":{"memberships":[{"membershipId":7,"userId":1,"complexId":6,"complex":{"complexId":6,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":8,"userId":3,"complexId":6}],"rooms":[{"roomId":6,"title":"Hall","avatar":0,"complexId":6,"messages":[{"messageId":10,"time":1551519286758,"type":"ServiceMessage","roomId":6,"seenByMe":false,"seenCount":0}]}]}}],"contacts":[{"contactId":2,"complexId":3,"userId":1,"peerId":2}],"peereds":[],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"peerId":3}],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"},"peerId":1,"peer":{"memberships":[{"membershipId":7,"userId":1,"complexId":6,"complex":{"complexId":6,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":8,"userId":3,"user":{"memberships":[],"contacts":[],"peereds":[{"contactId":3,"complexId":6,"userId":1,"peerId":3}],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"},"complexId":6}],"rooms":[{"roomId":6,"title":"Hall","avatar":0,"complexId":6,"messages":[{"messageId":10,"time":1551519286758,"type":"ServiceMessage","roomId":6,"seenByMe":false,"seenCount":0}]}]}}],"contacts":[{"contactId":2,"complexId":3,"userId":1,"peerId":2},{"contactId":3,"complexId":6,"complex":{"complexId":6,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":7,"userId":1,"complexId":6},{"membershipId":8,"userId":3,"user":{"memberships":[],"contacts":[],"peereds":[],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"},"complexId":6}],"rooms":[{"roomId":6,"title":"Hall","avatar":0,"complexId":6,"messages":[{"messageId":10,"time":1551519286758,"type":"ServiceMessage","roomId":6,"seenByMe":false,"seenCount":0}]}]},"userId":1,"peerId":3,"peer":{"memberships":[{"membershipId":8,"userId":3,"complexId":6,"complex":{"complexId":6,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":7,"userId":1,"complexId":6}],"rooms":[{"roomId":6,"title":"Hall","avatar":0,"complexId":6,"messages":[{"messageId":10,"time":1551519286758,"type":"ServiceMessage","roomId":6,"seenByMe":false,"seenCount":0}]}]}}],"contacts":[],"peereds":[],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"}}],"peereds":[],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7a4e3744326240fcf2216b","type":"ContactCreationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"eY7vmp_qdLGKAC-blEE6CQ"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"Room created.","messageId":10,"time":1551519286758,"type":"ServiceMessage","roomId":6,"room":{"roomId":6,"title":"Hall","avatar":0,"complexId":6,"complex":{"complexId":6,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":7,"userId":1,"user":{"memberships":[],"contacts":[{"contactId":2,"complexId":3,"userId":1,"peerId":2},{"contactId":3,"complexId":6,"userId":1,"peerId":3,"peer":{"memberships":[{"membershipId":8,"userId":3,"complexId":6}],"contacts":[{"contactId":4,"complexId":6,"userId":3,"peerId":1}],"peereds":[],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"}}],"peereds":[{"contactId":4,"complexId":6,"userId":3,"user":{"memberships":[{"membershipId":8,"userId":3,"complexId":6}],"contacts":[],"peereds":[{"contactId":3,"complexId":6,"userId":1,"peerId":3}],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"},"peerId":1}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":6},{"membershipId":8,"userId":3,"user":{"memberships":[],"contacts":[{"contactId":4,"complexId":6,"userId":3,"peerId":1,"peer":{"memberships":[{"membershipId":7,"userId":1,"complexId":6}],"contacts":[{"contactId":2,"complexId":3,"userId":1,"peerId":2},{"contactId":3,"complexId":6,"userId":1,"peerId":3}],"peereds":[],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"}}],"peereds":[{"contactId":3,"complexId":6,"userId":1,"user":{"memberships":[{"membershipId":7,"userId":1,"complexId":6}],"contacts":[{"contactId":2,"complexId":3,"userId":1,"peerId":2}],"peereds":[{"contactId":4,"complexId":6,"userId":3,"peerId":1}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"peerId":3}],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"},"complexId":6}],"rooms":[]},"messages":[]},"seenByMe":false,"seenCount":0},"NotificationId":"5c7a4e3744326240fcf2216c","type":"ServiceMessageNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"eY7vmp_qdLGKAC-blEE6CQ"}}
+ to client...
+
+Pushing notification : 
+{"MessageId":10,"MessageSeenCount":1,"NotificationId":"5c7a4e4944326240fcf2216d","type":"MessageSeenNotification","session":{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","online":true,"connectionId":"5t9BP1DIRGF88O3tlB9FMA"}}
+ to client...
+
+Pushing notification : 
+{"MessageId":10,"MessageSeenCount":2,"NotificationId":"5c7a4e7044326240fcf2216e","type":"MessageSeenNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"eY7vmp_qdLGKAC-blEE6CQ"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"hello","messageId":11,"time":1551519349332,"type":"TextMessage","authorId":1,"author":{"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"type":"User"},"roomId":6,"room":{"roomId":6,"title":"Hall","avatar":0,"complexId":6,"complex":{"complexId":6,"title":"","avatar":-1,"mode":2,"rooms":[]},"messages":[]},"seenByMe":false,"seenCount":0},"NotificationId":"5c7a4e7544326240fcf2216f","type":"TextMessageNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"eY7vmp_qdLGKAC-blEE6CQ"}}
+ to client...
+
+Pushing notification : 
+{"MessageId":11,"MessageSeenCount":1,"NotificationId":"5c7a4e7544326240fcf22170","type":"MessageSeenNotification","session":{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","online":true,"connectionId":"5t9BP1DIRGF88O3tlB9FMA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":2,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"members":[{"membershipId":5,"userId":1,"user":{"memberships":[{"membershipId":1,"userId":1,"complexId":1},{"membershipId":4,"userId":1,"complexId":3},{"membershipId":7,"userId":1,"complexId":6}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":4}],"invites":[{"inviteId":1,"complexId":4,"userId":2}]}},"NotificationId":"5c7a4e8244326240fcf22171","type":"InviteCancellationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"eY7vmp_qdLGKAC-blEE6CQ"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":3,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"invites":[]},"userId":3,"user":{"memberships":[{"membershipId":6,"userId":3,"complexId":5},{"membershipId":8,"userId":3,"complexId":6}],"invites":[],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7a4fb844326240fcf22172","type":"InviteCreationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"Hu8-my-x_wDOJY-3RMApEA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":3,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"members":[{"membershipId":5,"userId":1,"user":{"memberships":[{"membershipId":1,"userId":1,"complexId":1},{"membershipId":4,"userId":1,"complexId":3},{"membershipId":7,"userId":1,"complexId":6}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":4}],"invites":[{"inviteId":1,"complexId":4,"userId":2}]}},"NotificationId":"5c7a4fd744326240fcf22173","type":"InviteCancellationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"Hu8-my-x_wDOJY-3RMApEA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":4,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"invites":[]},"userId":3,"user":{"memberships":[{"membershipId":6,"userId":3,"complexId":5},{"membershipId":8,"userId":3,"complexId":6}],"invites":[],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7a4fdb44326240fcf22174","type":"InviteCreationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"Hu8-my-x_wDOJY-3RMApEA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":4,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"members":[{"membershipId":5,"userId":1,"user":{"memberships":[{"membershipId":1,"userId":1,"complexId":1},{"membershipId":4,"userId":1,"complexId":3},{"membershipId":7,"userId":1,"complexId":6}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":4}],"invites":[{"inviteId":1,"complexId":4,"userId":2}]}},"NotificationId":"5c7a4fdf44326240fcf22175","type":"InviteCancellationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"Hu8-my-x_wDOJY-3RMApEA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":5,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"invites":[]},"userId":3,"user":{"memberships":[{"membershipId":6,"userId":3,"complexId":5},{"membershipId":8,"userId":3,"complexId":6}],"invites":[],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7a4fe244326240fcf22176","type":"InviteCreationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"Hu8-my-x_wDOJY-3RMApEA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":5,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"members":[{"membershipId":5,"userId":1,"user":{"memberships":[{"membershipId":1,"userId":1,"complexId":1},{"membershipId":4,"userId":1,"complexId":3},{"membershipId":7,"userId":1,"complexId":6}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":4}],"invites":[{"inviteId":1,"complexId":4,"userId":2}]}},"NotificationId":"5c7a4fe444326240fcf22177","type":"InviteCancellationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"Hu8-my-x_wDOJY-3RMApEA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":6,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"invites":[]},"userId":3,"user":{"memberships":[{"membershipId":6,"userId":3,"complexId":5},{"membershipId":8,"userId":3,"complexId":6}],"invites":[],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7a4ff944326240fcf22178","type":"InviteCreationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"Hu8-my-x_wDOJY-3RMApEA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":6,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"members":[{"membershipId":5,"userId":1,"user":{"memberships":[{"membershipId":1,"userId":1,"complexId":1},{"membershipId":4,"userId":1,"complexId":3},{"membershipId":7,"userId":1,"complexId":6}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":4}],"invites":[{"inviteId":1,"complexId":4,"userId":2}]}},"NotificationId":"5c7a4ffb44326240fcf22179","type":"InviteCancellationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"Hu8-my-x_wDOJY-3RMApEA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":7,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"invites":[]},"userId":3,"user":{"memberships":[{"membershipId":6,"userId":3,"complexId":5},{"membershipId":8,"userId":3,"complexId":6}],"invites":[],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7a502344326240fcf2217a","type":"InviteCreationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"Hu8-my-x_wDOJY-3RMApEA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":7,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"members":[{"membershipId":5,"userId":1,"user":{"memberships":[{"membershipId":1,"userId":1,"complexId":1},{"membershipId":4,"userId":1,"complexId":3},{"membershipId":7,"userId":1,"complexId":6}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":4}],"invites":[{"inviteId":1,"complexId":4,"userId":2}]}},"NotificationId":"5c7a502544326240fcf2217b","type":"InviteCancellationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"Hu8-my-x_wDOJY-3RMApEA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":8,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"invites":[]},"userId":3,"user":{"memberships":[{"membershipId":6,"userId":3,"complexId":5},{"membershipId":8,"userId":3,"complexId":6}],"invites":[],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7a5a2444326240fcf2217c","type":"InviteCreationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"Hu8-my-x_wDOJY-3RMApEA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":8,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"members":[{"membershipId":5,"userId":1,"user":{"memberships":[{"membershipId":1,"userId":1,"complexId":1},{"membershipId":4,"userId":1,"complexId":3},{"membershipId":7,"userId":1,"complexId":6}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":4}],"invites":[{"inviteId":1,"complexId":4,"userId":2}]}},"NotificationId":"5c7a5a4944326240fcf2217d","type":"InviteCancellationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"Hu8-my-x_wDOJY-3RMApEA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":9,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"invites":[]},"userId":3,"user":{"memberships":[{"membershipId":6,"userId":3,"complexId":5},{"membershipId":8,"userId":3,"complexId":6}],"invites":[],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7a5a4a44326240fcf2217e","type":"InviteCreationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"Hu8-my-x_wDOJY-3RMApEA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":9,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"members":[{"membershipId":5,"userId":1,"user":{"memberships":[{"membershipId":1,"userId":1,"complexId":1},{"membershipId":4,"userId":1,"complexId":3},{"membershipId":7,"userId":1,"complexId":6}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":4}],"invites":[{"inviteId":1,"complexId":4,"userId":2}]}},"NotificationId":"5c7ab8818885c93d545faf06","type":"InviteCancellationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"sBjxr1cTsKC_TeNigtrknw"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":10,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"invites":[]},"userId":3,"user":{"memberships":[{"membershipId":6,"userId":3,"complexId":5},{"membershipId":8,"userId":3,"complexId":6}],"invites":[],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7ab8878885c93d545faf07","type":"InviteCreationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"sBjxr1cTsKC_TeNigtrknw"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":10,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"members":[{"membershipId":5,"userId":1,"user":{"memberships":[{"membershipId":1,"userId":1,"complexId":1},{"membershipId":4,"userId":1,"complexId":3},{"membershipId":7,"userId":1,"complexId":6}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":4}],"invites":[{"inviteId":1,"complexId":4,"userId":2}]}},"NotificationId":"5c7ab89d8885c93d545faf08","type":"InviteCancellationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"sBjxr1cTsKC_TeNigtrknw"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":11,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"invites":[]},"userId":3,"user":{"memberships":[{"membershipId":6,"userId":3,"complexId":5},{"membershipId":8,"userId":3,"complexId":6}],"invites":[],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7ab89e8885c93d545faf09","type":"InviteCreationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"sBjxr1cTsKC_TeNigtrknw"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":11,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"members":[{"membershipId":5,"userId":1,"user":{"memberships":[{"membershipId":1,"userId":1,"complexId":1},{"membershipId":4,"userId":1,"complexId":3},{"membershipId":7,"userId":1,"complexId":6}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":4}],"invites":[{"inviteId":1,"complexId":4,"userId":2}]}},"NotificationId":"5c7ab9d08885c93d545faf0a","type":"InviteCancellationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"gOM0VPfx2eXdsvE5Gd24JQ"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":12,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"invites":[]},"userId":3,"user":{"memberships":[{"membershipId":6,"userId":3,"complexId":5},{"membershipId":8,"userId":3,"complexId":6}],"invites":[],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7ab9d38885c93d545faf0b","type":"InviteCreationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"gOM0VPfx2eXdsvE5Gd24JQ"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":12,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"members":[{"membershipId":5,"userId":1,"user":{"memberships":[{"membershipId":1,"userId":1,"complexId":1},{"membershipId":4,"userId":1,"complexId":3},{"membershipId":7,"userId":1,"complexId":6}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":4}],"invites":[{"inviteId":1,"complexId":4,"userId":2}]}},"NotificationId":"5c7abb848885c93d545faf0c","type":"InviteCancellationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"5X2J8DUh0JXm3p0v-vU6KQ"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":13,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"invites":[]},"userId":3,"user":{"memberships":[{"membershipId":6,"userId":3,"complexId":5},{"membershipId":8,"userId":3,"complexId":6}],"invites":[],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7abb858885c93d545faf0d","type":"InviteCreationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"5X2J8DUh0JXm3p0v-vU6KQ"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":13,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"members":[{"membershipId":5,"userId":1,"user":{"memberships":[{"membershipId":1,"userId":1,"complexId":1},{"membershipId":4,"userId":1,"complexId":3},{"membershipId":7,"userId":1,"complexId":6}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":4}],"invites":[{"inviteId":1,"complexId":4,"userId":2}]}},"NotificationId":"5c7abbf08885c93d545faf0e","type":"InviteCancellationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"5X2J8DUh0JXm3p0v-vU6KQ"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":14,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"invites":[]},"userId":3,"user":{"memberships":[{"membershipId":6,"userId":3,"complexId":5},{"membershipId":8,"userId":3,"complexId":6}],"invites":[],"baseUserId":3,"title":"keyhan","avatar":6,"sessions":[{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","baseUserId":3,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7abcd18885c93d545faf0f","type":"InviteCreationNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"2KYSPvu5qSzkymV90Q0v4w"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"hi, how r u ?","messageId":12,"time":1551548091636,"type":"TextMessage","authorId":3,"author":{"baseUserId":3,"title":"keyhan","avatar":6,"type":"User"},"roomId":6,"room":{"roomId":6,"title":"Hall","avatar":0,"complexId":6,"complex":{"complexId":6,"title":"","avatar":-1,"mode":2,"rooms":[]},"messages":[]},"seenByMe":false,"seenCount":0},"NotificationId":"5c7abebc8885c93d545faf10","type":"TextMessageNotification","session":{"sessionId":1,"token":"yzrJZiJ7CZBI8lC2MRajKzY5irbiNrHTyDEmngKsffbs15Dg8FiMM8B7KuBHgBuk","online":true,"connectionId":"UIaY1LSPDwI5UOybJqDzlw"}}
+ to client...
+
+Pushing notification : 
+{"MessageId":12,"MessageSeenCount":1,"NotificationId":"5c7abebf8885c93d545faf11","type":"MessageSeenNotification","session":{"sessionId":3,"token":"POJnussg2VQJ3ebe7Zh4HuETOcWiQXsVF2ypF4CDGwBbTikiDhIlOW3vkZHsEjye","online":true,"connectionId":"-YPRbIzSbjfs7pWguFoFQw"}}
+ to client...
+
+Pushing notification : 
+{"MessageId":17,"MessageSeenCount":1,"NotificationId":"5c7ad4a7307c743ca047beb1","type":"MessageSeenNotification","session":{"sessionId":7,"token":"pycralvojEq4kH5gAhhITuYSBnqvobkghRJYaeQkc5e62jHZDfPSUzg3JsZV4a8h","online":true,"connectionId":"PELFjHnMOZBB_W2WRtdA_A"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":15,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"invites":[]},"userId":4,"user":{"memberships":[{"membershipId":10,"userId":4,"complexId":7},{"membershipId":11,"userId":4,"complexId":8},{"membershipId":12,"userId":4,"complexId":9}],"invites":[],"baseUserId":4,"title":"sanjab","avatar":8,"sessions":[{"sessionId":7,"token":"pycralvojEq4kH5gAhhITuYSBnqvobkghRJYaeQkc5e62jHZDfPSUzg3JsZV4a8h","baseUserId":4,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7ad671307c743ca047beb2","type":"InviteCreationNotification","session":{"sessionId":7,"token":"pycralvojEq4kH5gAhhITuYSBnqvobkghRJYaeQkc5e62jHZDfPSUzg3JsZV4a8h","online":true,"connectionId":"PELFjHnMOZBB_W2WRtdA_A"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":16,"complexId":10,"complex":{"complexId":10,"title":"mountains space","avatar":9,"mode":3,"invites":[]},"userId":4,"user":{"memberships":[{"membershipId":10,"userId":4,"complexId":7},{"membershipId":11,"userId":4,"complexId":8},{"membershipId":12,"userId":4,"complexId":9}],"invites":[{"inviteId":15,"complexId":4,"userId":4}],"baseUserId":4,"title":"sanjab","avatar":8,"sessions":[{"sessionId":7,"token":"pycralvojEq4kH5gAhhITuYSBnqvobkghRJYaeQkc5e62jHZDfPSUzg3JsZV4a8h","baseUserId":4,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7ad685307c743ca047beb3","type":"InviteCreationNotification","session":{"sessionId":7,"token":"pycralvojEq4kH5gAhhITuYSBnqvobkghRJYaeQkc5e62jHZDfPSUzg3JsZV4a8h","online":true,"connectionId":"PELFjHnMOZBB_W2WRtdA_A"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":16,"complexId":10,"complex":{"complexId":10,"title":"mountains space","avatar":9,"mode":3,"members":[{"membershipId":14,"userId":1,"user":{"memberships":[{"membershipId":1,"userId":1,"complexId":1},{"membershipId":4,"userId":1,"complexId":3},{"membershipId":5,"userId":1,"complexId":4},{"membershipId":7,"userId":1,"complexId":6},{"membershipId":13,"userId":1,"complexId":9}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":10}],"invites":[]}},"NotificationId":"5c7adb48307c743ca047beb4","type":"InviteCancellationNotification","session":{"sessionId":7,"token":"pycralvojEq4kH5gAhhITuYSBnqvobkghRJYaeQkc5e62jHZDfPSUzg3JsZV4a8h","online":true,"connectionId":"nucoY4IRz-dp-lSgHBrt_A"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":15,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"members":[{"membershipId":5,"userId":1,"user":{"memberships":[{"membershipId":1,"userId":1,"complexId":1},{"membershipId":4,"userId":1,"complexId":3},{"membershipId":7,"userId":1,"complexId":6},{"membershipId":13,"userId":1,"complexId":9},{"membershipId":14,"userId":1,"complexId":10}],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":4}],"invites":[{"inviteId":1,"complexId":4,"userId":2}]}},"NotificationId":"5c7adb49307c743ca047beb5","type":"InviteCancellationNotification","session":{"sessionId":7,"token":"pycralvojEq4kH5gAhhITuYSBnqvobkghRJYaeQkc5e62jHZDfPSUzg3JsZV4a8h","online":true,"connectionId":"nucoY4IRz-dp-lSgHBrt_A"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":17,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"invites":[]},"userId":4,"user":{"memberships":[{"membershipId":10,"userId":4,"complexId":7},{"membershipId":11,"userId":4,"complexId":8},{"membershipId":12,"userId":4,"complexId":9}],"invites":[],"baseUserId":4,"title":"sanjab","avatar":8,"sessions":[{"sessionId":7,"token":"pycralvojEq4kH5gAhhITuYSBnqvobkghRJYaeQkc5e62jHZDfPSUzg3JsZV4a8h","baseUserId":4,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7adb57307c743ca047beb6","type":"InviteCreationNotification","session":{"sessionId":7,"token":"pycralvojEq4kH5gAhhITuYSBnqvobkghRJYaeQkc5e62jHZDfPSUzg3JsZV4a8h","online":true,"connectionId":"nucoY4IRz-dp-lSgHBrt_A"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":17,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"invites":[]}},"NotificationId":"5c7adb64307c743ca047beb7","type":"InviteIgnoranceNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":18,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"invites":[]},"userId":4,"user":{"memberships":[{"membershipId":10,"userId":4,"complexId":7},{"membershipId":11,"userId":4,"complexId":8},{"membershipId":12,"userId":4,"complexId":9}],"invites":[],"baseUserId":4,"title":"sanjab","avatar":8,"sessions":[{"sessionId":7,"token":"pycralvojEq4kH5gAhhITuYSBnqvobkghRJYaeQkc5e62jHZDfPSUzg3JsZV4a8h","baseUserId":4,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7adb72307c743ca047beb8","type":"InviteCreationNotification","session":{"sessionId":7,"token":"pycralvojEq4kH5gAhhITuYSBnqvobkghRJYaeQkc5e62jHZDfPSUzg3JsZV4a8h","online":true,"connectionId":"nucoY4IRz-dp-lSgHBrt_A"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"sanjab entered complex by invite.","messageId":0,"time":1551555448364,"type":"ServiceMessage","room":{"roomId":4,"title":"Hall","avatar":0,"complexId":4,"complex":{"complexId":4,"title":"guest building","avatar":5,"mode":3,"members":[{"membershipId":5,"userId":1,"user":{"memberships":[],"baseUserId":1,"title":"Edward Kaspershot","avatar":1,"sessions":[{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","baseUserId":1,"online":false,"connectionId":""}],"type":"User"},"complexId":4},{"membershipId":9,"userId":3,"user":{"memberships":[],"baseUserId":3,"title":"Deleted User","avatar":-1,"sessions":[],"type":"User"},"complexId":4},{"membershipId":15,"userId":4,"user":{"memberships":[],"invites":[],"baseUserId":4,"title":"sanjab","avatar":8,"sessions":[{"sessionId":7,"token":"pycralvojEq4kH5gAhhITuYSBnqvobkghRJYaeQkc5e62jHZDfPSUzg3JsZV4a8h","baseUserId":4,"online":false,"connectionId":""}],"type":"User"},"complexId":4}],"rooms":[],"invites":[]}},"seenByMe":false,"seenCount":0},"NotificationId":"5c7adb78307c743ca047beb9","type":"ServiceMessageNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"NotificationId":"5c7adb78307c743ca047beba","type":"UserJointComplexNotification","session":{"sessionId":12,"token":"GDxY1PyGHtLUrw5mYdfwUtsrDDOBkLGszGxcpl5QGDaTUcJA3V1fYL7nlgvyb6w4","online":true,"connectionId":"uw5PbFizh8YHq1STo3ETIw"}}
+ to client...
+
+Pushing notification : 
+{"MessageId":22,"MessageSeenCount":2,"NotificationId":"5c7ade9c679d6a2710d7b9a0","type":"MessageSeenNotification","session":{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","online":true,"connectionId":"RWSRBLaeV9SE7dYC5hW8JQ"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"Room created.","messageId":24,"time":1551556358935,"type":"ServiceMessage","roomId":14,"room":{"roomId":14,"title":"Hall","avatar":0,"complexId":14,"complex":{"complexId":14,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":20,"userId":6,"user":{"memberships":[],"contacts":[{"contactId":9,"complexId":14,"userId":6,"peerId":5,"peer":{"memberships":[{"membershipId":21,"userId":5,"complexId":14}],"contacts":[{"contactId":10,"complexId":14,"userId":5,"peerId":6}],"peereds":[],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","baseUserId":5,"online":false,"connectionId":""}],"type":"User"}}],"peereds":[{"contactId":10,"complexId":14,"userId":5,"user":{"memberships":[{"membershipId":21,"userId":5,"complexId":14}],"contacts":[],"peereds":[{"contactId":9,"complexId":14,"userId":6,"peerId":5}],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","baseUserId":5,"online":false,"connectionId":""}],"type":"User"},"peerId":6}],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"},"complexId":14},{"membershipId":21,"userId":5,"user":{"memberships":[],"contacts":[{"contactId":10,"complexId":14,"userId":5,"peerId":6,"peer":{"memberships":[{"membershipId":20,"userId":6,"complexId":14}],"contacts":[{"contactId":9,"complexId":14,"userId":6,"peerId":5}],"peereds":[],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"}}],"peereds":[{"contactId":9,"complexId":14,"userId":6,"user":{"memberships":[{"membershipId":20,"userId":6,"complexId":14}],"contacts":[],"peereds":[{"contactId":10,"complexId":14,"userId":5,"peerId":6}],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"},"peerId":5}],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","baseUserId":5,"online":false,"connectionId":""}],"type":"User"},"complexId":14}],"rooms":[]},"messages":[]},"seenByMe":false,"seenCount":0},"NotificationId":"5c7adf07679d6a2710d7b9a2","type":"ServiceMessageNotification","session":{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","online":true,"connectionId":"RWSRBLaeV9SE7dYC5hW8JQ"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"Room created.","messageId":24,"time":1551556358935,"type":"ServiceMessage","roomId":14,"room":{"roomId":14,"title":"Hall","avatar":0,"complexId":14,"complex":{"complexId":14,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":20,"userId":6,"user":{"memberships":[],"contacts":[{"contactId":9,"complexId":14,"userId":6,"peerId":5,"peer":{"memberships":[{"membershipId":21,"userId":5,"complexId":14}],"contacts":[{"contactId":10,"complexId":14,"userId":5,"peerId":6}],"peereds":[],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","baseUserId":5,"online":false,"connectionId":""}],"type":"User"}}],"peereds":[{"contactId":10,"complexId":14,"userId":5,"user":{"memberships":[{"membershipId":21,"userId":5,"complexId":14}],"contacts":[],"peereds":[{"contactId":9,"complexId":14,"userId":6,"peerId":5}],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","baseUserId":5,"online":false,"connectionId":""}],"type":"User"},"peerId":6}],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"},"complexId":14},{"membershipId":21,"userId":5,"user":{"memberships":[],"contacts":[{"contactId":10,"complexId":14,"userId":5,"peerId":6,"peer":{"memberships":[{"membershipId":20,"userId":6,"complexId":14}],"contacts":[{"contactId":9,"complexId":14,"userId":6,"peerId":5}],"peereds":[],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"}}],"peereds":[{"contactId":9,"complexId":14,"userId":6,"user":{"memberships":[{"membershipId":20,"userId":6,"complexId":14}],"contacts":[],"peereds":[{"contactId":10,"complexId":14,"userId":5,"peerId":6}],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"},"peerId":5}],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","baseUserId":5,"online":false,"connectionId":""}],"type":"User"},"complexId":14}],"rooms":[]},"messages":[]},"seenByMe":false,"seenCount":0},"NotificationId":"5c7adf07679d6a2710d7b9a2","type":"ServiceMessageNotification","session":{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","online":true,"connectionId":"RWSRBLaeV9SE7dYC5hW8JQ"}}
+ to client...
+
+Pushing notification : 
+{"Contact":{"contactId":10,"complexId":14,"complex":{"complexId":14,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":20,"userId":6,"user":{"memberships":[],"contacts":[{"contactId":9,"complexId":14,"userId":6,"peerId":5,"peer":{"memberships":[{"membershipId":21,"userId":5,"complexId":14}],"contacts":[],"peereds":[],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","baseUserId":5,"online":false,"connectionId":""}],"type":"User"}}],"peereds":[],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"},"complexId":14},{"membershipId":21,"userId":5,"user":{"memberships":[],"contacts":[],"peereds":[{"contactId":9,"complexId":14,"userId":6,"user":{"memberships":[{"membershipId":20,"userId":6,"complexId":14}],"contacts":[],"peereds":[],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"},"peerId":5}],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","baseUserId":5,"online":false,"connectionId":""}],"type":"User"},"complexId":14}],"rooms":[{"roomId":14,"title":"Hall","avatar":0,"complexId":14,"messages":[{"messageId":24,"time":1551556358935,"type":"ServiceMessage","roomId":14,"seenByMe":false,"seenCount":0}]}]},"userId":5,"user":{"memberships":[{"membershipId":21,"userId":5,"complexId":14,"complex":{"complexId":14,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":20,"userId":6,"user":{"memberships":[],"contacts":[{"contactId":9,"complexId":14,"userId":6,"peerId":5}],"peereds":[],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"},"complexId":14}],"rooms":[{"roomId":14,"title":"Hall","avatar":0,"complexId":14,"messages":[{"messageId":24,"time":1551556358935,"type":"ServiceMessage","roomId":14,"seenByMe":false,"seenCount":0}]}]}}],"contacts":[],"peereds":[{"contactId":9,"complexId":14,"complex":{"complexId":14,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":20,"userId":6,"user":{"memberships":[],"contacts":[],"peereds":[],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"},"complexId":14},{"membershipId":21,"userId":5,"complexId":14}],"rooms":[{"roomId":14,"title":"Hall","avatar":0,"complexId":14,"messages":[{"messageId":24,"time":1551556358935,"type":"ServiceMessage","roomId":14,"seenByMe":false,"seenCount":0}]}]},"userId":6,"user":{"memberships":[{"membershipId":20,"userId":6,"complexId":14,"complex":{"complexId":14,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":21,"userId":5,"complexId":14}],"rooms":[{"roomId":14,"title":"Hall","avatar":0,"complexId":14,"messages":[{"messageId":24,"time":1551556358935,"type":"ServiceMessage","roomId":14,"seenByMe":false,"seenCount":0}]}]}}],"contacts":[],"peereds":[],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"},"peerId":5}],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","baseUserId":5,"online":false,"connectionId":""}],"type":"User"},"peerId":6,"peer":{"memberships":[{"membershipId":20,"userId":6,"complexId":14,"complex":{"complexId":14,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":21,"userId":5,"user":{"memberships":[],"contacts":[],"peereds":[{"contactId":9,"complexId":14,"userId":6,"peerId":5}],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","baseUserId":5,"online":false,"connectionId":""}],"type":"User"},"complexId":14}],"rooms":[{"roomId":14,"title":"Hall","avatar":0,"complexId":14,"messages":[{"messageId":24,"time":1551556358935,"type":"ServiceMessage","roomId":14,"seenByMe":false,"seenCount":0}]}]}}],"contacts":[{"contactId":9,"complexId":14,"complex":{"complexId":14,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":20,"userId":6,"complexId":14},{"membershipId":21,"userId":5,"user":{"memberships":[],"contacts":[],"peereds":[],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","baseUserId":5,"online":false,"connectionId":""}],"type":"User"},"complexId":14}],"rooms":[{"roomId":14,"title":"Hall","avatar":0,"complexId":14,"messages":[{"messageId":24,"time":1551556358935,"type":"ServiceMessage","roomId":14,"seenByMe":false,"seenCount":0}]}]},"userId":6,"peerId":5,"peer":{"memberships":[{"membershipId":21,"userId":5,"complexId":14,"complex":{"complexId":14,"title":"","avatar":-1,"mode":2,"members":[{"membershipId":20,"userId":6,"complexId":14}],"rooms":[{"roomId":14,"title":"Hall","avatar":0,"complexId":14,"messages":[{"messageId":24,"time":1551556358935,"type":"ServiceMessage","roomId":14,"seenByMe":false,"seenCount":0}]}]}}],"contacts":[],"peereds":[],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","baseUserId":5,"online":false,"connectionId":""}],"type":"User"}}],"peereds":[],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7adf07679d6a2710d7b9a1","type":"ContactCreationNotification","session":{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","online":true,"connectionId":"RWSRBLaeV9SE7dYC5hW8JQ"}}
+ to client...
+
+Pushing notification : 
+{"MessageId":24,"MessageSeenCount":1,"NotificationId":"5c7adf21679d6a2710d7b9a3","type":"MessageSeenNotification","session":{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","online":true,"connectionId":"BtJo5Ac610zbGo3jaqozQQ"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"hi","messageId":25,"time":1551556390682,"type":"TextMessage","authorId":6,"author":{"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"type":"User"},"roomId":14,"room":{"roomId":14,"title":"Hall","avatar":0,"complexId":14,"complex":{"complexId":14,"title":"","avatar":-1,"mode":2,"rooms":[]},"messages":[]},"seenByMe":false,"seenCount":0},"NotificationId":"5c7adf26679d6a2710d7b9a4","type":"TextMessageNotification","session":{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","online":true,"connectionId":"BtJo5Ac610zbGo3jaqozQQ"}}
+ to client...
+
+Pushing notification : 
+{"MessageId":24,"MessageSeenCount":2,"NotificationId":"5c7adf28679d6a2710d7b9a5","type":"MessageSeenNotification","session":{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","online":true,"connectionId":"NxLOWvmbfJo_D3ZxVnIrtA"}}
+ to client...
+
+Pushing notification : 
+{"MessageId":25,"MessageSeenCount":1,"NotificationId":"5c7adf28679d6a2710d7b9a6","type":"MessageSeenNotification","session":{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","online":true,"connectionId":"NxLOWvmbfJo_D3ZxVnIrtA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":19,"complexId":15,"complex":{"complexId":15,"title":"moon space","avatar":12,"mode":3,"invites":[]},"userId":5,"user":{"memberships":[{"membershipId":16,"userId":5,"complexId":11},{"membershipId":17,"userId":5,"complexId":12},{"membershipId":21,"userId":5,"complexId":14}],"invites":[],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","baseUserId":5,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7adf51679d6a2710d7b9a7","type":"InviteCreationNotification","session":{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","online":true,"connectionId":"BtJo5Ac610zbGo3jaqozQQ"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":19,"complexId":15,"complex":{"complexId":15,"title":"moon space","avatar":12,"mode":3,"invites":[]}},"NotificationId":"5c7adf5b679d6a2710d7b9a8","type":"InviteIgnoranceNotification","session":{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","online":true,"connectionId":"NxLOWvmbfJo_D3ZxVnIrtA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":20,"complexId":15,"complex":{"complexId":15,"title":"moon space","avatar":12,"mode":3,"invites":[]},"userId":5,"user":{"memberships":[{"membershipId":16,"userId":5,"complexId":11},{"membershipId":17,"userId":5,"complexId":12},{"membershipId":21,"userId":5,"complexId":14}],"invites":[],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","baseUserId":5,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7adf67679d6a2710d7b9a9","type":"InviteCreationNotification","session":{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","online":true,"connectionId":"BtJo5Ac610zbGo3jaqozQQ"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"caspi entered complex by invite.","messageId":0,"time":1551556459467,"type":"ServiceMessage","room":{"roomId":15,"title":"Hall","avatar":0,"complexId":15,"complex":{"complexId":15,"title":"moon space","avatar":12,"mode":3,"members":[{"membershipId":22,"userId":6,"user":{"memberships":[],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"},"complexId":15},{"membershipId":23,"userId":5,"user":{"memberships":[],"invites":[],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","baseUserId":5,"online":false,"connectionId":""}],"type":"User"},"complexId":15}],"rooms":[],"invites":[]}},"seenByMe":false,"seenCount":0},"NotificationId":"5c7adf6b679d6a2710d7b9aa","type":"ServiceMessageNotification","session":{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","online":true,"connectionId":"NxLOWvmbfJo_D3ZxVnIrtA"}}
+ to client...
+
+Pushing notification : 
+{"Membership":{"membershipId":23,"userId":5,"user":{"memberships":[],"invites":[],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","baseUserId":5,"online":false,"connectionId":""}],"type":"User"},"complexId":15,"complex":{"complexId":15,"title":"moon space","avatar":12,"mode":3,"members":[{"membershipId":22,"userId":6,"user":{"memberships":[],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"},"complexId":15}],"rooms":[{"roomId":15,"title":"Hall","avatar":0,"complexId":15}],"invites":[]}},"NotificationId":"5c7adf6b679d6a2710d7b9ab","type":"UserJointComplexNotification","session":{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","online":true,"connectionId":"NxLOWvmbfJo_D3ZxVnIrtA"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":20,"complexId":15,"complex":{"complexId":15,"title":"moon space","avatar":12,"mode":3,"members":[{"membershipId":22,"userId":6,"user":{"memberships":[],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"},"complexId":15},{"membershipId":23,"userId":5,"user":{"memberships":[],"invites":[],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":13,"token":"zqgZ4vXim62Fxe3QvTY4eFq7KoETPwrDHyTvqVpFwz3EuQaWrTTYJ4C2aioQ0eCZ","baseUserId":5,"online":false,"connectionId":""}],"type":"User"},"complexId":15}],"rooms":[{"roomId":15,"title":"Hall","avatar":0,"complexId":15}],"invites":[]}},"NotificationId":"5c7adf6b679d6a2710d7b9ac","type":"InviteAcceptanceNotification","session":{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","online":true,"connectionId":"NxLOWvmbfJo_D3ZxVnIrtA"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"hi","messageId":28,"time":1551557375896,"type":"TextMessage","authorId":6,"author":{"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"type":"User"},"roomId":15,"room":{"roomId":15,"title":"Hall","avatar":0,"complexId":15,"complex":{"complexId":15,"title":"moon space","avatar":12,"mode":3,"rooms":[]},"messages":[]},"seenByMe":false,"seenCount":0},"NotificationId":"5c7ae300679d6a2710d7b9ad","type":"TextMessageNotification","session":{"sessionId":16,"token":"26tBFuiAM8O8oXsTunmUumLHcnAxqFxQy31Yua7XhntBnYLxz3wDHRTPvUzs3Tkh","online":true,"connectionId":"CRjunsObnlS-g830Xzo92A"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"hello","messageId":29,"time":1551557383748,"type":"TextMessage","authorId":5,"author":{"baseUserId":5,"title":"caspi","avatar":10,"type":"User"},"roomId":15,"room":{"roomId":15,"title":"Hall","avatar":0,"complexId":15,"complex":{"complexId":15,"title":"moon space","avatar":12,"mode":3,"rooms":[]},"messages":[]},"seenByMe":false,"seenCount":0},"NotificationId":"5c7ae307679d6a2710d7b9ae","type":"TextMessageNotification","session":{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","online":true,"connectionId":"xudUidSbSD3g2FlLawKbCg"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":21,"complexId":16,"complex":{"complexId":16,"title":"lake view space","avatar":13,"mode":3,"invites":[]},"userId":5,"user":{"memberships":[{"membershipId":16,"userId":5,"complexId":11},{"membershipId":17,"userId":5,"complexId":12},{"membershipId":21,"userId":5,"complexId":14},{"membershipId":23,"userId":5,"complexId":15}],"invites":[],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":16,"token":"26tBFuiAM8O8oXsTunmUumLHcnAxqFxQy31Yua7XhntBnYLxz3wDHRTPvUzs3Tkh","baseUserId":5,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7ae337679d6a2710d7b9af","type":"InviteCreationNotification","session":{"sessionId":16,"token":"26tBFuiAM8O8oXsTunmUumLHcnAxqFxQy31Yua7XhntBnYLxz3wDHRTPvUzs3Tkh","online":true,"connectionId":"CRjunsObnlS-g830Xzo92A"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":21,"complexId":16,"complex":{"complexId":16,"title":"lake view space","avatar":13,"mode":3,"members":[{"membershipId":24,"userId":6,"user":{"memberships":[{"membershipId":19,"userId":6,"complexId":13},{"membershipId":20,"userId":6,"complexId":14},{"membershipId":22,"userId":6,"complexId":15}],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"},"complexId":16}],"invites":[]}},"NotificationId":"5c7ae339679d6a2710d7b9b0","type":"InviteCancellationNotification","session":{"sessionId":16,"token":"26tBFuiAM8O8oXsTunmUumLHcnAxqFxQy31Yua7XhntBnYLxz3wDHRTPvUzs3Tkh","online":true,"connectionId":"CRjunsObnlS-g830Xzo92A"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":22,"complexId":16,"complex":{"complexId":16,"title":"lake view space","avatar":13,"mode":3,"invites":[]},"userId":5,"user":{"memberships":[{"membershipId":16,"userId":5,"complexId":11},{"membershipId":17,"userId":5,"complexId":12},{"membershipId":21,"userId":5,"complexId":14},{"membershipId":23,"userId":5,"complexId":15}],"invites":[],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":16,"token":"26tBFuiAM8O8oXsTunmUumLHcnAxqFxQy31Yua7XhntBnYLxz3wDHRTPvUzs3Tkh","baseUserId":5,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7ae33b679d6a2710d7b9b1","type":"InviteCreationNotification","session":{"sessionId":16,"token":"26tBFuiAM8O8oXsTunmUumLHcnAxqFxQy31Yua7XhntBnYLxz3wDHRTPvUzs3Tkh","online":true,"connectionId":"CRjunsObnlS-g830Xzo92A"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":22,"complexId":16,"complex":{"complexId":16,"title":"lake view space","avatar":13,"mode":3,"invites":[]}},"NotificationId":"5c7ae344679d6a2710d7b9b2","type":"InviteIgnoranceNotification","session":{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","online":true,"connectionId":"xudUidSbSD3g2FlLawKbCg"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":23,"complexId":16,"complex":{"complexId":16,"title":"lake view space","avatar":13,"mode":3,"invites":[]},"userId":5,"user":{"memberships":[{"membershipId":16,"userId":5,"complexId":11},{"membershipId":17,"userId":5,"complexId":12},{"membershipId":21,"userId":5,"complexId":14},{"membershipId":23,"userId":5,"complexId":15}],"invites":[],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":16,"token":"26tBFuiAM8O8oXsTunmUumLHcnAxqFxQy31Yua7XhntBnYLxz3wDHRTPvUzs3Tkh","baseUserId":5,"online":false,"connectionId":""}],"type":"User"}},"NotificationId":"5c7ae34d679d6a2710d7b9b3","type":"InviteCreationNotification","session":{"sessionId":16,"token":"26tBFuiAM8O8oXsTunmUumLHcnAxqFxQy31Yua7XhntBnYLxz3wDHRTPvUzs3Tkh","online":true,"connectionId":"CRjunsObnlS-g830Xzo92A"}}
+ to client...
+
+Pushing notification : 
+{"Membership":{"membershipId":25,"userId":5,"user":{"memberships":[],"invites":[],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":16,"token":"26tBFuiAM8O8oXsTunmUumLHcnAxqFxQy31Yua7XhntBnYLxz3wDHRTPvUzs3Tkh","baseUserId":5,"online":false,"connectionId":""}],"type":"User"},"complexId":16,"complex":{"complexId":16,"title":"lake view space","avatar":13,"mode":3,"members":[{"membershipId":24,"userId":6,"user":{"memberships":[],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"},"complexId":16}],"rooms":[{"roomId":16,"title":"Hall","avatar":0,"complexId":16}],"invites":[]}},"NotificationId":"5c7ae351679d6a2710d7b9b4","type":"UserJointComplexNotification","session":{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","online":true,"connectionId":"xudUidSbSD3g2FlLawKbCg"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"caspi entered complex by invite.","messageId":0,"time":1551557457066,"type":"ServiceMessage","room":{"roomId":16,"title":"Hall","avatar":0,"complexId":16,"complex":{"complexId":16,"title":"lake view space","avatar":13,"mode":3,"members":[{"membershipId":24,"userId":6,"user":{"memberships":[],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"},"complexId":16},{"membershipId":25,"userId":5,"user":{"memberships":[],"invites":[],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":16,"token":"26tBFuiAM8O8oXsTunmUumLHcnAxqFxQy31Yua7XhntBnYLxz3wDHRTPvUzs3Tkh","baseUserId":5,"online":false,"connectionId":""}],"type":"User"},"complexId":16}],"rooms":[],"invites":[]}},"seenByMe":false,"seenCount":0},"NotificationId":"5c7ae351679d6a2710d7b9b5","type":"ServiceMessageNotification","session":{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","online":true,"connectionId":"xudUidSbSD3g2FlLawKbCg"}}
+ to client...
+
+Pushing notification : 
+{"Invite":{"inviteId":23,"complexId":16,"complex":{"complexId":16,"title":"lake view space","avatar":13,"mode":3,"members":[{"membershipId":24,"userId":6,"user":{"memberships":[],"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"sessions":[{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","baseUserId":6,"online":false,"connectionId":""}],"type":"User"},"complexId":16},{"membershipId":25,"userId":5,"user":{"memberships":[],"invites":[],"baseUserId":5,"title":"caspi","avatar":10,"sessions":[{"sessionId":16,"token":"26tBFuiAM8O8oXsTunmUumLHcnAxqFxQy31Yua7XhntBnYLxz3wDHRTPvUzs3Tkh","baseUserId":5,"online":false,"connectionId":""}],"type":"User"},"complexId":16}],"rooms":[{"roomId":16,"title":"Hall","avatar":0,"complexId":16}],"invites":[]}},"NotificationId":"5c7ae351679d6a2710d7b9b6","type":"InviteAcceptanceNotification","session":{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","online":true,"connectionId":"xudUidSbSD3g2FlLawKbCg"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"hi","messageId":32,"time":1551557528603,"type":"TextMessage","authorId":5,"author":{"baseUserId":5,"title":"caspi","avatar":10,"type":"User"},"roomId":16,"room":{"roomId":16,"title":"Hall","avatar":0,"complexId":16,"complex":{"complexId":16,"title":"lake view space","avatar":13,"mode":3,"rooms":[]},"messages":[]},"seenByMe":false,"seenCount":0},"NotificationId":"5c7ae398679d6a2710d7b9b7","type":"TextMessageNotification","session":{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","online":true,"connectionId":"xudUidSbSD3g2FlLawKbCg"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"how the hell","messageId":33,"time":1551557540355,"type":"TextMessage","authorId":5,"author":{"baseUserId":5,"title":"caspi","avatar":10,"type":"User"},"roomId":16,"room":{"roomId":16,"title":"Hall","avatar":0,"complexId":16,"complex":{"complexId":16,"title":"lake view space","avatar":13,"mode":3,"rooms":[]},"messages":[]},"seenByMe":false,"seenCount":0},"NotificationId":"5c7ae3a4679d6a2710d7b9b8","type":"TextMessageNotification","session":{"sessionId":15,"token":"zjOOX6Lj7f1kzSR8Mu8cB8K6zkRnzV1s8HKHemnCO0GXw2reQ0ArAYXzIRoMpxSm","online":true,"connectionId":"xudUidSbSD3g2FlLawKbCg"}}
+ to client...
+
+Pushing notification : 
+{"Message":{"text":"hello","messageId":34,"time":1551557548810,"type":"TextMessage","authorId":6,"author":{"baseUserId":6,"title":"Edward Kaspershot","avatar":11,"type":"User"},"roomId":16,"room":{"roomId":16,"title":"Hall","avatar":0,"complexId":16,"complex":{"complexId":16,"title":"lake view space","avatar":13,"mode":3,"rooms":[]},"messages":[]},"seenByMe":false,"seenCount":0},"NotificationId":"5c7ae3ac679d6a2710d7b9b9","type":"TextMessageNotification","session":{"sessionId":16,"token":"26tBFuiAM8O8oXsTunmUumLHcnAxqFxQy31Yua7XhntBnYLxz3wDHRTPvUzs3Tkh","online":true,"connectionId":"CRjunsObnlS-g830Xzo92A"}}
+ to client...

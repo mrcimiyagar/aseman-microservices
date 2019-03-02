@@ -16,6 +16,10 @@ namespace EntryPlatform.DbContexts
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Invite>()
+                .Property(i => i.InviteId)
+                .ValueGeneratedNever();
+
             modelBuilder.Entity<User>()
                 .Property(u => u.BaseUserId)
                 .ValueGeneratedNever();

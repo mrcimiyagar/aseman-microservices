@@ -1069,7 +1069,10 @@ namespace MessengerPlatform.Consumers
                     var membership = user.Memberships.Find(mem => mem.ComplexId == roomC.ComplexId);
                     if (membership == null)
                     {
-
+                        await context.RespondAsync(new GetLastActionsResponse()
+                        {
+                            Packet = new Packet() {Status = "error_1"}
+                        });
                         return;
                     }
 
@@ -1079,7 +1082,10 @@ namespace MessengerPlatform.Consumers
                     var room = complex.Rooms.Find(r => r.RoomId == roomC.RoomId);
                     if (room == null)
                     {
-
+                        await context.RespondAsync(new GetLastActionsResponse()
+                        {
+                            Packet = new Packet() {Status = "error_2"}
+                        });
                         return;
                     }
 

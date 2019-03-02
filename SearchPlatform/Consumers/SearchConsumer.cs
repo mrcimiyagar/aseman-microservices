@@ -271,7 +271,11 @@ namespace SearchPlatform.Consumers
                     dbContext.Entry(complex).Reference(c => c.ComplexSecret).Load();
                     if (complex.ComplexSecret == null) continue;
                     if (complex.ComplexSecret.AdminId == user.BaseUserId)
+                    {
                         complexSecrets.Add(complex.ComplexSecret);
+                        dbContext.Entry(complex).Collection(c => c.Invites).Query()
+                            .Include(i => i.Complex).Include(i => i.User).Load();
+                    }
                 }
                 await context.RespondAsync(new GetComplexesResponse()
                 {

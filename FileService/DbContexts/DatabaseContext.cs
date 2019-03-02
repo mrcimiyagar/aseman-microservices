@@ -25,6 +25,10 @@ namespace FileService.DbContexts
                 .HasIndex(fu => new {fu.FileId, fu.RoomId})
                 .IsUnique();
 
+            modelBuilder.Entity<Invite>()
+                .Property(i => i.InviteId)
+                .ValueGeneratedNever();
+
             modelBuilder.Entity<User>()
                 .Property(u => u.BaseUserId)
                 .ValueGeneratedNever();

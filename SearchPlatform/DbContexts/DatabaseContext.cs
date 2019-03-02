@@ -17,6 +17,10 @@ namespace SearchPlatform.DbContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Invite>()
+                .Property(i => i.InviteId)
+                .ValueGeneratedNever();
             
             modelBuilder.Entity<User>()
                 .Property(u => u.BaseUserId)

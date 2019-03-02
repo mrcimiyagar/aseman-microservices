@@ -102,5 +102,24 @@ namespace ApiGateway.Controllers
                 return result.Packet;
             }
         }
+
+        [Route("~/api/invite/get_invites")]
+        [HttpPost]
+        public async Task<ActionResult<Packet>> GetMyInvites()
+        {
+            using (var context = new DatabaseContext())
+            {
+                var session = Security.Authenticate(context, Request.Headers[AuthExtracter.AK]);
+                if (session == null) return new Packet {Status = "error_0"};
+                
+                var result = await SharedArea.Transport.DirectService<GetMyInvitesRequest, GetMyInvitesResponse>(
+                    Program.Bus,
+                    SharedArea.GlobalVariables.CITY_QUEUE_NAME,
+                    session.SessionId,
+                    Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()));
+
+                return result.Packet;
+            }
+        }
     }
 }

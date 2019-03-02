@@ -46,6 +46,7 @@ namespace SharedArea.Middles
         public BotCreation BotCreation { get; set; }
         public List<BotCreation> BotCreations { get; set; }
         public Invite Invite { get; set; }
+        public List<Invite> Invites { get; set; }
         public FileUsage FileUsage { get; set; }
         public BaseUser BaseUser { get; set; }
         public Photo Photo { get; set; }

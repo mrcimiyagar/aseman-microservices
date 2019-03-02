@@ -1085,6 +1085,8 @@
             <e p="CancelInviteResponse.cs" t="Include" />
             <e p="CreateInviteRequest.cs" t="Include" />
             <e p="CreateInviteResponse.cs" t="Include" />
+            <e p="GetMyInvitesRequest.cs" t="Include" />
+            <e p="GetMyInvitesResponse.cs" t="Include" />
             <e p="IgnoreInviteRequest.cs" t="Include" />
             <e p="IgnoreInviteResponse.cs" t="Include" />
           </e>

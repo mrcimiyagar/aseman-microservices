@@ -28,6 +28,10 @@ namespace StorePlatform.DbContexts
                 .HasIndex(bs => new {bs.BotId, bs.SubscriberId})
                 .IsUnique();
 
+            modelBuilder.Entity<Invite>()
+                .Property(i => i.InviteId)
+                .ValueGeneratedNever();
+
             modelBuilder.Entity<User>()
                 .Property(u => u.BaseUserId)
                 .ValueGeneratedNever();

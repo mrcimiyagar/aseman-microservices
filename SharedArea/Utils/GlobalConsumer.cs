@@ -331,7 +331,6 @@ namespace SharedArea.Utils
             {
                 var invite = dbContext.Invites.Find(context.Message.Packet.Invite.InviteId);
                 var membership = context.Message.Packet.Membership;
-                var message = context.Message.Packet.ServiceMessage;
                 var human = (User) dbContext.BaseUsers.Find(context.Message.Packet.User.BaseUserId);
 
                 dbContext.Entry(invite).Reference(i => i.Complex).Load();
@@ -343,9 +342,6 @@ namespace SharedArea.Utils
                 dbContext.Entry(complex).Collection(c => c.Members).Load();
                 complex.Members.Add(membership);
                 dbContext.Entry(complex).Collection(c => c.Rooms).Load();
-                var hall = complex.Rooms.FirstOrDefault();
-                message.Room = hall;
-                dbContext.Messages.Add(message);
                 dbContext.SaveChanges();
             }
 

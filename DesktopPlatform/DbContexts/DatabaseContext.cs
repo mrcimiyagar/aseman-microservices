@@ -22,14 +22,10 @@ namespace DesktopPlatform.DbContexts
             modelBuilder.Entity<Workership>()
                 .HasIndex(w => new {w.BotId, w.RoomId})
                 .IsUnique();
-            
-            modelBuilder.Entity<BotCreation>()
-                .HasIndex(bc => new {bc.BotId, bc.CreatorId})
-                .IsUnique();
 
-            modelBuilder.Entity<BotSubscription>()
-                .HasIndex(bs => new {bs.BotId, bs.SubscriberId})
-                .IsUnique();
+            modelBuilder.Entity<Invite>()
+                .Property(i => i.InviteId)
+                .ValueGeneratedNever();
 
             modelBuilder.Entity<User>()
                 .Property(u => u.BaseUserId)

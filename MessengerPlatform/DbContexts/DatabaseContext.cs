@@ -40,6 +40,10 @@ namespace MessengerPlatform.DbContexts
                 .HasIndex(ms => new {ms.MessageId, ms.UserId})
                 .IsUnique();
 
+            modelBuilder.Entity<Invite>()
+                .Property(i => i.InviteId)
+                .ValueGeneratedNever();
+
             modelBuilder.Entity<User>()
                 .Property(u => u.BaseUserId)
                 .ValueGeneratedNever();

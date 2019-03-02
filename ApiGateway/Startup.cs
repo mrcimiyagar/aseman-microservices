@@ -96,6 +96,8 @@ namespace ApiGateway
             Logger.Setup();
             MongoLayer.Setup();
             
+            DatabaseConfig.ConfigMongoNotifDb(new MongoLayer().GetNotifsColl());
+            
             Pusher = new Pusher(notifsHub);
                         
             Program.Bus = MassTransit.Bus.Factory.CreateUsingRabbitMq(sbc =>

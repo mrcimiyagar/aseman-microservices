@@ -829,8 +829,7 @@ namespace ApiGateway.Consumers
 
                     var notification = new UserJointComplexNotification()
                     {
-                        ComplexId = context.Message.Notif.ComplexId,
-                        UserId = context.Message.Notif.UserId,
+                        Membership = context.Message.Notif.Membership,
                         Session = s
                     };
 
