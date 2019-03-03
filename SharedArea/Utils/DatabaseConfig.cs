@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using SharedArea.Notifications;
 
@@ -13,7 +14,7 @@ namespace SharedArea.Utils
             context.Database.EnsureCreated();
         }
 
-        public static void ConfigMongoNotifDb(IMongoCollection<Notification> notifColl)
+        public static void ConfigMongoNotifDb(IMongoCollection<BsonDocument> notifColl)
         {
             //notifColl.DeleteMany(notification => true);
         }

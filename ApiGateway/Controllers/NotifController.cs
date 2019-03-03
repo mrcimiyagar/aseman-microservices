@@ -4,6 +4,8 @@ using ApiGateway.DbContexts;
 using ApiGateway.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using SharedArea.Middles;
 using SharedArea.Utils;
@@ -27,10 +29,12 @@ namespace ApiGateway.Controllers
 
                 using (var mongo = new MongoLayer())
                 {
-                    var notif = mongo.GetNotifsColl().FindOneAndDelete(n =>
-                        n.NotificationId == packet.Notif.NotificationId 
-                        && n.Session.SessionId == session.SessionId);
+                    var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(packet.Notif.NotificationId));
+                    
+                    var notif = mongo.GetNotifsColl().Find(filter).FirstOrDefault();
                     if (notif == null) return new Packet() {Status = "error_1"};
+                    if (notif["Session"]["SessionId"] == session.SessionId)
+                        mongo.GetNotifsColl().DeleteOne(filter);
                 }
                 
                 Startup.Pusher.NotifyNotificationReceived(session.SessionId);

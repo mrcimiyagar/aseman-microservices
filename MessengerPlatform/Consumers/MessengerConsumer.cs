@@ -771,6 +771,8 @@ namespace MessengerPlatform.Consumers
 
                 dbContext.Messages.Add(message);
 
+                message = (ServiceMessage) dbContext.Messages.Find(message.MessageId);
+
                 dbContext.SaveChanges();
 
                 await context.RespondAsync(new PutServiceMessageResponse()
@@ -926,31 +928,28 @@ namespace MessengerPlatform.Consumers
                     dbContext.MessageSeens.Add(messageSeen);
 
                     dbContext.SaveChanges();
-                    if (complex.Mode == 1 || complex.Mode == 2)
+                    var notif = new MessageSeenNotification()
                     {
-                        var notif = new MessageSeenNotification()
-                        {
-                            MessageId = message.MessageId,
-                            MessageSeenCount =
-                                dbContext.MessageSeens.LongCount(ms => ms.MessageId == message.MessageId)
-                        };
-                        dbContext.Entry(complex)
-                            .Collection(c => c.Members).Query()
-                            .Include(m => m.User)
-                            .ThenInclude(u => u.Sessions)
-                            .Load();
-                        var push = new MessageSeenPush()
-                        {
-                            Notif = notif,
-                            SessionIds = (from m in complex.Members
-                                where m.User.BaseUserId != user.BaseUserId
-                                from s in m.User.Sessions
-                                select s.SessionId).ToList()
-                        };
-                        SharedArea.Transport.Push<MessageSeenPush>(
-                            Program.Bus,
-                            push);
-                    }
+                        MessageId = message.MessageId,
+                        MessageSeenCount =
+                            dbContext.MessageSeens.LongCount(ms => ms.MessageId == message.MessageId)
+                    };
+                    dbContext.Entry(complex)
+                        .Collection(c => c.Members).Query()
+                        .Include(m => m.User)
+                        .ThenInclude(u => u.Sessions)
+                        .Load();
+                    var push = new MessageSeenPush()
+                    {
+                        Notif = notif,
+                        SessionIds = (from m in complex.Members
+                            where m.User.BaseUserId != user.BaseUserId
+                            from s in m.User.Sessions
+                            select s.SessionId).ToList()
+                    };
+                    SharedArea.Transport.Push<MessageSeenPush>(
+                        Program.Bus,
+                        push);
 
                     await context.RespondAsync(new NotifyMessageSeenResponse()
                     {

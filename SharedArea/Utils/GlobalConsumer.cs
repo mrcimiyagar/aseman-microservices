@@ -85,8 +85,8 @@ namespace SharedArea.Utils
             using (var dbContext = (DatabaseContext) Activator.CreateInstance<T>())
             {
                 var membership = context.Message.Packet.Membership;
-                var user = context.Message.Packet.User;
-                var complex = context.Message.Packet.Complex;
+                var user = (User) dbContext.BaseUsers.Find(context.Message.Packet.Membership.User.BaseUserId);
+                var complex = dbContext.Complexes.Find(context.Message.Packet.Membership.Complex.ComplexId);
 
                 membership.User = user;
                 membership.Complex = complex;
@@ -331,17 +331,17 @@ namespace SharedArea.Utils
             {
                 var invite = dbContext.Invites.Find(context.Message.Packet.Invite.InviteId);
                 var membership = context.Message.Packet.Membership;
-                var human = (User) dbContext.BaseUsers.Find(context.Message.Packet.User.BaseUserId);
+                var human = (User) dbContext.BaseUsers.Find(invite.UserId);
+                var complex = dbContext.Complexes.Find(invite.ComplexId);
 
-                dbContext.Entry(invite).Reference(i => i.Complex).Load();
-                var complex = invite.Complex;
+                dbContext.Entry(human).Collection(h => h.Invites).Load();
                 human.Invites.Remove(invite);
                 dbContext.Invites.Remove(invite);
                 membership.Complex = complex;
                 membership.User = human;
                 dbContext.Entry(complex).Collection(c => c.Members).Load();
                 complex.Members.Add(membership);
-                dbContext.Entry(complex).Collection(c => c.Rooms).Load();
+                dbContext.Memberships.Add(membership);
                 dbContext.SaveChanges();
             }
 

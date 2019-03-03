@@ -1,18 +1,16 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApiGateway.DbContexts;
-using ApiGateway.Utils;
 using MassTransit;
-using SharedArea.Commands.Auth;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
 using SharedArea.Commands.Internal.Responses;
 using SharedArea.Commands.Pushes;
 using SharedArea.Entities;
 using SharedArea.Notifications;
-using SharedArea.Utils;
 
 namespace ApiGateway.Consumers
 {
@@ -25,7 +23,7 @@ namespace ApiGateway.Consumers
         , IConsumer<PhotoCreatedNotif>, IConsumer<AudioCreatedNotif>, IConsumer<VideoCreatedNotif>
         , IConsumer<SessionUpdatedNotif>, IConsumer<RoomDeletionNotif>, IConsumer<WorkershipCreatedNotif>
         , IConsumer<WorkershipUpdatedNotif>, IConsumer<WorkershipDeletedNotif>, IConsumer<AccountCreatedNotif>
-
+        
         , IConsumer<PutUserRequest>, IConsumer<PutComplexRequest>, IConsumer<PutRoomRequest>
         , IConsumer<PutMembershipRequest>, IConsumer<PutSessionRequest>, IConsumer<UpdateUserSecretRequest>
         , IConsumer<PutServiceMessageRequest>, IConsumer<ConsolidateContactRequest>
@@ -644,7 +642,7 @@ namespace ApiGateway.Consumers
             }
         }
 
-        public Task Consume(ConsumeContext<ComplexDeletionPush> context)
+        public  async Task Consume(ConsumeContext<ComplexDeletionPush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -660,7 +658,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -669,11 +667,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<RoomDeletionPush> context)
+        public async Task Consume(ConsumeContext<RoomDeletionPush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -690,7 +686,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -699,11 +695,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<ContactCreationPush> context)
+        public async Task Consume(ConsumeContext<ContactCreationPush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -719,7 +713,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -728,11 +722,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<ServiceMessagePush> context)
+        public async Task Consume(ConsumeContext<ServiceMessagePush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -748,7 +740,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -757,11 +749,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<InviteCreationPush> context)
+        public async Task Consume(ConsumeContext<InviteCreationPush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -777,7 +767,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -786,11 +776,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<InviteCancellationPush> context)
+        public async Task Consume(ConsumeContext<InviteCancellationPush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -806,7 +794,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -815,11 +803,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<UserJointComplexPush> context)
+        public async Task Consume(ConsumeContext<UserJointComplexPush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -835,7 +821,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -844,11 +830,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<InviteAcceptancePush> context)
+        public async Task Consume(ConsumeContext<InviteAcceptancePush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -864,7 +848,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -873,11 +857,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<InviteIgnoredPush> context)
+        public async Task Consume(ConsumeContext<InviteIgnoredPush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -893,7 +875,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -902,11 +884,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<BotAdditionToRoomPush> context)
+        public async Task Consume(ConsumeContext<BotAdditionToRoomPush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -922,7 +902,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -931,11 +911,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<BotRemovationFromRoomPush> context)
+        public async Task Consume(ConsumeContext<BotRemovationFromRoomPush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -951,7 +929,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -960,11 +938,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<TextMessagePush> context)
+        public async Task Consume(ConsumeContext<TextMessagePush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -979,14 +955,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        try
-                        {
-                            mongo.GetNotifsColl().InsertOne(notification);
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex.ToString());
-                        }
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -995,11 +964,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<PhotoMessagePush> context)
+        public async Task Consume(ConsumeContext<PhotoMessagePush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -1015,7 +982,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -1024,11 +991,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<AudioMessagePush> context)
+        public async Task Consume(ConsumeContext<AudioMessagePush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -1044,7 +1009,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -1053,11 +1018,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<VideoMessagePush> context)
+        public async Task Consume(ConsumeContext<VideoMessagePush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -1073,7 +1036,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -1082,11 +1045,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<UserRequestedBotViewPush> context)
+        public async Task Consume(ConsumeContext<UserRequestedBotViewPush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -1105,7 +1066,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -1114,11 +1075,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<BotSentBotViewPush> context)
+        public async Task Consume(ConsumeContext<BotSentBotViewPush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -1137,7 +1096,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -1146,11 +1105,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<BotUpdatedBotViewPush> context)
+        public async Task Consume(ConsumeContext<BotUpdatedBotViewPush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -1169,7 +1126,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -1178,11 +1135,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<BotAnimatedBotViewPush> context)
+        public async Task Consume(ConsumeContext<BotAnimatedBotViewPush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -1201,7 +1156,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -1210,11 +1165,9 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<BotRanCommandsOnBotViewPush> context)
+        public async Task Consume(ConsumeContext<BotRanCommandsOnBotViewPush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
@@ -1233,7 +1186,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -1242,16 +1195,16 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<MessageSeenPush> context)
+        public async Task Consume(ConsumeContext<MessageSeenPush> context)
         {
             using (var dbContext = new DatabaseContext())
             {
+                Console.WriteLine("Sending Message seen to sessions : ");
                 foreach (var sessionId in context.Message.SessionIds)
                 {
+                    Console.WriteLine("Message seen to session : " + sessionId);
                     var session = dbContext.Sessions.Find(sessionId);
 
                     var notification = new MessageSeenNotification()
@@ -1263,7 +1216,7 @@ namespace ApiGateway.Consumers
 
                     using (var mongo = new MongoLayer())
                     {
-                        mongo.GetNotifsColl().InsertOne(notification);
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
                     }
                 }
 
@@ -1272,8 +1225,6 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
         public async Task Consume(ConsumeContext<ConsolidateMakeAccountRequest> context)

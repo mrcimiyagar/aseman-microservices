@@ -1003,12 +1003,14 @@ namespace CityPlatform.Consumers
                         Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
                     };
 
-                    await SharedArea.Transport
+                    var result = await SharedArea.Transport
                         .RequestService<PutServiceMessageRequest, PutServiceMessageResponse>(
                             Program.Bus,
                             SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
                             new Packet() {ServiceMessage = message, Room = hall});
 
+                    message = result.Packet.ServiceMessage;
+                    
                     User user;
                     Complex jointComplex;
                     using (var context2 = new DatabaseContext())
