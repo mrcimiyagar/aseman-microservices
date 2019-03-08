@@ -35,6 +35,16 @@ namespace DesktopPlatform.Consumers
                     });
                     return;
                 }
+                dbContext.Entry(membership).Reference(m => m.MemberAccess).Load();
+                if (!membership.MemberAccess.CanModifyWorkers)
+                {
+                    await context.RespondAsync(new AddBotToRoomResponse()
+                    {
+                        Packet = new Packet() {Status = "error_3"}
+                    });
+                    return;
+                }
+                
                 dbContext.Entry(membership).Reference(m => m.Complex).Load();
                 var complex = membership.Complex;
                 dbContext.Entry(complex).Collection(c => c.Rooms).Load();

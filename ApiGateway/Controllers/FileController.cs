@@ -86,7 +86,7 @@ namespace ApiGateway.Controllers
 
                                 var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
                                                       SharedArea.GlobalVariables.FILE_QUEUE_NAME +
-                                                      "?autodelete=true&durable=false&temporary=true");
+                                                      SharedArea.GlobalVariables.RABBITMQ_SERVER_URL_EXTENSIONS);
                                 Console.WriteLine("Hello 8");
 
                                 var requestTimeout = TimeSpan.FromDays(35);
@@ -214,7 +214,7 @@ namespace ApiGateway.Controllers
 
                 var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
                                       SharedArea.GlobalVariables.FILE_QUEUE_NAME +
-                                      "?autodelete=true&durable=false&temporary=true");
+                                      SharedArea.GlobalVariables.RABBITMQ_SERVER_URL_EXTENSIONS);
                 var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
                 IRequestClient<UploadPhotoRequest, UploadPhotoResponse> client =
                     new MessageRequestClient<UploadPhotoRequest, UploadPhotoResponse>(
@@ -251,7 +251,7 @@ namespace ApiGateway.Controllers
 
                 var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
                                       SharedArea.GlobalVariables.FILE_QUEUE_NAME +
-                                      "?autodelete=true&durable=false&temporary=true");
+                                      SharedArea.GlobalVariables.RABBITMQ_SERVER_URL_EXTENSIONS);
                 var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
                 IRequestClient<UploadAudioRequest, UploadAudioResponse> client =
                     new MessageRequestClient<UploadAudioRequest, UploadAudioResponse>(
@@ -285,7 +285,7 @@ namespace ApiGateway.Controllers
 
                 var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
                                       SharedArea.GlobalVariables.FILE_QUEUE_NAME +
-                                      "?autodelete=true&durable=false&temporary=true");
+                                      SharedArea.GlobalVariables.RABBITMQ_SERVER_URL_EXTENSIONS);
                 var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
                 IRequestClient<UploadVideoRequest, UploadVideoResponse> client =
                     new MessageRequestClient<UploadVideoRequest, UploadVideoResponse>(
@@ -316,7 +316,7 @@ namespace ApiGateway.Controllers
 
             var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
                                   SharedArea.GlobalVariables.FILE_QUEUE_NAME +
-                                  "?autodelete=true&durable=false&temporary=true");
+                                  SharedArea.GlobalVariables.RABBITMQ_SERVER_URL_EXTENSIONS);
             var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
             IRequestClient<DownloadBotAvatarRequest, DownloadBotAvatarResponse> client =
                 new MessageRequestClient<DownloadBotAvatarRequest, DownloadBotAvatarResponse>(
@@ -369,7 +369,7 @@ namespace ApiGateway.Controllers
 
                 var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
                                       SharedArea.GlobalVariables.FILE_QUEUE_NAME +
-                                      "?autodelete=true&durable=false&temporary=true");
+                                      SharedArea.GlobalVariables.RABBITMQ_SERVER_URL_EXTENSIONS);
                 var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
                 IRequestClient<DownloadRoomAvatarRequest, DownloadRoomAvatarResponse> client =
                     new MessageRequestClient<DownloadRoomAvatarRequest, DownloadRoomAvatarResponse>(
@@ -420,7 +420,7 @@ namespace ApiGateway.Controllers
 
             var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
                                   SharedArea.GlobalVariables.FILE_QUEUE_NAME +
-                                  "?autodelete=true&durable=false&temporary=true");
+                                  SharedArea.GlobalVariables.RABBITMQ_SERVER_URL_EXTENSIONS);
             var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
             IRequestClient<DownloadComplexAvatarRequest, DownloadComplexAvatarResponse> client =
                 new MessageRequestClient<DownloadComplexAvatarRequest, DownloadComplexAvatarResponse>(
@@ -468,7 +468,7 @@ namespace ApiGateway.Controllers
 
             var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
                                   SharedArea.GlobalVariables.FILE_QUEUE_NAME +
-                                  "?autodelete=true&durable=false&temporary=true");
+                                  SharedArea.GlobalVariables.RABBITMQ_SERVER_URL_EXTENSIONS);
             var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
             IRequestClient<DownloadUserAvatarRequest, DownloadUserAvatarResponse> client =
                 new MessageRequestClient<DownloadUserAvatarRequest, DownloadUserAvatarResponse>(
@@ -546,7 +546,7 @@ namespace ApiGateway.Controllers
 
                 var address = new Uri(SharedArea.GlobalVariables.RABBITMQ_SERVER_URL + "/" +
                                       SharedArea.GlobalVariables.FILE_QUEUE_NAME +
-                                      "?autodelete=true&durable=false&temporary=true");
+                                      SharedArea.GlobalVariables.RABBITMQ_SERVER_URL_EXTENSIONS);
                 var requestTimeout = TimeSpan.FromSeconds(SharedArea.GlobalVariables.RABBITMQ_REQUEST_TIMEOUT);
                 IRequestClient<DownloadFileRequest, DownloadFileResponse> client =
                     new MessageRequestClient<DownloadFileRequest, DownloadFileResponse>(

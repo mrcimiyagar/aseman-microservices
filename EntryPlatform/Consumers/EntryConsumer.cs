@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using EntryPlatform.DbContexts;
 using EntryPlatform.Utils;
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using SharedArea.Commands.Auth;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
@@ -126,6 +127,14 @@ namespace EntryPlatform.Consumers
                                                     Avatar = 0
                                                 }
                                             }
+                                        },
+                                        MemberAccess = new MemberAccess()
+                                        {
+                                            CanCreateMessage = true,
+                                            CanModifyAccess = true,
+                                            CanModifyWorkers = true,
+                                            CanSendInvite = true,
+                                            CanUpdateProfiles = true
                                         }
                                     }
                                 }
@@ -137,6 +146,7 @@ namespace EntryPlatform.Consumers
                             user.Memberships[0].Complex.Rooms[0].Complex = user.Memberships[0].Complex;
                             user.UserSecret.Home = user.Memberships[0].Complex;
                             user.Memberships[0].User = user;
+                            user.Memberships[0].MemberAccess.Membership = user.Memberships[0];
                             
                             var result = await SharedArea.Transport.RequestService<MakeAccountRequest, MakeAccountResponse>(
                                 Program.Bus,
@@ -150,6 +160,8 @@ namespace EntryPlatform.Consumers
                             user.Memberships[0].Complex.ComplexSecret.ComplexSecretId = result.Packet.ComplexSecret.ComplexSecretId;
                             user.Memberships[0].Complex.Rooms[0].RoomId = result.Packet.Room.RoomId;
                             user.Memberships[0].MembershipId = result.Packet.Membership.MembershipId;
+                            user.Memberships[0].MemberAccess.MemberAccessId =
+                                result.Packet.Membership.MemberAccess.MemberAccessId;
                             
                             dbContext.AddRange(user);
 
@@ -229,7 +241,8 @@ namespace EntryPlatform.Consumers
                         dbContext.Entry(session).Reference(s => s.BaseUser).Load();
                         dbContext.Entry(user).Reference(u => u.UserSecret).Load();
                         dbContext.Entry(user.UserSecret).Reference(us => us.Home).Load();
-                        dbContext.Entry(user.UserSecret.Home).Collection(h => h.Members).Load();
+                        dbContext.Entry(user.UserSecret.Home).Collection(h => h.Members).Query()
+                            .Include(m => m.MemberAccess).Load();
                         dbContext.Entry(user.UserSecret.Home).Reference(h => h.ComplexSecret).Load();
                         dbContext.Entry(user.UserSecret.Home).Collection(h => h.Rooms).Load();
                         dbContext.Entry(user.UserSecret.Home).Reference(h => h.ComplexSecret).Load();

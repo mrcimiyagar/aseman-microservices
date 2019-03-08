@@ -4,8 +4,9 @@ namespace SharedArea
 {
     public class GlobalVariables
     {
+        public const string RABBITMQ_SERVER_URL_EXTENSIONS = "?autodelete=true&durable=false&temporary=true";
         public const string RABBITMQ_SERVER_URL = "rabbitmq://localhost";
-        public const string RABBITMQ_SERVER_PATH = RABBITMQ_SERVER_URL + "?autodelete=true&durable=false&temporary=true";
+        public const string RABBITMQ_SERVER_PATH = RABBITMQ_SERVER_URL + RABBITMQ_SERVER_URL_EXTENSIONS;
         public const string RABBITMQ_USERNAME = "guest", RABBITMQ_PASSWORD = "guest";
         public const string FILE_TRANSFER_USERNAME = "guest", FILE_TRANSFER_PASSWORD = "guest";
         public const string SERVER_URL = "http://localhost:8080/";

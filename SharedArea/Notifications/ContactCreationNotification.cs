@@ -6,5 +6,6 @@ namespace SharedArea.Notifications
     {
         public long? ContactId { get; set; }
         public virtual Contact Contact { get; set; }
+        public virtual ComplexSecret ComplexSecret { get; set; }
     }
 }

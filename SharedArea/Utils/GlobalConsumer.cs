@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using SharedArea.Commands.Auth;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
@@ -54,6 +55,7 @@ namespace SharedArea.Utils
                 complex.Members[0].Complex = complex;
                 complexSecret.Admin = admin;
                 complex.Members[0].User = admin;
+                complex.Members[0].MemberAccess.Membership = complex.Members[0];
 
                 dbContext.AddRange(complex);
 
@@ -156,28 +158,28 @@ namespace SharedArea.Utils
             {
                 var complex = dbContext.Complexes.Find(context.Message.Packet.Complex.ComplexId);
 
-                dbContext.Entry(complex).Collection(c => c.Members).Load();
+                dbContext.Entry(complex).Collection(c => c.Members).Query().Include(mem => mem.MemberAccess).Load();
+                dbContext.Entry(complex).Collection(c => c.Rooms).Load();
+                foreach (var room in complex.Rooms)
+                {
+                    dbContext.Rooms.Remove(room);
+                }
                 var members = complex.Members.ToList();
                 foreach (var membership in members)
                 {
+                    dbContext.MemberAccesses.Remove(membership.MemberAccess);
                     dbContext.Entry(membership).Reference(m => m.User).Load();
                     var user = membership.User;
                     dbContext.Entry(user).Collection(u => u.Memberships).Load();
                     user.Memberships.Remove(membership);
                     dbContext.Memberships.Remove(membership);
-
-                    dbContext.Entry(complex).Collection(c => c.Rooms).Load();
-                    foreach (var room in complex.Rooms)
-                    {
-                        dbContext.Rooms.Remove(room);
-                    }
-
-                    dbContext.Entry(complex).Reference(c => c.ComplexSecret).Load();
-                    dbContext.ComplexSecrets.Remove(complex.ComplexSecret);
-                    dbContext.Complexes.Remove(complex);
-
-                    dbContext.SaveChanges();
                 }
+                
+                dbContext.Entry(complex).Reference(c => c.ComplexSecret).Load();
+                dbContext.ComplexSecrets.Remove(complex.ComplexSecret);
+                dbContext.Complexes.Remove(complex);
+
+                dbContext.SaveChanges();
             }
 
             await context.RespondAsync(new ComplexDeletionNotifResponse());
@@ -197,7 +199,7 @@ namespace SharedArea.Utils
                 dbContext.SaveChanges();
             }
 
-            await context.RespondAsync(new ComplexDeletionNotifResponse());
+            await context.RespondAsync(new RoomProfileUpdatedNotifResponse());
         }
 
         public async Task Consume(ConsumeContext<RoomDeletionNotif> context)
@@ -259,15 +261,36 @@ namespace SharedArea.Utils
                         new Membership()
                         {
                             MembershipId = m1.MembershipId,
-                            User = me
+                            User = me,
+                            MemberAccess = new MemberAccess()
+                            {
+                                MemberAccessId = m1.MemberAccess.MemberAccessId,
+                                CanCreateMessage = m1.MemberAccess.CanCreateMessage,
+                                CanModifyAccess = m1.MemberAccess.CanModifyAccess,
+                                CanModifyWorkers = m1.MemberAccess.CanModifyWorkers,
+                                CanSendInvite = m1.MemberAccess.CanSendInvite,
+                                CanUpdateProfiles = m1.MemberAccess.CanUpdateProfiles
+                            }
                         },
                         new Membership()
                         {
                             MembershipId = m2.MembershipId,
-                            User = peer
+                            User = peer,
+                            MemberAccess = new MemberAccess()
+                            {
+                                MemberAccessId = m2.MemberAccess.MemberAccessId,
+                                CanCreateMessage = m2.MemberAccess.CanCreateMessage,
+                                CanModifyAccess = m2.MemberAccess.CanModifyAccess,
+                                CanModifyWorkers = m2.MemberAccess.CanModifyWorkers,
+                                CanSendInvite = m2.MemberAccess.CanSendInvite,
+                                CanUpdateProfiles = m2.MemberAccess.CanUpdateProfiles
+                            }
                         }
                     }
                 };
+
+                lComplex.Members[0].MemberAccess.Membership = lComplex.Members[0];
+                lComplex.Members[1].MemberAccess.Membership = lComplex.Members[1];
 
                 dbContext.AddRange(lComplex);
                 dbContext.SaveChanges();
@@ -400,6 +423,7 @@ namespace SharedArea.Utils
                 user.Memberships[0].Complex.Rooms[0].Complex = user.Memberships[0].Complex;
                 user.UserSecret.Home = user.Memberships[0].Complex;
                 user.Memberships[0].User = user;
+                user.Memberships[0].MemberAccess.Membership = user.Memberships[0];
                 
                 dbContext.AddRange(user);
 

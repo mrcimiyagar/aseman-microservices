@@ -78,6 +78,10 @@ namespace DesktopPlatform.DbContexts
             modelBuilder.Entity<Message>()
                 .Property(m => m.MessageId)
                 .ValueGeneratedNever();
+            
+            modelBuilder.Entity<MemberAccess>()
+                .Property(m => m.MemberAccessId)
+                .ValueGeneratedNever();
         }
     }
 }

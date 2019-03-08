@@ -10,13 +10,13 @@ namespace SharedArea.Utils
         public static void ConfigDatabase(DbContext context)
         {
             context.Database.SetCommandTimeout(60000);
-            //context.Database.EnsureDeleted();
+            context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
         }
 
         public static void ConfigMongoNotifDb(IMongoCollection<BsonDocument> notifColl)
         {
-            //notifColl.DeleteMany(notification => true);
+            notifColl.DeleteMany(notification => true);
         }
     }
 }

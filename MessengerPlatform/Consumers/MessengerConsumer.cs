@@ -41,6 +41,7 @@ namespace MessengerPlatform.Consumers
                 complex.Members[0].Complex = complex;
                 complexSecret.Admin = admin;
                 complex.Members[0].User = admin;
+                complex.Members[0].MemberAccess.Membership = complex.Members[0];
 
                 dbContext.AddRange(complex);
 
@@ -1026,6 +1027,7 @@ namespace MessengerPlatform.Consumers
                 user.Memberships[0].Complex.Rooms[0].Complex = user.Memberships[0].Complex;
                 user.UserSecret.Home = user.Memberships[0].Complex;
                 user.Memberships[0].User = user;
+                user.Memberships[0].MemberAccess.Membership = user.Memberships[0];
 
                 dbContext.AddRange(user);
 
@@ -1092,6 +1094,8 @@ namespace MessengerPlatform.Consumers
                     
                     if (roomC.LastAction != null)
                     {
+                        dbContext.Entry(roomC.LastAction).Reference(m => m.Author).Load();
+                        
                         if (roomC.LastAction.GetType() == typeof(PhotoMessage))
                         {
                             dbContext.Entry(roomC.LastAction).Reference(m => ((PhotoMessage) m).Photo).Load();

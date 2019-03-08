@@ -111,6 +111,10 @@ namespace MessengerPlatform.DbContexts
             modelBuilder.Entity<Workership>()
                 .Property(w => w.WorkershipId)
                 .ValueGeneratedNever();
+            
+            modelBuilder.Entity<MemberAccess>()
+                .Property(m => m.MemberAccessId)
+                .ValueGeneratedNever();
         }
     }
 }

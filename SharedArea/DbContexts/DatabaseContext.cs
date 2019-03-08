@@ -14,6 +14,7 @@ namespace SharedArea.DbContexts
         public DbSet<ComplexSecret> ComplexSecrets { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Membership> Memberships { get; set; }
+        public DbSet<MemberAccess> MemberAccesses { get; set; }
         public DbSet<Invite> Invites { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Contact> Contacts { get; set; }
@@ -52,6 +53,11 @@ namespace SharedArea.DbContexts
             modelBuilder.Entity<Invite>()
                 .HasIndex(i => new {i.ComplexId, i.UserId})
                 .IsUnique();
+            
+            modelBuilder.Entity<Membership>()
+                .HasOne(a => a.MemberAccess)
+                .WithOne(a => a.Membership)
+                .HasForeignKey<MemberAccess>(c => c.MembershipId);
         }
     }
 }

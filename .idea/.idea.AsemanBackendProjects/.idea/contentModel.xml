@@ -951,6 +951,8 @@
             <e p="CreateComplexResponse.cs" t="Include" />
             <e p="DeleteComplexRequest.cs" t="Include" />
             <e p="DeleteComplexResponse.cs" t="Include" />
+            <e p="GetComplexAccessesRequest.cs" t="Include" />
+            <e p="GetComplexAccessesResponse.cs" t="Include" />
             <e p="GetComplexByIdRequest.cs" t="Include" />
             <e p="GetComplexByIdResponse.cs" t="Include" />
             <e p="GetComplexesRequest.cs" t="Include" />
@@ -959,6 +961,8 @@
             <e p="SearchComplexesResponse.cs" t="Include" />
             <e p="UpdateComplexProfileRequest.cs" t="Include" />
             <e p="UpdateComplexProfileResponse.cs" t="Include" />
+            <e p="UpdateMemberAccessRequest.cs" t="Include" />
+            <e p="UpdateMemberAccessResponse.cs" t="Include" />
           </e>
           <e p="Contact" t="Include">
             <e p="CreateContactRequest.cs" t="Include" />
@@ -1136,6 +1140,7 @@
             <e p="InviteCancellationPush.cs" t="Include" />
             <e p="InviteCreationPush.cs" t="Include" />
             <e p="InviteIgnoredPush.cs" t="Include" />
+            <e p="MemberAccessUpdatedPush.cs" t="Include" />
             <e p="MessageSeenPush.cs" t="Include" />
             <e p="PhotoMessagePush.cs" t="Include" />
             <e p="RoomDeletionPush.cs" t="Include" />
@@ -1191,6 +1196,7 @@
           <e p="File.cs" t="Include" />
           <e p="FileUsage.cs" t="Include" />
           <e p="Invite.cs" t="Include" />
+          <e p="MemberAccess.cs" t="Include" />
           <e p="Membership.cs" t="Include" />
           <e p="Message.cs" t="Include" />
           <e p="MessageSeen.cs" t="Include" />
@@ -1231,6 +1237,7 @@
           <e p="InviteCancellationNotification.cs" t="Include" />
           <e p="InviteCreationNotification.cs" t="Include" />
           <e p="InviteIgnoranceNotification.cs" t="Include" />
+          <e p="MemberAccessUpdatedNotification.cs" t="Include" />
           <e p="MessageSeenNotification.cs" t="Include" />
           <e p="Notification.cs" t="Include" />
           <e p="PhotoMessageNotification.cs" t="Include" />

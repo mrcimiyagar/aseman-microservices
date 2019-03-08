@@ -39,6 +39,7 @@ namespace ApiGateway.Consumers
         , IConsumer<PhotoMessagePush>, IConsumer<AudioMessagePush>, IConsumer<VideoMessagePush>
         , IConsumer<UserRequestedBotViewPush>, IConsumer<BotSentBotViewPush>, IConsumer<BotUpdatedBotViewPush>
         , IConsumer<BotAnimatedBotViewPush>, IConsumer<BotRanCommandsOnBotViewPush>, IConsumer<MessageSeenPush>
+        , IConsumer<MemberAccessUpdatedPush>
     {
         public async Task Consume(ConsumeContext<UserCreatedNotif> context)
         {
@@ -1201,10 +1202,8 @@ namespace ApiGateway.Consumers
         {
             using (var dbContext = new DatabaseContext())
             {
-                Console.WriteLine("Sending Message seen to sessions : ");
                 foreach (var sessionId in context.Message.SessionIds)
                 {
-                    Console.WriteLine("Message seen to session : " + sessionId);
                     var session = dbContext.Sessions.Find(sessionId);
 
                     var notification = new MessageSeenNotification()
@@ -1255,6 +1254,33 @@ namespace ApiGateway.Consumers
                     context.Message.Destination,
                     context.Message.Packet);
             await context.RespondAsync(result);
+        }
+
+        public async Task Consume(ConsumeContext<MemberAccessUpdatedPush> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    var session = dbContext.Sessions.Find(sessionId);
+
+                    var notification = new MemberAccessUpdatedNotification()
+                    {
+                        MemberAccess = context.Message.Notif.MemberAccess,
+                        Session = session
+                    };
+
+                    using (var mongo = new MongoLayer())
+                    {
+                        await mongo.GetNotifsColl2().InsertOneAsync(notification).ConfigureAwait(false);
+                    }
+                }
+
+                foreach (var sessionId in context.Message.SessionIds)
+                {
+                    Startup.Pusher.NextPush(sessionId);
+                }
+            }
         }
     }
 }

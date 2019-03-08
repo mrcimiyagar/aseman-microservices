@@ -7,6 +7,7 @@ using SharedArea.Middles;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using SharedArea.Commands.Complex;
+using SharedArea.Forms;
 using SharedArea.Utils;
 
 namespace ApiGateway.Controllers
@@ -135,6 +136,46 @@ namespace ApiGateway.Controllers
                 var result = await SharedArea.Transport.DirectService<SearchComplexesRequest, SearchComplexesResponse>(
                     Program.Bus,
                     SharedArea.GlobalVariables.SEARCH_QUEUE_NAME,
+                    session.SessionId,
+                    Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
+                    packet);
+
+                return result.Packet;
+            }
+        }
+
+        [Route("~/api/complex/update_member_access")]
+        [HttpPost]
+        public async Task<ActionResult<Packet>> UpdateMemberAccess([FromBody] Packet packet)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = Security.Authenticate(dbContext, Request.Headers[AuthExtracter.AK]);
+                if (session == null) return new Packet() {Status = "error_0"};
+                
+                var result = await SharedArea.Transport.DirectService<UpdateMemberAccessRequest, UpdateMemberAccessResponse>(
+                    Program.Bus,
+                    SharedArea.GlobalVariables.CITY_QUEUE_NAME,
+                    session.SessionId,
+                    Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
+                    packet);
+
+                return result.Packet;
+            }
+        }
+
+        [Route("~/api/complex/get_complex_accesses")]
+        [HttpPost]
+        public async Task<ActionResult<Packet>> GetComplexAccesses([FromBody] Packet packet)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = Security.Authenticate(dbContext, Request.Headers[AuthExtracter.AK]);
+                if (session == null) return new Packet() {Status = "error_0"};
+                
+                var result = await SharedArea.Transport.DirectService<GetComplexAccessesRequest, GetComplexAccessesResponse>(
+                    Program.Bus,
+                    SharedArea.GlobalVariables.CITY_QUEUE_NAME,
                     session.SessionId,
                     Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()),
                     packet);

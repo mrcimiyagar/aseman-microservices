@@ -85,7 +85,7 @@ namespace ApiGateway.Utils
                             return;
                         }
                         PushNotification(session, n);
-                        await Task.Delay(10000, cts.Token);
+                        await Task.Delay(20000, cts.Token);
                         _senderStates[sessionId] = NotifSenderState.EmptyQueue;
                         NextPush(sessionId);
                     }
@@ -244,6 +244,13 @@ namespace ApiGateway.Utils
                 notif.Type = notif.GetType().Name;
                 await _notifsHub.Clients.Client(session.ConnectionId)
                     .SendAsync("NotifyMessageSeen", notif);
+            }
+            else if (type == typeof(MemberAccessUpdatedNotification).Name)
+            {
+                var notif = BsonSerializer.Deserialize<MemberAccessUpdatedNotification>(n);
+                notif.Type = notif.GetType().Name;
+                await _notifsHub.Clients.Client(session.ConnectionId)
+                    .SendAsync("NotifyMemberAccessUpdated", notif);
             }
         }
     }

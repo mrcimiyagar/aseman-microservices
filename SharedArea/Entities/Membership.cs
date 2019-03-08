@@ -16,5 +16,9 @@ namespace SharedArea.Entities
         public long? ComplexId { get; set; }
         [JsonProperty("complex")]
         public virtual Complex Complex { get; set; }
+        [JsonProperty("memberAccessId")]
+        public long? MemberAccessId { get; set; }
+        [JsonProperty("memberAccess")]
+        public virtual MemberAccess MemberAccess { get; set; }
     }
 }

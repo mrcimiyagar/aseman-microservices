@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using CityPlatform.DbContexts;
 using CityPlatform.Utils;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Remotion.Linq.Clauses;
 using SharedArea.Commands.Bot;
 using SharedArea.Commands.Complex;
 using SharedArea.Commands.Contact;
@@ -32,7 +34,8 @@ namespace CityPlatform.Consumers
         , IConsumer<GetBotsRequest>, IConsumer<GetCreatedBotsRequest>, IConsumer<GetSubscribedBotsRequest>
         , IConsumer<SearchBotsRequest>, IConsumer<UpdateBotProfileRequest>, IConsumer<GetBotRequest>
         , IConsumer<SubscribeBotRequest>, IConsumer<CreateBotRequest>, IConsumer<CreateRoomRequest>
-        , IConsumer<ConsolidateDeleteAccountRequest>, IConsumer<GetMyInvitesRequest>
+        , IConsumer<ConsolidateDeleteAccountRequest>, IConsumer<GetMyInvitesRequest>, IConsumer<UpdateMemberAccessRequest>
+        , IConsumer<GetComplexAccessesRequest>
     {
         public async Task Consume(ConsumeContext<PutComplexRequest> context)
         {
@@ -199,7 +202,7 @@ namespace CityPlatform.Consumers
                     });
                     return;
                 }
-                
+
                 var session = dbContext.Sessions.Find(context.Message.SessionId);
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
                 var user = session.BaseUser;
@@ -243,6 +246,7 @@ namespace CityPlatform.Consumers
                     });
                     return;
                 }
+
                 if (complex.Title.ToLower() != "home" && complex.ComplexSecret.AdminId == session.BaseUser.BaseUserId)
                 {
                     complex.Title = packet.Complex.Title;
@@ -305,14 +309,23 @@ namespace CityPlatform.Consumers
                         {
                             new Membership()
                             {
-                                User = user
+                                User = user,
+                                MemberAccess = new MemberAccess()
+                                {
+                                    CanCreateMessage = true,
+                                    CanModifyAccess = true,
+                                    CanModifyWorkers = true,
+                                    CanSendInvite = true,
+                                    CanUpdateProfiles = true
+                                }
                             }
                         }
                     };
                     complex.ComplexSecret.Complex = complex;
                     complex.Rooms[0].Complex = complex;
                     complex.Members[0].Complex = complex;
-                    
+                    complex.Members[0].MemberAccess.Membership = complex.Members[0];
+
                     dbContext.AddRange(complex);
                     dbContext.SaveChanges();
 
@@ -340,17 +353,23 @@ namespace CityPlatform.Consumers
                         Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
                     };
 
-                    var result = await SharedArea.Transport.RequestService<PutServiceMessageRequest, PutServiceMessageResponse>(
-                        Program.Bus,
-                        SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
-                        new Packet() {ServiceMessage = message});
+                    var result = await SharedArea.Transport
+                        .RequestService<PutServiceMessageRequest, PutServiceMessageResponse>(
+                            Program.Bus,
+                            SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                            new Packet() {ServiceMessage = message});
 
                     message.MessageId = result.Packet.ServiceMessage.MessageId;
-                    
+
                     await context.RespondAsync(new CreateComplexResponse()
                     {
-                        Packet = new Packet {Status = "success", Complex = complex
-                            , ComplexSecret = complex.ComplexSecret, ServiceMessage = message}
+                        Packet = new Packet
+                        {
+                            Status = "success",
+                            Complex = complex,
+                            ComplexSecret = complex.ComplexSecret,
+                            ServiceMessage = message
+                        }
                     });
                 }
                 else
@@ -378,36 +397,40 @@ namespace CityPlatform.Consumers
                     {
                         if (complex.Title != "" && complex.Title.ToLower() != "home")
                         {
-                            dbContext.Entry(complex).Collection(c => c.Members).Load();
+                            dbContext.Entry(complex).Collection(c => c.Members).Query()
+                                .Include(mem => mem.MemberAccess)
+                                .Include(mem => mem.User)
+                                .ThenInclude(u => u.Sessions)
+                                .Load();
+                            var sessionIds =
+                                (from m in complex.Members
+                                    where m.UserId == session.BaseUserId
+                                    from s in m.User.Sessions
+                                    select s.SessionId).ToList();
                             var members = complex.Members.ToList();
                             foreach (var membership in members)
                             {
+                                dbContext.MemberAccesses.Remove(membership.MemberAccess);
                                 dbContext.Entry(membership).Reference(m => m.User).Load();
                                 var user = membership.User;
                                 dbContext.Entry(user).Collection(u => u.Memberships).Load();
                                 user.Memberships.Remove(membership);
                                 dbContext.Memberships.Remove(membership);
-
-                                var sessionIds = new List<long>();
-                                foreach (var memSess in user.Sessions)
-                                {
-                                    sessionIds.Add(memSess.SessionId);
-                                }
-
-                                var cdn = new ComplexDeletionNotification()
-                                {
-                                    ComplexId = complex.ComplexId
-                                };
-                                var push = new ComplexDeletionPush()
-                                {
-                                    SessionIds = sessionIds,
-                                    Notif = cdn
-                                };
-
-                                SharedArea.Transport.Push<ComplexDeletionPush>(
-                                    Program.Bus,
-                                    push);
                             }
+
+                            var cdn = new ComplexDeletionNotification()
+                            {
+                                ComplexId = complex.ComplexId
+                            };
+                            var push = new ComplexDeletionPush()
+                            {
+                                SessionIds = sessionIds,
+                                Notif = cdn
+                            };
+
+                            SharedArea.Transport.Push<ComplexDeletionPush>(
+                                Program.Bus,
+                                push);
 
                             dbContext.Entry(complex).Collection(c => c.Rooms).Load();
                             foreach (var room in complex.Rooms)
@@ -644,12 +667,28 @@ namespace CityPlatform.Consumers
                     var m1 = new Membership()
                     {
                         User = me,
-                        Complex = complex
+                        Complex = complex,
+                        MemberAccess = new MemberAccess()
+                        {
+                            CanCreateMessage = true,
+                            CanModifyAccess = false,
+                            CanModifyWorkers = true,
+                            CanSendInvite = true,
+                            CanUpdateProfiles = true
+                        }
                     };
                     var m2 = new Membership()
                     {
                         User = peer,
-                        Complex = complex
+                        Complex = complex,
+                        MemberAccess = new MemberAccess()
+                        {
+                            CanCreateMessage = true,
+                            CanModifyAccess = false,
+                            CanModifyWorkers = true,
+                            CanSendInvite = true,
+                            CanUpdateProfiles = true
+                        }
                     };
                     var myContact = new Contact
                     {
@@ -663,6 +702,8 @@ namespace CityPlatform.Consumers
                         User = peer,
                         Peer = me
                     };
+                    m1.MemberAccess.Membership = m1;
+                    m2.MemberAccess.Membership = m2;
                     dbContext.AddRange(complex, complexSecret, room, m1, m2, myContact, peerContact);
                     dbContext.SaveChanges();
 
@@ -719,10 +760,38 @@ namespace CityPlatform.Consumers
 
                     dbContext.Entry(peer).Collection(u => u.Sessions).Load();
                     var sessionIds = peer.Sessions.Select(s => s.SessionId).ToList();
+                    
+                    ServiceMessage finalMessage;
+                    Contact finalMyContact;
+                    using (var finalContext = new DatabaseContext())
+                    {
+                        finalMessage = (ServiceMessage) finalContext.Messages.Find(message.MessageId);
+                        finalMyContact = finalContext.Contacts.Find(myContact.ContactId);
+                        finalContext.Entry(finalMessage).Reference(m => m.Room).Load();
+                        finalContext.Entry(finalMessage.Room).Reference(r => r.Complex).Load();
+                        finalContext.Entry(finalMyContact).Reference(c => c.Complex).Load();
+                        finalContext.Entry(finalMyContact.Complex).Collection(c => c.Rooms).Load();
+                        finalContext.Entry(finalMyContact).Reference(c => c.User).Load();
+                        finalContext.Entry(finalMyContact).Reference(c => c.Peer).Load();
+                        finalContext.Entry(finalMyContact.Complex).Collection(c => c.Members)
+                            .Query().Include(m => m.User).Include(m => m.MemberAccess).Load();
+                        
+                        message = (ServiceMessage) finalContext.Messages.Find(message.MessageId);
+                        peerContact = finalContext.Contacts.Find(peerContact.ContactId);
+                        finalContext.Entry(message).Reference(m => m.Room).Load();
+                        finalContext.Entry(message.Room).Reference(r => r.Complex).Load();
+                        finalContext.Entry(peerContact).Reference(c => c.Complex).Load();
+                        finalContext.Entry(peerContact.Complex).Collection(c => c.Rooms).Load();
+                        finalContext.Entry(peerContact).Reference(c => c.User).Load();
+                        finalContext.Entry(peerContact).Reference(c => c.Peer).Load();
+                        finalContext.Entry(peerContact.Complex).Collection(c => c.Members)
+                            .Query().Include(m => m.User).Include(m => m.MemberAccess).Load();
+                    }
 
                     var ccn = new ContactCreationNotification
                     {
                         Contact = peerContact,
+                        ComplexSecret = complexSecret
                     };
                     var mcn = new ServiceMessageNotification
                     {
@@ -745,27 +814,14 @@ namespace CityPlatform.Consumers
                             SessionIds = sessionIds
                         });
 
-                    ServiceMessage finalMessage;
-                    Contact finalMyContact;
-                    using (var finalContext = new DatabaseContext())
-                    {
-                        finalMessage = (ServiceMessage) finalContext.Messages.Find(message.MessageId);
-                        finalMyContact = finalContext.Contacts.Find(myContact.ContactId);
-                        finalContext.Entry(finalMessage).Reference(m => m.Room).Load();
-                        finalContext.Entry(finalMyContact).Reference(c => c.Complex).Load();
-                        finalContext.Entry(finalMyContact.Complex).Collection(c => c.Rooms).Load();
-                        finalContext.Entry(finalMyContact).Reference(c => c.Peer).Load();
-                        finalContext.Entry(finalMyContact.Complex).Collection(c => c.Members)
-                            .Query().Include(m => m.User).Load();
-                    }
-
                     await context.RespondAsync(new CreateContactResponse()
                     {
                         Packet = new Packet
                         {
                             Status = "success",
                             Contact = finalMyContact,
-                            ServiceMessage = finalMessage
+                            ServiceMessage = finalMessage,
+                            ComplexSecret = complexSecret
                         }
                     });
                 }
@@ -789,88 +845,100 @@ namespace CityPlatform.Consumers
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
                 var human = dbContext.Users.Find(packet.User.BaseUserId);
                 dbContext.Entry(human).Collection(h => h.Memberships).Load();
-                if (human.Memberships.All(m => m.ComplexId != packet.Complex.ComplexId))
+
+                if (human.Memberships.Any(m => m.ComplexId == packet.Complex.ComplexId))
                 {
-                    dbContext.Entry(human).Collection(h => h.Invites).Load();
-                    if (human.Invites.All(i => i.ComplexId != packet.Complex.ComplexId))
+                    await context.RespondAsync(new CreateInviteResponse()
                     {
-                        var complex = dbContext.Complexes.Find(packet.Complex.ComplexId);
-                        if (complex != null)
+                        Packet = new Packet {Status = "error_0H2"}
+                    });
+                    return;
+                }
+
+                dbContext.Entry(human).Collection(h => h.Invites).Load();
+                if (human.Invites.Any(i => i.ComplexId == packet.Complex.ComplexId))
+                {
+                    await context.RespondAsync(new CreateInviteResponse()
+                    {
+                        Packet = new Packet {Status = "error_0H1"}
+                    });
+                    return;
+                }
+
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var me = (User) session.BaseUser;
+                dbContext.Entry(me).Collection(u => u.Memberships).Load();
+                var mem = me.Memberships.Find(m => m.ComplexId == packet.Complex.ComplexId);
+                if (mem == null)
+                {
+                    await context.RespondAsync(new CreateInviteResponse()
+                    {
+                        Packet = new Packet {Status = "error_1"}
+                    });
+                    return;
+                }
+
+                dbContext.Entry(mem).Reference(m => m.Complex).Load();
+                var complex = mem.Complex;
+                if (complex.Mode == 1 || complex.Mode == 2)
+                {
+                    await context.RespondAsync(new CreateInviteResponse()
+                    {
+                        Packet = new Packet {Status = "error_2"}
+                    });
+                    return;
+                }
+                
+                dbContext.Entry(complex).Reference(c => c.ComplexSecret).Load();
+                dbContext.Entry(mem).Reference(m => m.MemberAccess).Load();
+                if (mem.MemberAccess.CanSendInvite)
+                {
+                    var invite = new Invite()
+                    {
+                        Complex = complex,
+                        User = human
+                    };
+                    dbContext.AddRange(invite);
+                    dbContext.SaveChanges();
+
+                    SharedArea.Transport.NotifyService<InviteCreatedNotif, InviteCreatedNotifResponse>(
+                        Program.Bus,
+                        new Packet() {Invite = invite, Complex = complex, User = human},
+                        SharedArea.GlobalVariables.AllQueuesExcept(new[]
                         {
-                            dbContext.Entry(complex).Reference(c => c.ComplexSecret).Load();
-                            dbContext.Entry(session).Reference(s => s.BaseUser).Load();
-                            if (complex.ComplexSecret.AdminId == session.BaseUser.BaseUserId)
-                            {
-                                var invite = new Invite()
-                                {
-                                    Complex = complex,
-                                    User = human
-                                };
-                                dbContext.AddRange(invite);
-                                dbContext.SaveChanges();
+                            SharedArea.GlobalVariables.CITY_QUEUE_NAME
+                        }));
 
-                                SharedArea.Transport.NotifyService<InviteCreatedNotif, InviteCreatedNotifResponse>(
-                                    Program.Bus,
-                                    new Packet() {Invite = invite, Complex = complex, User = human},
-                                    SharedArea.GlobalVariables.AllQueuesExcept(new[]
-                                    {
-                                        SharedArea.GlobalVariables.CITY_QUEUE_NAME
-                                    }));
-
-                                dbContext.Entry(human).Collection(h => h.Sessions).Load();
-                                var sessionIds = new List<long>();
-                                foreach (var targetSession in human.Sessions)
-                                {
-                                    sessionIds.Add(targetSession.SessionId);
-                                }
-
-                                var inviteNotification = new InviteCreationNotification()
-                                {
-                                    Invite = invite
-                                };
-
-                                SharedArea.Transport.Push<InviteCreationPush>(
-                                    Program.Bus,
-                                    new InviteCreationPush()
-                                    {
-                                        SessionIds = sessionIds,
-                                        Notif = inviteNotification
-                                    });
-
-                                await context.RespondAsync(new CreateInviteResponse()
-                                {
-                                    Packet = new Packet {Status = "success", Invite = invite}
-                                });
-                            }
-                            else
-                            {
-                                await context.RespondAsync(new CreateInviteResponse()
-                                {
-                                    Packet = new Packet {Status = "error_0H0"}
-                                });
-                            }
-                        }
-                        else
-                        {
-                            await context.RespondAsync(new CreateInviteResponse()
-                            {
-                                Packet = new Packet {Status = "error_0H4"}
-                            });
-                        }
+                    dbContext.Entry(human).Collection(h => h.Sessions).Load();
+                    var sessionIds = new List<long>();
+                    foreach (var targetSession in human.Sessions)
+                    {
+                        sessionIds.Add(targetSession.SessionId);
                     }
-                    else
+
+                    var inviteNotification = new InviteCreationNotification()
                     {
-                        await context.RespondAsync(new CreateInviteResponse()
+                        Invite = invite
+                    };
+
+                    SharedArea.Transport.Push<InviteCreationPush>(
+                        Program.Bus,
+                        new InviteCreationPush()
                         {
-                            Packet = new Packet {Status = "error_0H1"}
+                            SessionIds = sessionIds,
+                            Notif = inviteNotification
                         });
-                    }
+
+                    await context.RespondAsync(new CreateInviteResponse()
+                    {
+                        Packet = new Packet {Status = "success", Invite = invite}
+                    });
                 }
                 else
                 {
                     await context.RespondAsync(new CreateInviteResponse()
                     {
-                        Packet = new Packet {Status = "error_0H2"}
+                        Packet = new Packet {Status = "error_0H0"}
                     });
                 }
             }
@@ -882,7 +950,7 @@ namespace CityPlatform.Consumers
             {
                 var packet = context.Message.Packet;
                 var session = dbContext.Sessions.Find(context.Message.SessionId);
-                
+
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
                 var user = (User) session.BaseUser;
                 dbContext.Entry(user).Collection(u => u.Memberships).Load();
@@ -895,6 +963,7 @@ namespace CityPlatform.Consumers
                     });
                     return;
                 }
+
                 dbContext.Entry(mem).Reference(m => m.Complex).Load();
                 var complex = mem.Complex;
                 if (complex != null)
@@ -978,14 +1047,31 @@ namespace CityPlatform.Consumers
                     var membership = new Membership
                     {
                         User = human,
-                        Complex = complex
+                        Complex = complex,
+                        MemberAccess = new MemberAccess()
+                        {
+                            CanCreateMessage = true,
+                            CanModifyAccess = false,
+                            CanModifyWorkers = false,
+                            CanSendInvite = false,
+                            CanUpdateProfiles = false
+                        }
                     };
+                    membership.MemberAccess.Membership = membership;
+
                     dbContext.Entry(complex).Collection(c => c.Members).Load();
                     complex.Members.Add(membership);
                     dbContext.Entry(complex).Collection(c => c.Rooms).Load();
                     var hall = complex.Rooms.FirstOrDefault();
-                    
+
                     dbContext.SaveChanges();
+
+                    membership = dbContext.Memberships.Find(membership.MembershipId);
+                    dbContext.Entry(membership).Reference(m => m.MemberAccess).Load();
+                    dbContext.Entry(membership).Reference(m => m.User).Load();
+                    dbContext.Entry(membership).Reference(m => m.Complex).Query()
+                        .Include(c => c.Rooms).Include(c => c.Members)
+                        .ThenInclude(m => m.User).Load();
 
                     SharedArea.Transport.NotifyService<InviteAcceptedNotif, InviteAcceptedNotifResponse>(
                         Program.Bus,
@@ -994,7 +1080,7 @@ namespace CityPlatform.Consumers
                         {
                             SharedArea.GlobalVariables.CITY_QUEUE_NAME
                         }));
-                    
+
                     var message = new ServiceMessage()
                     {
                         Room = hall,
@@ -1010,7 +1096,7 @@ namespace CityPlatform.Consumers
                             new Packet() {ServiceMessage = message, Room = hall});
 
                     message = result.Packet.ServiceMessage;
-                    
+
                     User user;
                     Complex jointComplex;
                     using (var context2 = new DatabaseContext())
@@ -1022,27 +1108,62 @@ namespace CityPlatform.Consumers
                     dbContext.Entry(complex)
                         .Collection(c => c.Members)
                         .Query().Include(m => m.User)
-                        .ThenInclude(u => u.Sessions).Load();
-                    var sessionIds = (from sess in (from m in complex.Members where m.UserId != user.BaseUserId
+                        .ThenInclude(u => u.Sessions)
+                        .Include(m => m.MemberAccess)
+                        .Load();
+
+                    var adminsSessionIds = (from m in complex.Members
+                        where m.MemberAccess.CanModifyAccess &&
+                              m.UserId != user.BaseUserId
+                        from s
+                            in m.User.Sessions
+                        select s.SessionId).ToList();
+
+                    var allSessionIds = (from sess in (from m in complex.Members
+                            where m.UserId != user.BaseUserId
                             from s
                                 in m.User.Sessions
                             select s)
                         select sess.SessionId).ToList();
+
+                    var nonAdminSessionIds = new List<long>(allSessionIds);
+                    nonAdminSessionIds.RemoveAll(sId => adminsSessionIds.Contains(sId));
+
+                    Membership lightMembership = null;
+                    using (var dbContextFinal = new DatabaseContext())
+                    {
+                        lightMembership = dbContextFinal.Memberships.Find(membership.MembershipId);
+                        dbContextFinal.Entry(lightMembership).Reference(mem => mem.User).Load();
+                        dbContextFinal.Entry(lightMembership).Reference(mem => mem.Complex).Load();
+                    }
+
                     var mcn = new ServiceMessageNotification
                     {
                         Message = message
                     };
-                    var ujn = new UserJointComplexNotification
+                    var ujnFull = new UserJointComplexNotification
                     {
                         Membership = membership
+                    };
+                    var ujnLight = new UserJointComplexNotification
+                    {
+                        Membership = lightMembership
                     };
 
                     SharedArea.Transport.Push<UserJointComplexPush>(
                         Program.Bus,
                         new UserJointComplexPush()
                         {
-                            Notif = ujn,
-                            SessionIds = sessionIds
+                            Notif = ujnFull,
+                            SessionIds = adminsSessionIds
+                        });
+
+                    SharedArea.Transport.Push<UserJointComplexPush>(
+                        Program.Bus,
+                        new UserJointComplexPush()
+                        {
+                            Notif = ujnLight,
+                            SessionIds = nonAdminSessionIds
                         });
 
                     SharedArea.Transport.Push<ServiceMessagePush>(
@@ -1050,7 +1171,7 @@ namespace CityPlatform.Consumers
                         new ServiceMessagePush()
                         {
                             Notif = mcn,
-                            SessionIds = sessionIds
+                            SessionIds = allSessionIds
                         });
 
                     dbContext.SaveChanges();
@@ -1075,7 +1196,7 @@ namespace CityPlatform.Consumers
 
                     await context.RespondAsync(new AcceptInviteResponse()
                     {
-                        Packet = new Packet {Status = "success", Membership = membership, ServiceMessage = message}
+                        Packet = new Packet {Status = "success", Membership = membership, ServiceMessage = message, ComplexSecret = complex.ComplexSecret}
                     });
                 }
                 else
@@ -1310,7 +1431,7 @@ namespace CityPlatform.Consumers
                 SharedArea.Transport.NotifyService<BotProfileUpdatedNotif, BotProfileUpdatedNotifResponse>(
                     Program.Bus,
                     new Packet() {Bot = bot},
-                    new []
+                    new[]
                     {
                         SharedArea.GlobalVariables.BOT_QUEUE_NAME,
                         SharedArea.GlobalVariables.DESKTOP_QUEUE_NAME,
@@ -1409,7 +1530,7 @@ namespace CityPlatform.Consumers
                 SharedArea.Transport.NotifyService<BotCreatedNotif, BotCreatedNotifResponse>(
                     Program.Bus,
                     new Packet() {Bot = bot, BotCreation = botCreation, BotSubscription = subscription, User = user},
-                    new []
+                    new[]
                     {
                         SharedArea.GlobalVariables.BOT_QUEUE_NAME,
                         SharedArea.GlobalVariables.DESKTOP_QUEUE_NAME,
@@ -1504,6 +1625,7 @@ namespace CityPlatform.Consumers
                     });
                     return;
                 }
+
                 dbContext.Entry(mem).Reference(m => m.Complex).Load();
                 var complex = mem.Complex;
                 if (complex != null)
@@ -1543,13 +1665,14 @@ namespace CityPlatform.Consumers
                             Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
                         };
 
-                        var result = await SharedArea.Transport.RequestService<PutServiceMessageRequest, PutServiceMessageResponse>(
-                            Program.Bus,
-                            SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
-                            new Packet() {ServiceMessage = message});
+                        var result = await SharedArea.Transport
+                            .RequestService<PutServiceMessageRequest, PutServiceMessageResponse>(
+                                Program.Bus,
+                                SharedArea.GlobalVariables.MESSENGER_QUEUE_NAME,
+                                new Packet() {ServiceMessage = message});
 
                         message.MessageId = result.Packet.ServiceMessage.MessageId;
-                        
+
                         await context.RespondAsync(new CreateRoomResponse()
                         {
                             Packet = new Packet {Status = "success", Room = room, ServiceMessage = message}
@@ -1589,6 +1712,7 @@ namespace CityPlatform.Consumers
                 complexSecret.Admin = user;
                 user.Memberships[0].Complex.Rooms[0].Complex = user.Memberships[0].Complex;
                 user.Memberships[0].User = user;
+                user.Memberships[0].MemberAccess.Membership = user.Memberships[0];
 
                 dbContext.AddRange(user, userAuth, complexSecret);
 
@@ -1648,6 +1772,161 @@ namespace CityPlatform.Consumers
                 await context.RespondAsync(new GetMyInvitesResponse()
                 {
                     Packet = new Packet() {Status = "success", Invites = invites}
+                });
+            }
+        }
+
+        public async Task Consume(ConsumeContext<UpdateMemberAccessRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
+                dbContext.Entry(user).Collection(u => u.Memberships).Load();
+
+                var membership = user.Memberships.Find(mem => mem.ComplexId == packet.Complex.ComplexId);
+                if (membership == null)
+                {
+                    await context.RespondAsync(new UpdateMemberAccessResponse()
+                    {
+                        Packet = new Packet() {Status = "error_1"}
+                    });
+                    return;
+                }
+
+                dbContext.Entry(membership).Reference(mem => mem.MemberAccess).Load();
+                dbContext.Entry(membership).Reference(mem => mem.Complex).Load();
+                var complex = membership.Complex;
+                if (complex.Mode == 1 || complex.Mode == 2)
+                {
+                    await context.RespondAsync(new UpdateMemberAccessResponse()
+                    {
+                        Packet = new Packet() {Status = "error_2"}
+                    });
+                    return;
+                }
+
+                dbContext.Entry(complex).Reference(c => c.ComplexSecret).Load();
+                if (membership.UserId != complex.ComplexSecret.AdminId && !membership.MemberAccess.CanModifyAccess)
+                {
+                    await context.RespondAsync(new UpdateMemberAccessResponse()
+                    {
+                        Packet = new Packet() {Status = "error_3"}
+                    });
+                    return;
+                }
+
+                dbContext.Entry(complex).Collection(c => c.Members).Load();
+                var targetMem = complex.Members.Find(mem => mem.UserId == packet.User.BaseUserId);
+                if (targetMem == null)
+                {
+                    await context.RespondAsync(new UpdateMemberAccessResponse()
+                    {
+                        Packet = new Packet() {Status = "error_4"}
+                    });
+                    return;
+                }
+
+                if (packet.User.BaseUserId == complex.ComplexSecret.AdminId ||
+                    packet.User.BaseUserId == user.BaseUserId)
+                {
+                    await context.RespondAsync(new UpdateMemberAccessResponse()
+                    {
+                        Packet = new Packet() {Status = "error_5"}
+                    });
+                    return;
+                }
+
+                dbContext.Entry(targetMem).Reference(tmem => tmem.MemberAccess).Load();
+                targetMem.MemberAccess.CanCreateMessage = packet.MemberAccess.CanCreateMessage;
+                targetMem.MemberAccess.CanSendInvite = packet.MemberAccess.CanSendInvite;
+                targetMem.MemberAccess.CanModifyWorkers = packet.MemberAccess.CanModifyWorkers;
+                targetMem.MemberAccess.CanUpdateProfiles = packet.MemberAccess.CanUpdateProfiles;
+
+                if (complex.ComplexSecret.AdminId == user.BaseUserId)
+                    targetMem.MemberAccess.CanModifyAccess = packet.MemberAccess.CanModifyAccess;
+
+                dbContext.SaveChanges();
+
+                dbContext.Entry(complex.ComplexSecret).Reference(cs => cs.Admin).Load();
+                dbContext.Entry(complex.ComplexSecret.Admin).Collection(u => u.Sessions).Load();
+
+                dbContext.Entry(complex).Collection(c => c.Members).Query()
+                    .Include(m => m.User)
+                    .ThenInclude(u => u.Sessions)
+                    .Include(m => m.MemberAccess)
+                    .Load();
+
+                var sessionIds = (from m in complex.Members
+                    where
+                        (m.MemberAccess.CanModifyAccess &&
+                         m.User.BaseUserId != user.BaseUserId) ||
+                        m.User.BaseUserId == targetMem.User.BaseUserId
+                    from s in m.User.Sessions
+                    select s.SessionId).ToList();
+
+                SharedArea.Transport.Push<MemberAccessUpdatedPush>(
+                    Program.Bus,
+                    new MemberAccessUpdatedPush()
+                    {
+                        Notif = new MemberAccessUpdatedNotification()
+                        {
+                            MemberAccess = targetMem.MemberAccess
+                        },
+                        SessionIds = sessionIds
+                    });
+
+                await context.RespondAsync(new UpdateMemberAccessResponse()
+                {
+                    Packet = new Packet() {Status = "success"}
+                });
+            }
+        }
+
+        public async Task Consume(ConsumeContext<GetComplexAccessesRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var packet = context.Message.Packet;
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var user = (User) session.BaseUser;
+                
+                dbContext.Entry(user).Collection(u => u.Memberships).Load();
+                var membership = user.Memberships.Find(mem => mem.ComplexId == packet.Complex.ComplexId);
+                if (membership == null)
+                {
+                    await context.RespondAsync(new GetComplexAccessesResponse()
+                    {
+                        Packet = new Packet() {Status = "error_1"}
+                    });
+                    return;
+                }
+                
+                dbContext.Entry(membership).Reference(mem => mem.MemberAccess).Load();
+                if (!membership.MemberAccess.CanModifyAccess)
+                {
+                    await context.RespondAsync(new GetComplexAccessesResponse()
+                    {
+                        Packet = new Packet() {Status = "error_2"}
+                    });
+                    return;
+                }
+                
+                dbContext.Entry(membership).Reference(mem => mem.Complex).Load();
+                var complex = membership.Complex;
+                dbContext.Entry(complex).Collection(c => c.Members).Query()
+                    .Include(mem => mem.MemberAccess)
+                    .ThenInclude(ma => ma.Membership)
+                    .Load();
+
+                var mas = complex.Members.Select(mem => mem.MemberAccess).ToList();
+
+                await context.RespondAsync(new GetComplexAccessesResponse()
+                {
+                    Packet = new Packet() {Status = "success", MemberAccesses = mas}
                 });
             }
         }

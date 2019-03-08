@@ -26,7 +26,7 @@ namespace SharedArea
             {
                 Packet = packet,
                 Destinations = enumerable
-            }).Wait();
+            });
         }
 
         public static async Task<TB> RequestService<TA, TB>(IBusControl bus, string queueName, Packet packet)

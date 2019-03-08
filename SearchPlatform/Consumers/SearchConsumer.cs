@@ -261,13 +261,14 @@ namespace SearchPlatform.Consumers
                 var session = dbContext.Sessions.Find(context.Message.SessionId);
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
                 var user = (User) session.BaseUser;
-                dbContext.Entry(user).Collection(u => u.Memberships).Query().Include(m => m.Complex).Load();
-                var complexes = user.Memberships.Select(m => m.Complex).ToList();
+                dbContext.Entry(user).Collection(u => u.Memberships).Query()
+                    .Include(m => m.Complex).Include(mem => mem.MemberAccess).Load();
                 var complexSecrets = new List<ComplexSecret>();
-                foreach (var complex in complexes)
+                var complexes = new List<Complex>();
+                foreach (var membership in user.Memberships)
                 {
+                    var complex = membership.Complex;
                     dbContext.Entry(complex).Collection(c => c.Rooms).Load();
-                    dbContext.Entry(complex).Collection(c => c.Members).Query().Include(m => m.User).Load();
                     dbContext.Entry(complex).Reference(c => c.ComplexSecret).Load();
                     if (complex.ComplexSecret == null) continue;
                     if (complex.ComplexSecret.AdminId == user.BaseUserId)
@@ -276,6 +277,12 @@ namespace SearchPlatform.Consumers
                         dbContext.Entry(complex).Collection(c => c.Invites).Query()
                             .Include(i => i.Complex).Include(i => i.User).Load();
                     }
+                    if (membership.MemberAccess.CanModifyAccess)
+                        dbContext.Entry(complex).Collection(c => c.Members).Query().Include(m => m.User)
+                            .Include(m => m.MemberAccess).Load();
+                    else
+                        dbContext.Entry(complex).Collection(c => c.Members).Query().Include(m => m.User).Load();
+                    complexes.Add(complex);
                 }
                 await context.RespondAsync(new GetComplexesResponse()
                 {
