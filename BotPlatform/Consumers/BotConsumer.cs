@@ -213,6 +213,7 @@ namespace BotPlatform.Consumers
                 var roomId = packet.Room.RoomId;
                 var userSessId = packet.Session.SessionId;
                 var viewData = packet.RawJson;
+                var batchData = packet.BatchData;
 
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
                 var bot = (Bot) session.BaseUser;
@@ -268,7 +269,8 @@ namespace BotPlatform.Consumers
                     ComplexId = complexId,
                     RoomId = roomId,
                     BotId = bot.BaseUserId,
-                    UpdateData = viewData
+                    UpdateData = viewData,
+                    BatchData = batchData ?? false
                 };
                 
                 dbContext.Entry(complex).Collection(c => c.Members).Query()
@@ -303,6 +305,7 @@ namespace BotPlatform.Consumers
                 var roomId = packet.Room.RoomId;
                 var userSessId = packet.Session.SessionId;
                 var viewData = packet.RawJson;
+                var batchData = packet.BatchData;
 
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
                 var bot = (Bot) session.BaseUser;
@@ -358,7 +361,8 @@ namespace BotPlatform.Consumers
                     ComplexId = complexId,
                     RoomId = roomId,
                     BotId = bot.BaseUserId,
-                    AnimData = viewData
+                    AnimData = viewData,
+                    BatchData = batchData ?? false
                 };
                 
                 dbContext.Entry(complex).Collection(c => c.Members).Query()
@@ -393,6 +397,7 @@ namespace BotPlatform.Consumers
                 var roomId = packet.Room.RoomId;
                 var userSessId = packet.Session.SessionId;
                 var viewData = packet.RawJson;
+                var batchData = packet.BatchData;
 
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
                 var bot = (Bot) session.BaseUser;
@@ -448,7 +453,8 @@ namespace BotPlatform.Consumers
                     ComplexId = complexId,
                     RoomId = roomId,
                     BotId = bot.BaseUserId,
-                    CommandsData = viewData
+                    CommandsData = viewData,
+                    BatchData = batchData ?? false
                 };
                 
                 dbContext.Entry(complex).Collection(c => c.Members).Query()

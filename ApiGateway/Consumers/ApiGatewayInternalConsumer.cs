@@ -709,6 +709,7 @@ namespace ApiGateway.Consumers
                     var notification = new ContactCreationNotification()
                     {
                         Contact = context.Message.Notif.Contact,
+                        ComplexSecret = context.Message.Notif.ComplexSecret,
                         Session = s
                     };
 
@@ -1122,6 +1123,7 @@ namespace ApiGateway.Consumers
                         RoomId = context.Message.Notif.RoomId,
                         BotId = context.Message.Notif.BotId,
                         UpdateData = context.Message.Notif.UpdateData,
+                        BatchData = context.Message.Notif.BatchData,
                         Session = session
                     };
 
@@ -1152,6 +1154,7 @@ namespace ApiGateway.Consumers
                         RoomId = context.Message.Notif.RoomId,
                         BotId = context.Message.Notif.BotId,
                         AnimData = context.Message.Notif.AnimData,
+                        BatchData = context.Message.Notif.BatchData,
                         Session = session
                     };
 
@@ -1182,6 +1185,7 @@ namespace ApiGateway.Consumers
                         RoomId = context.Message.Notif.RoomId,
                         BotId = context.Message.Notif.BotId,
                         CommandsData = context.Message.Notif.CommandsData,
+                        BatchData = context.Message.Notif.BatchData,
                         Session = session
                     };
 

@@ -6,5 +6,6 @@
         public long RoomId { get; set; }
         public long BotId { get; set; }
         public string AnimData { get; set; }
+        public bool BatchData { get; set; }
     }
 }

@@ -60,5 +60,6 @@ namespace SharedArea.Middles
         public string StreamCode { get; set; }
         public string RawJson { get; set; }
         public long? MessageSeenCount { get; set; }
+        public bool? BatchData { get; set; }
     }
 }

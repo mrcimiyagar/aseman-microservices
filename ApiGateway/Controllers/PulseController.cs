@@ -40,7 +40,7 @@ namespace ApiGateway.Controllers
         {
             using (var dbContext = new DatabaseContext())
             {
-                var session = Security.Authenticate(dbContext, Request.Headers[AuthExtracter.AK]);
+                var session = Security.AuthenticateBot(dbContext, Request.Headers[AuthExtracter.AK]);
                 if (session == null) return new Packet() {Status = "error_0"};
 
                 var result = await SharedArea.Transport.DirectService<SendBotViewRequest, SendBotViewResponse>(
@@ -60,7 +60,7 @@ namespace ApiGateway.Controllers
         {
             using (var dbContext = new DatabaseContext())
             {
-                var session = Security.Authenticate(dbContext, Request.Headers[AuthExtracter.AK]);
+                var session = Security.AuthenticateBot(dbContext, Request.Headers[AuthExtracter.AK]);
                 if (session == null) return new Packet() {Status = "error_0"};
 
                 var result = await SharedArea.Transport.DirectService<UpdateBotViewRequest, UpdateBotViewResponse>(
@@ -80,7 +80,7 @@ namespace ApiGateway.Controllers
         {
             using (var dbContext = new DatabaseContext())
             {
-                var session = Security.Authenticate(dbContext, Request.Headers[AuthExtracter.AK]);
+                var session = Security.AuthenticateBot(dbContext, Request.Headers[AuthExtracter.AK]);
                 if (session == null) return new Packet() {Status = "error_0"};
 
                 var result = await SharedArea.Transport.DirectService<AnimateBotViewRequest, AnimateBotViewResponse>(
@@ -100,7 +100,7 @@ namespace ApiGateway.Controllers
         {
             using (var dbContext = new DatabaseContext())
             {
-                var session = Security.Authenticate(dbContext, Request.Headers[AuthExtracter.AK]);
+                var session = Security.AuthenticateBot(dbContext, Request.Headers[AuthExtracter.AK]);
                 if (session == null) return new Packet() {Status = "error_0"};
 
                 var result = await SharedArea.Transport.DirectService<RunCommandsOnBotViewRequest, RunCommandsOnBotViewResponse>(

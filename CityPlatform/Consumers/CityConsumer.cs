@@ -1135,6 +1135,7 @@ namespace CityPlatform.Consumers
                         lightMembership = dbContextFinal.Memberships.Find(membership.MembershipId);
                         dbContextFinal.Entry(lightMembership).Reference(mem => mem.User).Load();
                         dbContextFinal.Entry(lightMembership).Reference(mem => mem.Complex).Load();
+                        dbContextFinal.Entry(lightMembership.Complex).Collection(c => c.Rooms).Load();
                     }
 
                     var mcn = new ServiceMessageNotification
