@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using BotPlatform.DbContexts;
 using MassTransit;
@@ -84,12 +85,18 @@ namespace BotPlatform.Consumers
                     var bot = dbContext.Bots.Find(botId);
                     dbContext.Entry(bot).Collection(b => b.Sessions).Load();
 
+                    User finalUser;
+                    using (var finalContext = new DatabaseContext())
+                    {
+                        finalUser = (User) finalContext.BaseUsers.Find(user.BaseUserId);
+                    }
+
                     var notif = new UserRequestedBotViewNotification()
                     {
                         ComplexId = complexId,
                         RoomId = roomId,
                         BotId = botId,
-                        UserSessionId = sessionId
+                        User = finalUser
                     };
 
                     SharedArea.Transport.Push<UserRequestedBotViewPush>(
@@ -121,7 +128,7 @@ namespace BotPlatform.Consumers
 
                 var complexId = packet.Complex.ComplexId;
                 var roomId = packet.Room.RoomId;
-                var userSessId = packet.Session.SessionId;
+                var userId = packet.User.BaseUserId;
                 var viewData = packet.RawJson;
 
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
@@ -156,12 +163,13 @@ namespace BotPlatform.Consumers
                     });
                     return;
                 }
-                if (userSessId > 0)
+
+                User user = null;
+                if (userId > 0)
                 {
                     dbContext.Entry(complex).Collection(c => c.Members).Load();
-                    var userSess = dbContext.Sessions.Find(userSessId);
-                    dbContext.Entry(userSess).Reference(s => s.BaseUser).Load();
-                    var user = (User) userSess.BaseUser;
+                    user = (User) dbContext.BaseUsers.Find(userId);
+                    dbContext.Entry(user).Collection(u => u.Sessions).Load();
                     var membership = complex.Members.Find(m => m.UserId == user.BaseUserId);
                     if (membership == null)
                     {
@@ -172,7 +180,12 @@ namespace BotPlatform.Consumers
                         return;
                     }
                 }
-
+                else
+                {
+                    dbContext.Entry(complex).Collection(c => c.Members).Query()
+                        .Include(m => m.User).ThenInclude(u => u.Sessions).Load();  
+                }
+                
                 var notif = new BotSentBotViewNotification()
                 {
                     ComplexId = complexId,
@@ -180,12 +193,9 @@ namespace BotPlatform.Consumers
                     BotId = bot.BaseUserId,
                     ViewData = viewData
                 };
-                
-                dbContext.Entry(complex).Collection(c => c.Members).Query()
-                    .Include(m => m.User).ThenInclude(u => u.Sessions).Load();
-                
-                var sessionIds = userSessId == 0 ? (from m in complex.Members from s in m.User.Sessions 
-                    select s.SessionId).ToList() : new List<long>() {userSessId};
+
+                var sessionIds = user == null ? (from m in complex.Members from s in m.User.Sessions 
+                    select s.SessionId).ToList() : user.Sessions.Select(s => s.SessionId).ToList();
                 
                 SharedArea.Transport.Push<BotSentBotViewPush>(
                     Program.Bus,
@@ -211,7 +221,7 @@ namespace BotPlatform.Consumers
 
                 var complexId = packet.Complex.ComplexId;
                 var roomId = packet.Room.RoomId;
-                var userSessId = packet.Session.SessionId;
+                var userId = packet.User.BaseUserId;
                 var viewData = packet.RawJson;
                 var batchData = packet.BatchData;
 
@@ -247,12 +257,13 @@ namespace BotPlatform.Consumers
                     });
                     return;
                 }
-                if (userSessId > 0)
+
+                User user = null;
+                if (userId > 0)
                 {
                     dbContext.Entry(complex).Collection(c => c.Members).Load();
-                    var userSess = dbContext.Sessions.Find(userSessId);
-                    dbContext.Entry(userSess).Reference(s => s.BaseUser).Load();
-                    var user = (User) userSess.BaseUser;
+                    user = (User) dbContext.BaseUsers.Find(userId);
+                    dbContext.Entry(user).Collection(u => u.Sessions).Load();
                     var membership = complex.Members.Find(m => m.UserId == user.BaseUserId);
                     if (membership == null)
                     {
@@ -262,6 +273,11 @@ namespace BotPlatform.Consumers
                         });
                         return;
                     }
+                }
+                else
+                {
+                    dbContext.Entry(complex).Collection(c => c.Members).Query()
+                        .Include(m => m.User).ThenInclude(u => u.Sessions).Load();     
                 }
 
                 var notif = new BotUpdatedBotViewNotification()
@@ -273,11 +289,8 @@ namespace BotPlatform.Consumers
                     BatchData = batchData ?? false
                 };
                 
-                dbContext.Entry(complex).Collection(c => c.Members).Query()
-                    .Include(m => m.User).ThenInclude(u => u.Sessions).Load();
-                
-                var sessionIds = userSessId == 0 ? (from m in complex.Members from s in m.User.Sessions 
-                    select s.SessionId).ToList() : new List<long>() {userSessId};
+                var sessionIds = user == null ? (from m in complex.Members from s in m.User.Sessions 
+                    select s.SessionId).ToList() : user.Sessions.Select(s => s.SessionId).ToList();
                 
                 SharedArea.Transport.Push<BotUpdatedBotViewPush>(
                     Program.Bus,
@@ -303,7 +316,7 @@ namespace BotPlatform.Consumers
 
                 var complexId = packet.Complex.ComplexId;
                 var roomId = packet.Room.RoomId;
-                var userSessId = packet.Session.SessionId;
+                var userId = packet.User.BaseUserId;
                 var viewData = packet.RawJson;
                 var batchData = packet.BatchData;
 
@@ -339,12 +352,13 @@ namespace BotPlatform.Consumers
                     });
                     return;
                 }
-                if (userSessId > 0)
+
+                User user = null;
+                if (userId > 0)
                 {
                     dbContext.Entry(complex).Collection(c => c.Members).Load();
-                    var userSess = dbContext.Sessions.Find(userSessId);
-                    dbContext.Entry(userSess).Reference(s => s.BaseUser).Load();
-                    var user = (User) userSess.BaseUser;
+                    user = (User) dbContext.BaseUsers.Find(userId);
+                    dbContext.Entry(user).Collection(u => u.Sessions).Load();
                     var membership = complex.Members.Find(m => m.UserId == user.BaseUserId);
                     if (membership == null)
                     {
@@ -354,6 +368,11 @@ namespace BotPlatform.Consumers
                         });
                         return;
                     }
+                }
+                else
+                {
+                    dbContext.Entry(complex).Collection(c => c.Members).Query()
+                        .Include(m => m.User).ThenInclude(u => u.Sessions).Load();  
                 }
 
                 var notif = new BotAnimatedBotViewNotification()
@@ -365,11 +384,8 @@ namespace BotPlatform.Consumers
                     BatchData = batchData ?? false
                 };
                 
-                dbContext.Entry(complex).Collection(c => c.Members).Query()
-                    .Include(m => m.User).ThenInclude(u => u.Sessions).Load();
-                
-                var sessionIds = userSessId == 0 ? (from m in complex.Members from s in m.User.Sessions 
-                    select s.SessionId).ToList() : new List<long>() {userSessId};
+                var sessionIds = user == null ? (from m in complex.Members from s in m.User.Sessions 
+                    select s.SessionId).ToList() : user.Sessions.Select(s => s.SessionId).ToList();
                 
                 SharedArea.Transport.Push<BotAnimatedBotViewPush>(
                     Program.Bus,
@@ -395,7 +411,7 @@ namespace BotPlatform.Consumers
 
                 var complexId = packet.Complex.ComplexId;
                 var roomId = packet.Room.RoomId;
-                var userSessId = packet.Session.SessionId;
+                var userId = packet.User.BaseUserId;
                 var viewData = packet.RawJson;
                 var batchData = packet.BatchData;
 
@@ -431,12 +447,13 @@ namespace BotPlatform.Consumers
                     });
                     return;
                 }
-                if (userSessId > 0)
+
+                User user = null;
+                if (userId > 0)
                 {
                     dbContext.Entry(complex).Collection(c => c.Members).Load();
-                    var userSess = dbContext.Sessions.Find(userSessId);
-                    dbContext.Entry(userSess).Reference(s => s.BaseUser).Load();
-                    var user = (User) userSess.BaseUser;
+                    user = (User) dbContext.BaseUsers.Find(userId);
+                    dbContext.Entry(user).Collection(u => u.Sessions).Load();
                     var membership = complex.Members.Find(m => m.UserId == user.BaseUserId);
                     if (membership == null)
                     {
@@ -447,6 +464,11 @@ namespace BotPlatform.Consumers
                         return;
                     }
                 }
+                else
+                {
+                    dbContext.Entry(complex).Collection(c => c.Members).Query()
+                        .Include(m => m.User).ThenInclude(u => u.Sessions).Load();  
+                }
 
                 var notif = new BotRanCommandsOnBotViewNotification()
                 {
@@ -456,12 +478,12 @@ namespace BotPlatform.Consumers
                     CommandsData = viewData,
                     BatchData = batchData ?? false
                 };
-                
-                dbContext.Entry(complex).Collection(c => c.Members).Query()
-                    .Include(m => m.User).ThenInclude(u => u.Sessions).Load();
-                
-                var sessionIds = userSessId == 0 ? (from m in complex.Members from s in m.User.Sessions 
-                    select s.SessionId).ToList() : new List<long>() {userSessId};
+
+                var sessionIds = user == null
+                    ? (from m in complex.Members
+                        from s in m.User.Sessions
+                        select s.SessionId).ToList()
+                    : user.Sessions.Select(s => s.SessionId).ToList();
                 
                 SharedArea.Transport.Push<BotRanCommandsOnBotViewPush>(
                     Program.Bus,

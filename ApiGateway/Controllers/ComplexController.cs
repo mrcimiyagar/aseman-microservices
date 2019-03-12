@@ -183,5 +183,24 @@ namespace ApiGateway.Controllers
                 return result.Packet;
             }
         }
+
+        [Route("~/api/complex/bot_get_workerships")]
+        [HttpPost]
+        public async Task<ActionResult<Packet>> BotGetWorkerships()
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = Security.AuthenticateBot(dbContext, Request.Headers[AuthExtracter.AK]);
+                if (session == null) return new Packet() {Status = "error_0"};
+                
+                var result = await SharedArea.Transport.DirectService<BotGetWorkershipsRequest, BotGetWorkershipsResponse>(
+                    Program.Bus,
+                    SharedArea.GlobalVariables.DESKTOP_QUEUE_NAME,
+                    session.SessionId,
+                    Request.Headers.ToDictionary(a => a.Key, a => a.Value.ToString()));
+
+                return result.Packet;
+            }
+        }
     }
 }

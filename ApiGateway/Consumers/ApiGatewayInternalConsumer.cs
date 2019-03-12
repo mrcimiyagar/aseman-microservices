@@ -1062,7 +1062,7 @@ namespace ApiGateway.Consumers
                         ComplexId = context.Message.Notif.ComplexId,
                         RoomId = context.Message.Notif.RoomId,
                         BotId = context.Message.Notif.BotId,
-                        UserSessionId = context.Message.Notif.UserSessionId,
+                        User = context.Message.Notif.User,
                         Session = session
                     };
 

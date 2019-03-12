@@ -947,6 +947,8 @@
             <e p="UpdateWorkershipResponse.cs" t="Include" />
           </e>
           <e p="Complex" t="Include">
+            <e p="BotGetWorkershipsRequest.cs" t="Include" />
+            <e p="BotGetWorkershipsResponse.cs" t="Include" />
             <e p="CreateComplexRequest.cs" t="Include" />
             <e p="CreateComplexResponse.cs" t="Include" />
             <e p="DeleteComplexRequest.cs" t="Include" />

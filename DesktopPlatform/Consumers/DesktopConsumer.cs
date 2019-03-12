@@ -2,7 +2,9 @@
 using System.Threading.Tasks;
 using DesktopPlatform.DbContexts;
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using SharedArea.Commands.Bot;
+using SharedArea.Commands.Complex;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
 using SharedArea.Commands.Pushes;
@@ -15,6 +17,7 @@ namespace DesktopPlatform.Consumers
     public class DesktopConsumer : IConsumer<AddBotToRoomRequest>, IConsumer<UpdateWorkershipRequest>
         , IConsumer<RemoveBotFromRoomRequest>, IConsumer<GetWorkershipsRequest>, IConsumer<BotSubscribedNotif>
         , IConsumer<BotCreatedNotif>, IConsumer<BotProfileUpdatedNotif>, IConsumer<ConsolidateDeleteAccountRequest>
+        , IConsumer<BotGetWorkershipsRequest>
     {
         public async Task Consume(ConsumeContext<AddBotToRoomRequest> context)
         {
@@ -400,6 +403,25 @@ namespace DesktopPlatform.Consumers
             }
 
             await context.RespondAsync(new ConsolidateDeleteAccountResponse());
+        }
+
+        public async Task Consume(ConsumeContext<BotGetWorkershipsRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var session = dbContext.Sessions.Find(context.Message.SessionId);
+                dbContext.Entry(session).Reference(s => s.BaseUser).Load();
+                var bot = (Bot) session.BaseUser;
+
+                var workerships = dbContext.Workerships.Where(w => w.BotId == bot.BaseUserId)
+                    .Include(w => w.Room).ThenInclude(r => r.Complex).ThenInclude(c => c.Members)
+                    .ThenInclude(m => m.User).ToList();
+
+                await context.RespondAsync(new BotGetWorkershipsResponse()
+                {
+                    Packet = new Packet() {Status = "success", Workerships = workerships}
+                });
+            }
         }
     }
 }

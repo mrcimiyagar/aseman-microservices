@@ -1111,6 +1111,9 @@ namespace CityPlatform.Consumers
                         .ThenInclude(u => u.Sessions)
                         .Include(m => m.MemberAccess)
                         .Load();
+                    
+                    dbContext.Entry(complex).Collection(c => c.Rooms).Query()
+                        .Include(r => r.Workers).Load();
 
                     var adminsSessionIds = (from m in complex.Members
                         where m.MemberAccess.CanModifyAccess &&
@@ -1128,6 +1131,14 @@ namespace CityPlatform.Consumers
 
                     var nonAdminSessionIds = new List<long>(allSessionIds);
                     nonAdminSessionIds.RemoveAll(sId => adminsSessionIds.Contains(sId));
+
+                    var botIds = new HashSet<long>((from r in complex.Rooms from w in r.Workers select w.BotId).ToList());
+                    var botsSet = dbContext.BaseUsers.Where(b => botIds.Contains(b.BaseUserId));
+                    botsSet.Include(b => b.Sessions).Load();
+                    foreach (var bot in botsSet)
+                    {
+                        nonAdminSessionIds.Add(bot.Sessions.FirstOrDefault().SessionId);
+                    }
 
                     Membership lightMembership = null;
                     using (var dbContextFinal = new DatabaseContext())
