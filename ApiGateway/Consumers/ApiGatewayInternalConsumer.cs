@@ -30,7 +30,7 @@ namespace ApiGateway.Consumers
         , IConsumer<ConsolidateSessionRequest>
         , IConsumer<MakeAccountRequest>, IConsumer<ConsolidateDeleteAccountRequest>
         , IConsumer<ConsolidateMakeAccountRequest>, IConsumer<ConsolidateCreateComplexRequest>
-        , IConsumer<ConsolidateCreateRoomRequest>, IConsumer<ConsolidateLogoutRequest>
+        , IConsumer<ConsolidateCreateRoomRequest>, IConsumer<ConsolidateLogoutRequest>, IConsumer<GetComplexWorkersRequest>
 
         , IConsumer<ComplexDeletionPush>, IConsumer<RoomDeletionPush>, IConsumer<ContactCreationPush>
         , IConsumer<ServiceMessagePush>, IConsumer<InviteCreationPush>, IConsumer<InviteCancellationPush>
@@ -898,7 +898,7 @@ namespace ApiGateway.Consumers
 
                     var notification = new BotAdditionToRoomNotification()
                     {
-                        Room = context.Message.Notif.Room,
+                        Workership = context.Message.Notif.Workership,
                         Session = session
                     };
 
@@ -1285,6 +1285,16 @@ namespace ApiGateway.Consumers
                     Startup.Pusher.NextPush(sessionId);
                 }
             }
+        }
+
+        public async Task Consume(ConsumeContext<GetComplexWorkersRequest> context)
+        {
+            var result = await SharedArea.Transport
+                .DirectService<GetComplexWorkersRequest, GetComplexWorkersResponse>(
+                    Program.Bus,
+                    context.Message.Destination,
+                    context.Message.Packet);
+            await context.RespondAsync(result);
         }
     }
 }

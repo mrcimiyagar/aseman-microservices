@@ -1,12 +1,15 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DesktopPlatform.DbContexts;
+using GreenPipes;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using SharedArea.Commands.Bot;
 using SharedArea.Commands.Complex;
 using SharedArea.Commands.Internal.Notifications;
 using SharedArea.Commands.Internal.Requests;
+using SharedArea.Commands.Internal.Responses;
 using SharedArea.Commands.Pushes;
 using SharedArea.Entities;
 using SharedArea.Middles;
@@ -17,7 +20,7 @@ namespace DesktopPlatform.Consumers
     public class DesktopConsumer : IConsumer<AddBotToRoomRequest>, IConsumer<UpdateWorkershipRequest>
         , IConsumer<RemoveBotFromRoomRequest>, IConsumer<GetWorkershipsRequest>, IConsumer<BotSubscribedNotif>
         , IConsumer<BotCreatedNotif>, IConsumer<BotProfileUpdatedNotif>, IConsumer<ConsolidateDeleteAccountRequest>
-        , IConsumer<BotGetWorkershipsRequest>
+        , IConsumer<BotGetWorkershipsRequest>, IConsumer<GetComplexWorkersRequest>
     {
         public async Task Consume(ConsumeContext<AddBotToRoomRequest> context)
         {
@@ -100,18 +103,19 @@ namespace DesktopPlatform.Consumers
                         SharedArea.GlobalVariables.BOT_QUEUE_NAME
                     });
                 
-                Room finalRoom;
+                Workership finalWorkership;
                 using (var finalContext = new DatabaseContext())
                 {
-                    finalRoom = finalContext.Rooms.Find(room.RoomId);
-                    finalContext.Entry(finalRoom).Reference(r => r.Complex).Load();
+                    finalWorkership = finalContext.Workerships.Find(workership.WorkershipId);
+                    finalContext.Entry(finalWorkership).Reference(w => w.Room).Query().Include(r => r.Complex)
+                        .ThenInclude(c => c.Members).ThenInclude(m => m.User).Load();
                 }
                 
                 dbContext.Entry(bot).Collection(b => b.Sessions).Load();
                 var botSess = bot.Sessions.FirstOrDefault();
                 var addition = new BotAdditionToRoomNotification()
                 {
-                    Room = finalRoom,
+                    Workership = finalWorkership,
                     Session = botSess
                 };
                 if (botSess != null)
@@ -420,6 +424,27 @@ namespace DesktopPlatform.Consumers
                 await context.RespondAsync(new BotGetWorkershipsResponse()
                 {
                     Packet = new Packet() {Status = "success", Workerships = workerships}
+                });
+            }
+        }
+
+        public async Task Consume(ConsumeContext<GetComplexWorkersRequest> context)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var complex = dbContext.Complexes.Find(context.Message.Packet.Complex.ComplexId);
+
+                dbContext.Entry(complex).Collection(c => c.Rooms).Query().Include(r => r.Workers).Load();
+
+                List<Workership> workers = new List<Workership>();
+                foreach (var room in complex.Rooms)
+                {
+                    workers.AddRange(room.Workers.ToList());
+                }
+
+                await context.RespondAsync(new GetComplexWorkersResponse
+                {
+                    Packet = new Packet() {Workerships = workers}
                 });
             }
         }

@@ -80,7 +80,7 @@ namespace ApiGateway.Controllers
         {
             using (var context = new DatabaseContext())
             {
-                var session = Security.Authenticate(context, Request.Headers[AuthExtracter.AK]);
+                var session = Security.AuthenticateBot(context, Request.Headers[AuthExtracter.AK]);
                 if (session == null) return new Packet {Status = "error_1"};
                 
                 var result = await SharedArea.Transport.DirectService<BotCreateTextMessageRequest, BotCreateTextMessageResponse>(
@@ -100,7 +100,7 @@ namespace ApiGateway.Controllers
         {
             using (var context = new DatabaseContext())
             {
-                var session = Security.Authenticate(context, Request.Headers[AuthExtracter.AK]);
+                var session = Security.AuthenticateBot(context, Request.Headers[AuthExtracter.AK]);
                 if (session == null) return new Packet {Status = "error_1"};
                 
                 var result = await SharedArea.Transport.DirectService<BotCreateFileMessageRequest, BotCreateFileMessageResponse>(

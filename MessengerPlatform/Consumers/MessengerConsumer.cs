@@ -56,6 +56,15 @@ namespace MessengerPlatform.Consumers
             using (var dbContext = new DatabaseContext())
             {
                 var packet = context.Message.Packet;
+                if (packet.FetchNext == null)
+                {
+                    await context.RespondAsync(new GetMessagesResponse()
+                    {
+                        Packet = new Packet() {Status = "error_1"}
+                    });
+                    return;
+                }
+                
                 var session = dbContext.Sessions.Find(context.Message.SessionId);
 
                 dbContext.Entry(session).Reference(s => s.BaseUser).Load();
@@ -86,57 +95,29 @@ namespace MessengerPlatform.Consumers
 
                 dbContext.Entry(room).Collection(r => r.Messages).Load();
 
-                List<Message> messages;
-
-                if (room.Messages.Count > 100000)
+                var messages = packet.FetchNext.Value ?
+                    room.Messages.Where(m => m.MessageId > packet.Message.MessageId && m.MessageId - packet.Message.MessageId <= 100).ToList() : 
+                    room.Messages.Where(m => m.MessageId < packet.Message.MessageId && packet.Message.MessageId - m.MessageId <= 100).ToList();
+                
+                foreach (var msg in messages)
                 {
-                    messages = room.Messages.Skip(room.Messages.Count - 100).ToList();
-
-                    foreach (var msg in messages)
+                    if (msg.GetType() == typeof(PhotoMessage))
                     {
-                        if (msg.GetType() == typeof(PhotoMessage))
-                        {
-                            dbContext.Entry(msg).Reference(m => ((PhotoMessage) m).Photo).Load();
-                            dbContext.Entry(((PhotoMessage) msg).Photo).Collection(f => f.FileUsages).Load();
-                        }
-                        else if (msg.GetType() == typeof(AudioMessage))
-                        {
-                            dbContext.Entry(msg).Reference(m => ((AudioMessage) m).Audio).Load();
-                            dbContext.Entry(((AudioMessage) msg).Audio).Collection(f => f.FileUsages).Load();
-                        }
-                        else if (msg.GetType() == typeof(VideoMessage))
-                        {
-                            dbContext.Entry(msg).Reference(m => ((VideoMessage) m).Video).Load();
-                            dbContext.Entry(((VideoMessage) msg).Video).Collection(f => f.FileUsages).Load();
-                        }
-
-                        msg.SeenByMe = (dbContext.MessageSeens.Find(user.BaseUserId + "_" + msg.MessageId) != null);
+                        dbContext.Entry(msg).Reference(m => ((PhotoMessage) m).Photo).Load();
+                        dbContext.Entry(((PhotoMessage) msg).Photo).Collection(f => f.FileUsages).Load();
                     }
-                }
-                else
-                {
-                    messages = room.Messages.ToList();
-
-                    foreach (var msg in messages)
+                    else if (msg.GetType() == typeof(AudioMessage))
                     {
-                        if (msg.GetType() == typeof(PhotoMessage))
-                        {
-                            dbContext.Entry(msg).Reference(m => ((PhotoMessage) m).Photo).Load();
-                            dbContext.Entry(((PhotoMessage) msg).Photo).Collection(f => f.FileUsages).Load();
-                        }
-                        else if (msg.GetType() == typeof(AudioMessage))
-                        {
-                            dbContext.Entry(msg).Reference(m => ((AudioMessage) m).Audio).Load();
-                            dbContext.Entry(((AudioMessage) msg).Audio).Collection(f => f.FileUsages).Load();
-                        }
-                        else if (msg.GetType() == typeof(VideoMessage))
-                        {
-                            dbContext.Entry(msg).Reference(m => ((VideoMessage) m).Video).Load();
-                            dbContext.Entry(((VideoMessage) msg).Video).Collection(f => f.FileUsages).Load();
-                        }
-
-                        msg.SeenByMe = (dbContext.MessageSeens.Find(user.BaseUserId + "_" + msg.MessageId) != null);
+                        dbContext.Entry(msg).Reference(m => ((AudioMessage) m).Audio).Load();
+                        dbContext.Entry(((AudioMessage) msg).Audio).Collection(f => f.FileUsages).Load();
                     }
+                    else if (msg.GetType() == typeof(VideoMessage))
+                    {
+                        dbContext.Entry(msg).Reference(m => ((VideoMessage) m).Video).Load();
+                        dbContext.Entry(((VideoMessage) msg).Video).Collection(f => f.FileUsages).Load();
+                    }
+
+                    msg.SeenByMe = (dbContext.MessageSeens.Find(user.BaseUserId + "_" + msg.MessageId) != null);
                 }
 
                 await context.RespondAsync(new GetMessagesResponse()

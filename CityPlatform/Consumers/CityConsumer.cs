@@ -1132,13 +1132,23 @@ namespace CityPlatform.Consumers
                     var nonAdminSessionIds = new List<long>(allSessionIds);
                     nonAdminSessionIds.RemoveAll(sId => adminsSessionIds.Contains(sId));
 
-                    var botIds = new HashSet<long>((from r in complex.Rooms from w in r.Workers select w.BotId).ToList());
-                    var botsSet = dbContext.BaseUsers.Where(b => botIds.Contains(b.BaseUserId));
-                    botsSet.Include(b => b.Sessions).Load();
-                    foreach (var bot in botsSet)
-                    {
-                        nonAdminSessionIds.Add(bot.Sessions.FirstOrDefault().SessionId);
-                    }
+                    var comp = new Complex {ComplexId = complex.ComplexId};
+
+                    var result2 = await SharedArea.Transport
+                        .RequestService<GetComplexWorkersRequest, GetComplexWorkersResponse>(
+                            Program.Bus,
+                            SharedArea.GlobalVariables.DESKTOP_QUEUE_NAME,
+                            new Packet()
+                            {
+                                Complex = comp
+                            });
+                    
+                    var botIds = new HashSet<long>(result2.Packet.Workerships.Select(w => w.BotId).ToList());
+                    var botsQuery = dbContext.Bots.Where(b => botIds.Contains(b.BaseUserId));
+                    botsQuery.Include(b => b.Sessions).Load();
+                    var bots = botsQuery.ToList();
+                    var botSessionIds = bots.Select(b => b.Sessions.FirstOrDefault().SessionId);
+                    nonAdminSessionIds.AddRange(botSessionIds);
 
                     Membership lightMembership = null;
                     using (var dbContextFinal = new DatabaseContext())
@@ -1205,10 +1215,18 @@ namespace CityPlatform.Consumers
                             Notif = notification,
                             SessionIds = inviterSessiondIds
                         });
+                    
+                    foreach (var room in membership.Complex.Rooms)
+                    {
+                        room.Workers = new List<Workership>();
+                        foreach (var workership in result2.Packet.Workerships)
+                            if (workership.Room.RoomId == room.RoomId)
+                                room.Workers.Add(workership);
+                    }
 
                     await context.RespondAsync(new AcceptInviteResponse()
                     {
-                        Packet = new Packet {Status = "success", Membership = membership, ServiceMessage = message, ComplexSecret = complex.ComplexSecret}
+                        Packet = new Packet {Status = "success", Membership = membership, Bots = bots, ServiceMessage = message, ComplexSecret = complex.ComplexSecret}
                     });
                 }
                 else

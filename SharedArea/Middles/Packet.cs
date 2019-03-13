@@ -61,5 +61,6 @@ namespace SharedArea.Middles
         public string RawJson { get; set; }
         public long? MessageSeenCount { get; set; }
         public bool? BatchData { get; set; }
+        public bool? FetchNext { get; set; }
     }
 }
